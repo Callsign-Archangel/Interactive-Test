@@ -1,0 +1,1292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AFCAT 2026 — Interactive 250 MCQ Idioms & Phrases Self-Assessment Quiz</title>
+<style>
+    :root {
+        --bg-main: #f8fafc;
+        --card-bg: #ffffff;
+        --primary: #0f172a;
+        --accent-red: #dc2626;
+        --accent-green: #10b981;
+        --accent-blue: #2563eb;
+        --text-main: #1e293b;
+        --text-muted: #64748b;
+        --border: #e2e8f0;
+    }
+    
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
+    
+    body {
+        font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        background-color: var(--bg-main);
+        color: var(--text-main);
+        line-height: 1.5;
+        padding-bottom: 60px;
+    }
+    
+    header {
+        background-color: var(--primary);
+        color: #ffffff;
+        padding: 24px 20px;
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+    
+    .header-container {
+        max-width: 1100px;
+        margin: 0 auto;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        align-items: center;
+        gap: 15px;
+    }
+    
+    .title-area h1 {
+        font-size: 1.4rem;
+        font-weight: 700;
+        letter-spacing: -0.5px;
+    }
+    
+    .title-area p {
+        font-size: 0.85rem;
+        color: #94a3b8;
+    }
+    
+    .stats-badge {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        background-color: #1e293b;
+        border: 2px solid #334155;
+        border-radius: 8px;
+        padding: 6px 10px;
+    }
+
+    .stat-item {
+        padding: 6px 14px;
+        border-radius: 6px;
+        text-align: center;
+        min-width: 70px;
+        cursor: pointer;
+        transition: all 0.2s;
+        border: 2px solid transparent;
+        background-color: rgba(255, 255, 255, 0.05);
+        user-select: none;
+    }
+
+    .stat-item:hover {
+        transform: scale(1.05);
+    }
+
+    .stat-item .stat-num {
+        font-size: 1.2rem;
+        font-weight: 800;
+        display: block;
+        line-height: 1.2;
+    }
+
+    .stat-item .stat-label {
+        font-size: 0.6rem;
+        text-transform: uppercase;
+        letter-spacing: 0.3px;
+        opacity: 0.8;
+    }
+
+    .stat-item.correct-stat {
+        background-color: rgba(16, 185, 129, 0.2);
+        border-color: #10b981;
+        color: #34d399;
+    }
+
+    .stat-item.correct-stat.active-filter {
+        background-color: rgba(16, 185, 129, 0.4);
+        box-shadow: 0 0 20px rgba(16, 185, 129, 0.3);
+    }
+
+    .stat-item.wrong-stat {
+        background-color: rgba(239, 68, 68, 0.2);
+        border-color: #ef4444;
+        color: #f87171;
+    }
+
+    .stat-item.wrong-stat.active-filter {
+        background-color: rgba(239, 68, 68, 0.4);
+        box-shadow: 0 0 20px rgba(239, 68, 68, 0.3);
+    }
+
+    .stat-item.left-stat {
+        background-color: rgba(234, 179, 8, 0.2);
+        border-color: #eab308;
+        color: #fbbf24;
+    }
+
+    .stat-item.left-stat.active-filter {
+        background-color: rgba(234, 179, 8, 0.4);
+        box-shadow: 0 0 20px rgba(234, 179, 8, 0.3);
+    }
+
+    .stat-item.pct-stat {
+        background-color: rgba(56, 189, 248, 0.15);
+        border-color: #38bdf8;
+        color: #38bdf8;
+        min-width: 80px;
+        cursor: default;
+    }
+
+    .stat-item.pct-stat:hover {
+        transform: none;
+    }
+
+    .stat-item .stat-pct {
+        font-size: 1.2rem;
+        font-weight: 800;
+        display: block;
+        line-height: 1.2;
+    }
+    
+    .container {
+        max-width: 1100px;
+        margin: 24px auto;
+        padding: 0 16px;
+    }
+
+    .controls-panel {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        margin-bottom: 24px;
+        background: var(--card-bg);
+        padding: 16px;
+        border-radius: 12px;
+        border: 1px solid var(--border);
+        box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+
+    .search-row {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+
+    .search-input {
+        flex: 1;
+        min-width: 260px;
+        padding: 10px 14px;
+        border: 1px solid #cbd5e1;
+        border-radius: 8px;
+        font-size: 0.95rem;
+        color: var(--text-main);
+        outline: none;
+        transition: border-color 0.2s;
+    }
+
+    .search-input:focus {
+        border-color: var(--accent-blue);
+        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+    }
+
+    .search-hint {
+        font-size: 0.75rem;
+        color: var(--text-muted);
+        margin-top: 2px;
+        font-style: italic;
+    }
+
+    .action-btn {
+        background-color: #f1f5f9;
+        border: 1px solid #cbd5e1;
+        border-radius: 8px;
+        padding: 10px 16px;
+        font-size: 0.85rem;
+        font-weight: 700;
+        color: var(--text-main);
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+    .action-btn:hover {
+        background-color: #e2e8f0;
+    }
+
+    .action-btn.primary {
+        background-color: var(--primary);
+        color: #ffffff;
+        border-color: var(--primary);
+    }
+
+    .action-btn.primary:hover {
+        background-color: #1e293b;
+    }
+
+    .action-btn.show-all-active {
+        background-color: #dc2626 !important;
+        border-color: #b91c1c !important;
+        color: #ffffff !important;
+        box-shadow: 0 0 12px rgba(220, 38, 38, 0.4);
+        transition: all 0.2s;
+    }
+    
+    .filter-bar {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 4px;
+    }
+    
+    .filter-btn {
+        background-color: #f1f5f9;
+        border: 1px solid #cbd5e1;
+        border-radius: 6px;
+        padding: 6px 12px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: var(--text-main);
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    
+    .filter-btn:hover {
+        background-color: #e2e8f0;
+    }
+
+    .filter-btn.active {
+        background-color: #0f172a;
+        color: #ffffff;
+        border-color: #0f172a;
+    }
+
+    .question-card {
+        background-color: var(--card-bg);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 20px;
+        margin-bottom: 16px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        transition: transform 0.15s;
+    }
+    
+    .question-card:hover {
+        border-color: #cbd5e1;
+    }
+    
+    .q-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 10px;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    .q-badges-left {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        flex-wrap: wrap;
+    }
+    
+    .q-num-badge {
+        background-color: #fef2f2;
+        color: var(--accent-red);
+        border: 1px solid #fecaca;
+        font-weight: 700;
+        font-size: 0.8rem;
+        padding: 3px 10px;
+        border-radius: 20px;
+    }
+
+    .qid-badge {
+        background-color: #fef08a;
+        color: #854d0e;
+        border: 1px solid #fde047;
+        font-weight: 700;
+        font-size: 0.8rem;
+        padding: 3px 10px;
+        border-radius: 20px;
+    }
+    
+    .q-mod-badge {
+        font-size: 0.75rem;
+        color: var(--text-muted);
+        font-weight: 600;
+    }
+
+    .q-status-badge {
+        font-size: 0.7rem;
+        padding: 2px 10px;
+        border-radius: 12px;
+        font-weight: 700;
+        transition: all 0.3s ease;
+    }
+
+    .q-status-badge.status-correct {
+        background-color: #d1fae5;
+        color: #065f46;
+    }
+
+    .q-status-badge.status-wrong {
+        background-color: #fecaca;
+        color: #991b1b;
+    }
+
+    .q-status-badge.status-unanswered {
+        background-color: #fef3c7;
+        color: #92400e;
+    }
+    
+    .q-text {
+        font-size: 1.05rem;
+        font-weight: 600;
+        margin-bottom: 16px;
+        color: var(--text-main);
+    }
+    
+    .options-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 10px;
+    }
+    
+    .opt-btn {
+        background-color: #f8fafc;
+        border: 1px solid #cbd5e1;
+        border-radius: 8px;
+        padding: 12px 16px;
+        text-align: left;
+        font-size: 0.95rem;
+        font-weight: 500;
+        color: var(--text-main);
+        cursor: pointer;
+        transition: all 0.2s;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+    
+    .opt-btn:hover:not(.disabled) {
+        background-color: #f1f5f9;
+        border-color: #94a3b8;
+    }
+    
+    .opt-btn.correct {
+        background-color: #ecfdf5 !important;
+        border-color: #10b981 !important;
+        color: #065f46 !important;
+        font-weight: 700;
+    }
+    
+    .opt-btn.wrong {
+        background-color: #fef2f2 !important;
+        border-color: #ef4444 !important;
+        color: #991b1b !important;
+    }
+    
+    .opt-btn.disabled {
+        cursor: default;
+    }
+    
+    .feedback-box {
+        margin-top: 14px;
+        padding: 12px 16px;
+        border-radius: 8px;
+        font-size: 0.9rem;
+        display: none;
+    }
+    
+    .feedback-box.show-correct {
+        display: block;
+        background-color: #f0fdf4;
+        border-left: 4px solid var(--accent-green);
+        color: #166534;
+    }
+    
+    .feedback-box.show-wrong {
+        display: block;
+        background-color: #fff7ed;
+        border-left: 4px solid #f97316;
+        color: #9a3412;
+    }
+    
+    .feedback-title {
+        font-weight: 700;
+        margin-bottom: 4px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .saved-note-banner {
+        background-color: #fef9c3;
+        border: 1px solid #fde047;
+        color: #713f12;
+        padding: 10px 14px;
+        border-radius: 6px;
+        margin-top: 10px;
+        font-size: 0.85rem;
+    }
+
+    .notes-section {
+        margin-top: 12px;
+        padding-top: 12px;
+        border-top: 1px dashed #cbd5e1;
+    }
+
+    .notes-btn {
+        background-color: #0f172a;
+        color: #ffffff;
+        border: 1px solid #334155;
+        padding: 6px 14px;
+        border-radius: 6px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+    .notes-btn:hover {
+        background-color: #334155;
+    }
+
+    .note-editor {
+        margin-top: 10px;
+        display: none;
+    }
+
+    .notes-area {
+        width: 100%;
+        padding: 10px;
+        border-radius: 6px;
+        border: 1px solid #cbd5e1;
+        font-family: inherit;
+        font-size: 0.85rem;
+        resize: vertical;
+        margin-bottom: 8px;
+        color: #1e293b;
+    }
+
+    .save-note-btn {
+        background-color: #10b981;
+        color: #ffffff;
+        border: none;
+        padding: 6px 14px;
+        border-radius: 6px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        cursor: pointer;
+    }
+
+    .save-note-btn:hover {
+        background-color: #059669;
+    }
+
+    .no-results {
+        text-align: center;
+        padding: 40px;
+        background: var(--card-bg);
+        border-radius: 12px;
+        border: 1px solid var(--border);
+        color: var(--text-muted);
+        font-weight: 600;
+    }
+</style>
+</head>
+<body>
+
+<header>
+    <div class="header-container">
+        <div class="title-area">
+            <h1>AFCAT / CDS / NDA — IDIOMS & PHRASES INTERACTIVE QUIZ</h1>
+            <p>250 MCQs Extracted from "Idioms Class — For Every Exam with Tricks" — Etymology, Hindi & Origins[cite: 3]</p>
+        </div>
+        <div class="stats-badge">
+            <div class="stat-item correct-stat" id="correctStat" onclick="filterByStatus('correct')">
+                <span class="stat-num" id="correct-count">0</span>
+                <span class="stat-label">✅ Correct</span>
+            </div>
+            <div class="stat-item wrong-stat" id="wrongStat" onclick="filterByStatus('wrong')">
+                <span class="stat-num" id="wrong-count">0</span>
+                <span class="stat-label">❌ Wrong</span>
+            </div>
+            <div class="stat-item left-stat" id="leftStat" onclick="filterByStatus('left')">
+                <span class="stat-num" id="left-count">250</span>
+                <span class="stat-label">⏳ Left</span>
+            </div>
+            <div class="stat-item pct-stat">
+                <span class="stat-pct" id="pct-display">0%</span>
+                <span class="stat-label">Accuracy</span>
+            </div>
+        </div>
+    </div>
+</header>
+
+<div class="container">
+    <div class="controls-panel">
+        <div class="search-row">
+            <div style="flex:1; min-width:260px;">
+                <input type="text" id="search-input" class="search-input" placeholder="Search by idiom, meaning, origin, or QID" oninput="applyFilters()">
+                <div class="search-hint">💡 Tip: Enter a number like "42" to search by QID</div>
+            </div>
+            <button class="action-btn" onclick="resetQuiz()">🔄 Reset All Answers</button>
+            <button class="action-btn primary" id="showAllBtn" onclick="toggleShowAll()">👁️ Show All Answers (Study Mode)</button>
+        </div>
+        <div class="filter-bar" id="filter-bar">
+            <button class="filter-btn active" data-filter="All" onclick="filterQuestions('All')">All 250 MCQs</button>
+            <button class="filter-btn" data-filter="Module 1" onclick="filterQuestions('Module 1')">Mod 1: Animal & Nature</button>
+            <button class="filter-btn" data-filter="Module 2" onclick="filterQuestions('Module 2')">Mod 2: Historical & Battle</button>
+            <button class="filter-btn" data-filter="Module 3" onclick="filterQuestions('Module 3')">Mod 3: Biblical & Mythological</button>
+            <button class="filter-btn" data-filter="Module 4" onclick="filterQuestions('Module 4')">Mod 4: Body Parts & Actions</button>
+            <button class="filter-btn" data-filter="Module 5" onclick="filterQuestions('Module 5')">Mod 5: Workplace & Tools</button>
+            <button class="filter-btn" data-filter="Module 6" onclick="filterQuestions('Module 6')">Mod 6: Social & Behaviour</button>
+            <button class="filter-btn" data-filter="Module 7" onclick="filterQuestions('Module 7')">Mod 7: Financial & Value</button>
+            <button class="filter-btn" data-filter="Module 8" onclick="filterQuestions('Module 8')">Mod 8: Success & Effort</button>
+            <button class="filter-btn" data-filter="Module 9" onclick="filterQuestions('Module 9')">Mod 9: Deception & Trouble</button>
+            <button class="filter-btn" data-filter="Module 10" onclick="filterQuestions('Module 10')">Mod 10: Language & Etymology</button>
+        </div>
+    </div>
+
+    <div id="quiz-container"></div>
+</div>
+
+<script>
+    // Complete 250-MCQ dataset extracted from "Idioms class  (1).pdf"[cite: 3]
+    const originalQuestionsData = [
+        // MODULE 1: ANIMAL & NATURE IDIOMS (1-25)
+        {"num": 1, "module": "Module 1: Animal & Nature Idioms", "q": "What is the meaning of the idiom 'Like a sitting duck'?", "options": ["A) An easy target for attack or criticism", "B) A person who refuses to move from their position", "C) Someone who swims effortlessly against danger", "D) A silent observer in an argument"], "ans": 0, "brief": "From duck hunting: when a duck sits calmly on water, it is very easy for hunters to shoot[cite: 3]."},
+        {"num": 2, "module": "Module 1: Animal & Nature Idioms", "q": "What does 'Dog in the manger' refer to?", "options": ["A) Preventing others from using something you cannot use yourself", "B) Guarding one's property with extreme loyalty", "C) A person who eats excessively without working", "D) Sharing resources generously with strangers"], "ans": 0, "brief": "From Aesop's Fable: a dog sleeping in hay cannot eat it itself, yet barks at cows to prevent them from eating it[cite: 3]."},
+        {"num": 3, "module": "Module 1: Animal & Nature Idioms", "q": "What is the meaning of 'Wolf in sheep's clothing'?", "options": ["A) A dangerous person who appears harmless or innocent", "B) An innocent person falsely accused of a crime", "C) A leader who dresses humbly to gain popularity", "D) A weak person trying to act brave in public"], "ans": 0, "brief": "From Aesop's Fables & Bible: a wolf disguises itself in sheep's skin to infiltrate the flock and attack[cite: 3]."},
+        {"num": 4, "module": "Module 1: Animal & Nature Idioms", "q": "What does the expression 'Low-hanging fruit' mean?", "options": ["A) The easiest target or objective to achieve", "B) Things of inferior quality that should be avoided", "C) Rewards that come only after long patience", "D) Investments that yield declining returns"], "ans": 0, "brief": "Refers to fruit that hangs low on a tree and can be picked with minimal effort[cite: 3]."},
+        {"num": 5, "module": "Module 1: Animal & Nature Idioms", "q": "What is the meaning of 'Fish in a barrel'?", "options": ["A) Something extremely easy to do or someone very easy to defeat", "B) People trapped together in a confined space", "C) Wealth accumulated in secret storage", "D) A chaotic situation with no escape"], "ans": 0, "brief": "Shooting fish confined inside a barrel requires no skill; it is an effortless task[cite: 3]."},
+        {"num": 6, "module": "Module 1: Animal & Nature Idioms", "q": "What does 'Canary in the coal mine' signify?", "options": ["A) An early warning sign of danger or trouble", "B) A cheerful person in a depressing workplace", "C) A worker who talks too much about secrets", "D) A fragile project that requires constant supervision"], "ans": 0, "brief": "Miners carried canaries into coal mines because they detected toxic gases early, warning miners to evacuate[cite: 3]."},
+        {"num": 7, "module": "Module 1: Animal & Nature Idioms", "q": "What does 'Bee in one's bonnet' mean?", "options": ["A) To be obsessed with a particular idea or topic", "B) To have a sudden headache or confusion", "C) To dress in a strange or fashionable manner", "D) To be constantly bothered by insects"], "ans": 0, "brief": "Scottish origin: if a bee enters someone's bonnet (cap), they remain agitated and constantly think about it[cite: 3]."},
+        {"num": 8, "module": "Module 1: Animal & Nature Idioms", "q": "What does 'Like a shag on a rock' mean?", "options": ["A) Looking lonely, isolated, or completely out of place", "B) Sitting firmly without fear of waves", "C) Enjoying sunbathing on a holiday beach", "D) Arguing loudly in a silent gathering"], "ans": 0, "brief": "Australian/NZ idiom: a shag (cormorant seabird) sitting alone on an ocean rock looks isolated and awkward[cite: 3]."},
+        {"num": 9, "module": "Module 1: Animal & Nature Idioms", "q": "What is the meaning of 'Fair game'?", "options": ["A) Open to attack or criticism", "B) A competition played honestly", "C) An equal distribution of wealth", "D) A sports match with impartial referees"], "ans": 0, "brief": "In hunting, 'fair game' refers to animals that are legally permitted to be hunted[cite: 3]."},
+        {"num": 10, "module": "Module 1: Animal & Nature Idioms", "q": "What does 'Dead meat' mean in slang?", "options": ["A) Someone certain to fail, be punished, or be defeated", "B) Spoiled food that causes illness", "C) A project that has been completed successfully", "D) An old argument that is no longer relevant"], "ans": 0, "brief": "Means someone is in deep trouble with no chance of escape ('gone case')[cite: 3]."},
+        {"num": 11, "module": "Module 1: Animal & Nature Idioms", "q": "What does 'Horse sense' mean?", "options": ["A) Sound, practical judgment and basic common sense", "B) Ability to ride or train animals well", "C) Working blindly without thinking", "D) A stubborn refusal to listen to advice"], "ans": 0, "brief": "Refers to everyday practical wisdom and basic common sense[cite: 3]."},
+        {"num": 12, "module": "Module 1: Animal & Nature Idioms", "q": "What does 'Work like a horse' mean?", "options": ["A) To work extremely hard and tirelessly", "B) To work only when commanded by a master", "C) To carry heavy physical loads outdoors", "D) To complain constantly about daily labor"], "ans": 0, "brief": "Horses are traditional draft animals; working like a horse means putting in strenuous physical effort[cite: 3]."},
+        {"num": 13, "module": "Module 1: Animal & Nature Idioms", "q": "What does 'Eat like a horse' mean?", "options": ["A) To eat a very large amount of food", "B) To eat only grass and vegetables", "C) To eat quickly and quietly", "D) To refuse food when stressed"], "ans": 0, "brief": "Means having a very large appetite and consuming big quantities of food[cite: 3]."},
+        {"num": 14, "module": "Module 1: Animal & Nature Idioms", "q": "What does 'Put the cart before the horse' mean?", "options": ["A) To do things in the wrong order", "B) To prepare thoroughly before starting a task", "C) To replace old equipment with modern tools", "D) To lead a team from behind"], "ans": 0, "brief": "A horse pulls a cart from the front; putting the cart first means reversing the logical sequence of actions[cite: 3]."},
+        {"num": 15, "module": "Module 1: Animal & Nature Idioms", "q": "What does 'Beard the lion' mean?", "options": ["A) To confront a powerful or dangerous person fearlessly", "B) To pet a wild animal in a zoo", "C) To mock someone when they are asleep", "D) To trim one's facial hair before a meeting"], "ans": 0, "brief": "From folklore: touching or grasping a lion's beard (mane) was considered an act of extreme courage[cite: 3]."},
+        {"num": 16, "module": "Module 1: Animal & Nature Idioms", "q": "What does 'Black sheep (of the family/group)' mean?", "options": ["A) A person regarded as a disgrace to a family or group", "B) The most hardworking member of a team", "C) A person with dark hair and eyes", "D) A quiet individual who avoids social events"], "ans": 0, "brief": "In a flock of white sheep, a black sheep stood out and its wool could not be dyed easily, symbolizing disgrace ('kalank')[cite: 3]."},
+        {"num": 17, "module": "Module 1: Animal & Nature Idioms", "q": "What does 'Birds of a feather (flock together)' mean?", "options": ["A) People with similar interests or characteristics tend to associate", "B) Birds migrate to warmer places during winter", "C) Family members should always support each other", "D) Competitors gather in the same market"], "ans": 0, "brief": "Means people of the same character or tastes naturally spend time together ('ek hi thaali ke chatte batte')[cite: 3]."},
+        {"num": 18, "module": "Module 1: Animal & Nature Idioms", "q": "What does 'Cry wolf' mean?", "options": ["A) To raise a false alarm repeatedly so that people stop believing you", "B) To weep loudly in public for sympathy", "C) To call for help when real danger arrives", "D) To howl at night like a wild animal"], "ans": 0, "brief": "From Aesop's fable of the shepherd boy who lied about wolf attacks until villagers ignored his real cries[cite: 3]."},
+        {"num": 19, "module": "Module 1: Animal & Nature Idioms", "q": "What does 'Take the bull by the horns' mean?", "options": ["A) To face a difficult situation boldly and directly", "B) To participate in a Spanish bullfighting contest", "C) To provoke an angry person unnecessarily", "D) To avoid danger by stepping aside"], "ans": 0, "brief": "Means tackling a dangerous problem head-on with courage and determination[cite: 3]."},
+        {"num": 20, "module": "Module 1: Animal & Nature Idioms", "q": "What does 'Water off a duck's back' mean?", "options": ["A) Criticism or advice that has no effect on someone", "B) Rainwater that flows smoothly off a roof", "C) A slippery surface where nothing can stand", "D) An easy swimming lesson for beginners"], "ans": 0, "brief": "Duck feathers are oily and waterproof; water beads up and rolls off without soaking in[cite: 3]."},
+        {"num": 21, "module": "Module 1: Animal & Nature Idioms", "q": "What does 'Go the way of the dodo' mean?", "options": ["A) To become extinct, obsolete, or completely out of date", "B) To fly away to an unknown island", "C) To become famous overnight", "D) To walk clumsily on land"], "ans": 0, "brief": "The dodo bird became extinct in the 17th century; the idiom means becoming obsolete or archaic[cite: 3]."},
+        {"num": 22, "module": "Module 1: Animal & Nature Idioms", "q": "What does 'Monkey on one's back' refer to?", "options": ["A) A persistent problem or addiction that is difficult to overcome", "B) A playful child riding on a parent's shoulders", "C) A lucky charm carried during exams", "D) A sudden back pain caused by lifting weights"], "ans": 0, "brief": "Refers to a continuous burden, troublesome habit, or addiction that one cannot shake off[cite: 3]."},
+        {"num": 23, "module": "Module 1: Animal & Nature Idioms", "q": "What does 'Neither fish nor fowl' mean?", "options": ["A) Something that does not clearly belong to any recognized category", "B) A vegetarian meal served at a feast", "C) An animal that can live both on land and in water", "D) A person who speaks two languages fluently"], "ans": 0, "brief": "In medieval dietary classification, something that was neither fish nor bird lacked a clear identity[cite: 3]."},
+        {"num": 24, "module": "Module 1: Animal & Nature Idioms", "q": "What does 'Wild-goose chase' mean?", "options": ["A) A futile, hopeless, or pointless search", "B) An exciting hunting expedition in the forest", "C) A fast race between two athletes", "D) A successful pursuit of a hidden treasure"], "ans": 0, "brief": "Chasing wild geese is notoriously difficult and unrewarding; it signifies a wasted effort[cite: 3]."},
+        {"num": 25, "module": "Module 1: Animal & Nature Idioms", "q": "What does 'Run with the hare and hunt with the hounds' mean?", "options": ["A) To support both opposing sides for one's own benefit", "B) To run very fast during a marathon competition", "C) To hunt wild animals using trained dogs", "D) To remain strictly neutral during a conflict"], "ans": 0, "brief": "Means double-dealing by pretending to be an ally to two conflicting parties simultaneously[cite: 3]."},
+
+        // MODULE 2: HISTORICAL, MILITARY & BATTLE ORIGINS (26-50)
+        {"num": 26, "module": "Module 2: Historical & Battle Origins", "q": "What does 'Meet one's Waterloo' mean?", "options": ["A) To suffer a very severe or decisive defeat from which recovery is impossible", "B) To win a glorious victory after long suffering", "C) To visit a famous European battlefield", "D) To surrender peacefully without a fight"], "ans": 0, "brief": "Originates from Napoleon Bonaparte's final, crushing defeat at the Battle of Waterloo in 1815[cite: 3]."},
+        {"num": 27, "module": "Module 2: Historical & Battle Origins", "q": "What does 'Spartan life' mean?", "options": ["A) A life of simplicity, discipline, and self-denial", "B) A luxurious and hedonistic lifestyle", "C) A life spent traveling across oceans", "D) A secluded life in a mountain monastery"], "ans": 0, "brief": "Ancient Spartans of Greece were famous for their rigorous discipline, hard training, and avoidance of luxury[cite: 3]."},
+        {"num": 28, "module": "Module 2: Historical & Battle Origins", "q": "What is a 'Pyrrhic victory'?", "options": ["A) A victory achieved at an unbearable or costly sacrifice", "B) An easy victory won without losing soldiers", "C) A victory in a naval battle against pirates", "D) A diplomatic victory achieved through treaty"], "ans": 0, "brief": "King Pyrrhus of Epirus defeated the Romans in 279 BC but lost so many troops he said another such win would ruin him[cite: 3]."},
+        {"num": 29, "module": "Module 2: Historical & Battle Origins", "q": "What is a 'Fabian policy'?", "options": ["A) A strategy of achieving success through patience, delay, and gradual action", "B) An aggressive frontal attack on enemy lines", "C) A policy of rapid industrial industrialization", "D) A diplomatic trade boycott against rivals"], "ans": 0, "brief": "Roman General Quintus Fabius Maximus defeated Hannibal by avoiding direct battles and using gradual, patient tactics[cite: 3]."},
+        {"num": 30, "module": "Module 2: Historical & Battle Origins", "q": "What does 'Cross the Rubicon' mean?", "options": ["A) To take an irreversible step with serious consequences", "B) To swim across a dangerous river safely", "C) To sign a peace treaty between two nations", "D) To travel between Europe and Asia"], "ans": 0, "brief": "In 49 BC, Julius Caesar crossed the Rubicon River into Italy with his army, making civil war inevitable[cite: 3]."},
+        {"num": 31, "module": "Module 2: Historical & Battle Origins", "q": "What does 'Burn one's bridges (or boats)' mean?", "options": ["A) To destroy any possibility of returning to an earlier situation", "B) To construct new roads across rivers", "C) To attack enemy supply lines at night", "D) To forget past arguments and reconcile"], "ans": 0, "brief": "Ancient commanders burned their own bridges or boats so soldiers had no option to retreat and fought with resolve[cite: 3]."},
+        {"num": 32, "module": "Module 2: Historical & Battle Origins", "q": "What does 'Throw down the gauntlet' mean?", "options": ["A) To issue a bold or formal challenge to someone", "B) To surrender one's weapons after defeat", "C) To wear heavy iron gloves during winter", "D) To invite someone to a friendly dinner"], "ans": 0, "brief": "Medieval knights challenged rivals to a duel by throwing their heavy armoured glove (gauntlet) on the ground[cite: 3]."},
+        {"num": 33, "module": "Module 2: Historical & Battle Origins", "q": "What does 'Gird up the loins' mean?", "options": ["A) To prepare yourself mentally and physically for a difficult task", "B) To wear expensive robes for a festival", "C) To rest after a tiring journey", "D) To fasten a belt around a horse"], "ans": 0, "brief": "In Biblical/ancient times, men tucked up their long robes into their belts to move freely before work or battle[cite: 3]."},
+        {"num": 34, "module": "Module 2: Historical & Battle Origins", "q": "What does 'Run the gauntlet' mean?", "options": ["A) To endure a series of difficult attacks, criticism, or challenges", "B) To win a running race against multiple rivals", "C) To inspect military troops on parade", "D) To escape from a prison cell"], "ans": 0, "brief": "A 17th-century military punishment where a soldier ran between two rows of men who struck him with sticks[cite: 3]."},
+        {"num": 35, "module": "Module 2: Historical & Battle Origins", "q": "What does 'Turn one's coat' mean?", "options": ["A) To change sides or loyalties for personal advantage", "B) To wear warm clothing during winter", "C) To clean and repair an old uniform", "D) To hide one's identity at a masquerade"], "ans": 0, "brief": "Soldiers in medieval Europe sometimes turned their coats inside out to hide their emblem and pretend loyalty to the winning side[cite: 3]."},
+        {"num": 36, "module": "Module 2: Historical & Battle Origins", "q": "What does 'Bite the dust' mean?", "options": ["A) To be defeated, fail, or die", "B) To clean a dusty room thoroughly", "C) To fall down and get up immediately", "D) To eat dry food during a journey"], "ans": 0, "brief": "In battle, a slain soldier falls face-first to the ground, biting the dust[cite: 3]."},
+        {"num": 37, "module": "Module 2: Historical & Battle Origins", "q": "What does 'Show the white feather' mean?", "options": ["A) To display cowardice or lack of courage", "B) To wave a flag of victory", "C) To dress in clean white garments", "D) To release a dove of peace"], "ans": 0, "brief": "From cockfighting: a white feather in a gamecock's tail was believed to show inferior breeding and cowardice[cite: 3]."},
+        {"num": 38, "module": "Module 2: Historical & Battle Origins", "q": "What does 'Keep one's powder dry' mean?", "options": ["A) To be prepared for future action while conserving one's resources", "B) To store gunpowder in underground vaults", "C) To avoid speaking in public meetings", "D) To wash one's hands after work"], "ans": 0, "brief": "Originates from gunpowder weapons: soldiers had to keep gunpowder dry so it would fire when needed[cite: 3]."},
+        {"num": 39, "module": "Module 2: Historical & Battle Origins", "q": "What does 'Flash in the pan' mean?", "options": ["A) A short-lived success that quickly fades away", "B) A sudden fire in a kitchen stove", "C) A bright star in the evening sky", "D) A wealthy person who spends lavishly"], "ans": 0, "brief": "In flintlock muskets, if gunpowder flared in the pan without igniting the main charge, no shot was fired[cite: 3]."},
+        {"num": 40, "module": "Module 2: Historical & Battle Origins", "q": "What does 'Double Dutch' mean?", "options": ["A) Language that is completely impossible to understand", "B) A traditional dance from the Netherlands", "C) A game played with two skipping ropes", "D) Speaking two foreign languages fluently"], "ans": 0, "brief": "From 17th-century Anglo-Dutch rivalries: English soldiers viewed Dutch speech as confusing gibberish[cite: 3]."},
+        {"num": 41, "module": "Module 2: Historical & Battle Origins", "q": "What does 'Halcyon days' refer to?", "options": ["A) A period of peace, happiness, and prosperity, often viewed nostalgically", "B) Stormy winter days at sea", "C) Days spent preparing for exams", "D) A time of economic depression"], "ans": 0, "brief": "Named after the halcyon (kingfisher bird) in Greek myth, which was believed to calm the winter sea around solstice[cite: 3]."},
+        {"num": 42, "module": "Module 2: Historical & Battle Origins", "q": "What does 'Palmy days' mean?", "options": ["A) A period of great success, prosperity, or happiness", "B) Summer holidays spent under palm trees", "C) Rainy days in coastal villages", "D) Old age spent in quiet retirement"], "ans": 0, "brief": "Palm branches were ancient Roman symbols of victory and honour; palmy days signify prosperous times[cite: 3]."},
+        {"num": 43, "module": "Module 2: Historical & Battle Origins", "q": "What does 'In one's heyday' mean?", "options": ["A) In the period of one's greatest success, popularity, or power", "B) During one's early childhood years", "C) While recovering from a severe illness", "D) When working on a farm during harvest"], "ans": 0, "brief": "Heyday denotes the prime peak of vitality, vigor, and popularity in someone's life[cite: 3]."},
+        {"num": 44, "module": "Module 2: Historical & Battle Origins", "q": "What does 'Go down fighting' mean?", "options": ["A) To continue resisting until the very end despite defeat", "B) To collapse from exhaustion during sports", "C) To argue loudly with subordinates", "D) To surrender at the first sign of trouble"], "ans": 0, "brief": "A military term for resisting the enemy until the last moment before being overcome[cite: 3]."},
+        {"num": 45, "module": "Module 2: Historical & Battle Origins", "q": "What does 'Win the battle but lose the war' mean?", "options": ["A) To gain a short-term success while suffering an overall failure", "B) To defeat an enemy without using weapons", "C) To celebrate a victory before the war ends", "D) To sign a peace treaty after a minor skirmish"], "ans": 0, "brief": "Means winning an immediate tactical skirmish at the cost of the broader strategic objective[cite: 3]."},
+        {"num": 46, "module": "Module 2: Historical & Battle Origins", "q": "What does 'Twist (or turn) the knife' mean?", "options": ["A) To make a bad situation even more painful or upsetting for someone", "B) To sharpen a blade before cooking", "C) To perform a surgical operation carefully", "D) To defend oneself against a sudden attack"], "ans": 0, "brief": "From battlefield wounds: twisting a knife embedded in a wound causes excruciating extra pain[cite: 3]."},
+        {"num": 47, "module": "Module 2: Historical & Battle Origins", "q": "What does 'Take the plunge' mean?", "options": ["A) To commit oneself to a risky or important action", "B) To dive into a swimming pool during summer", "C) To hesitate before speaking in a meeting", "D) To cancel a planned trip suddenly"], "ans": 0, "brief": "Means boldly taking a decisive step into an unfamiliar or risky enterprise[cite: 3]."},
+        {"num": 48, "module": "Module 2: Historical & Battle Origins", "q": "What does 'The die is cast' mean?", "options": ["A) An irrevocable decision has been made", "B) A metal casting mold has been broken", "C) A game of dice has just started", "D) A lucky break has occurred"], "ans": 0, "brief": "Spoken by Julius Caesar ('Alea iacta est') when crossing the Rubicon, meaning the decision is final[cite: 3]."},
+        {"num": 49, "module": "Module 2: Historical & Battle Origins", "q": "What does 'At the eleventh hour' mean?", "options": ["A) At the last possible moment", "B) Exactly at 11:00 AM in the morning", "C) Long before a deadline arrives", "D) During a late-night office party"], "ans": 0, "brief": "From the Biblical parable of laborers hired at the eleventh hour of the day, just before closing[cite: 3]."},
+        {"num": 50, "module": "Module 2: Historical & Battle Origins", "q": "What does 'Hedonistic life' mean (mentioned as opposite to Spartan life)?", "options": ["A) A life devoted to pleasure and luxury ('bhogvadi')", "B) A life of strict monastic vows", "C) A life spent serving rural communities", "D) A life of military training"], "ans": 0, "brief": "Hedonism focuses on pleasure and luxury, contrasted directly with Spartan simplicity[cite: 3]."},
+
+        // MODULE 3: BIBLICAL, MYTHOLOGICAL & LITERARY IDIOMS (51-75)
+        {"num": 51, "module": "Module 3: Biblical & Mythological", "q": "What does 'Achilles' heel' mean?", "options": ["A) A person's greatest weakness or vulnerable point", "B) A strong foot used for running marathons", "C) A shield that protects against arrows", "D) A royal crown worn by Greek kings"], "ans": 0, "brief": "In Greek myth, Achilles was dipped in the River Styx by his heel, leaving that spot vulnerable to a fatal arrow[cite: 3]."},
+        {"num": 52, "module": "Module 3: Biblical & Mythological", "q": "What is the meaning of 'Midas touch'?", "options": ["A) The ability to achieve success in everything one does", "B) A magical treatment for skin diseases", "C) A habit of hoarding gold coins", "D) Touching things with extreme gentleness"], "ans": 0, "brief": "King Midas of Greek mythology was granted the wish that everything he touched would turn to gold[cite: 3]."},
+        {"num": 53, "module": "Module 3: Biblical & Mythological", "q": "What does 'Quiver full of arrows' mean?", "options": ["A) Having many resources, skills, or options to achieve success", "B) Carrying hunting weapons into a forest", "C) Feeling nervous and trembling with fear", "D) Having many enemies waiting to attack"], "ans": 0, "brief": "In ancient archery, a warrior with a quiver (arrow holder) full of arrows was well-equipped for any situation[cite: 3]."},
+        {"num": 54, "module": "Module 3: Biblical & Mythological", "q": "What does 'Ivory tower' refer to?", "options": ["A) Living isolated from practical realities or everyday life", "B) A tall monument made of white marble", "C) A secure bank vault for storing jewelry", "D) A busy marketplace in a capital city"], "ans": 0, "brief": "Originally a Biblical symbol of purity, it came to describe intellectuals secluded from real-world practicalities[cite: 3]."},
+        {"num": 55, "module": "Module 3: Biblical & Mythological", "q": "What does 'Thirty pieces of silver' refer to?", "options": ["A) Money accepted by betraying someone's trust", "B) An ancient Roman silver currency", "C) The price of a modest meal in Jerusalem", "D) A generous reward for faithful service"], "ans": 0, "brief": "Judas Iscariot accepted thirty pieces of silver as the bribe to betray Jesus Christ to his captors[cite: 3]."},
+        {"num": 56, "module": "Module 3: Biblical & Mythological", "q": "Who is a 'Prodigal son'?", "options": ["A) A person who returns home after wasting opportunities or wealth", "B) A son who becomes a famous scholar", "C) An obedient child who never leaves home", "D) A wealthy heir who donates everything to charity"], "ans": 0, "brief": "From the Biblical parable: a younger son wastes his inheritance but is welcomed back with love by his father[cite: 3]."},
+        {"num": 57, "module": "Module 3: Biblical & Mythological", "q": "What does 'Wash one's hands of (something)' mean?", "options": ["A) To refuse responsibility for someone or something", "B) To clean one's hands before a meal", "C) To complete a task successfully", "D) To sign a legal contract"], "ans": 0, "brief": "Pontius Pilate washed his hands in public to declare he took no responsibility for the condemnation of Jesus[cite: 3]."},
+        {"num": 58, "module": "Module 3: Biblical & Mythological", "q": "What does 'Penelope's web' mean?", "options": ["A) Work repeatedly undone, causing endless delay or no progress", "B) A beautifully woven silk garment", "C) A spider web in a garden", "D) A complex legal trap"], "ans": 0, "brief": "In Homer's Odyssey, Penelope wove a shroud by day and unraveled it at night to delay suitors[cite: 3]."},
+        {"num": 59, "module": "Module 3: Biblical & Mythological", "q": "What does 'Between Scylla and Charybdis' mean?", "options": ["A) Caught between two equally dangerous choices", "B) Sailing smoothly between two islands", "C) Living happily between two friendly neighbors", "D) Choosing between wealth and fame"], "ans": 0, "brief": "In Greek mythology, Scylla and Charybdis were sea monsters on opposite sides of a narrow strait[cite: 3]."},
+        {"num": 60, "module": "Module 3: Biblical & Mythological", "q": "What does 'Sword of Damocles' symbolize?", "options": ["A) A constant threat of imminent danger or misfortune", "B) An ancient royal weapon of victory", "C) A knight's pledge of loyalty", "D) A sharp knife used in banquets"], "ans": 0, "brief": "King Dionysius hung a sword by a single horsehair over Damocles' head to show the peril accompanying power[cite: 3]."},
+        {"num": 61, "module": "Module 3: Biblical & Mythological", "q": "What does 'Tilt at windmills' mean?", "options": ["A) To fight imaginary enemies or pursue unrealistic causes", "B) To generate electricity using wind power", "C) To travel across windy farm plains", "D) To build wooden structures in the countryside"], "ans": 0, "brief": "From Cervantes' Don Quixote: the knight attacked windmills believing they were ferocious giants[cite: 3]."},
+        {"num": 62, "module": "Module 3: Biblical & Mythological", "q": "What does 'Hold out an olive branch' mean?", "options": ["A) To offer peace, reconciliation, or friendship after conflict", "B) To plant olive trees in a vineyard", "C) To invite friends for a feast", "D) To surrender unconditional territory"], "ans": 0, "brief": "In Noah's Ark story, a dove returned with an olive leaf, symbolizing the end of the flood and peace[cite: 3]."},
+        {"num": 63, "module": "Module 3: Biblical & Mythological", "q": "What does 'Throw pearls before swine' mean?", "options": ["A) To offer something valuable to those who cannot appreciate it", "B) To feed farm animals with grains", "C) To wear expensive jewelry in rural markets", "D) To scatter coins in front of a crowd"], "ans": 0, "brief": "From Gospel of Matthew: pigs cannot recognize the value of pearls and will simply trample them in mud[cite: 3]."},
+        {"num": 64, "module": "Module 3: Biblical & Mythological", "q": "What does 'Cloven hoof' refer to when shown by someone?", "options": ["A) Showing one's true, usually evil, nature unexpectedly", "B) Wearing boots made of leather", "C) Walking awkwardly on stones", "D) A lucky mark on an animal's foot"], "ans": 0, "brief": "In Christian folklore, the Devil had split (cloven) hooves which revealed his true identity despite human disguise[cite: 3]."},
+        {"num": 65, "module": "Module 3: Biblical & Mythological", "q": "What does 'Albatross around one's neck' mean?", "options": ["A) A heavy burden causing constant trouble or guilt", "B) A beautiful necklace worn at weddings", "C) A pet bird carried on a ship", "D) A medal of honor for sailors"], "ans": 0, "brief": "From Coleridge's 'Rime of the Ancient Mariner': the sailor who shot an albatross was forced to wear its carcass[cite: 3]."},
+        {"num": 66, "module": "Module 3: Biblical & Mythological", "q": "What does 'A Judas kiss' mean?", "options": ["A) An act of betrayal disguised as friendship or affection", "B) A farewell greeting between lovers", "C) A greeting given to a returning hero", "D) A sacred blessing from a priest"], "ans": 0, "brief": "Judas identified Jesus to the arresting soldiers by greeting him with a kiss in Gethsemane[cite: 3]."},
+        {"num": 67, "module": "Module 3: Biblical & Mythological", "q": "What does 'Trojan horse' mean metaphorically?", "options": ["A) A person or thing that appears harmless but is intended to deceive or destroy from within", "B) A wooden toy horse for children", "C) A fast warhorse used in cavalry", "D) A heavy cart used to transport weapons"], "ans": 0, "brief": "Greek soldiers hid inside a wooden horse gifted to Troy, opening the city gates from within[cite: 3]."},
+        {"num": 68, "module": "Module 3: Biblical & Mythological", "q": "What does 'Between the devil and the deep blue sea' mean?", "options": ["A) Faced with two equally unpleasant choices", "B) Swimming in a deep ocean near rocks", "C) Arguing with a wicked person on a boat", "D) Enjoying a peaceful voyage"], "ans": 0, "brief": "A maritime phrase synonymous with Scylla and Charybdis, meaning trapped between two perils[cite: 3]."},
+        {"num": 69, "module": "Module 3: Biblical & Mythological", "q": "What does 'Have many strings to one's bow' mean?", "options": ["A) To possess several skills, abilities, or alternative resources", "B) To play a violin in an orchestra", "C) To carry extra weapons during hunting", "D) To tie decorative ribbons on a gift"], "ans": 0, "brief": "An archer with extra bowstrings is prepared if one breaks; it denotes versatility[cite: 3]."},
+        {"num": 70, "module": "Module 3: Biblical & Mythological", "q": "What does 'Keep something up one's sleeve' mean?", "options": ["A) To have a hidden advantage or reserve strategy", "B) To wear clothing with large pockets", "C) To conceal money in a coat", "D) To fold shirt sleeves during summer"], "ans": 0, "brief": "Magicians and card players hid extra cards or props up their sleeves to produce when needed[cite: 3]."},
+        {"num": 71, "module": "Module 3: Biblical & Mythological", "q": "What does 'Strike gold' mean?", "options": ["A) To achieve unexpected success or wealth", "B) To work as a miner in an underground pit", "C) To buy gold jewelry during a festival", "D) To lose money in a speculative venture"], "ans": 0, "brief": "From gold rush mining: suddenly discovering a rich vein of gold ore[cite: 3]."},
+        {"num": 72, "module": "Module 3: Biblical & Mythological", "q": "What does 'Ride the crest of a wave' mean?", "options": ["A) To enjoy peak popularity, success, or good fortune", "B) To surf on ocean waves during a storm", "C) To struggle against a rising tide", "D) To sail a boat into a harbor"], "ans": 0, "brief": "The crest is the highest point of a wave; riding it means being at the summit of success[cite: 3]."},
+        {"num": 73, "module": "Module 3: Biblical & Mythological", "q": "What does 'Come up roses' mean?", "options": ["A) To turn out successfully and happily", "B) To plant rose bushes in a garden", "C) To smell pleasant like flowers", "D) To receive a bouquet as a gift"], "ans": 0, "brief": "Means a situation develops in a wonderful, flourishing manner[cite: 3]."},
+        {"num": 74, "module": "Module 3: Biblical & Mythological", "q": "What does 'Millstone around one's neck' mean?", "options": ["A) A heavy burden or encumbrance", "B) A stone carving worn as a pendant", "C) A grinding stone used in a flour mill", "D) A badge of military distinction"], "ans": 0, "brief": "A heavy stone used for grinding grain; hanging it around someone's neck is an oppressive burden[cite: 3]."},
+        {"num": 75, "module": "Module 3: Biblical & Mythological", "q": "What does 'Cross to bear' mean?", "options": ["A) A difficult burden or trial one must endure patiently", "B) A wooden cross placed in a chapel", "C) A medal awarded for bravery", "D) A sign marked on a map"], "ans": 0, "brief": "From Christ carrying his cross to Calvary; it symbolizes personal suffering endured with fortitude[cite: 3]."},
+
+        // MODULE 4: BODY PARTS & PHYSICAL ACTIONS (76-100)
+        {"num": 76, "module": "Module 4: Body Parts & Actions", "q": "What does 'My ears are burning' mean?", "options": ["A) Someone is talking about you in your absence", "B) Your ears are hurting due to loud noise", "C) You are suffering from a winter cold", "D) You are listening to a secret conversation"], "ans": 0, "brief": "Ancient Roman superstition: if your ears suddenly felt hot, someone was discussing you[cite: 3]."},
+        {"num": 77, "module": "Module 4: Body Parts & Actions", "q": "What does 'Turn a deaf ear (to)' mean?", "options": ["A) To ignore someone or something deliberately", "B) To suffer from partial hearing loss", "C) To listen carefully to advice", "D) To whisper in someone's ear"], "ans": 0, "brief": "Means pretending not to hear requests or complaints[cite: 3]."},
+        {"num": 78, "module": "Module 4: Body Parts & Actions", "q": "What does 'All ears' mean?", "options": ["A) To be waiting eagerly and attentively to hear about something", "B) To have large ears", "C) To overhear rumors by accident", "D) To ignore ambient sounds"], "ans": 0, "brief": "Means giving someone your undivided listening attention[cite: 3]."},
+        {"num": 79, "module": "Module 4: Body Parts & Actions", "q": "What does 'By the skin of the teeth' mean?", "options": ["A) By the narrowest possible margin; barely escaping failure", "B) By brushing teeth clean every morning", "C) By speaking clearly and loudly", "D) By biting food carefully"], "ans": 0, "brief": "Biblical phrase (Book of Job): since teeth have no skin, it describes a hair's-breadth escape[cite: 3]."},
+        {"num": 80, "module": "Module 4: Body Parts & Actions", "q": "What does 'Snap one's fingers at' mean?", "options": ["A) To treat someone or something with contempt or disregard", "B) To call a waiter in a restaurant", "C) To keep rhythm with music", "D) To wake someone from sleep"], "ans": 0, "brief": "In ancient Greece and Rome, snapping fingers signified dismissing someone as insignificant[cite: 3]."},
+        {"num": 81, "module": "Module 4: Body Parts & Actions", "q": "What does 'Elbow grease' mean?", "options": ["A) Hard physical effort and strenuous work", "B) Lubricating oil used on machinery", "C) A pain in the elbow joint", "D) Resting one's arms on a table"], "ans": 0, "brief": "Refers to energetic physical manual labor, especially polishing or scrubbing[cite: 3]."},
+        {"num": 82, "module": "Module 4: Body Parts & Actions", "q": "What does 'Elbow room' mean?", "options": ["A) Enough space or freedom to move or act comfortably", "B) A small corner in an office", "C) A crowded train carriage", "D) A table where people bump elbows"], "ans": 0, "brief": "Means having sufficient physical or operational latitude without feeling cramped[cite: 3]."},
+        {"num": 83, "module": "Module 4: Body Parts & Actions", "q": "What does 'Find one's feet' mean?", "options": ["A) To become confident and comfortable in a new situation", "B) To buy new shoes for a walk", "C) To stand up after sitting for hours", "D) To lose balance on a slippery floor"], "ans": 0, "brief": "Like an infant learning to stand and walk, it means gaining poise in a new role[cite: 3]."},
+        {"num": 84, "module": "Module 4: Body Parts & Actions", "q": "What does 'Have one's head in the clouds' mean?", "options": ["A) To be impractical, unrealistic, or day-dreaming ('hawai kile banana')", "B) To climb a tall mountain peak", "C) To suffer from dizziness", "D) To observe weather patterns"], "ans": 0, "brief": "Means being disconnected from earthly realities and living in fantasy[cite: 3]."},
+        {"num": 85, "module": "Module 4: Body Parts & Actions", "q": "What does 'Bury one's head in the sand' mean?", "options": ["A) To refuse to face reality or unpleasant facts", "B) To search for shells on a beach", "C) To hide from the sun", "D) To dig a hole in the desert"], "ans": 0, "brief": "From the myth that ostriches bury their heads in sand when threatened[cite: 3]."},
+        {"num": 86, "module": "Module 4: Body Parts & Actions", "q": "What does 'Cool one's heels' mean?", "options": ["A) To wait idly or impatiently for a long time", "B) To soak feet in cold water", "C) To walk barefoot on grass", "D) To run fast after a thief"], "ans": 0, "brief": "Visitors kept waiting in royal anterooms until their heels grew cool from standing[cite: 3]."},
+        {"num": 87, "module": "Module 4: Body Parts & Actions", "q": "What does 'Take to one's heels' mean?", "options": ["A) To run away quickly, especially to escape danger", "B) To dance merrily at a party", "C) To stand firm during an attack", "D) To wear high-heeled shoes"], "ans": 0, "brief": "Means fleeing rapidly on foot[cite: 3]."},
+        {"num": 88, "module": "Module 4: Body Parts & Actions", "q": "What does 'Dig in one's heels' mean?", "options": ["A) To refuse stubbornly to change one's opinion or course of action", "B) To plant seeds in a garden", "C) To climb a steep muddy hill", "D) To kick a ball with force"], "ans": 0, "brief": "Like an animal pressing its hooves into earth to avoid being pulled forward[cite: 3]."},
+        {"num": 89, "module": "Module 4: Body Parts & Actions", "q": "What does 'Kick one's heels' mean?", "options": ["A) To wait around idly or impatiently for someone or something", "B) To jump high with joy", "C) To exercise in a gym", "D) To trip over an obstacle"], "ans": 0, "brief": "Means idling away time while waiting[cite: 3]."},
+        {"num": 90, "module": "Module 4: Body Parts & Actions", "q": "What does 'Kick the bucket' mean in slang?", "options": ["A) To die", "B) To clean a floor with water", "C) To win a prize unexpectedly", "D) To start a quarrel"], "ans": 0, "brief": "A colloquial idiom meaning to pass away or die[cite: 3]."},
+        {"num": 91, "module": "Module 4: Body Parts & Actions", "q": "What does 'Grease the palm' mean?", "options": ["A) To bribe someone to gain favor or illegal advantage ('ghuus dena')", "B) To apply lotion to dry hands", "C) To shake hands warmly", "D) To read someone's palm for fortune"], "ans": 0, "brief": "Making an official's palm 'slippery' with coins so they smooth your transaction[cite: 3]."},
+        {"num": 92, "module": "Module 4: Body Parts & Actions", "q": "What does 'Cut someone's throat' mean metaphorically?", "options": ["A) To ruin someone ruthlessly", "B) To shave someone's beard", "C) To speak with a hoarse voice", "D) To cure a sore throat"], "ans": 0, "brief": "Refers to merciless competition or ruin[cite: 3]."},
+        {"num": 93, "module": "Module 4: Body Parts & Actions", "q": "What does 'Cut off one's nose to spite one's face' mean?", "options": ["A) To harm oneself while trying to harm or punish someone else", "B) To undergo cosmetic surgery", "C) To wear a mask in winter", "D) To speak angrily to a mirror"], "ans": 0, "brief": "A self-destructive act committed out of spite or revenge[cite: 3]."},
+        {"num": 94, "module": "Module 4: Body Parts & Actions", "q": "What does 'A bag of bones' mean?", "options": ["A) A person who is extremely thin or emaciated", "B) A sack full of old relics", "C) A dog chewing on bones", "D) A heavy backpack for camping"], "ans": 0, "brief": "An emaciated person whose bones protrude visibly through the skin[cite: 3]."},
+        {"num": 95, "module": "Module 4: Body Parts & Actions", "q": "What does 'Green thumb' refer to?", "options": ["A) An unusual talent for making plants grow well", "B) A thumb stained with green ink", "C) A beginner in gardening", "D) A hand injury from thorns"], "ans": 0, "brief": "Someone with a green thumb is a skilled and successful gardener[cite: 3]."},
+        {"num": 96, "module": "Module 4: Body Parts & Actions", "q": "What does 'Feet of clay' mean?", "options": ["A) A hidden weakness or flaw in someone otherwise admired or powerful", "B) Muddy boots after walking in rain", "C) A statue made of terracotta", "D) Ability to walk on soft earth"], "ans": 0, "brief": "From the Biblical dream of a golden statue resting on fragile feet of iron and clay[cite: 3]."},
+        {"num": 97, "module": "Module 4: Body Parts & Actions", "q": "What does 'Hand in glove' mean?", "options": ["A) To be in an extremely close, cooperative, or inseparable relationship", "B) To wear warm gloves in winter", "C) To work as a surgeon in an operating room", "D) To fight with boxing gloves"], "ans": 0, "brief": "A glove fits a hand snugly; it denotes intimate collaboration or collusion[cite: 3]."},
+        {"num": 98, "module": "Module 4: Body Parts & Actions", "q": "What does 'Prick up your ears' mean?", "options": ["A) To suddenly begin listening very carefully", "B) To pierce ears for earrings", "C) To suffer from ear pain", "D) To clean ears with a bud"], "ans": 0, "brief": "Like an animal raising its ears when it hears an intriguing sound[cite: 3]."},
+        {"num": 99, "module": "Module 4: Body Parts & Actions", "q": "What does 'Eavesdropper' mean?", "options": ["A) A person who secretly listens to private conversations ('chhupkar sunne wala')", "B) A roof repairman", "C) A person who drops items from a window", "D) A speaker at a public rally"], "ans": 0, "brief": "Someone standing under the eaves of a house to overhear private talk inside[cite: 3]."},
+        {"num": 100, "module": "Module 4: Body Parts & Actions", "q": "What does 'By a hair's breadth' mean?", "options": ["A) By an extremely small margin ('baal-baal bachna')", "B) By measuring hair length", "C) By cutting hair short", "D) By combing hair neatly"], "ans": 0, "brief": "The breadth of a single hair represents the tiniest possible margin of safety[cite: 3]."},
+
+        // MODULE 5: WORKPLACE, TRADES & TOOL IDIOMS (101-125)
+        {"num": 101, "module": "Module 5: Workplace & Tools", "q": "What does 'Put out to pasture' mean?", "options": ["A) To retire someone because they are considered old or no longer useful", "B) To take animals to graze in a green meadow", "C) To go on a countryside vacation", "D) To buy a farm in a village"], "ans": 0, "brief": "Old farm horses no longer fit for plow work were turned out into green pastures to live out their days[cite: 3]."},
+        {"num": 102, "module": "Module 5: Workplace & Tools", "q": "What does 'Dyed in the wool' mean?", "options": ["A) Having strong, rigid beliefs that are unlikely to change", "B) Wearing woolen sweaters in winter", "C) Knitting blankets for children", "D) Washing woolen garments with care"], "ans": 0, "brief": "Wool dyed before being spun into yarn absorbs color permanently; it describes deeply rooted convictions[cite: 3]."},
+        {"num": 103, "module": "Module 5: Workplace & Tools", "q": "What does 'Throw a spanner in the works' mean?", "options": ["A) To cause problems or disrupt a plan unexpectedly", "B) To repair a broken machine quickly", "C) To work as an apprentice mechanic", "D) To build a new factory"], "ans": 0, "brief": "Dropping a spanner (wrench) into spinning gears halts and damages industrial machinery[cite: 3]."},
+        {"num": 104, "module": "Module 5: Workplace & Tools", "q": "What does 'A chip off the old block' mean?", "options": ["A) A person very similar to their parent in character or habits", "B) A piece of firewood used for cooking", "C) A wooden sculpture in a museum", "D) A carpenter's sharpening tool"], "ans": 0, "brief": "When a woodcutter chops a block, the wood chip shares the exact grain of the parent log[cite: 3]."},
+        {"num": 105, "module": "Module 5: Workplace & Tools", "q": "What does 'Cut the mustard' mean?", "options": ["A) To meet the required standard or succeed at a task", "B) To harvest mustard crops in a field", "C) To cook food with spicy seasoning", "D) To slice bread with a sharp knife"], "ans": 0, "brief": "In 19th-century America, mustard symbolized zest and quality; cutting the mustard means measuring up[cite: 3]."},
+        {"num": 106, "module": "Module 5: Workplace & Tools", "q": "What does 'A cut above' mean?", "options": ["A) Clearly better or superior to others", "B) A cut made on the top of a cloth", "C) A salary increase in a job", "D) A high jumper in athletics"], "ans": 0, "brief": "A master tailor's cut of garment cloth was noticeably more elegant and superior to average cuts[cite: 3]."},
+        {"num": 107, "module": "Module 5: Workplace & Tools", "q": "What does 'Run of the mill' mean?", "options": ["A) Ordinary, average, or lacking anything special", "B) A race run around a wind mill", "C) High-grade flour produced in a factory", "D) A fast machine in a textile plant"], "ans": 0, "brief": "Flour or cloth produced routinely by a mill without special selection is standard, average quality[cite: 3]."},
+        {"num": 108, "module": "Module 5: Workplace & Tools", "q": "What does 'Get the axe' mean?", "options": ["A) To be dismissed from a job or position", "B) To chop firewood in a forest", "C) To buy a sharp cutting tool", "D) To win a prize in a competition"], "ans": 0, "brief": "Refers to the swift termination of employment, like a tree felled by an axe[cite: 3]."},
+        {"num": 109, "module": "Module 5: Workplace & Tools", "q": "What does 'Hang up one's boots' mean?", "options": ["A) To retire or quit a profession, sport, or activity", "B) To dry shoes after walking in rain", "C) To buy new athletic footwear", "D) To play a football match"], "ans": 0, "brief": "When athletes retire, they hang up their boots in the locker room for the last time[cite: 3]."},
+        {"num": 110, "module": "Module 5: Workplace & Tools", "q": "What does 'Past one's prime' mean?", "options": ["A) Having passed the peak of abilities, health, or success", "B) Being in the best shape of one's life", "C) Working during early morning hours", "D) Receiving a promotion at work"], "ans": 0, "brief": "Means someone has crossed their age of optimum vigor and effectiveness[cite: 3]."},
+        {"num": 111, "module": "Module 5: Workplace & Tools", "q": "What does 'Put a spoke in someone's wheel' mean?", "options": ["A) To deliberately hinder or obstruct someone's progress", "B) To repair a broken bicycle wheel", "C) To help someone push a heavy cart", "D) To drive a vehicle at high speed"], "ans": 0, "brief": "Inserting a bar into a turning wheel stops it instantly, symbolizing deliberate obstruction[cite: 3]."},
+        {"num": 112, "module": "Module 5: Workplace & Tools", "q": "What does 'Rain on someone's parade' mean?", "options": ["A) To spoil someone's plans, excitement, or enjoyment", "B) To celebrate during a monsoon rainfall", "C) To organize an outdoor festival", "D) To carry an umbrella in public"], "ans": 0, "brief": "An unexpected downpour ruins an outdoor parade or celebratory event[cite: 3]."},
+        {"num": 113, "module": "Module 5: Workplace & Tools", "q": "What does 'Upset the applecart' mean?", "options": ["A) To ruin carefully laid plans or cause disruption", "B) To buy fresh apples from a street vendor", "C) To eat fruit before a meal", "D) To push a cart down a steep hill"], "ans": 0, "brief": "Overturning a vendor's cart of neatly stacked apples causes chaotic disorder[cite: 3]."},
+        {"num": 114, "module": "Module 5: Workplace & Tools", "q": "What does 'Rock the boat' mean?", "options": ["A) To disturb a stable situation or cause trouble", "B) To row a boat across a quiet lake", "C) To go on a sea voyage", "D) To anchor a vessel in a harbor"], "ans": 0, "brief": "Swaying a small boat risks capsizing it; it means unsettling a precarious equilibrium[cite: 3]."},
+        {"num": 115, "module": "Module 5: Workplace & Tools", "q": "What does 'Throw in the sponge (or towel)' mean?", "options": ["A) To admit defeat and give up a struggle", "B) To clean a bathroom with a sponge", "C) To wipe sweat during a boxing match", "D) To start a new competition"], "ans": 0, "brief": "In boxing, a trainer threw a sponge or towel into the ring to surrender on behalf of a battered fighter[cite: 3]."},
+        {"num": 116, "module": "Module 5: Workplace & Tools", "q": "What does 'Yeoman's service' mean?", "options": ["A) Valuable, loyal, and efficient service performed with dedication", "B) Military service during wartime only", "C) Unpaid domestic labor", "D) Guarding a royal castle at night"], "ans": 0, "brief": "Yeomen were reliable freeholders and servants whose faithful service became legendary in England[cite: 3]."},
+        {"num": 117, "module": "Module 5: Workplace & Tools", "q": "What does 'Go the extra mile' mean?", "options": ["A) To make an exceptional effort beyond what is required", "B) To walk a long distance for exercise", "C) To travel abroad for business", "D) To drive an extra hour on a highway"], "ans": 0, "brief": "Means doing more than your statutory obligation to ensure success or help someone[cite: 3]."},
+        {"num": 118, "module": "Module 5: Workplace & Tools", "q": "What does 'Above and beyond the call of duty' mean?", "options": ["A) Performing much better or greater than expected in one's work", "B) Answering a telephone call after office hours", "C) Resigning from a government post", "D) Obeying rules strictly without question"], "ans": 0, "brief": "Denotes heroic or exemplary dedication exceeding professional requirements[cite: 3]."},
+        {"num": 119, "module": "Module 5: Workplace & Tools", "q": "What does 'Pull one's weight' mean?", "options": ["A) To do one's fair share of work in a team ('apna kaam pura karna')", "B) To lift heavy dumbbells in a gym", "C) To weigh oneself on a scale", "D) To drag a boat onto a shore"], "ans": 0, "brief": "From rowing crews: each rower must pull their oar with full force so the boat moves straight[cite: 3]."},
+        {"num": 120, "module": "Module 5: Workplace & Tools", "q": "What does 'Toe the line' mean?", "options": ["A) To obey rules or conform to expected standards strictly", "B) To paint white lines on a running track", "C) To walk barefoot on a rope", "D) To cross a boundary illegally"], "ans": 0, "brief": "Athletes or soldiers standing with their toes touching the chalk mark in disciplined alignment[cite: 3]."},
+        {"num": 121, "module": "Module 5: Workplace & Tools", "q": "What does 'A dry run' mean?", "options": ["A) A practice rehearsal or trial before the actual event", "B) A running race held in a desert", "C) A machine that operates without oil", "D) A journey without drinking water"], "ans": 0, "brief": "Testing equipment or procedures without live ammunition or fuel to rehearse for real execution[cite: 3]."},
+        {"num": 122, "module": "Module 5: Workplace & Tools", "q": "What does 'A lot on your plate' mean?", "options": ["A) Having many responsibilities or tasks to handle simultaneously", "B) Eating a lavish buffet dinner", "C) Washing dishes in a kitchen", "D) Serving food to guests at a feast"], "ans": 0, "brief": "A plate heaped with too much food is hard to eat; it denotes an overwhelming workload[cite: 3]."},
+        {"num": 123, "module": "Module 5: Workplace & Tools", "q": "What does 'Blaze a trail' mean?", "options": ["A) To be the first to do something new or innovative; to pioneer", "B) To light a campfire in a forest", "C) To burn dry leaves on a path", "D) To run quickly down a mountain slope"], "ans": 0, "brief": "Frontiersmen chipped marks (blazes) on tree trunks to guide later travelers through wilderness[cite: 3]."},
+        {"num": 124, "module": "Module 5: Workplace & Tools", "q": "What does 'Cut corners' mean?", "options": ["A) To do something cheaply or carelessly, taking shortcuts that compromise quality", "B) To trim the edges of a piece of paper", "C) To turn a car sharply on a road", "D) To build square furniture"], "ans": 0, "brief": "Taking shortcuts across lawn corners rather than walking the proper path saving time but ruining quality[cite: 3]."},
+        {"num": 125, "module": "Module 5: Workplace & Tools", "q": "What does 'Cut and dried' mean?", "options": ["A) Already settled and decided; not open to debate", "B) Herbs dried in the sun for cooking", "C) A wet cloth cut into strips", "D) An argument that continues endlessly"], "ans": 0, "brief": "Like dried herbs ready for immediate use in a shop, the matter is pre-prepared and settled[cite: 3]."},
+
+        // MODULE 6: SOCIAL, BEHAVIOUR & RELATIONSHIP IDIOMS (126-150)
+        {"num": 126, "module": "Module 6: Social & Behaviour", "q": "What does 'No love lost' mean today?", "options": ["A) Mutual dislike or hostility between two people", "B) Deep romantic affection between couple", "C) A broken friendship that is repaired", "D) A game where no points are lost"], "ans": 0, "brief": "Though 16th-century usage varied, today it means two people detest each other ('we don't get along')[cite: 3]."},
+        {"num": 127, "module": "Module 6: Social & Behaviour", "q": "What does 'At daggers drawn' mean?", "options": ["A) In bitter hostility; openly quarrelling and ready to fight", "B) Drawing pictures of swords on paper", "C) Fencing with wooden sticks", "D) Signing a peace treaty with a pen"], "ans": 0, "brief": "With daggers unsheathed from scabbards, two parties stand ready for immediate violent combat[cite: 3]."},
+        {"num": 128, "module": "Module 6: Social & Behaviour", "q": "What does 'Lock horns (with)' mean?", "options": ["A) To engage in a serious dispute or conflict", "B) To tie two bulls together with a rope", "C) To play a musical horn in a band", "D) To agree on a common strategy"], "ans": 0, "brief": "Like two bulls clashing horns in a fierce battle for dominance[cite: 3]."},
+        {"num": 129, "module": "Module 6: Social & Behaviour", "q": "What does 'Bad blood' mean?", "options": ["A) Feelings of anger, resentment, or enmity ('dushmani hona')", "B) An infection in the bloodstream", "C) An inherited genetic disorder", "D) A blood donation camp"], "ans": 0, "brief": "Refers to deep-seated rancor, hatred, and enmity between families or individuals[cite: 3]."},
+        {"num": 130, "module": "Module 6: Social & Behaviour", "q": "What does 'Cross swords (with)' mean?", "options": ["A) To argue, dispute, or fight with someone", "B) To practice stage fencing", "C) To exchange gifts at a wedding", "D) To salute an officer with a sword"], "ans": 0, "brief": "When duelists cross blades, combat begins; it denotes engaging in an intellectual or verbal clash[cite: 3]."},
+        {"num": 131, "module": "Module 6: Social & Behaviour", "q": "What does 'At loggerheads' mean?", "options": ["A) In strong disagreement or stubborn conflict", "B) Working together to chop timber", "C) Sharing a room in a wooden cabin", "D) Nodding agreement during a speech"], "ans": 0, "brief": "Means being locked in intractable dispute and opposing each other fiercely[cite: 3]."},
+        {"num": 132, "module": "Module 6: Social & Behaviour", "q": "What does 'Play second fiddle' mean?", "options": ["A) To accept a less important or subordinate role", "B) To play a violin solo in a concert", "C) To lead an orchestra from the front", "D) To tune a musical instrument"], "ans": 0, "brief": "In an orchestra, the second violin (fiddle) supports the lead first violin[cite: 3]."},
+        {"num": 133, "module": "Module 6: Social & Behaviour", "q": "What does 'Take a back seat' mean?", "options": ["A) To accept a less active or less important role", "B) To sit in the rear of a theater", "C) To drive a car from behind", "D) To sleep during a road journey"], "ans": 0, "brief": "Letting someone else drive while you occupy a secondary, supportive position[cite: 3]."},
+        {"num": 134, "module": "Module 6: Social & Behaviour", "q": "What does 'Break the ice' mean?", "options": ["A) To start a conversation and reduce initial awkwardness", "B) To chop blocks of ice for cold drinks", "C) To skate on a frozen lake", "D) To break a window in winter"], "ans": 0, "brief": "Icebreaker ships clear frozen waterways so other vessels can pass; it means thawing social stiffness[cite: 3]."},
+        {"num": 135, "module": "Module 6: Social & Behaviour", "q": "What does 'Hit it off' mean?", "options": ["A) To become friendly with someone immediately after meeting", "B) To strike a ball with a bat", "C) To leave a party early", "D) To quarrel during a first meeting"], "ans": 0, "brief": "Means developing instant rapport and friendship with a newcomer[cite: 3]."},
+        {"num": 136, "module": "Module 6: Social & Behaviour", "q": "What does 'A stalking horse' mean?", "options": ["A) A person or plan used to hide someone's real intentions", "B) A fast horse used in racing", "C) A wild horse in a mountain forest", "D) A toy horse for children"], "ans": 0, "brief": "Hunters hid behind a trained horse to approach game birds; it means a decoy masking real motives[cite: 3]."},
+        {"num": 137, "module": "Module 6: Social & Behaviour", "q": "What does 'Pull strings' mean?", "options": ["A) To use secret influence to obtain an unfair advantage ('naajayaz fayda uthana')", "B) To play a guitar in a band", "C) To tie a parcel with twine", "D) To repair a puppet theater"], "ans": 0, "brief": "Like a puppeteer manipulating strings from above, it means exerting behind-the-scenes influence[cite: 3]."},
+        {"num": 138, "module": "Module 6: Social & Behaviour", "q": "What does 'Play to the gallery' mean?", "options": ["A) To seek public approval through showy or popular actions", "B) To display paintings in an art exhibition", "C) To watch a cricket match from the stands", "D) To sing quietly in a studio"], "ans": 0, "brief": "Actors exaggerated performance for the cheap upstairs gallery seats to win cheap applause[cite: 3]."},
+        {"num": 139, "module": "Module 6: Social & Behaviour", "q": "What does 'Blow one's own trumpet (or horn)' mean?", "options": ["A) To boast or brag about one's own achievements", "B) To play music in a wedding parade", "C) To sound an alarm during fire", "D) To repair a brass instrument"], "ans": 0, "brief": "Means self-glorification and praising your own deeds loudly[cite: 3]."},
+        {"num": 140, "module": "Module 6: Social & Behaviour", "q": "What does 'Steal the show' mean?", "options": ["A) To attract the most attention or admiration unexpectedly", "B) To rob tickets at a cinema hall", "C) To cancel a theatrical performance", "D) To arrive late at a concert"], "ans": 0, "brief": "Outshining lead performers and capturing audience applause[cite: 3]."},
+        {"num": 141, "module": "Module 6: Social & Behaviour", "q": "What does 'Bury the hatchet' mean?", "options": ["A) To end a quarrel and make peace", "B) To dig a hole in a garden", "C) To hide a weapon in a forest", "D) To chop firewood for winter"], "ans": 0, "brief": "Native American tribes buried their war tomahawks (hatchets) in the ground when concluding peace treaties[cite: 3]."},
+        {"num": 142, "module": "Module 6: Social & Behaviour", "q": "What does 'Patch up one's differences' mean?", "options": ["A) To resolve disagreements and reconcile", "B) To sew torn clothes with needle", "C) To paint an old wall", "D) To divide property between brothers"], "ans": 0, "brief": "Mending a rift in relationships to restore harmony[cite: 3]."},
+        {"num": 143, "module": "Module 6: Social & Behaviour", "q": "What does 'Let bygones be bygones' mean?", "options": ["A) To forget past quarrels and move on", "B) To study ancient history", "C) To visit old childhood friends", "D) To keep old photographs in a diary"], "ans": 0, "brief": "Agreeing that past offenses should be forgiven and forgotten[cite: 3]."},
+        {"num": 144, "module": "Module 6: Social & Behaviour", "q": "What does 'Give someone a piece of one's mind' mean?", "options": ["A) To scold or rebuke someone angrily", "B) To share a brilliant idea with a colleague", "C) To write a friendly letter", "D) To teach meditation techniques"], "ans": 0, "brief": "Expressing blunt, angry criticism directly to an offender[cite: 3]."},
+        {"num": 145, "module": "Module 6: Social & Behaviour", "q": "What does 'Take someone to task' mean?", "options": ["A) To reprimand or criticize someone severely", "B) To assign homework to a student", "C) To invite someone for a job interview", "D) To help someone complete a project"], "ans": 0, "brief": "Calling someone to account and scolding them for faults[cite: 3]."},
+        {"num": 146, "module": "Module 6: Social & Behaviour", "q": "What does 'Haul over the coals' mean?", "options": ["A) To severely criticize or scold someone", "B) To cook meat over a charcoal grill", "C) To walk barefoot on fire", "D) To warm hands by a fireplace"], "ans": 0, "brief": "From medieval ordeals where accused persons were dragged over glowing embers[cite: 3]."},
+        {"num": 147, "module": "Module 6: Social & Behaviour", "q": "What does 'Read someone the riot act' mean?", "options": ["A) To give a stern warning or reprimand", "B) To read legal statutes in a courtroom", "C) To recite poetry to an audience", "D) To announce election results"], "ans": 0, "brief": "British magistrates read the Riot Act of 1714 to disperse unruly mobs under threat of severe punishment[cite: 3]."},
+        {"num": 148, "module": "Module 6: Social & Behaviour", "q": "What does 'Put on airs' mean?", "options": ["A) To behave as though one is more important than one really is", "B) To open windows for fresh air", "C) To travel by airplane frequently", "D) To sing cheerful songs"], "ans": 0, "brief": "Adopting pretentious, snobbish manners to impress others[cite: 3]."},
+        {"num": 149, "module": "Module 6: Social & Behaviour", "q": "What does 'Throw one's weight around' mean?", "options": ["A) To use one's power or authority aggressively", "B) To exercise with heavy gym weights", "C) To move furniture in a room", "D) To dance energetically at a party"], "ans": 0, "brief": "Bullying subordinates by flaunting superior official clout[cite: 3]."},
+        {"num": 150, "module": "Module 6: Social & Behaviour", "q": "What does 'Play politics' mean?", "options": ["A) To use influence or manipulation to achieve personal goals", "B) To contest elections for parliament", "C) To watch political news on television", "D) To debate constitution articles"], "ans": 0, "brief": "Engaging in scheming and factionalism for self-advancement[cite: 3]."},
+
+        // MODULE 7: FINANCIAL, VALUE & POSSESSION IDIOMS (151-175)
+        {"num": 151, "module": "Module 7: Financial & Value", "q": "What does 'In the red' mean?", "options": ["A) In debt or suffering financial loss", "B) Dressed in red clothes for a wedding", "C) Angry during a discussion", "D) Celebrating a profitable business year"], "ans": 0, "brief": "Old accounting ledgers used red ink for losses and debts, and black ink for profits[cite: 3]."},
+        {"num": 152, "module": "Module 7: Financial & Value", "q": "What does 'Rob Peter to pay Paul' mean?", "options": ["A) To use one debt or resource to pay another, without solving the underlying financial problem", "B) To steal money from a bank at night", "C) To donate wealth to two charities equally", "D) To borrow books from a library"], "ans": 0, "brief": "Shifting funds from one creditor to appease another without reducing total indebtedness[cite: 3]."},
+        {"num": 153, "module": "Module 7: Financial & Value", "q": "What does 'Keep the wolf from the door' mean?", "options": ["A) To earn just enough to avoid poverty or starvation ('gareebi ko ghar se door rakhna')", "B) To lock doors at night against thieves", "C) To train guard dogs for a farm", "D) To hunt wolves in winter"], "ans": 0, "brief": "The wolf symbolized hunger and winter peril; keeping it away means earning subsistence livelihood[cite: 3]."},
+        {"num": 154, "module": "Module 7: Financial & Value", "q": "What is a 'White elephant'?", "options": ["A) A costly possession that is useless or difficult to maintain", "B) A rare white marble statue", "C) A large house in the countryside", "D) A successful business investment"], "ans": 0, "brief": "In Siam (Thailand), sacred white elephants could not work but required lavish upkeep, ruining the owner[cite: 3]."},
+        {"num": 155, "module": "Module 7: Financial & Value", "q": "What does 'Go for a song' mean?", "options": ["A) To be sold at a very low or cheap price", "B) To sing at a musical concert", "C) To buy musical instruments", "D) To write lyrics for a film"], "ans": 0, "brief": "In 18th-century England, items sold cheaply at auction were said to go for a song[cite: 3]."},
+        {"num": 156, "module": "Module 7: Financial & Value", "q": "What does 'A dime a dozen' mean?", "options": ["A) Very common, cheap, and of little value", "B) Twelve eggs bought in a market", "C) A rare coin collection", "D) An expensive dozen of roses"], "ans": 0, "brief": "19th-century US pricing where 12 common items cost just one dime (10 cents)[cite: 3]."},
+        {"num": 157, "module": "Module 7: Financial & Value", "q": "What does 'Make a killing' mean?", "options": ["A) To earn a large and sudden financial profit", "B) To hunt animals in a safari", "C) To lose money in stock trading", "D) To cancel a business contract"], "ans": 0, "brief": "Refers to reaping huge financial gains quickly[cite: 3]."},
+        {"num": 158, "module": "Module 7: Financial & Value", "q": "What does 'Line one's pockets' mean?", "options": ["A) To make money dishonestly or through bribery", "B) To sew pockets into a coat", "C) To carry coins in trousers", "D) To donate savings to poor"], "ans": 0, "brief": "Filling one's pockets with illicit gains or graft[cite: 3]."},
+        {"num": 159, "module": "Module 7: Financial & Value", "q": "What does 'Feather one's own nest' mean?", "options": ["A) To use one's position to acquire wealth dishonestly for oneself", "B) To build a wooden birdhouse in a garden", "C) To clean one's bedroom neatly", "D) To prepare for retirement peacefully"], "ans": 0, "brief": "Like birds lining nests with soft feathers, it means enriching oneself at public expense[cite: 3]."},
+        {"num": 160, "module": "Module 7: Financial & Value", "q": "What does 'Feel the pinch' mean?", "options": ["A) To experience financial hardship or reduced income", "B) To suffer a skin bruise", "C) To wear tight shoes", "D) To complain about cold weather"], "ans": 0, "brief": "Feeling the uncomfortable squeeze of financial stringency[cite: 3]."},
+        {"num": 161, "module": "Module 7: Financial & Value", "q": "What does 'Be in dire straits' mean?", "options": ["A) To be in an extremely difficult financial or dangerous situation", "B) To sail through a narrow sea passage", "C) To live in a luxurious mansion", "D) To travel across foreign borders"], "ans": 0, "brief": "Straits are narrow maritime passages; dire straits mean acute distress or bankruptcy[cite: 3]."},
+        {"num": 162, "module": "Module 7: Financial & Value", "q": "What does 'Man of means' mean?", "options": ["A) A wealthy or financially well-off person", "B) A man who speaks with polite words", "C) A mathematician skilled in averages", "D) A traveler with simple luggage"], "ans": 0, "brief": "Someone possessing substantial financial resources and wealth[cite: 3]."},
+        {"num": 163, "module": "Module 7: Financial & Value", "q": "What does 'Man of straw' mean?", "options": ["A) A man of no substance, weak character, or little financial value", "B) A farmer working in a wheat field", "C) A scarecrow placed in a garden", "D) A strong leader who defends his town"], "ans": 0, "brief": "Like a figure stuffed with straw, a person lacking moral fiber or financial standing[cite: 3]."},
+        {"num": 164, "module": "Module 7: Financial & Value", "q": "What does 'Born with a silver spoon in one's mouth' mean?", "options": ["A) Born into a wealthy and privileged family", "B) Gifted with a silver cup at birth", "C) Born with excellent dental health", "D) Trained as a chef from childhood"], "ans": 0, "brief": "Denotes inherited aristocratic privilege and affluence[cite: 3]."},
+        {"num": 165, "module": "Module 7: Financial & Value", "q": "What does 'Throw good money after bad' mean?", "options": ["A) To waste more resources on a hopeless cause or failing investment", "B) To donate money to charity after winning a lottery", "C) To exchange old currency notes for new ones", "D) To save money in a bank account"], "ans": 0, "brief": "Spending additional money trying to rescue an already lost investment[cite: 3]."},
+        {"num": 166, "module": "Module 7: Financial & Value", "q": "What does 'Bread and water' mean when describing a lifestyle?", "options": ["A) Living on the bare minimum or poorest subsistence", "B) Eating a healthy breakfast every day", "C) Hosting a simple dinner for neighbors", "D) Working in a bakery shop"], "ans": 0, "brief": "Prisoners' traditional meager ration, denoting extreme frugality or poverty[cite: 3]."},
+        {"num": 167, "module": "Module 7: Financial & Value", "q": "What does 'Life of Riley' mean?", "options": ["A) A life of comfort, ease, and luxury", "B) A life of hard manual farming", "C) A military life in barracks", "D) A sailor's life at sea"], "ans": 0, "brief": "An Irish-American expression for carefree, opulent living[cite: 3]."},
+        {"num": 168, "module": "Module 7: Financial & Value", "q": "What does 'Work the system' mean?", "options": ["A) To exploit rules or procedures to one's own advantage", "B) To repair office computers", "C) To work overtime without pay", "D) To design a new software program"], "ans": 0, "brief": "Manipulating bureaucratic loopholes for personal gain[cite: 3]."},
+        {"num": 169, "module": "Module 7: Financial & Value", "q": "What does 'Use one's clout' mean?", "options": ["A) To use one's influence or power to achieve something", "B) To strike someone with a wooden club", "C) To shout loudly in a crowd", "D) To wear fashionable clothes"], "ans": 0, "brief": "Exerting political or social leverage to get results[cite: 3]."},
+        {"num": 170, "module": "Module 7: Financial & Value", "q": "What does 'Footloose and fancy-free' mean?", "options": ["A) Free from responsibilities or attachments; able to move freely", "B) Wearing comfortable dancing shoes", "C) Lost in a dense forest", "D) Working hard in a factory"], "ans": 0, "brief": "Unencumbered by marriage or heavy duties[cite: 3]."},
+        {"num": 171, "module": "Module 7: Financial & Value", "q": "What does 'Wander from pillar to post' mean?", "options": ["A) To move from one place to another without achieving anything", "B) To walk between stone columns in a palace", "C) To deliver postal mail in a village", "D) To travel by bus across cities"], "ans": 0, "brief": "Aimless, desperate wandering from one recourse to another[cite: 3]."},
+        {"num": 172, "module": "Module 7: Financial & Value", "q": "What does 'Drift along' mean?", "options": ["A) To live or move without a clear plan or purpose", "B) To row a boat rapidly across a river", "C) To drive a car on a mountain road", "D) To work with extreme focus"], "ans": 0, "brief": "Floating passively through life without ambition[cite: 3]."},
+        {"num": 173, "module": "Module 7: Financial & Value", "q": "What does 'Under a cloud' mean?", "options": ["A) Under suspicion, disgrace, or facing criticism ('shak ke daayre mein hona')", "B) Standing under a rain umbrella", "C) Enjoying cool weather in hills", "D) Flying in an airplane above clouds"], "ans": 0, "brief": "Dark clouds symbolize misfortune; being under one means enduring suspicion or disfavor[cite: 3]."},
+        {"num": 174, "module": "Module 7: Financial & Value", "q": "What does 'In bad odour' mean?", "options": ["A) Out of favour; viewed with disapproval or suspicion", "B) Wearing strong perfume", "C) Standing near a garbage dump", "D) Suffering from a cold"], "ans": 0, "brief": "Being in bad odor means having a bad reputation or being disliked[cite: 3]."},
+        {"num": 175, "module": "Module 7: Financial & Value", "q": "What does 'Fall from grace' mean?", "options": ["A) To lose status, reputation, or public respect", "B) To slip on a staircase", "C) To resign from a sports team", "D) To apologize after an argument"], "ans": 0, "brief": "Losing prestige or divine/official favor after a transgression[cite: 3]."},
+
+        // MODULE 8: SUCCESS, FAILURE & EFFORT IDIOMS (176-200)
+        {"num": 176, "module": "Module 8: Success & Effort", "q": "What does 'Rise to the occasion' mean?", "options": ["A) To perform well in a difficult or challenging situation", "B) To wake up early for a festival", "C) To stand up when a judge enters", "D) To climb a stage to receive a medal"], "ans": 0, "brief": "Rising above pressure to display superior capability when challenged[cite: 3]."},
+        {"num": 177, "module": "Module 8: Success & Effort", "q": "What does 'Take a leaf out of somebody's book' mean?", "options": ["A) To follow someone's good example or behavior", "B) To tear a page from a library book", "C) To steal someone's diary notes", "D) To write a book review"], "ans": 0, "brief": "Adopting a page (leaf) from an admirable person's book of conduct[cite: 3]."},
+        {"num": 178, "module": "Module 8: Success & Effort", "q": "What does 'Follow in someone's footsteps' mean?", "options": ["A) To imitate someone's career or way of life", "B) To walk behind someone on a path", "C) To track a suspect in snow", "D) To wear someone's old shoes"], "ans": 0, "brief": "Pursuing the same career or moral path as a respected predecessor[cite: 3]."},
+        {"num": 179, "module": "Module 8: Success & Effort", "q": "What does 'Slow and steady wins the race' mean?", "options": ["A) Patience and persistence lead to success", "B) Running slowly saves running shoes", "C) Fast runners always get injured", "D) Short races are easier than marathons"], "ans": 0, "brief": "From Aesop's Tortoise and Hare: consistent effort triumphs over erratic speed[cite: 3]."},
+        {"num": 180, "module": "Module 8: Success & Effort", "q": "What does 'A rolling stone gathers no moss' imply about a 'Rolling stone'?", "options": ["A) A person who never settles in one place or job fails to build lasting stability", "B) A smooth stone is best for carving", "C) Mountain rocks fall during rain", "D) Travelers acquire great wealth"], "ans": 0, "brief": "A stone that rolls constantly never accumulates moss; restless wanderers fail to build roots[cite: 3]."},
+        {"num": 181, "module": "Module 8: Success & Effort", "q": "What is a 'Damp squib'?", "options": ["A) Something that disappoints by failing to meet expectations ('fus firework')", "B) A wet umbrella after rain", "C) A small boat caught in a storm", "D) A cold drink served at a party"], "ans": 0, "brief": "A wet firework (squib) fails to explode, symbolizing an anticlimactic disappointment[cite: 3]."},
+        {"num": 182, "module": "Module 8: Success & Effort", "q": "What is a 'Nine days' wonder'?", "options": ["A) A person or event that attracts great attention for only a short time", "B) A festival celebrated for nine nights", "C) A journey around the world in nine days", "D) A worker who takes nine days of leave"], "ans": 0, "brief": "A fleeting sensation whose novelty evaporates after nine days[cite: 3]."},
+        {"num": 183, "module": "Module 8: Success & Effort", "q": "What is a 'One-hit wonder'?", "options": ["A) Someone who achieves only one notable success before fading into obscurity", "B) A boxer who wins by a single punch", "C) A singer who performs without instruments", "D) A batsman who hits one six in a match"], "ans": 0, "brief": "A performer or creator known for only a single successful achievement[cite: 3]."},
+        {"num": 184, "module": "Module 8: Success & Effort", "q": "What does 'Here today, gone tomorrow' mean?", "options": ["A) Successful or popular for only a brief period", "B) Traveling daily between two cities", "C) A guest who stays for one night", "D) A weather forecast of sudden rain"], "ans": 0, "brief": "Ephemeral popularity that vanishes overnight[cite: 3]."},
+        {"num": 185, "module": "Module 8: Success & Effort", "q": "What does 'Rise like a rocket, fall like a stick' mean?", "options": ["A) To rise rapidly to success and then decline just as quickly", "B) To launch fireworks during Diwali", "C) To climb a mountain and slide down", "D) To fly an airplane at high altitude"], "ans": 0, "brief": "Spectacular ascent followed by an immediate, ungraceful crash[cite: 3]."},
+        {"num": 186, "module": "Module 8: Success & Effort", "q": "What does 'A greenhorn' mean?", "options": ["A) An inexperienced or unskilled person; a beginner ('kachcha khiladi')", "B) A person wearing green clothes", "C) A farmer growing green vegetables", "D) A musician playing a horn"], "ans": 0, "brief": "Young cattle with immature green horns symbolized a novice or tyro[cite: 3]."},
+        {"num": 187, "module": "Module 8: Success & Effort", "q": "What does 'Wet behind the ears' mean?", "options": ["A) Inexperienced and immature", "B) Having wet hair after a shower", "C) Listening to music with headphones", "D) Standing in rain without a cap"], "ans": 0, "brief": "Newborn animals remain wet behind their ears longest; it means being naive[cite: 3]."},
+        {"num": 188, "module": "Module 8: Success & Effort", "q": "What does 'A purple patch' refer to?", "options": ["A) A period of outstanding success, good fortune, or excellence", "B) A purple flower bed in a garden", "C) A bruise on the skin", "D) A royal robe worn at coronation"], "ans": 0, "brief": "Purple symbolized imperial success; a purple patch is a streak of brilliance[cite: 3]."},
+        {"num": 189, "module": "Module 8: Success & Effort", "q": "What does 'Bid one's time' mean?", "options": ["A) To wait patiently for the right opportunity", "B) To auction an antique clock", "C) To waste hours in gossip", "D) To set an alarm for early morning"], "ans": 0, "brief": "Waiting watchfully until favorable circumstances arise[cite: 3]."},
+        {"num": 190, "module": "Module 8: Success & Effort", "q": "What does 'Play a waiting game' mean?", "options": ["A) To delay action until conditions become favourable", "B) To play chess for many hours", "C) To wait for a bus at a terminal", "D) To postpone an examination"], "ans": 0, "brief": "Tactical postponement of moves until rivals err or timing improves[cite: 3]."},
+        {"num": 191, "module": "Module 8: Success & Effort", "q": "What does 'Win by inches' mean?", "options": ["A) To succeed through gradual, hard-fought progress", "B) To win a long jump competition", "C) To measure cloth with a tape", "D) To build a wall brick by brick"], "ans": 0, "brief": "Achieving victory through incremental, tenacious gains[cite: 3]."},
+        {"num": 192, "module": "Module 8: Success & Effort", "q": "What does 'In the pink' mean?", "options": ["A) In excellent health or condition; in very good form", "B) Dressed in pink garments", "C) Blushing with embarrassment", "D) Painting a room pink"], "ans": 0, "brief": "Denotes optimum physical health and vitality[cite: 3]."},
+        {"num": 193, "module": "Module 8: Success & Effort", "q": "What does 'On top of the world' mean?", "options": ["A) Feeling extremely happy, successful, or confident", "B) Climbing Mount Everest", "C) Flying in a spaceship", "D) Living in a high-rise penthouse"], "ans": 0, "brief": "Exuberant elation and triumph[cite: 3]."},
+        {"num": 194, "module": "Module 8: Success & Effort", "q": "What does 'Fizzle out' mean?", "options": ["A) To end weakly or gradually lose momentum", "B) To explode with a loud bang", "C) To drink a carbonated beverage", "D) To start a fire with dry wood"], "ans": 0, "brief": "Gradual dissipation of energy or enthusiasm until failure[cite: 3]."},
+        {"num": 195, "module": "Module 8: Success & Effort", "q": "What does 'Come a cropper' mean?", "options": ["A) To fail disastrously or suffer a heavy fall", "B) To harvest crops in autumn", "C) To cut hair short with scissors", "D) To win a farming competition"], "ans": 0, "brief": "A severe accidental fall from a horse, extended to disastrous failure[cite: 3]."},
+        {"num": 196, "module": "Module 8: Success & Effort", "q": "What does 'Go down like a lead balloon' mean?", "options": ["A) To be received very badly by an audience", "B) To fly a heavy balloon in the sky", "C) To sink a metal anchor in sea", "D) To sing a cheerful tune"], "ans": 0, "brief": "A lead balloon cannot fly; a joke or proposal that fails miserably[cite: 3]."},
+        {"num": 197, "module": "Module 8: Success & Effort", "q": "What does 'Fall flat' mean?", "options": ["A) To fail to produce the intended effect or result", "B) To lie down on a bed", "C) To iron clothes smooth", "D) To build a flat roof"], "ans": 0, "brief": "An attempt or joke that elicits zero reaction or success[cite: 3]."},
+        {"num": 198, "module": "Module 8: Success & Effort", "q": "What does 'Go up in smoke' mean?", "options": ["A) To come to nothing; to fail completely", "B) To light a bonfire in winter", "C) To cook food on a grill", "D) To climb a chimney"], "ans": 0, "brief": "Plans that vanish uselessly like smoke into the air[cite: 3]."},
+        {"num": 199, "module": "Module 8: Success & Effort", "q": "What does 'Be on the ropes' mean?", "options": ["A) To be close to defeat or collapse", "B) To practice tightrope walking", "C) To tie a boat with ropes", "D) To climb a mountain cliff"], "ans": 0, "brief": "A boxer pinned helplessly against the ring ropes by an opponent[cite: 3]."},
+        {"num": 200, "module": "Module 8: Success & Effort", "q": "What does 'Know the ropes' mean?", "options": ["A) To have knowledge or experience of how to do a task", "B) To tie knots on a sailing ship", "C) To weave ropes from cotton", "D) To climb trees in a forest"], "ans": 0, "brief": "Experienced sailors knew every rigging rope on a ship; it means expertise[cite: 3]."},
+
+        // MODULE 9: DECEPTION, SECRETS & TROUBLE IDIOMS (201-225)
+        {"num": 201, "module": "Module 9: Deception & Trouble", "q": "What does 'Red herring' mean?", "options": ["A) Something that distracts attention from the real issue", "B) A red fish cooked for dinner", "C) A warning flag on a beach", "D) A lucky coin found on a road"], "ans": 0, "brief": "Smoked red herrings were dragged across trails to distract hunting dogs[cite: 3]."},
+        {"num": 202, "module": "Module 9: Deception & Trouble", "q": "What is a 'Skeleton in the cupboard (or closet)'?", "options": ["A) A shameful secret kept hidden from others", "B) A model skeleton in a science lab", "C) An old coat hanging in a wardrobe", "D) A collection of ancient bones"], "ans": 0, "brief": "A dark family scandal concealed from public knowledge[cite: 3]."},
+        {"num": 203, "module": "Module 9: Deception & Trouble", "q": "What does 'Whitewash' mean?", "options": ["A) To deliberately hide or cover up faults or wrongdoing", "B) To paint house walls white", "C) To wash clothes with soap", "D) To clean a floor with water"], "ans": 0, "brief": "Painting over stains with white lime to conceal defects superficially[cite: 3]."},
+        {"num": 204, "module": "Module 9: Deception & Trouble", "q": "What does 'Cloak and dagger' refer to?", "options": ["A) Involving secrecy, espionage, or undercover activities", "B) A medieval costume party", "C) A theatrical fencing match", "D) A royal parade in winter"], "ans": 0, "brief": "Spies wearing concealing cloaks and carrying hidden daggers[cite: 3]."},
+        {"num": 205, "module": "Module 9: Deception & Trouble", "q": "What does 'Get into a scrape' mean?", "options": ["A) To get into trouble or a difficult situation", "B) To scrape knee while running", "C) To clean paint off a table", "D) To quarrel with a stranger"], "ans": 0, "brief": "An awkward, abrasive predicament from which extrication is painful[cite: 3]."},
+        {"num": 206, "module": "Module 9: Deception & Trouble", "q": "What does 'Get into hot water' mean?", "options": ["A) To get into trouble or difficulty", "B) To take a warm bath in winter", "C) To boil water for tea", "D) To swim in a heated pool"], "ans": 0, "brief": "Being plunged into scalding trouble or official displeasure[cite: 3]."},
+        {"num": 207, "module": "Module 9: Deception & Trouble", "q": "What does 'Be in a pickle' mean?", "options": ["A) To be in a difficult or awkward situation", "B) To eat sour mango pickles", "C) To preserve vegetables in jar", "D) To work in a food factory"], "ans": 0, "brief": "Being steeped in messy trouble like vegetables in vinegar brine[cite: 3]."},
+        {"num": 208, "module": "Module 9: Deception & Trouble", "q": "What does 'Open a can of worms' mean?", "options": ["A) To create or become involved in a complicated problem", "B) To go fishing with live bait", "C) To clean an old storage box", "D) To feed birds in a garden"], "ans": 0, "brief": "Opening a sealed container that unleashes tangled, wriggling complications[cite: 3]."},
+        {"num": 209, "module": "Module 9: Deception & Trouble", "q": "What does 'Dig oneself into a hole' mean?", "options": ["A) To make one's situation worse through one's own actions ('apne liye gaddha khodna')", "B) To dig a well for drinking water", "C) To plant trees in a farm", "D) To search for buried treasure"], "ans": 0, "brief": "Aggravating one's own predicament by foolish words or deeds[cite: 3]."},
+        {"num": 210, "module": "Module 9: Deception & Trouble", "q": "What does 'A leap in the dark' mean?", "options": ["A) A risky action taken with an uncertain outcome ('andhere mein teer chalana')", "B) Jumping across a ditch at night", "C) Sleeping without a night lamp", "D) Walking in a dark tunnel"], "ans": 0, "brief": "Jumping into unseen darkness where hazards and results are unknown[cite: 3]."},
+        {"num": 211, "module": "Module 9: Deception & Trouble", "q": "What does 'Jump in at the deep end' mean?", "options": ["A) To undertake a difficult task without preparation", "B) To dive into a deep swimming pool", "C) To swim across a wide river", "D) To rescue a drowning swimmer"], "ans": 0, "brief": "Entering the deepest water of a project without gradual shallow training[cite: 3]."},
+        {"num": 212, "module": "Module 9: Deception & Trouble", "q": "What does 'Roll the dice' mean?", "options": ["A) To take a chance on an uncertain outcome", "B) To play a board game with friends", "C) To gamble money in a casino", "D) To count numbers on dice"], "ans": 0, "brief": "Staking success on a random, unpredictable gamble[cite: 3]."},
+        {"num": 213, "module": "Module 9: Deception & Trouble", "q": "What does 'Throw caution to the wind' mean?", "options": ["A) To act boldly without worrying about the risks", "B) To fly a kite in windy weather", "C) To open windows during a storm", "D) To speak carelessly in anger"], "ans": 0, "brief": "Discarding prudence and acting with daring abandon[cite: 3]."},
+        {"num": 214, "module": "Module 9: Deception & Trouble", "q": "What does 'Walk a tightrope' mean?", "options": ["A) To be in a risky or delicate situation requiring balance", "B) To perform as an acrobat in circus", "C) To tie clothes on a washing line", "D) To climb a steep mountain trail"], "ans": 0, "brief": "Balancing precariously where any misstep causes disaster[cite: 3]."},
+        {"num": 215, "module": "Module 9: Deception & Trouble", "q": "What does 'Be in the dock' mean?", "options": ["A) To be accused or called to account for one's actions", "B) To work as a dockyard laborer", "C) To load cargo onto a ship", "D) To sit in a courtroom audience"], "ans": 0, "brief": "Standing in the accused criminal's enclosure (the dock) in court[cite: 3]."},
+        {"num": 216, "module": "Module 9: Deception & Trouble", "q": "What does 'Go through the mill' mean?", "options": ["A) To undergo a very difficult or painful experience", "B) To visit a flour grinding factory", "C) To work as a miller for years", "D) To grind wheat into flour"], "ans": 0, "brief": "Being ground down by severe trials like grain in a mill[cite: 3]."},
+        {"num": 217, "module": "Module 9: Deception & Trouble", "q": "What does 'Face the music' mean?", "options": ["A) To accept and endure the unpleasant consequences of one's actions", "B) To listen to a classical concert", "C) To sing on a theatrical stage", "D) To dance at a festival"], "ans": 0, "brief": "Confronting inevitable punishment or criticism bravely[cite: 3]."},
+        {"num": 218, "module": "Module 9: Deception & Trouble", "q": "What does 'Go through the wringer' mean?", "options": ["A) To experience severe stress, hardship, or criticism", "B) To wash clothes in a laundry machine", "C) To twist a wet towel dry", "D) To exercise in a gymnasium"], "ans": 0, "brief": "Squeezed through painful pressure like wet clothes in a wringer[cite: 3]."},
+        {"num": 219, "module": "Module 9: Deception & Trouble", "q": "What does 'Bear the brunt' mean?", "options": ["A) To suffer the main force of hardship, criticism, or attack", "B) To carry a heavy wooden log", "C) To shield a friend from rain", "D) To lead an army into battle"], "ans": 0, "brief": "Absorbing the heaviest shock of an assault or disaster[cite: 3]."},
+        {"num": 220, "module": "Module 9: Deception & Trouble", "q": "What does 'Smoke screen' mean?", "options": ["A) Something used to conceal the truth or real intention", "B) Dense smoke from a chimney", "C) A screen used to block sunlight", "D) A fog in a winter valley"], "ans": 0, "brief": "Military smoke clouds deployed to mask troop movements from enemy eyes[cite: 3]."},
+        {"num": 221, "module": "Module 9: Deception & Trouble", "q": "What is a 'Blind alley'?", "options": ["A) A course of action leading nowhere", "B) A dark street without streetlights", "C) A narrow lane between tall buildings", "D) A road closed for repairs"], "ans": 0, "brief": "A dead-end street with no exit; a fruitless pursuit[cite: 3]."},
+        {"num": 222, "module": "Module 9: Deception & Trouble", "q": "What does 'Send someone on a fool's errand' mean?", "options": ["A) To send someone on a useless or impossible task", "B) To invite someone to a comedy show", "C) To ask a servant to buy groceries", "D) To deliver a secret message"], "ans": 0, "brief": "An absurd, pointless mission designed to waste the messenger's time[cite: 3]."},
+        {"num": 223, "module": "Module 9: Deception & Trouble", "q": "What does 'Cover one's tracks' mean?", "options": ["A) To hide evidence of one's actions", "B) To sweep footprints from a muddy path", "C) To repair a broken railway track", "D) To wear shoes while walking in snow"], "ans": 0, "brief": "Erasing footprints so pursuers cannot follow your trail[cite: 3]."},
+        {"num": 224, "module": "Module 9: Deception & Trouble", "q": "What does 'Hush up' mean?", "options": ["A) To suppress or keep something secret", "B) To speak quietly in a library", "C) To soothe a crying baby", "D) To close windows at night"], "ans": 0, "brief": "Silencing rumors or scandals from reaching public ears[cite: 3]."},
+        {"num": 225, "module": "Module 9: Deception & Trouble", "q": "What does 'Paper over the cracks' mean?", "options": ["A) To make superficial repairs while ignoring the real problem", "B) To paste decorative wallpaper on a room", "C) To seal packages with tape", "D) To write letters on torn paper"], "ans": 0, "brief": "Pasting wallpaper over structural wall cracks instead of fixing the foundation[cite: 3]."},
+
+        // MODULE 10: SPEECH, LANGUAGE & IDIOM ETYMOLOGY (226-250)
+        {"num": 226, "module": "Module 10: Language & Etymology", "q": "What does 'It's all Latin and Greek to me' mean?", "options": ["A) Completely difficult or impossible to understand", "B) A scholar fluent in classical languages", "C) An ancient manuscript found in Rome", "D) A lecture on European history"], "ans": 0, "brief": "Latin and Greek were understood only by elite scholars; to laymen they were unintelligible[cite: 3]."},
+        {"num": 227, "module": "Module 10: Language & Etymology", "q": "What is a 'Greek gift'?", "options": ["A) A gift that brings harm to the receiver", "B) A valuable statue of a Greek god", "C) A generous wedding present", "D) A box of olives from Athens"], "ans": 0, "brief": "Refers to the Trojan Horse gifted by the Greeks, which destroyed Troy[cite: 3]."},
+        {"num": 228, "module": "Module 10: Language & Etymology", "q": "What does 'Greek calends' refer to?", "options": ["A) A time that will never come; never", "B) The first day of the Greek New Year", "C) A festival celebrated in Athens", "D) An ancient calendar carved on stone"], "ans": 0, "brief": "The Greeks had no calends (a Roman calendar division); postponing to Greek calends means never[cite: 3]."},
+        {"num": 229, "module": "Module 10: Language & Etymology", "q": "What does 'Mealy mouthed' mean?", "options": ["A) Unwilling to speak clearly or directly; evasive", "B) Having a mouth full of dry flour", "C) Speaking with a loud and harsh voice", "D) Enjoying sweet meals after dinner"], "ans": 0, "brief": "Old English: meal (flour) is soft and bland; mealy-mouthed speakers use hesitant, evasive words[cite: 3]."},
+        {"num": 230, "module": "Module 10: Language & Etymology", "q": "What does 'Talk through one's hat' mean?", "options": ["A) To talk nonsense or speak without knowing the facts", "B) To speak quietly into a microphone", "C) To address an audience wearing a cap", "D) To tell humorous stories at a party"], "ans": 0, "brief": "Spouting ignorant, boastful chatter without substance[cite: 3]."},
+        {"num": 231, "module": "Module 10: Language & Etymology", "q": "What does 'Play it by ear' mean?", "options": ["A) To deal with a situation without making advance plans", "B) To play a musical instrument by listening without sheet music", "C) To whisper secrets into someone's ear", "D) To check sound volume in a studio"], "ans": 0, "brief": "Musicians playing melodies by ear without scores, extended to improvising actions as events unfold[cite: 3]."},
+        {"num": 232, "module": "Module 10: Language & Etymology", "q": "What does 'A voice in the wilderness' mean?", "options": ["A) A warning or opinion ignored by others", "B) A person shouting in a dense forest", "C) A leader who inspires millions", "D) A hermit living in a cave"], "ans": 0, "brief": "Unheeded prophetic warnings spoken where no one listens[cite: 3]."},
+        {"num": 233, "module": "Module 10: Language & Etymology", "q": "What does 'Preach to the converted (or choir)' mean?", "options": ["A) To try to persuade people who already agree with you", "B) To deliver a sermon in a cathedral", "C) To teach songs to a choir group", "D) To convert non-believers to a faith"], "ans": 0, "brief": "Argue a cause to an audience that is already fully convinced[cite: 3]."},
+        {"num": 234, "module": "Module 10: Language & Etymology", "q": "What does 'Man of letters' mean?", "options": ["A) A learned writer, scholar, or literary intellectual", "B) A postman who delivers letters", "C) A calligrapher skilled in alphabets", "D) A clerk who types official mail"], "ans": 0, "brief": "In 17th-century Europe, 'letters' meant literature and scholarship; a man of letters was a literary savant[cite: 3]."},
+        {"num": 235, "module": "Module 10: Language & Etymology", "q": "What does 'Blue stocking' refer to?", "options": ["A) An intellectual or literary woman", "B) A woman wearing blue woolen socks", "C) A traditional folk dancer", "D) A wealthy aristocratic lady"], "ans": 0, "brief": "18th-century literary salon women who favored intellectual discussion over formal evening dress[cite: 3]."},
+        {"num": 236, "module": "Module 10: Language & Etymology", "q": "What is a 'Walking encyclopedia'?", "options": ["A) A person with extensive knowledge on many subjects", "B) A salesman who sells reference books", "C) A teacher who walks while lecturing", "D) A heavy dictionary carried in a bag"], "ans": 0, "brief": "An individual possessing vast, encyclopedic factual knowledge[cite: 3]."},
+        {"num": 237, "module": "Module 10: Language & Etymology", "q": "What does 'Carrot and stick policy' mean?", "options": ["A) Using rewards and punishments to influence behavior", "B) Feeding vegetables to farm animals", "C) Growing carrots using wooden support sticks", "D) A vegetarian diet plan"], "ans": 0, "brief": "Dangling a carrot reward in front of a donkey while holding a stick behind to enforce motion[cite: 3]."},
+        {"num": 238, "module": "Module 10: Language & Etymology", "q": "What does 'Set the Thames on fire' mean (usually used negatively)?", "options": ["A) To do something remarkable or extraordinary", "B) To light a bonfire on a riverbank", "C) To swim across a cold river", "D) To build a bridge over water"], "ans": 0, "brief": "The Thames river cannot burn; saying someone won't set it on fire means they lack extraordinary genius[cite: 3]."},
+        {"num": 239, "module": "Module 10: Language & Etymology", "q": "What does 'Bell the cat' mean?", "options": ["A) To undertake a dangerous task that everyone else avoids", "B) To tie a ribbon around a pet cat", "C) To feed milk to a stray animal", "D) To catch mice in a granary"], "ans": 0, "brief": "From the fable where mice agree a bell on the cat would warn them, but none dare tie it[cite: 3]."},
+        {"num": 240, "module": "Module 10: Language & Etymology", "q": "What does 'Hang by a thread' mean?", "options": ["A) To be in a very uncertain or dangerous situation", "B) To sew clothes with fine cotton", "C) To hang a picture on a wall", "D) To dry clothes on a string"], "ans": 0, "brief": "Suspended over peril by a thread that could snap at any instant[cite: 3]."},
+        {"num": 241, "module": "Module 10: Language & Etymology", "q": "What does 'A fine kettle of fish' mean in Scottish origin?", "options": ["A) A complete mess, chaos, or awkward situation", "B) A delicious seafood soup served at dinner", "C) A large catch of river fish", "D) An iron pot used for boiling water"], "ans": 0, "brief": "Originally a riverside fish picnic; sarcastically applied to a chaotic, bungled mess[cite: 3]."},
+        {"num": 242, "module": "Module 10: Language & Etymology", "q": "What does 'Burn the candle at both ends' mean?", "options": ["A) To overwork yourself by staying busy day and night", "B) To waste wax candles during Diwali", "C) To light two rooms with one lamp", "D) To read books in the dark"], "ans": 0, "brief": "A candle lit at both ends gives double light but burns out twice as fast[cite: 3]."},
+        {"num": 243, "module": "Module 10: Language & Etymology", "q": "What does 'Castles in the air' mean?", "options": ["A) Unrealistic dreams or impractical plans", "B) Royal palaces built on mountain tops", "C) Clouds that look like buildings", "D) Tall skyscrapers in modern cities"], "ans": 0, "brief": "Castles cannot float in air; it denotes fanciful daydreaming without foundation[cite: 3]."},
+        {"num": 244, "module": "Module 10: Language & Etymology", "q": "What does 'Play Devil's Advocate' mean?", "options": ["A) To argue the opposite side to test an argument or stimulate debate", "B) To defend a criminal in a law court", "C) To speak wickedly against good people", "D) To practice legal debates in college"], "ans": 0, "brief": "A Catholic official assigned to argue against a candidate's sainthood to ensure rigorous scrutiny[cite: 3]."},
+        {"num": 245, "module": "Module 10: Language & Etymology", "q": "What does 'At a crossroads' mean?", "options": ["A) Facing an important decision between different courses of action", "B) Standing at a traffic signal in a city", "C) Meeting friends at a highway junction", "D) Crossing a railway track safely"], "ans": 0, "brief": "Reaching a road junction where choosing the right path determines one's ultimate destination[cite: 3]."},
+        {"num": 246, "module": "Module 10: Language & Etymology", "q": "What does 'Wee hours' mean?", "options": ["A) The very early hours after midnight (around 1:00 to 4:00 AM)", "B) Very short afternoon naps", "C) Evening tea hours in Scotland", "D) Hours spent waiting for a train"], "ans": 0, "brief": "In Scottish English, 'wee' means small; the small-numbered hours after midnight[cite: 3]."},
+        {"num": 247, "module": "Module 10: Language & Etymology", "q": "What does 'At the crack of dawn' mean?", "options": ["A) Very early in the morning, just as daylight begins", "B) When sunlight breaks a window glass", "C) At noon when the sun is hottest", "D) During late evening twilight"], "ans": 0, "brief": "The first streak (crack) of morning light appearing on the eastern horizon[cite: 3]."},
+        {"num": 248, "module": "Module 10: Language & Etymology", "q": "What does 'The early bird catches the worm' mean?", "options": ["A) Those who act early are more likely to succeed", "B) Birds eat insects in morning gardens", "C) Early risers feel sleepy by noon", "D) Hard work is better than luck"], "ans": 0, "brief": "Birds that forage at dawn find worms before others; prompt action earns rewards[cite: 3]."},
+        {"num": 249, "module": "Module 10: Language & Etymology", "q": "What does 'Have an axe to grind' mean?", "options": ["A) To have a personal motive, selfish interest, or hidden agenda", "B) To sharpen woodcutting tools on a stone", "C) To chop firewood for winter cooking", "D) To work as a blacksmith in a village"], "ans": 0, "brief": "Someone asking to sharpen their own axe on your grindstone for their private benefit[cite: 3]."},
+        {"num": 250, "module": "Module 10: Language & Etymology", "q": "What does 'Have a chip on one's shoulder' mean?", "options": ["A) To be habitually resentful or easily offended due to a perceived grievance", "B) To carry wood chips from a forest", "C) To wear epaulets on a military uniform", "D) To suffer shoulder pain from lifting loads"], "ans": 0, "brief": "19th-century youths placed a wood chip on their shoulder daring rivals to knock it off as a fight challenge[cite: 3]."}
+    ];
+
+    let activeQuestions = [];
+    let currentScore = 0;
+    let wrongCount = 0;
+    let answeredCount = 0;
+    let activeFilter = 'All';
+    let searchQuery = '';
+    let showAllActive = false;
+    let statusFilter = 'all';
+    let questionStatus = {};
+
+    function shuffleArray(array) {
+        const arr = [...array];
+        for (let i = arr.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [arr[i], arr[j]] = [arr[j], arr[i]];
+        }
+        return arr;
+    }
+
+    function initializeAndShuffleQuiz() {
+        const prepared = originalQuestionsData.map(q => {
+            const cleanOptions = q.options.map(opt => opt.replace(/^[A-D]\)\s*/, ''));
+            const correctAnswerText = cleanOptions[q.ans];
+            const shuffledCleanOptions = shuffleArray(cleanOptions);
+            const newCorrectIdx = shuffledCleanOptions.indexOf(correctAnswerText);
+            const relabeledOptions = shuffledCleanOptions.map((opt, i) => {
+                return String.fromCharCode(65 + i) + ') ' + opt;
+            });
+            return {
+                ...q,
+                options: relabeledOptions,
+                ans: newCorrectIdx
+            };
+        });
+        activeQuestions = shuffleArray(prepared);
+        questionStatus = {};
+        currentScore = 0;
+        wrongCount = 0;
+        answeredCount = 0;
+        statusFilter = 'all';
+        document.querySelectorAll('.stat-item').forEach(el => el.classList.remove('active-filter'));
+        updateStats();
+    }
+
+    function applyFilters() {
+        searchQuery = document.getElementById('search-input').value.toLowerCase().trim();
+        renderQuiz();
+    }
+
+    function filterByStatus(status) {
+        if (statusFilter === status) {
+            statusFilter = 'all';
+            document.querySelectorAll('.stat-item').forEach(el => el.classList.remove('active-filter'));
+        } else {
+            statusFilter = status;
+            document.querySelectorAll('.stat-item').forEach(el => el.classList.remove('active-filter'));
+            if (status === 'correct') {
+                document.getElementById('correctStat').classList.add('active-filter');
+            } else if (status === 'wrong') {
+                document.getElementById('wrongStat').classList.add('active-filter');
+            } else if (status === 'left') {
+                document.getElementById('leftStat').classList.add('active-filter');
+            }
+        }
+        renderQuiz();
+    }
+
+    function renderQuiz() {
+        const container = document.getElementById('quiz-container');
+        container.innerHTML = '';
+        let displayCount = 0;
+        let seqNum = 1;
+
+        const isQidSearch = searchQuery && /^\d+$/.test(searchQuery);
+        const qidNumber = isQidSearch ? parseInt(searchQuery) : null;
+
+        activeQuestions.forEach((q) => {
+            if (activeFilter !== 'All') {
+                const qModuleMatch = q.module.match(/Module (\d+)/);
+                const qModuleNum = qModuleMatch ? qModuleMatch[1] : null;
+                const filterMatch = activeFilter.match(/Module (\d+)/);
+                const filterModuleNum = filterMatch ? filterMatch[1] : null;
+                
+                if (qModuleNum && filterModuleNum) {
+                    if (qModuleNum !== filterModuleNum) return;
+                } else {
+                    if (!q.module.startsWith(activeFilter + ':')) return;
+                }
+            }
+            
+            if (statusFilter !== 'all') {
+                const status = questionStatus[q.num];
+                if (statusFilter === 'correct' && status !== 'correct') return;
+                if (statusFilter === 'wrong' && status !== 'wrong') return;
+                if (statusFilter === 'left' && status !== undefined) return;
+            }
+            
+            if (searchQuery) {
+                if (isQidSearch) {
+                    if (q.num !== qidNumber) return;
+                } else {
+                    const match = q.q.toLowerCase().includes(searchQuery) ||
+                                  q.module.toLowerCase().includes(searchQuery) ||
+                                  q.brief.toLowerCase().includes(searchQuery) ||
+                                  q.options.some(o => o.toLowerCase().includes(searchQuery));
+                    if (!match) return;
+                }
+            }
+            
+            displayCount++;
+            const card = document.createElement('div');
+            card.className = 'question-card';
+            card.id = `card-${q.num}`;
+            
+            const savedNote = localStorage.getItem(`idioms_gk_note_QID_${q.num}`) || '';
+            const savedNoteHtml = savedNote ? `
+                <div class="saved-note-banner" id="saved-display-${q.num}">
+                    <strong>📌 Saved Note:</strong> ${savedNote}
+                </div>` : `<div id="saved-display-${q.num}"></div>`;
+            
+            const status = questionStatus[q.num];
+            let statusBadge = '';
+            if (status === 'correct') {
+                statusBadge = `<span class="q-status-badge status-correct">✅ Correct</span>`;
+            } else if (status === 'wrong') {
+                statusBadge = `<span class="q-status-badge status-wrong">❌ Wrong</span>`;
+            } else {
+                statusBadge = `<span class="q-status-badge status-unanswered">⏳ Unanswered</span>`;
+            }
+            
+            card.innerHTML = `
+                <div class="q-header">
+                    <div class="q-badges-left">
+                        <span class="q-num-badge">Question #${seqNum++}</span>
+                        <span class="qid-badge">QID:- ${q.num}</span>
+                        ${statusBadge}
+                    </div>
+                    <span class="q-mod-badge">${q.module}</span>
+                </div>
+                <div class="q-text">${q.q}</div>
+                <div class="options-grid" id="opts-${q.num}">
+                    ${q.options.map((optText, optIdx) => `
+                        <button class="opt-btn" onclick="checkAnswer(${q.num}, ${optIdx}, ${q.ans})">
+                            <span>${optText}</span>
+                        </button>
+                    `).join('')}
+                </div>
+                <div class="feedback-box" id="feedback-${q.num}">
+                    ${showAllActive && !questionStatus[q.num] ? `
+                        <div class="feedback-title">✓ Correct Answer: ${q.options[q.ans]}</div>
+                        <div><strong>Origin & Usage Trick:</strong> ${q.brief}</div>
+                        ${savedNoteHtml}
+                        <div class="notes-section">
+                            <button class="notes-btn" onclick="toggleNoteEditor(${q.num})">Add / Edit Notes & Points</button>
+                            <div class="note-editor" id="editor-${q.num}">
+                                <textarea class="notes-area" id="textarea-${q.num}" rows="3" placeholder="Add your notes/points here...">${savedNote}</textarea>
+                                <button class="save-note-btn" onclick="saveNote(${q.num})">Save Note Locally</button>
+                            </div>
+                        </div>
+                    ` : ''}
+                </div>
+            `;
+            container.appendChild(card);
+
+            if (questionStatus[q.num]) {
+                const optsContainer = document.getElementById(`opts-${q.num}`);
+                if (optsContainer) {
+                    const buttons = optsContainer.querySelectorAll('.opt-btn');
+                    buttons.forEach((btn, idx) => {
+                        btn.classList.add('disabled');
+                        if (idx === q.ans) {
+                            btn.classList.add('correct');
+                        }
+                        if (q._selectedIdx !== undefined && idx === q._selectedIdx && idx !== q.ans) {
+                            btn.classList.add('wrong');
+                        }
+                    });
+                }
+                const feedback = document.getElementById(`feedback-${q.num}`);
+                if (feedback) {
+                    const isCorrect = questionStatus[q.num] === 'correct';
+                    feedback.className = `feedback-box show-${isCorrect ? 'correct' : 'wrong'}`;
+                    const savedNoteDisplay = localStorage.getItem(`idioms_gk_note_QID_${q.num}`) || '';
+                    const savedNoteHtmlDisplay = savedNoteDisplay ? `
+                        <div class="saved-note-banner" id="saved-display-${q.num}">
+                            <strong>📌 Saved Note:</strong> ${savedNoteDisplay}
+                        </div>` : `<div id="saved-display-${q.num}"></div>`;
+                    
+                    if (isCorrect) {
+                        feedback.innerHTML = `
+                            <div class="feedback-title">✓ Correct Answer!</div>
+                            <div><strong>Origin & Usage Trick:</strong> ${q.brief}</div>
+                            ${savedNoteHtmlDisplay}
+                            <div class="notes-section">
+                                <button class="notes-btn" onclick="toggleNoteEditor(${q.num})">Add / Edit Notes & Points</button>
+                                <div class="note-editor" id="editor-${q.num}">
+                                    <textarea class="notes-area" id="textarea-${q.num}" rows="3" placeholder="Add your notes/points here...">${savedNoteDisplay}</textarea>
+                                    <button class="save-note-btn" onclick="saveNote(${q.num})">Save Note Locally</button>
+                                </div>
+                            </div>
+                        `;
+                    } else {
+                        feedback.innerHTML = `
+                            <div class="feedback-title">✗ Wrong Answer — The Correct Answer is: ${q.options[q.ans]}</div>
+                            <div><strong>Origin & Usage Trick:</strong> ${q.brief}</div>
+                            ${savedNoteHtmlDisplay}
+                            <div class="notes-section">
+                                <button class="notes-btn" onclick="toggleNoteEditor(${q.num})">Add / Edit Notes & Points</button>
+                                <div class="note-editor" id="editor-${q.num}">
+                                    <textarea class="notes-area" id="textarea-${q.num}" rows="3" placeholder="Add your notes/points here...">${savedNoteDisplay}</textarea>
+                                    <button class="save-note-btn" onclick="saveNote(${q.num})">Save Note Locally</button>
+                                </div>
+                            </div>
+                        `;
+                    }
+                }
+            }
+
+            if (showAllActive && !questionStatus[q.num]) {
+                const optsContainer = document.getElementById(`opts-${q.num}`);
+                if (optsContainer) {
+                    const buttons = optsContainer.querySelectorAll('.opt-btn');
+                    buttons.forEach((btn, idx) => {
+                        btn.classList.add('disabled');
+                        if (idx === q.ans) {
+                            btn.classList.add('correct');
+                        }
+                    });
+                }
+                const feedback = document.getElementById(`feedback-${q.num}`);
+                if (feedback) {
+                    feedback.className = 'feedback-box show-correct';
+                    const savedNoteDisplay = localStorage.getItem(`idioms_gk_note_QID_${q.num}`) || '';
+                    const savedNoteHtmlDisplay = savedNoteDisplay ? `
+                        <div class="saved-note-banner" id="saved-display-${q.num}">
+                            <strong>📌 Saved Note:</strong> ${savedNoteDisplay}
+                        </div>` : `<div id="saved-display-${q.num}"></div>`;
+                    
+                    if (!feedback.innerHTML) {
+                        feedback.innerHTML = `
+                            <div class="feedback-title">✓ Correct Answer: ${q.options[q.ans]}</div>
+                            <div><strong>Origin & Usage Trick:</strong> ${q.brief}</div>
+                            ${savedNoteHtmlDisplay}
+                            <div class="notes-section">
+                                <button class="notes-btn" onclick="toggleNoteEditor(${q.num})">Add / Edit Notes & Points</button>
+                                <div class="note-editor" id="editor-${q.num}">
+                                    <textarea class="notes-area" id="textarea-${q.num}" rows="3" placeholder="Add your notes/points here...">${savedNoteDisplay}</textarea>
+                                    <button class="save-note-btn" onclick="saveNote(${q.num})">Save Note Locally</button>
+                                </div>
+                            </div>
+                        `;
+                    }
+                }
+            }
+        });
+
+        if (displayCount === 0) {
+            let message = 'No Idioms & Phrases MCQs matched your search.';
+            if (isQidSearch) {
+                message = `No question found with QID ${qidNumber}. Please check the QID and try again.`;
+            } else if (statusFilter === 'correct' && currentScore === 0) {
+                message = 'No correct answers yet. Keep practicing! 🎯';
+            } else if (statusFilter === 'wrong' && wrongCount === 0) {
+                message = 'No wrong answers yet! Great job! 🎉';
+            } else if (statusFilter === 'left') {
+                if (answeredCount === activeQuestions.length) {
+                    message = '🎉 All questions have been answered! No questions left to attempt.';
+                } else {
+                    message = `📝 You have ${activeQuestions.length - answeredCount} questions left to attempt. Start answering!`;
+                }
+            }
+            container.innerHTML = `<div class="no-results">${message}</div>`;
+        }
+
+        updateStats();
+    }
+
+    function checkAnswer(qNum, selectedIdx, correctIdx) {
+        if (showAllActive) return;
+        if (questionStatus[qNum]) return;
+        
+        const optsContainer = document.getElementById(`opts-${qNum}`);
+        const buttons = optsContainer.querySelectorAll('.opt-btn');
+        const feedback = document.getElementById(`feedback-${qNum}`);
+        
+        if (buttons[0].classList.contains('disabled')) {
+            return;
+        }
+        
+        const qObj = activeQuestions.find(item => item.num === qNum);
+        qObj._selectedIdx = selectedIdx;
+        
+        buttons.forEach((btn, idx) => {
+            btn.classList.add('disabled');
+            if (idx === correctIdx) {
+                btn.classList.add('correct');
+            }
+        });
+        
+        const savedNote = localStorage.getItem(`idioms_gk_note_QID_${qNum}`) || '';
+        const savedNoteHtml = savedNote ? `
+            <div class="saved-note-banner" id="saved-display-${qNum}">
+                <strong>📌 Saved Note:</strong> ${savedNote}
+            </div>` : `<div id="saved-display-${qNum}"></div>`;
+        
+        const isCorrect = selectedIdx === correctIdx;
+        if (isCorrect) {
+            currentScore++;
+            questionStatus[qNum] = 'correct';
+            buttons[selectedIdx].classList.add('correct');
+            feedback.className = 'feedback-box show-correct';
+            feedback.innerHTML = `
+                <div class="feedback-title">✓ Correct Answer!</div>
+                <div><strong>Origin & Usage Trick:</strong> ${qObj.brief}</div>
+                ${savedNoteHtml}
+                <div class="notes-section">
+                    <button class="notes-btn" onclick="toggleNoteEditor(${qNum})">Add / Edit Notes & Points</button>
+                    <div class="note-editor" id="editor-${qNum}">
+                        <textarea class="notes-area" id="textarea-${qNum}" rows="3" placeholder="Add your notes/points here...">${savedNote}</textarea>
+                        <button class="save-note-btn" onclick="saveNote(${qNum})">Save Note Locally</button>
+                    </div>
+                </div>
+            `;
+        } else {
+            wrongCount++;
+            questionStatus[qNum] = 'wrong';
+            buttons[selectedIdx].classList.add('wrong');
+            const correctOptText = qObj.options[correctIdx];
+            feedback.className = 'feedback-box show-wrong';
+            feedback.innerHTML = `
+                <div class="feedback-title">✗ Wrong Answer — The Correct Answer is: ${correctOptText}</div>
+                <div><strong>Origin & Usage Trick:</strong> ${qObj.brief}</div>
+                ${savedNoteHtml}
+                <div class="notes-section">
+                    <button class="notes-btn" onclick="toggleNoteEditor(${qNum})">Add / Edit Notes & Points</button>
+                    <div class="note-editor" id="editor-${qNum}">
+                        <textarea class="notes-area" id="textarea-${qNum}" rows="3" placeholder="Add your notes/points here...">${savedNote}</textarea>
+                        <button class="save-note-btn" onclick="saveNote(${qNum})">Save Note Locally</button>
+                    </div>
+                </div>
+            `;
+        }
+        answeredCount++;
+        
+        const badgeContainer = document.querySelector(`#card-${qNum} .q-badges-left`);
+        if (badgeContainer) {
+            const oldBadge = badgeContainer.querySelector('.q-status-badge');
+            let newBadgeHtml = '';
+            if (isCorrect) {
+                newBadgeHtml = `<span class="q-status-badge status-correct">✅ Correct</span>`;
+            } else {
+                newBadgeHtml = `<span class="q-status-badge status-wrong">❌ Wrong</span>`;
+            }
+            if (oldBadge) {
+                oldBadge.outerHTML = newBadgeHtml;
+            } else {
+                badgeContainer.innerHTML += newBadgeHtml;
+            }
+        }
+        
+        updateStats();
+        
+        if (statusFilter !== 'all') {
+            renderQuiz();
+        }
+    }
+
+    function toggleNoteEditor(qNum) {
+        const editor = document.getElementById(`editor-${qNum}`);
+        if (editor.style.display === 'block') {
+            editor.style.display = 'none';
+        } else {
+            editor.style.display = 'block';
+        }
+    }
+
+    function saveNote(qNum) {
+        const textarea = document.getElementById(`textarea-${qNum}`);
+        const noteText = textarea.value.trim();
+        const storageKey = `idioms_gk_note_QID_${qNum}`;
+        
+        if (noteText) {
+            localStorage.setItem(storageKey, noteText);
+        } else {
+            localStorage.removeItem(storageKey);
+        }
+
+        const displayContainer = document.getElementById(`saved-display-${qNum}`);
+        if (noteText) {
+            displayContainer.className = 'saved-note-banner';
+            displayContainer.innerHTML = `<strong>📌 Saved Note:</strong> ${noteText}`;
+        } else {
+            displayContainer.className = '';
+            displayContainer.innerHTML = '';
+        }
+        document.getElementById(`editor-${qNum}`).style.display = 'none';
+    }
+
+    function updateStats() {
+        const totalQuestions = activeQuestions.length;
+        const leftToAttempt = totalQuestions - answeredCount;
+        
+        document.getElementById('correct-count').textContent = currentScore;
+        document.getElementById('wrong-count').textContent = wrongCount;
+        document.getElementById('left-count').textContent = leftToAttempt;
+        
+        const pct = answeredCount > 0 ? Math.round((currentScore / answeredCount) * 100) : 0;
+        document.getElementById('pct-display').textContent = pct + '%';
+    }
+
+    function filterQuestions(modPrefix) {
+        activeFilter = modPrefix;
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.classList.remove('active');
+            if (btn.getAttribute('data-filter') === modPrefix) {
+                btn.classList.add('active');
+            }
+        });
+        renderQuiz();
+    }
+
+    function resetQuiz() {
+        if (showAllActive) {
+            showAllActive = false;
+            const btn = document.getElementById('showAllBtn');
+            btn.classList.remove('show-all-active');
+            btn.textContent = '👁️ Show All Answers (Study Mode)';
+        }
+        currentScore = 0;
+        wrongCount = 0;
+        answeredCount = 0;
+        questionStatus = {};
+        statusFilter = 'all';
+        document.querySelectorAll('.stat-item').forEach(el => el.classList.remove('active-filter'));
+        updateStats();
+        renderQuiz();
+    }
+
+    function toggleShowAll() {
+        const btn = document.getElementById('showAllBtn');
+        showAllActive = !showAllActive;
+        
+        if (showAllActive) {
+            btn.classList.add('show-all-active');
+            btn.textContent = '🔴 Hide All Answers';
+        } else {
+            btn.classList.remove('show-all-active');
+            btn.textContent = '👁️ Show All Answers (Study Mode)';
+        }
+        renderQuiz();
+    }
+
+    // Initialize
+    initializeAndShuffleQuiz();
+    renderQuiz();
+</script>
+</body>
+</html>

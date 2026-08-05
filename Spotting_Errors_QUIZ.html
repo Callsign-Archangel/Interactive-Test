@@ -1,0 +1,1292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AFCAT / CDS / NDA — Interactive 250 MCQ Spotting Errors & Grammar Quiz</title>
+<style>
+    :root {
+        --bg-main: #f8fafc;
+        --card-bg: #ffffff;
+        --primary: #0f172a;
+        --accent-red: #dc2626;
+        --accent-green: #10b981;
+        --accent-blue: #2563eb;
+        --text-main: #1e293b;
+        --text-muted: #64748b;
+        --border: #e2e8f0;
+    }
+    
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
+    
+    body {
+        font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        background-color: var(--bg-main);
+        color: var(--text-main);
+        line-height: 1.5;
+        padding-bottom: 60px;
+    }
+    
+    header {
+        background-color: var(--primary);
+        color: #ffffff;
+        padding: 24px 20px;
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+    
+    .header-container {
+        max-width: 1100px;
+        margin: 0 auto;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        align-items: center;
+        gap: 15px;
+    }
+    
+    .title-area h1 {
+        font-size: 1.4rem;
+        font-weight: 700;
+        letter-spacing: -0.5px;
+    }
+    
+    .title-area p {
+        font-size: 0.85rem;
+        color: #94a3b8;
+    }
+    
+    .stats-badge {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        background-color: #1e293b;
+        border: 2px solid #334155;
+        border-radius: 8px;
+        padding: 6px 10px;
+    }
+
+    .stat-item {
+        padding: 6px 14px;
+        border-radius: 6px;
+        text-align: center;
+        min-width: 70px;
+        cursor: pointer;
+        transition: all 0.2s;
+        border: 2px solid transparent;
+        background-color: rgba(255, 255, 255, 0.05);
+        user-select: none;
+    }
+
+    .stat-item:hover {
+        transform: scale(1.05);
+    }
+
+    .stat-item .stat-num {
+        font-size: 1.2rem;
+        font-weight: 800;
+        display: block;
+        line-height: 1.2;
+    }
+
+    .stat-item .stat-label {
+        font-size: 0.6rem;
+        text-transform: uppercase;
+        letter-spacing: 0.3px;
+        opacity: 0.8;
+    }
+
+    .stat-item.correct-stat {
+        background-color: rgba(16, 185, 129, 0.2);
+        border-color: #10b981;
+        color: #34d399;
+    }
+
+    .stat-item.correct-stat.active-filter {
+        background-color: rgba(16, 185, 129, 0.4);
+        box-shadow: 0 0 20px rgba(16, 185, 129, 0.3);
+    }
+
+    .stat-item.wrong-stat {
+        background-color: rgba(239, 68, 68, 0.2);
+        border-color: #ef4444;
+        color: #f87171;
+    }
+
+    .stat-item.wrong-stat.active-filter {
+        background-color: rgba(239, 68, 68, 0.4);
+        box-shadow: 0 0 20px rgba(239, 68, 68, 0.3);
+    }
+
+    .stat-item.left-stat {
+        background-color: rgba(234, 179, 8, 0.2);
+        border-color: #eab308;
+        color: #fbbf24;
+    }
+
+    .stat-item.left-stat.active-filter {
+        background-color: rgba(234, 179, 8, 0.4);
+        box-shadow: 0 0 20px rgba(234, 179, 8, 0.3);
+    }
+
+    .stat-item.pct-stat {
+        background-color: rgba(56, 189, 248, 0.15);
+        border-color: #38bdf8;
+        color: #38bdf8;
+        min-width: 80px;
+        cursor: default;
+    }
+
+    .stat-item.pct-stat:hover {
+        transform: none;
+    }
+
+    .stat-item .stat-pct {
+        font-size: 1.2rem;
+        font-weight: 800;
+        display: block;
+        line-height: 1.2;
+    }
+    
+    .container {
+        max-width: 1100px;
+        margin: 24px auto;
+        padding: 0 16px;
+    }
+
+    .controls-panel {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        margin-bottom: 24px;
+        background: var(--card-bg);
+        padding: 16px;
+        border-radius: 12px;
+        border: 1px solid var(--border);
+        box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+
+    .search-row {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+
+    .search-input {
+        flex: 1;
+        min-width: 260px;
+        padding: 10px 14px;
+        border: 1px solid #cbd5e1;
+        border-radius: 8px;
+        font-size: 0.95rem;
+        color: var(--text-main);
+        outline: none;
+        transition: border-color 0.2s;
+    }
+
+    .search-input:focus {
+        border-color: var(--accent-blue);
+        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+    }
+
+    .search-hint {
+        font-size: 0.75rem;
+        color: var(--text-muted);
+        margin-top: 2px;
+        font-style: italic;
+    }
+
+    .action-btn {
+        background-color: #f1f5f9;
+        border: 1px solid #cbd5e1;
+        border-radius: 8px;
+        padding: 10px 16px;
+        font-size: 0.85rem;
+        font-weight: 700;
+        color: var(--text-main);
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+    .action-btn:hover {
+        background-color: #e2e8f0;
+    }
+
+    .action-btn.primary {
+        background-color: var(--primary);
+        color: #ffffff;
+        border-color: var(--primary);
+    }
+
+    .action-btn.primary:hover {
+        background-color: #1e293b;
+    }
+
+    .action-btn.show-all-active {
+        background-color: #dc2626 !important;
+        border-color: #b91c1c !important;
+        color: #ffffff !important;
+        box-shadow: 0 0 12px rgba(220, 38, 38, 0.4);
+        transition: all 0.2s;
+    }
+    
+    .filter-bar {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 4px;
+    }
+    
+    .filter-btn {
+        background-color: #f1f5f9;
+        border: 1px solid #cbd5e1;
+        border-radius: 6px;
+        padding: 6px 12px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: var(--text-main);
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    
+    .filter-btn:hover {
+        background-color: #e2e8f0;
+    }
+
+    .filter-btn.active {
+        background-color: #0f172a;
+        color: #ffffff;
+        border-color: #0f172a;
+    }
+
+    .question-card {
+        background-color: var(--card-bg);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 20px;
+        margin-bottom: 16px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        transition: transform 0.15s;
+    }
+    
+    .question-card:hover {
+        border-color: #cbd5e1;
+    }
+    
+    .q-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 10px;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    .q-badges-left {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        flex-wrap: wrap;
+    }
+    
+    .q-num-badge {
+        background-color: #fef2f2;
+        color: var(--accent-red);
+        border: 1px solid #fecaca;
+        font-weight: 700;
+        font-size: 0.8rem;
+        padding: 3px 10px;
+        border-radius: 20px;
+    }
+
+    .qid-badge {
+        background-color: #fef08a;
+        color: #854d0e;
+        border: 1px solid #fde047;
+        font-weight: 700;
+        font-size: 0.8rem;
+        padding: 3px 10px;
+        border-radius: 20px;
+    }
+    
+    .q-mod-badge {
+        font-size: 0.75rem;
+        color: var(--text-muted);
+        font-weight: 600;
+    }
+
+    .q-status-badge {
+        font-size: 0.7rem;
+        padding: 2px 10px;
+        border-radius: 12px;
+        font-weight: 700;
+        transition: all 0.3s ease;
+    }
+
+    .q-status-badge.status-correct {
+        background-color: #d1fae5;
+        color: #065f46;
+    }
+
+    .q-status-badge.status-wrong {
+        background-color: #fecaca;
+        color: #991b1b;
+    }
+
+    .q-status-badge.status-unanswered {
+        background-color: #fef3c7;
+        color: #92400e;
+    }
+    
+    .q-text {
+        font-size: 1.05rem;
+        font-weight: 600;
+        margin-bottom: 16px;
+        color: var(--text-main);
+    }
+    
+    .options-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 10px;
+    }
+    
+    .opt-btn {
+        background-color: #f8fafc;
+        border: 1px solid #cbd5e1;
+        border-radius: 8px;
+        padding: 12px 16px;
+        text-align: left;
+        font-size: 0.95rem;
+        font-weight: 500;
+        color: var(--text-main);
+        cursor: pointer;
+        transition: all 0.2s;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+    
+    .opt-btn:hover:not(.disabled) {
+        background-color: #f1f5f9;
+        border-color: #94a3b8;
+    }
+    
+    .opt-btn.correct {
+        background-color: #ecfdf5 !important;
+        border-color: #10b981 !important;
+        color: #065f46 !important;
+        font-weight: 700;
+    }
+    
+    .opt-btn.wrong {
+        background-color: #fef2f2 !important;
+        border-color: #ef4444 !important;
+        color: #991b1b !important;
+    }
+    
+    .opt-btn.disabled {
+        cursor: default;
+    }
+    
+    .feedback-box {
+        margin-top: 14px;
+        padding: 12px 16px;
+        border-radius: 8px;
+        font-size: 0.9rem;
+        display: none;
+    }
+    
+    .feedback-box.show-correct {
+        display: block;
+        background-color: #f0fdf4;
+        border-left: 4px solid var(--accent-green);
+        color: #166534;
+    }
+    
+    .feedback-box.show-wrong {
+        display: block;
+        background-color: #fff7ed;
+        border-left: 4px solid #f97316;
+        color: #9a3412;
+    }
+    
+    .feedback-title {
+        font-weight: 700;
+        margin-bottom: 4px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .saved-note-banner {
+        background-color: #fef9c3;
+        border: 1px solid #fde047;
+        color: #713f12;
+        padding: 10px 14px;
+        border-radius: 6px;
+        margin-top: 10px;
+        font-size: 0.85rem;
+    }
+
+    .notes-section {
+        margin-top: 12px;
+        padding-top: 12px;
+        border-top: 1px dashed #cbd5e1;
+    }
+
+    .notes-btn {
+        background-color: #0f172a;
+        color: #ffffff;
+        border: 1px solid #334155;
+        padding: 6px 14px;
+        border-radius: 6px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+    .notes-btn:hover {
+        background-color: #334155;
+    }
+
+    .note-editor {
+        margin-top: 10px;
+        display: none;
+    }
+
+    .notes-area {
+        width: 100%;
+        padding: 10px;
+        border-radius: 6px;
+        border: 1px solid #cbd5e1;
+        font-family: inherit;
+        font-size: 0.85rem;
+        resize: vertical;
+        margin-bottom: 8px;
+        color: #1e293b;
+    }
+
+    .save-note-btn {
+        background-color: #10b981;
+        color: #ffffff;
+        border: none;
+        padding: 6px 14px;
+        border-radius: 6px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        cursor: pointer;
+    }
+
+    .save-note-btn:hover {
+        background-color: #059669;
+    }
+
+    .no-results {
+        text-align: center;
+        padding: 40px;
+        background: var(--card-bg);
+        border-radius: 12px;
+        border: 1px solid var(--border);
+        color: var(--text-muted);
+        font-weight: 600;
+    }
+</style>
+</head>
+<body>
+
+<header>
+    <div class="header-container">
+        <div class="title-area">
+            <h1>AFCAT 2026 — SPOTTING ERRORS & ENGLISH GRAMMAR QUIZ</h1>
+            <p>250 MCQs Extracted from "ERROR PRACTICE — Every Error Question in One Class"[cite: 8] — Complete Rules & Notes</p>
+        </div>
+        <div class="stats-badge">
+            <div class="stat-item correct-stat" id="correctStat" onclick="filterByStatus('correct')">
+                <span class="stat-num" id="correct-count">0</span>
+                <span class="stat-label">✅ Correct</span>
+            </div>
+            <div class="stat-item wrong-stat" id="wrongStat" onclick="filterByStatus('wrong')">
+                <span class="stat-num" id="wrong-count">0</span>
+                <span class="stat-label">❌ Wrong</span>
+            </div>
+            <div class="stat-item left-stat" id="leftStat" onclick="filterByStatus('left')">
+                <span class="stat-num" id="left-count">250</span>
+                <span class="stat-label">⏳ Left</span>
+            </div>
+            <div class="stat-item pct-stat">
+                <span class="stat-pct" id="pct-display">0%</span>
+                <span class="stat-label">Accuracy</span>
+            </div>
+        </div>
+    </div>
+</header>
+
+<div class="container">
+    <div class="controls-panel">
+        <div class="search-row">
+            <div style="flex:1; min-width:260px;">
+                <input type="text" id="search-input" class="search-input" placeholder="Search by word, grammar rule, module, or QID" oninput="applyFilters()">
+                <div class="search-hint">💡 Tip: Enter a number like "42" to search by QID</div>
+            </div>
+            <button class="action-btn" onclick="resetQuiz()">🔄 Reset All Answers</button>
+            <button class="action-btn primary" id="showAllBtn" onclick="toggleShowAll()">👁️ Show All Answers (Study Mode)</button>
+        </div>
+        <div class="filter-bar" id="filter-bar">
+            <button class="filter-btn active" data-filter="All" onclick="filterQuestions('All')">All 250 MCQs</button>
+            <button class="filter-btn" data-filter="Module 1" onclick="filterQuestions('Module 1')">Mod 1: Subject-Verb Agreement</button>
+            <button class="filter-btn" data-filter="Module 2" onclick="filterQuestions('Module 2')">Mod 2: Nouns & Uncountables</button>
+            <button class="filter-btn" data-filter="Module 3" onclick="filterQuestions('Module 3')">Mod 3: Pronouns & Cases</button>
+            <button class="filter-btn" data-filter="Module 4" onclick="filterQuestions('Module 4')">Mod 4: Tenses & Time Words</button>
+            <button class="filter-btn" data-filter="Module 5" onclick="filterQuestions('Module 5')">Mod 5: Conditionals & Subjunctive</button>
+            <button class="filter-btn" data-filter="Module 6" onclick="filterQuestions('Module 6')">Mod 6: Confusing Verb Pairs</button>
+            <button class="filter-btn" data-filter="Module 7" onclick="filterQuestions('Module 7')">Mod 7: Conjunctions & Inversion</button>
+            <button class="filter-btn" data-filter="Module 8" onclick="filterQuestions('Module 8')">Mod 8: Prepositions & Collocations</button>
+            <button class="filter-btn" data-filter="Module 9" onclick="filterQuestions('Module 9')">Mod 9: Adjectives & Articles</button>
+            <button class="filter-btn" data-filter="Module 10" onclick="filterQuestions('Module 10')">Mod 10: Mixed Spotting Errors</button>
+        </div>
+    </div>
+
+    <div id="quiz-container"></div>
+</div>
+
+<script>
+    // Complete 250-MCQ dataset covering all spotting error rules extracted from the PDF[cite: 8]
+    const originalQuestionsData = [
+        // MODULE 1: SUBJECT-VERB AGREEMENT & SYNTAX (1-25)
+        {"num": 1, "module": "Module 1: Subject-Verb Agreement", "q": "Find the error: The chairperson of the ethics committee, (A)/ as well as several senior advisors, were present (B)/ during the confidential deliberations that followed the inquiry. (C)/ No error (D)", "options": ["A) (A)", "B) (B) - 'were present' should be 'was present'", "C) (C)", "D) (D) No error"], "ans": 1, "brief": "When subjects are connected by 'as well as', 'along with', 'together with', 'with', 'in addition to', the verb agrees with the First Subject (chairperson -> singular -> 'was present')[cite: 8]."},
+        {"num": 2, "module": "Module 1: Subject-Verb Agreement", "q": "Find the error: The CEO along with his deputies (A)/ were present during the final negotiations (B)/ with the investors and regulators. (C)/ No error (D)", "options": ["A) (A)", "B) (B) - 'were present' should be 'was present'", "C) (C)", "D) (D) No error"], "ans": 1, "brief": "When subjects are joined by 'along with', the verb agrees with the first subject ('The CEO' -> singular -> 'was present')[cite: 8]."},
+        {"num": 3, "module": "Module 1: Subject-Verb Agreement", "q": "Find the error: He is one of those administrators (A)/ who believes that authority (B)/ must always be exercised with restraint. (C)/ No error (D)", "options": ["A) (A)", "B) (B) - 'believes' should be 'believe'", "C) (C)", "D) (D) No error"], "ans": 1, "brief": "In 'one of + plural noun + relative pronoun (who/which/that)', the verb agrees with the plural antecedent ('administrators' -> plural -> 'believe')[cite: 8]."},
+        {"num": 4, "module": "Module 1: Subject-Verb Agreement", "q": "Find the error: Riya is one of my friends (A)/ who is going (B)/ on a trip to Ladakh next week. (C)/ No error (D)", "options": ["A) (A)", "B) (B) - 'is going' should be 'are going'", "C) (C)", "D) (D) No error"], "ans": 1, "brief": "The relative pronoun 'who' refers to the plural antecedent 'friends', requiring a plural verb ('are going')[cite: 8]."},
+        {"num": 5, "module": "Module 1: Subject-Verb Agreement", "q": "Find the error: Neither of the sisters (A)/ are sensible enough (B)/ to carry out the plan. (C)/ No error (D)", "options": ["A) (A)", "B) (B) - 'are sensible' should be 'is sensible'", "C) (C)", "D) (D) No error"], "ans": 1, "brief": "Distributive pronouns like 'Neither of', 'Either of', 'Each of', 'One of' always take a singular verb ('is sensible')[cite: 8]."},
+        {"num": 6, "module": "Module 1: Subject-Verb Agreement", "q": "Find the error: Each of the students participating (A)/ in the drawing competition (B)/ have to bring his own materials. (C)/ No error (D)", "options": ["A) (A)", "B) (B)", "C) (C) - 'have to bring' should be 'has to bring'", "D) (D) No error"], "ans": 2, "brief": "'Each of the students' is singular in grammatical number, requiring a singular verb ('has to bring') and singular pronoun ('his')[cite: 8]."},
+        {"num": 7, "module": "Module 1: Subject-Verb Agreement", "q": "Find the error: The number of registered (A)/ voters have increased substantially (B)/ in the last electoral cycle. (C)/ No Error (D)", "options": ["A) (A)", "B) (B) - 'have increased' should be 'has increased'", "C) (C)", "D) (D) No Error"], "ans": 1, "brief": "'The number of + Plural Noun' takes a Singular Verb ('has increased'); whereas 'A number of + Plural Noun' takes a Plural Verb[cite: 8]."},
+        {"num": 8, "module": "Module 1: Subject-Verb Agreement", "q": "Find the error: A number of students (A)/ is coming to attend (B)/ the seminar at the auditorium today. (C)/ No error (D)", "options": ["A) (A)", "B) (B) - 'is coming' should be 'are coming'", "C) (C)", "D) (D) No error"], "ans": 1, "brief": "'A number of / A variety of + Plural Noun' always takes a Plural Verb ('are coming')[cite: 8]."},
+        {"num": 9, "module": "Module 1: Subject-Verb Agreement", "q": "Find the error: The variety of items (A)/ displayed in the exhibition (B)/ were truly impressive. (C)/ No error (D)", "options": ["A) (A)", "B) (B)", "C) (C) - 'were' should be 'was'", "D) (D) No error"], "ans": 2, "brief": "'The variety of + Plural Noun' refers to a singular collective concept, requiring a Singular Verb ('was truly impressive')[cite: 8]."},
+        {"num": 10, "module": "Module 1: Subject-Verb Agreement", "q": "Find the error: When it comes to Artificial Intelligence, (A)/ the United States are about six months (B)/ ahead of the rest of the world. (C)/ No error (D)", "options": ["A) (A)", "B) (B) - 'are about' should be 'is about'", "C) (C)", "D) (D) No error"], "ans": 1, "brief": "Proper nouns that are plural in form but singular in meaning (e.g., 'The United States', 'The Philippines', 'Gulliver's Travels') take a Singular Verb ('is')[cite: 8]."},
+        {"num": 11, "module": "Module 1: Subject-Verb Agreement", "q": "Find the error: Ten nautical miles (A)/ are a long distance (B)/ for a swimmer to cover in open sea. (C)/ No error (D)", "options": ["A) (A)", "B) (B) - 'are a long distance' should be 'is a long distance'", "C) (C)", "D) (D) No error"], "ans": 1, "brief": "When a plural noun representing a fixed quantity of distance, time, weight, or money is considered as a single unit, it takes a Singular Verb ('is a long distance')[cite: 8]."},
+        {"num": 12, "module": "Module 1: Subject-Verb Agreement", "q": "Find the error: Five hours (A)/ are a long time (B)/ to wait for a delayed flight at the airport. (C)/ No error (D)", "options": ["A) (A)", "B) (B) - 'are a long time' should be 'is a long time'", "C) (C)", "D) (D) No error"], "ans": 1, "brief": "'Five hours' representing a single period/duration of time takes a Singular Verb ('is a long time')[cite: 8]."},
+        {"num": 13, "module": "Module 1: Subject-Verb Agreement", "q": "Find the error: The intelligence regarding the insurgent movements (A)/ were shared with the frontline commanders (B)/ only after the perimeter was secured. (C)/ No error (D)", "options": ["A) (A)", "B) (B) - 'were shared' should be 'was shared'", "C) (C)", "D) (D) No error"], "ans": 1, "brief": "The main subject is 'The intelligence' (singular uncountable noun); prepositional phrases ('regarding the insurgent movements') do not change the verb number -> 'was shared'[cite: 8]."},
+        {"num": 14, "module": "Module 1: Subject-Verb Agreement", "q": "Find the error: None of the evidence provided (A)/ by the prosecution (B)/ were sufficient to convict the accused. (C)/ No Error (D)", "options": ["A) (A)", "B) (B)", "C) (C) - 'were sufficient' should be 'was sufficient'", "D) (D) No Error"], "ans": 2, "brief": "'None of + Uncountable Noun (evidence)' takes a Singular Verb ('was sufficient')[cite: 8]."},
+        {"num": 15, "module": "Module 1: Subject-Verb Agreement", "q": "Find the error: The Arabian Nights (A)/ are indeed an interesting book (B)/ for readers of all age groups. (C)/ No error (D)", "options": ["A) (A)", "B) (B) - 'are indeed' should be 'is indeed'", "C) (C)", "D) (D) No error"], "ans": 1, "brief": "'The Arabian Nights' is the title of a single book, requiring a singular verb ('is')[cite: 8]."},
+        {"num": 16, "module": "Module 1: Subject-Verb Agreement", "q": "Find the error: Fifty thousand rupees (A)/ are a large sum of money (B)/ to spend on a single evening dinner. (C)/ No error (D)", "options": ["A) (A)", "B) (B) - 'are a large sum' should be 'is a large sum'", "C) (C)", "D) (D) No error"], "ans": 1, "brief": "A specific amount of money considered as a single sum takes a singular verb ('is a large sum')[cite: 8]."},
+        {"num": 17, "module": "Module 1: Subject-Verb Agreement", "q": "Find the error: The captain together with his soldiers (A)/ were warmly welcomed (B)/ by the citizens of the town. (C)/ No error (D)", "options": ["A) (A)", "B) (B) - 'were warmly welcomed' should be 'was warmly welcomed'", "C) (C)", "D) (D) No error"], "ans": 1, "brief": "With 'together with', the verb agrees with the first subject ('The captain' -> singular -> 'was warmly welcomed')[cite: 8]."},
+        {"num": 18, "module": "Module 1: Subject-Verb Agreement", "q": "Find the error: Either the manager or his assistants (A)/ is responsible for (B)/ the delay in submitting the project report. (C)/ No error (D)", "options": ["A) (A)", "B) (B) - 'is responsible' should be 'are responsible'", "C) (C)", "D) (D) No error"], "ans": 1, "brief": "When subjects are joined by 'either... or' or 'neither... nor', the verb agrees with the nearer subject ('assistants' -> plural -> 'are responsible')[cite: 8]."},
+        {"num": 19, "module": "Module 1: Subject-Verb Agreement", "q": "Find the error: Neither the students nor the teacher (A)/ were present in the classroom (B)/ when the inspection team arrived. (C)/ No error (D)", "options": ["A) (A)", "B) (B) - 'were present' should be 'was present'", "C) (C)", "D) (D) No error"], "ans": 1, "brief": "The verb agrees with the nearer subject after 'nor' ('the teacher' -> singular -> 'was present')[cite: 8]."},
+        {"num": 20, "module": "Module 1: Subject-Verb Agreement", "q": "Find the error: Gulliver's Travels (A)/ were written by (B)/ Jonathan Swift in the eighteenth century. (C)/ No error (D)", "options": ["A) (A)", "B) (B) - 'were written' should be 'was written'", "C) (C)", "D) (D) No error"], "ans": 1, "brief": "A book title ending in 's' is singular ('was written')[cite: 8]."},
+        {"num": 21, "module": "Module 1: Subject-Verb Agreement", "q": "Find the error: Much of the advice (A)/ given by the experts (B)/ were ignored by the committee members. (C)/ No error (D)", "options": ["A) (A)", "B) (B)", "C) (C) - 'were ignored' should be 'was ignored'", "D) (D) No error"], "ans": 2, "brief": "'Much of + Uncountable Noun (advice)' takes a singular verb ('was ignored')[cite: 8]."},
+        {"num": 22, "module": "Module 1: Subject-Verb Agreement", "q": "Find the error: Every one of the boys (A)/ love to ride (B)/ bicycles in the evening park. (C)/ No error (D)", "options": ["A) (A)", "B) (B) - 'love to ride' should be 'loves to ride'", "C) (C)", "D) (D) No error"], "ans": 1, "brief": "'Every one of + Plural Noun' takes a singular verb ('loves to ride')[cite: 8]."},
+        {"num": 23, "module": "Module 1: Subject-Verb Agreement", "q": "Find the error: The Prime Minister as well as his cabinet ministers (A)/ have arrived (B)/ at the conference hall. (C)/ No error (D)", "options": ["A) (A)", "B) (B) - 'have arrived' should be 'has arrived'", "C) (C)", "D) (D) No error"], "ans": 1, "brief": "With 'as well as', the verb agrees with 'The Prime Minister' (singular -> 'has arrived')[cite: 8]."},
+        {"num": 24, "module": "Module 1: Subject-Verb Agreement", "q": "Find the error: He is one of the best authors (A)/ who has ever lived (B)/ and written in the English language. (C)/ No error (D)", "options": ["A) (A)", "B) (B) - 'has ever lived' should be 'have ever lived'", "C) (C)", "D) (D) No error"], "ans": 1, "brief": "'who' refers to plural antecedent 'authors', requiring plural verb ('have ever lived')[cite: 8]."},
+        {"num": 25, "module": "Module 1: Subject-Verb Agreement", "q": "Find the error: A great number of visitors (A)/ was waiting outside (B)/ the museum gate before opening time. (C)/ No error (D)", "options": ["A) (A)", "B) (B) - 'was waiting' should be 'were waiting'", "C) (C)", "D) (D) No error"], "ans": 1, "brief": "'A great number of + Plural Noun' takes a plural verb ('were waiting')[cite: 8]."},
+
+        // MODULE 2: NOUNS, NUMBER, UNCOUNTABLES & COMPOUND FORMS (26-50)
+        {"num": 26, "module": "Module 2: Nouns & Uncountables", "q": "Find the error: The analyst cautioned against excessive (A)/ reliance on anecdotal indicators masquerading (B)/ as statistically representative evidences. (C)/ No Error (D)", "options": ["A) (A)", "B) (B)", "C) (C) - 'evidences' should be 'evidence'", "D) (D) No Error"], "ans": 2, "brief": "Uncountable nouns like 'evidence', 'information', 'scenery', 'luggage', 'baggage', 'equipment', 'furniture', 'advice' have NO plural form ('evidences' -> WRONG -> 'evidence')[cite: 8]."},
+        {"num": 27, "module": "Module 2: Nouns & Uncountables", "q": "Find the error: The art gallery had many (A)/ beautiful furnitures (B)/ and ancient sculptures on display. (C)/ No Error (D)", "options": ["A) (A)", "B) (B) - 'furnitures' should be 'pieces of furniture' / 'furniture'", "C) (C)", "D) (D) No Error"], "ans": 1, "brief": "'Furniture' is an uncountable noun and cannot be pluralized as 'furnitures' -> use 'much beautiful furniture' or 'many pieces of beautiful furniture'[cite: 8]."},
+        {"num": 28, "module": "Module 2: Nouns & Uncountables", "q": "Find the error: The Ministry of Defence (A)/ has issued a five-years plan (B)/ for modernization of armed forces. (C)/ No error (D)", "options": ["A) (A)", "B) (B) - 'five-years plan' should be 'five-year plan'", "C) (C)", "D) (D) No error"], "ans": 1, "brief": "When a noun expression is used as an adjective/modifier before another noun, it remains SINGULAR ('a five-year plan', 'a ten-rupee note', 'a five-mile walk')[cite: 8]."},
+        {"num": 29, "module": "Module 2: Nouns & Uncountables", "q": "Find the error: The Commander-in-chiefs (A)/ from all three services met to discuss (B)/ the border security situation. (C)/ No Error (D)", "options": ["A) (A) - 'Commander-in-chiefs' should be 'Commanders-in-Chief'", "B) (B)", "C) (C)", "D) (D) No Error"], "ans": 0, "brief": "Compound nouns form their plural by adding '-s' to the principal/head word ('Commander-in-Chief' -> 'Commanders-in-Chief'; 'daughter-in-law' -> 'daughters-in-law')[cite: 8]."},
+        {"num": 30, "module": "Module 2: Nouns & Uncountables", "q": "Find the error: All his sisters-in-laws (A)/ came to attend the wedding ceremony (B)/ held at the ancestral palace. (C)/ No error (D)", "options": ["A) (A) - 'sisters-in-laws' should be 'sisters-in-law'", "B) (B)", "C) (C)", "D) (D) No error"], "ans": 0, "brief": "In compound relationship nouns, the plural '-s' is attached to the head noun ('sisters-in-law', not 'sisters-in-laws')[cite: 8]."},
+        {"num": 31, "module": "Module 2: Nouns & Uncountables", "q": "Find the error: The tourist was enchanted by (A)/ the breathtaking sceneries (B)/ of the Kashmir valley during autumn. (C)/ No error (D)", "options": ["A) (A)", "B) (B) - 'sceneries' should be 'scenery'", "C) (C)", "D) (D) No error"], "ans": 1, "brief": "'Scenery' is an uncountable collective noun and cannot be pluralized as 'sceneries'[cite: 8]."},
+        {"num": 32, "module": "Module 2: Nouns & Uncountables", "q": "Find the error: The passengers were asked (A)/ to identify their luggages (B)/ before boarding the international flight. (C)/ No error (D)", "options": ["A) (A)", "B) (B) - 'luggages' should be 'luggage'", "C) (C)", "D) (D) No error"], "ans": 1, "brief": "'Luggage' and 'baggage' are uncountable nouns and do not take plural '-s'[cite: 8]."},
+        {"num": 33, "module": "Module 2: Nouns & Uncountables", "q": "Find the error: We received many important (A)/ informations regarding the upcoming (B)/ defence examination pattern. (C)/ No error (D)", "options": ["A) (A)", "B) (B) - 'informations' should be 'information' / 'pieces of information'", "C) (C)", "D) (D) No error"], "ans": 1, "brief": "'Information' is uncountable; use 'much information' or 'many pieces of information', never 'informations'[cite: 8]."},
+        {"num": 34, "module": "Module 2: Nouns & Uncountables", "q": "Find the error: He gave me a ten-rupees note (A)/ to buy some stationery items (B)/ from the university bookshop. (C)/ No error (D)", "options": ["A) (A) - 'ten-rupees note' should be 'ten-rupee note'", "B) (B)", "C) (C)", "D) (D) No error"], "ans": 0, "brief": "Hyphenated noun modifier before 'note' must remain singular ('ten-rupee note')[cite: 8]."},
+        {"num": 35, "module": "Module 2: Nouns & Uncountables", "q": "Find the error: The laboratory recently purchased (A)/ several expensive equipments (B)/ for conducting high-precision testing. (C)/ No error (D)", "options": ["A) (A)", "B) (B) - 'equipments' should be 'equipment' / 'pieces of equipment'", "C) (C)", "D) (D) No error"], "ans": 1, "brief": "'Equipment' is an uncountable noun with no plural form ('equipments' is wrong)[cite: 8]."},
+        {"num": 36, "module": "Module 2: Nouns & Uncountables", "q": "Find the error: All the daughter-in-laws (A)/ of the family gathered together (B)/ to celebrate the traditional festival. (C)/ No error (D)", "options": ["A) (A) - 'daughter-in-laws' should be 'daughters-in-law'", "B) (B)", "C) (C)", "D) (D) No error"], "ans": 0, "brief": "Plural of 'daughter-in-law' is 'daughters-in-law'[cite: 8]."},
+        {"num": 37, "module": "Module 2: Nouns & Uncountables", "q": "Find the error: I have an urgent work (A)/ to complete before leaving (B)/ the office this evening. (C)/ No error (D)", "options": ["A) (A) - 'an urgent work' should be 'urgent work' / 'a piece of urgent work'", "B) (B)", "C) (C)", "D) (D) No error"], "ans": 0, "brief": "'Work' is an uncountable noun; do not use indefinite article 'a/an' before it directly[cite: 8]."},
+        {"num": 38, "module": "Module 2: Nouns & Uncountables", "q": "Find the error: The police found many (A)/ evidences against the suspect (B)/ during the preliminary search. (C)/ No error (D)", "options": ["A) (A)", "B) (B) - 'evidences' should be 'pieces of evidence' / 'evidence'", "C) (C)", "D) (D) No error"], "ans": 1, "brief": "'Evidence' is uncountable and cannot be written as 'evidences'[cite: 8]."},
+        {"num": 39, "module": "Module 2: Nouns & Uncountables", "q": "Find the error: My grandfather gave me (A)/ many good advices (B)/ before I left for military training. (C)/ No error (D)", "options": ["A) (A)", "B) (B) - 'many good advices' should be 'much good advice' / 'many pieces of good advice'", "C) (C)", "D) (D) No error"], "ans": 1, "brief": "'Advice' is an uncountable noun ('advices' is incorrect in standard English)[cite: 8]."},
+        {"num": 40, "module": "Module 2: Nouns & Uncountables", "q": "Find the error: He went on a five-miles walk (A)/ along the riverbank (B)/ early in the morning. (C)/ No error (D)", "options": ["A) (A) - 'five-miles walk' should be 'five-mile walk'", "B) (B)", "C) (C)", "D) (D) No error"], "ans": 0, "brief": "Adjectival noun modifier before 'walk' must be singular ('five-mile walk')[cite: 8]."},
+        {"num": 41, "module": "Module 2: Nouns & Uncountables", "q": "Find the error: The hotel rooms were furnished (A)/ with luxurious furnitures (B)/ imported from European designers. (C)/ No error (D)", "options": ["A) (A)", "B) (B) - 'furnitures' should be 'furniture'", "C) (C)", "D) (D) No error"], "ans": 1, "brief": "Uncountable noun 'furniture' has no plural form[cite: 8]."},
+        {"num": 42, "module": "Module 2: Nouns & Uncountables", "q": "Find the error: We enjoyed the beautiful (A)/ sceneries of Switzerland (B)/ during our summer vacation. (C)/ No error (D)", "options": ["A) (A)", "B) (B) - 'sceneries' should be 'scenery'", "C) (C)", "D) (D) No error"], "ans": 1, "brief": "'Scenery' is uncountable ('sceneries' is wrong)[cite: 8]."},
+        {"num": 43, "module": "Module 2: Nouns & Uncountables", "q": "Find the error: The porter carried all our (A)/ heavy baggages to the train (B)/ platform without complaining. (C)/ No error (D)", "options": ["A) (A)", "B) (B) - 'baggages' should be 'baggage'", "C) (C)", "D) (D) No error"], "ans": 1, "brief": "'Baggage' is uncountable ('baggages' is wrong)[cite: 8]."},
+        {"num": 44, "module": "Module 2: Nouns & Uncountables", "q": "Find the error: The commanding officer issued (A)/ a three-days ultimatum (B)/ to the surrendered militants. (C)/ No error (D)", "options": ["A) (A)", "B) (B) - 'three-days ultimatum' should be 'three-day ultimatum'", "C) (C)", "D) (D) No error"], "ans": 1, "brief": "Modifier before noun must be singular ('a three-day ultimatum')[cite: 8]."},
+        {"num": 45, "module": "Module 2: Nouns & Uncountables", "q": "Find the error: All the brother-in-laws (A)/ agreed to invest together (B)/ in the family enterprise. (C)/ No error (D)", "options": ["A) (A) - 'brother-in-laws' should be 'brothers-in-law'", "B) (B)", "C) (C)", "D) (D) No error"], "ans": 0, "brief": "Compound plural form is 'brothers-in-law'[cite: 8]."},
+        {"num": 46, "module": "Module 2: Nouns & Uncountables", "q": "Find the error: He showed me two (A)/ hundred-rupees notes (B)/ that he found in an old diary. (C)/ No error (D)", "options": ["A) (A)", "B) (B) - 'hundred-rupees notes' should be 'hundred-rupee notes'", "C) (C)", "D) (D) No error"], "ans": 1, "brief": "Modifier 'hundred-rupee' remains singular before plural noun 'notes'[cite: 8]."},
+        {"num": 47, "module": "Module 2: Nouns & Uncountables", "q": "Find the error: The detective collected several (A)/ crucial evidences from the crime scene (B)/ before sealing the area. (C)/ No error (D)", "options": ["A) (A)", "B) (B) - 'evidences' should be 'pieces of evidence'", "C) (C)", "D) (D) No error"], "ans": 1, "brief": "'Evidence' is uncountable and cannot take plural '-s'[cite: 8]."},
+        {"num": 48, "module": "Module 2: Nouns & Uncountables", "q": "Find the error: The researcher required new (A)/ laboratory equipments (B)/ to complete his doctoral thesis. (C)/ No error (D)", "options": ["A) (A)", "B) (B) - 'equipments' should be 'equipment'", "C) (C)", "D) (D) No error"], "ans": 1, "brief": "'Equipment' is uncountable[cite: 8]."},
+        {"num": 49, "module": "Module 2: Nouns & Uncountables", "q": "Find the error: The general staff presented (A)/ a ten-years strategic vision (B)/ for modernizing air defence. (C)/ No error (D)", "options": ["A) (A)", "B) (B) - 'ten-years strategic vision' should be 'ten-year strategic vision'", "C) (C)", "D) (D) No error"], "ans": 1, "brief": "Adjectival modifier must be singular ('ten-year strategic vision')[cite: 8]."},
+        {"num": 50, "module": "Module 2: Nouns & Uncountables", "q": "Find the error: All the Commander-in-Chiefs (A)/ of the allied nations gathered (B)/ for the joint security summit. (C)/ No error (D)", "options": ["A) (A) - 'Commander-in-Chiefs' should be 'Commanders-in-Chief'", "B) (B)", "C) (C)", "D) (D) No error"], "ans": 0, "brief": "Plural of Commander-in-Chief is 'Commanders-in-Chief'[cite: 8]."},
+
+        // MODULE 3: PRONOUNS, POSSESSIVE CASES & RELATIVE PRONOUNS (51-75)
+        {"num": 51, "module": "Module 3: Pronouns & Cases", "q": "Find the error: The supervisor disapproved of the researcher's (A)/ submitting sensitive data (B)/ without proper authorisation during the preliminary phase. (C)/ No error (D)", "options": ["A) (A)", "B) (B)", "C) (C)", "D) (D) No error - possessive case 'researcher's' correctly precedes gerund 'submitting'"], "ans": 3, "brief": "A Gerund ('submitting', 'staying', 'going') is always preceded by a Possessive Case ('my', 'his', 'her', 'researcher's'), NOT objective case[cite: 8]."},
+        {"num": 52, "module": "Module 3: Pronouns & Cases", "q": "Find the error: My father doesn't like me (A)/ staying outside late at night (B)/ with my friends. (C)/ No error (D)", "options": ["A) (A) - 'me' should be 'my' (possessive case before gerund 'staying')", "B) (B)", "C) (C)", "D) (D) No error"], "ans": 0, "brief": "Gerund 'staying' must be preceded by possessive adjective 'my', not objective pronoun 'me'[cite: 8]."},
+        {"num": 53, "module": "Module 3: Pronouns & Cases", "q": "Find the error: One must be careful (A)/ to protect his equipment (B)/ during the sandstorm. (C)/ No error (D)", "options": ["A) (A)", "B) (B) - 'his equipment' should be 'one's equipment'", "C) (C)", "D) (D) No error"], "ans": 1, "brief": "When indefinite pronoun 'One' is the subject, its possessive form must be 'one's' (NOT 'his' or 'her')[cite: 8]."},
+        {"num": 54, "module": "Module 3: Pronouns & Cases", "q": "Find the error: Between you and I, (A)/ there is no doubt that (B)/ the plan will succeed. (C)/ No Error (D)", "options": ["A) (A) - 'Between you and I' should be 'Between you and me'", "B) (B)", "C) (C)", "D) (D) No Error"], "ans": 0, "brief": "After prepositions ('between', 'among', 'for', 'to', 'with', 'by', 'let'), pronouns must be in the Objective Case ('me', 'him', 'her', 'us', 'them')[cite: 8]."},
+        {"num": 55, "module": "Module 3: Pronouns & Cases", "q": "Find the error: Me and my wife (A)/ were at home (B)/ last night during the storm. (C)/ No Error (D)", "options": ["A) (A) - 'Me and my wife' should be 'My wife and I' (order 231 / subjective case)", "B) (B)", "C) (C)", "D) (D) No Error"], "ans": 0, "brief": "Subject of the sentence must be in Subjective Case ('I', not 'me'). For positive/neutral acts, pronoun order is 231 (Second, Third, First -> 'My wife and I')[cite: 8]."},
+        {"num": 56, "module": "Module 3: Pronouns & Cases", "q": "Find the error: Whom do you think (A)/ won the prize (B)/ in the annual literary contest? (C)/ No error (D)", "options": ["A) (A) - 'Whom do you think' should be 'Who do you think'", "B) (B)", "C) (C)", "D) (D) No error"], "ans": 0, "brief": "'Who' is the subject of the verb 'won' ('do you think' is a parenthetical clause -> 'Who won the prize?')[cite: 8]."},
+        {"num": 57, "module": "Module 3: Pronouns & Cases", "q": "Find the error: One should always perform (A)/ his duties with integrity (B)/ and dedication to the nation. (C)/ No error (D)", "options": ["A) (A)", "B) (B) - 'his duties' should be 'one's duties'", "C) (C)", "D) (D) No error"], "ans": 1, "brief": "Indefinite pronoun 'One' takes possessive 'one's'[cite: 8]."},
+        {"num": 58, "module": "Module 3: Pronouns & Cases", "q": "Find the error: I appreciated him (A)/ helping me with the mathematics (B)/ assignment before the exam. (C)/ No error (D)", "options": ["A) (A) - 'him' should be 'his' (possessive before gerund 'helping')", "B) (B)", "C) (C)", "D) (D) No error"], "ans": 0, "brief": "Gerund 'helping' requires possessive adjective 'his', not objective 'him'[cite: 8]."},
+        {"num": 59, "module": "Module 3: Pronouns & Cases", "q": "Find the error: Between him and I, (A)/ there has always been a strong (B)/ professional understanding. (C)/ No error (D)", "options": ["A) (A) - 'Between him and I' should be 'Between him and me'", "B) (B)", "C) (C)", "D) (D) No error"], "ans": 0, "brief": "Preposition 'between' takes objective case ('him and me')[cite: 8]."},
+        {"num": 60, "module": "Module 3: Pronouns & Cases", "q": "Find the error: It is I (A)/ who is responsible (B)/ for the delay in project execution. (C)/ No error (D)", "options": ["A) (A)", "B) (B) - 'who is' should be 'who am'", "C) (C)", "D) (D) No error"], "ans": 1, "brief": "After 'It is I who...', the verb agrees with the antecedent 'I' ('who am responsible'; 'It is you who are...')[cite: 8]."},
+        {"num": 61, "module": "Module 3: Pronouns & Cases", "q": "Find the error: The teacher did not object to (A)/ them leaving the classroom (B)/ after the lecture ended. (C)/ No error (D)", "options": ["A) (A)", "B) (B) - 'them leaving' should be 'their leaving'", "C) (C)", "D) (D) No error"], "ans": 1, "brief": "Gerund 'leaving' requires possessive adjective 'their', not objective 'them'[cite: 8]."},
+        {"num": 62, "module": "Module 3: Pronouns & Cases", "q": "Find the error: One must keep his promise (A)/ if one wishes to earn (B)/ respect in public life. (C)/ No error (D)", "options": ["A) (A) - 'his promise' should be 'one's promise'", "B) (B)", "C) (C)", "D) (D) No error"], "ans": 0, "brief": "'One' takes possessive 'one's promise'[cite: 8]."},
+        {"num": 63, "module": "Module 3: Pronouns & Cases", "q": "Find the error: Let you and I (A)/ complete this assignment (B)/ before the supervisor arrives. (C)/ No error (D)", "options": ["A) (A) - 'Let you and I' should be 'Let you and me'", "B) (B)", "C) (C)", "D) (D) No error"], "ans": 0, "brief": "The verb 'let' is followed by objective case pronouns ('Let you and me')[cite: 8]."},
+        {"num": 64, "module": "Module 3: Pronouns & Cases", "q": "Find the error: Whom was selected (A)/ as the captain of the national (B)/ football team this season? (C)/ No error (D)", "options": ["A) (A) - 'Whom was selected' should be 'Who was selected'", "B) (B)", "C) (C)", "D) (D) No error"], "ans": 0, "brief": "Subject of passive verb 'was selected' must be 'Who', not objective 'Whom'[cite: 8]."},
+        {"num": 65, "module": "Module 3: Pronouns & Cases", "q": "Find the error: He objected to me (A)/ joining the political debate (B)/ during office hours. (C)/ No error (D)", "options": ["A) (A) - 'me' should be 'my' (possessive before gerund 'joining')", "B) (B)", "C) (C)", "D) (D) No error"], "ans": 0, "brief": "Gerund 'joining' takes possessive 'my'[cite: 8]."},
+        {"num": 66, "module": "Module 3: Pronouns & Cases", "q": "Find the error: Between she and him, (A)/ only one can be selected (B)/ for the overseas scholarship. (C)/ No error (D)", "options": ["A) (A) - 'she and him' should be 'her and him'", "B) (B)", "C) (C)", "D) (D) No error"], "ans": 0, "brief": "Preposition 'Between' takes objective case ('her and him')[cite: 8]."},
+        {"num": 67, "module": "Module 3: Pronouns & Cases", "q": "Find the error: One should take care of (A)/ his health especially during (B)/ changing seasonal weather. (C)/ No error (D)", "options": ["A) (A)", "B) (B) - 'his health' should be 'one's health'", "C) (C)", "D) (D) No error"], "ans": 1, "brief": "Indefinite pronoun 'One' requires possessive 'one's'[cite: 8]."},
+        {"num": 68, "module": "Module 3: Pronouns & Cases", "q": "Find the error: It is you (A)/ who is going to lead (B)/ the parade on Republic Day. (C)/ No error (D)", "options": ["A) (A)", "B) (B) - 'who is going' should be 'who are going'", "C) (C)", "D) (D) No error"], "ans": 1, "brief": "Relative pronoun 'who' refers to antecedent 'you', requiring plural verb 'are going'[cite: 8]."},
+        {"num": 69, "module": "Module 3: Pronouns & Cases", "q": "Find the error: The committee welcomed him (A)/ accepting the leadership role (B)/ during the crisis period. (C)/ No error (D)", "options": ["A) (A) - 'him' should be 'his' (possessive before gerund 'accepting')", "B) (B)", "C) (C)", "D) (D) No error"], "ans": 0, "brief": "Gerund 'accepting' requires possessive 'his'[cite: 8]."},
+        {"num": 70, "module": "Module 3: Pronouns & Cases", "q": "Find the error: Let he and she (A)/ settle their dispute (B)/ without external interference. (C)/ No error (D)", "options": ["A) (A) - 'Let he and she' should be 'Let him and her'", "B) (B)", "C) (C)", "D) (D) No error"], "ans": 0, "brief": "'Let' takes objective case pronouns ('Let him and her')[cite: 8]."},
+        {"num": 71, "module": "Module 3: Pronouns & Cases", "q": "Find the error: Whom do you suppose (A)/ will be appointed as the new (B)/ director of the institute? (C)/ No error (D)", "options": ["A) (A) - 'Whom do you suppose' should be 'Who do you suppose'", "B) (B)", "C) (C)", "D) (D) No error"], "ans": 0, "brief": "'Who' is the subject of 'will be appointed' ('do you suppose' is parenthetical)[cite: 8]."},
+        {"num": 72, "module": "Module 3: Pronouns & Cases", "q": "Find the error: Between you and he, (A)/ there is no disagreement (B)/ regarding the budget allocation. (C)/ No error (D)", "options": ["A) (A) - 'you and he' should be 'you and him'", "B) (B)", "C) (C)", "D) (D) No error"], "ans": 0, "brief": "Preposition 'Between' requires objective case ('you and him')[cite: 8]."},
+        {"num": 73, "module": "Module 3: Pronouns & Cases", "q": "Find the error: One should never neglect (A)/ his parents in their old age. (B)/ No error (C)", "options": ["A) (A)", "B) (B) - 'his parents' should be 'one's parents'", "C) (C) No error"], "ans": 1, "brief": "Subject 'One' takes possessive 'one's parents'[cite: 8]."},
+        {"num": 74, "module": "Module 3: Pronouns & Cases", "q": "Find the error: I did not like them (A)/ shouting slogans inside (B)/ the academic building. (C)/ No error (D)", "options": ["A) (A) - 'them' should be 'their' (possessive before gerund 'shouting')", "B) (B)", "C) (C)", "D) (D) No error"], "ans": 0, "brief": "Gerund 'shouting' takes possessive 'their'[cite: 8]."},
+        {"num": 75, "module": "Module 3: Pronouns & Cases", "q": "Find the error: It is we (A)/ who is responsible (B)/ for preserving our cultural heritage. (C)/ No error (D)", "options": ["A) (A)", "B) (B) - 'who is' should be 'who are'", "C) (C)", "D) (D) No error"], "ans": 1, "brief": "Antecedent 'we' requires plural verb 'are' after relative pronoun 'who'[cite: 8]."},
+
+        // MODULE 4: TENSES, SEQUENCE OF TENSES & TIME WORDS (76-100)
+        {"num": 76, "module": "Module 4: Tenses & Time Words", "q": "Find the error: Four years have passed since (A)/ we had met each (B)/ other in Mumbai. (C)/ No error (D)", "options": ["A) (A)", "B) (B) - 'we had met' should be 'we met' (Simple Past after 'since')", "C) (C)", "D) (D) No error"], "ans": 1, "brief": "In a complex sentence with 'since' as a conjunction of time, the main clause takes Present Perfect ('have passed') and the 'since'-clause takes Simple Past ('we met')[cite: 8]."},
+        {"num": 77, "module": "Module 4: Tenses & Time Words", "q": "Find the error: I have passed (A)/ the examination (B)/ two years ago. (C)/ No error. (D)", "options": ["A) (A) - 'I have passed' should be 'I passed' (Simple Past with 'ago')", "B) (B)", "C) (C)", "D) (D) No error"], "ans": 0, "brief": "When a specific past time expression ('ago', 'yesterday', 'last year', 'in 2010') is given, use Simple Past Tense (V2), NOT Present Perfect[cite: 8]."},
+        {"num": 78, "module": "Module 4: Tenses & Time Words", "q": "Find the error: The other day my sister told me (A)/ that she will be moving (B)/ to her new apartment very soon. (C)/ No error (D)", "options": ["A) (A)", "B) (B) - 'will be moving' should be 'would be moving' (indirect speech past tense)", "C) (C)", "D) (D) No error"], "ans": 1, "brief": "In indirect speech, if the reporting verb is in the past tense ('told'), modal 'will' changes to 'would' ('would be moving')[cite: 8]."},
+        {"num": 79, "module": "Module 4: Tenses & Time Words", "q": "Find the error: The train had left (A)/ the station (B)/ before I reached there. (C)/ No error (D)", "options": ["A) (A)", "B) (B)", "C) (C)", "D) (D) No error - correct Past Perfect + Simple Past sequence"], "ans": 3, "brief": "When two past actions occur, the earlier action takes Past Perfect ('had left') and the later action takes Simple Past ('reached') -> No error[cite: 8]."},
+        {"num": 80, "module": "Module 4: Tenses & Time Words", "q": "Find the error: I ate (A)/ nothing (B)/ since morning. (C)/ No error (D)", "options": ["A) (A) - 'I ate' should be 'I have eaten' (Present Perfect with 'since morning')", "B) (B)", "C) (C)", "D) (D) No error"], "ans": 0, "brief": "With 'since' or 'for' denoting duration up to the present, use Present Perfect / Present Perfect Continuous ('I have eaten nothing since morning')[cite: 8]."},
+        {"num": 81, "module": "Module 4: Tenses & Time Words", "q": "Find the error: I went to his house but (A)/ couldn't see him (B)/ because he went out before I arrived. (C)/ No Error (D)", "options": ["A) (A)", "B) (B)", "C) (C) - 'he went out' should be 'he had gone out' (earlier past action)", "D) (D) No Error"], "ans": 2, "brief": "The action of going out happened earlier than arriving -> must use Past Perfect ('had gone out')[cite: 8]."},
+        {"num": 82, "module": "Module 4: Tenses & Time Words", "q": "Find the error: He admits that (A)/ he is not following (B)/ the instructions. (C)/ No error (D)", "options": ["A) (A)", "B) (B)", "C) (C)", "D) (D) No error - correct present tense consistency"], "ans": 3, "brief": "The sentence is grammatically correct with consistent present tense structure ('He admits that he is not following...')[cite: 8]."},
+        {"num": 83, "module": "Module 4: Tenses & Time Words", "q": "Find the error: I have not seen him since twenty years (A)/ and so I cannot say with certainty (B)/ whether he is alive or dead. (C)/ No error (D)", "options": ["A) (A) - 'since twenty years' should be 'for twenty years'", "B) (B)", "C) (C)", "D) (D) No error"], "ans": 0, "brief": "'For' is used for a period/duration of time ('twenty years', 'two hours'); 'since' is used for a specific starting point in time ('1990', 'morning')[cite: 8]."},
+        {"num": 84, "module": "Module 4: Tenses & Time Words", "q": "Find the error: Five years have passed since (A)/ I had graduated (B)/ from college. (C)/ No error (D)", "options": ["A) (A)", "B) (B) - 'had graduated' should be 'graduated' (Simple Past after 'since')", "C) (C)", "D) (D) No error"], "ans": 1, "brief": "The clause following 'since' in time expressions must be in Simple Past ('since I graduated')[cite: 8]."},
+        {"num": 85, "module": "Module 4: Tenses & Time Words", "q": "Find the error: He has completed (A)/ his postgraduate diploma (B)/ last year in London. (C)/ No error (D)", "options": ["A) (A) - 'has completed' should be 'completed' (Simple Past with 'last year')", "B) (B)", "C) (C)", "D) (D) No error"], "ans": 0, "brief": "Past time expression 'last year' requires Simple Past ('completed')[cite: 8]."},
+        {"num": 86, "module": "Module 4: Tenses & Time Words", "q": "Find the error: She informed me that (A)/ she will attend (B)/ the conference next Monday. (C)/ No error (D)", "options": ["A) (A)", "B) (B) - 'will attend' should be 'would attend' (indirect speech)", "C) (C)", "D) (D) No error"], "ans": 1, "brief": "Past reporting verb 'informed' requires modal change 'will -> would'[cite: 8]."},
+        {"num": 87, "module": "Module 4: Tenses & Time Words", "q": "Find the error: The patient died (A)/ before the doctor (B)/ reached the hospital. (C)/ No error (D)", "options": ["A) (A) - 'died' should be 'had died' (earlier past action)", "B) (B)", "C) (C)", "D) (D) No error"], "ans": 0, "brief": "Earlier action in past sequence takes Past Perfect ('The patient had died before the doctor reached')[cite: 8]."},
+        {"num": 88, "module": "Module 4: Tenses & Time Words", "q": "Find the error: We did not receive (A)/ any reply from him (B)/ since yesterday morning. (C)/ No error (D)", "options": ["A) (A) - 'did not receive' should be 'have not received' (with 'since yesterday morning')", "B) (B)", "C) (C)", "D) (D) No error"], "ans": 0, "brief": "With 'since yesterday morning' continuing to present, use Present Perfect ('have not received')[cite: 8]."},
+        {"num": 89, "module": "Module 4: Tenses & Time Words", "q": "Find the error: I went to the station but (A)/ missed the train because (B)/ it left before my arrival. (C)/ No error (D)", "options": ["A) (A)", "B) (B)", "C) (C) - 'it left' should be 'it had left' (earlier past action)", "D) (D) No error"], "ans": 2, "brief": "Train leaving earlier than arrival requires Past Perfect ('had left')[cite: 8]."},
+        {"num": 90, "module": "Module 4: Tenses & Time Words", "q": "Find the error: I have been knowing him (A)/ for more than (B)/ ten years now. (C)/ No error (D)", "options": ["A) (A) - 'have been knowing' should be 'have known' (stative verb 'know')", "B) (B)", "C) (C)", "D) (D) No error"], "ans": 0, "brief": "Stative verbs like 'know', 'believe', 'own', 'love' are not normally used in continuous tenses -> 'I have known him for ten years'[cite: 8]."},
+        {"num": 91, "module": "Module 4: Tenses & Time Words", "q": "Find the error: Ten years have passed since (A)/ we had moved (B)/ to this city. (C)/ No error (D)", "options": ["A) (A)", "B) (B) - 'had moved' should be 'moved'", "C) (C)", "D) (D) No error"], "ans": 1, "brief": "Simple Past is required after 'since' ('since we moved')[cite: 8]."},
+        {"num": 92, "module": "Module 4: Tenses & Time Words", "q": "Find the error: He has submitted (A)/ his application form (B)/ two days ago. (C)/ No error (D)", "options": ["A) (A) - 'has submitted' should be 'submitted'", "B) (B)", "C) (C)", "D) (D) No error"], "ans": 0, "brief": "Time expression 'ago' takes Simple Past ('submitted')[cite: 8]."},
+        {"num": 93, "module": "Module 4: Tenses & Time Words", "q": "Find the error: The teacher said that (A)/ the earth revolved (B)/ around the sun. (C)/ No error (D)", "options": ["A) (A)", "B) (B) - 'revolved' should be 'revolves' (universal/scientific truth)", "C) (C)", "D) (D) No error"], "ans": 1, "brief": "Universal truths and scientific facts remain in Simple Present Tense even in indirect speech ('revolves')[cite: 8]."},
+        {"num": 94, "module": "Module 4: Tenses & Time Words", "q": "Find the error: The guests had departed (A)/ before we (B)/ returned home. (C)/ No error (D)", "options": ["A) (A)", "B) (B)", "C) (C)", "D) (D) No error - correct Past Perfect + Simple Past"], "ans": 3, "brief": "Correct sequence of past tenses: earlier 'had departed', later 'returned' -> No error[cite: 8]."},
+        {"num": 95, "module": "Module 4: Tenses & Time Words", "q": "Find the error: I did not eat (A)/ anything (B)/ since last evening. (C)/ No error (D)", "options": ["A) (A) - 'did not eat' should be 'have not eaten'", "B) (B)", "C) (C)", "D) (D) No error"], "ans": 0, "brief": "Use Present Perfect ('have not eaten') with 'since last evening'[cite: 8]."},
+        {"num": 96, "module": "Module 4: Tenses & Time Words", "q": "Find the error: He told me that (A)/ he will return (B)/ my book tomorrow. (C)/ No error (D)", "options": ["A) (A)", "B) (B) - 'will return' should be 'would return'", "C) (C)", "D) (D) No error"], "ans": 1, "brief": "Reporting verb 'told' requires modal 'would return'[cite: 8]."},
+        {"num": 97, "module": "Module 4: Tenses & Time Words", "q": "Find the error: She has been working here (A)/ since three years (B)/ without any promotion. (C)/ No error (D)", "options": ["A) (A)", "B) (B) - 'since three years' should be 'for three years' (duration)", "C) (C)", "D) (D) No error"], "ans": 1, "brief": "'Three years' is a duration of time, requiring 'for three years'[cite: 8]."},
+        {"num": 98, "module": "Module 4: Tenses & Time Words", "q": "Find the error: By the time the police arrived, (A)/ the robbers (B)/ fled the scene. (C)/ No error (D)", "options": ["A) (A)", "B) (B)", "C) (C) - 'fled' should be 'had fled'", "D) (D) No error"], "ans": 2, "brief": "Robbers fleeing earlier than arrival requires Past Perfect ('had fled')[cite: 8]."},
+        {"num": 99, "module": "Module 4: Tenses & Time Words", "q": "Find the error: Three weeks have elapsed since (A)/ he had written (B)/ to his parents. (C)/ No error (D)", "options": ["A) (A)", "B) (B) - 'had written' should be 'wrote'", "C) (C)", "D) (D) No error"], "ans": 1, "brief": "Use Simple Past after 'since' ('since he wrote')[cite: 8]."},
+        {"num": 100, "module": "Module 4: Tenses & Time Words", "q": "Find the error: He has bought (A)/ a new car (B)/ yesterday evening. (C)/ No error (D)", "options": ["A) (A) - 'has bought' should be 'bought' (Simple Past with 'yesterday')", "B) (B)", "C) (C)", "D) (D) No error"], "ans": 0, "brief": "Specific past time 'yesterday evening' requires Simple Past ('bought')[cite: 8]."},
+
+        // MODULE 5: CONDITIONALS, SUBJUNCTIVE MOOD & HYPOTHETICALS (101-125)
+        {"num": 101, "module": "Module 5: Conditionals & Subjunctive", "q": "Find the error: If I was the prime minister (A)/ of India, I would (B)/ work wonders. (C)/ No error. (D)", "options": ["A) (A) - 'If I was' should be 'If I were' (hypothetical subjunctive mood)", "B) (B)", "C) (C)", "D) (D) No error"], "ans": 0, "brief": "In 2nd Conditional / hypothetical wishes ('If I were a king', 'If I were you'), use the past subjunctive 'were' for all subjects[cite: 8]."},
+        {"num": 102, "module": "Module 5: Conditionals & Subjunctive", "q": "Find the error: If he had (A)/ a few hours to spare (B)/ he would have spent them in a public library. (C)/ No Error. (D)", "options": ["A) (A) - 'If he had' should be 'If he had had' (3rd conditional past perfect)", "B) (B)", "C) (C)", "D) (D) No Error"], "ans": 0, "brief": "In 3rd Conditional sentences, the if-clause requires Past Perfect ('had + V3' -> 'If he had had', where 1st 'had' is auxiliary and 2nd 'had' is V3 of 'have/possess')[cite: 8]."},
+        {"num": 103, "module": "Module 5: Conditionals & Subjunctive", "q": "Find the error: Had the battalion reached (A)/ the summit on time, (B)/ they would had avoided the ambush. (C)/ No error (D)", "options": ["A) (A)", "B) (B)", "C) (C) - 'would had avoided' should be 'would have avoided'", "D) (D) No error"], "ans": 2, "brief": "In 3rd Conditional main clauses, modal auxiliaries are followed by base verb 'have' + V3 ('would have avoided', NEVER 'would had')[cite: 8]."},
+        {"num": 104, "module": "Module 5: Conditionals & Subjunctive", "q": "Find the error: The General behaves (A)/ as if he is the (B)/ sole authority in this jurisdiction. (C)/ No error (D)", "options": ["A) (A)", "B) (B) - 'as if he is' should be 'as if he were'", "C) (C)", "D) (D) No error"], "ans": 1, "brief": "After 'as if' / 'as though' expressing a present hypothetical/unreal condition, use the past subjunctive 'were' for all subjects ('as if he were')[cite: 8]."},
+        {"num": 105, "module": "Module 5: Conditionals & Subjunctive", "q": "Find the error: The actor talked (A)/ as if she had (B)/ already receive an award. (C)/ No error (D)", "options": ["A) (A)", "B) (B)", "C) (C) - 'had already receive' should be 'had already received'", "D) (D) No error"], "ans": 2, "brief": "After 'as if' / 'as though' referring to a past hypothetical action, use Past Perfect tense ('had + V3' -> 'had already received')[cite: 8]."},
+        {"num": 106, "module": "Module 5: Conditionals & Subjunctive", "q": "Find the error: I will come (A)/ to see you (B)/ if I will have time. (C)/ No error (D)", "options": ["A) (A)", "B) (B)", "C) (C) - 'if I will have' should be 'if I have' (1st conditional)", "D) (D) No error"], "ans": 2, "brief": "In First Conditional sentences, the conditional clause ('if', 'when', 'unless', 'until') takes Simple Present Tense, while the main clause takes Simple Future[cite: 8]."},
+        {"num": 107, "module": "Module 5: Conditionals & Subjunctive", "q": "Find the error: It is high time (A)/ that political parties (B)/ take a more responsible role to help the poor. (C)/ No error (D)", "options": ["A) (A)", "B) (B)", "C) (C) - 'take' should be 'took' (Simple Past V2 after 'It is high time')", "D) (D) No error"], "ans": 2, "brief": "After expressions 'It is time', 'It is high time', 'It is about time', the clause that follows must use Simple Past Tense (V2) -> 'took'[cite: 8]."},
+        {"num": 108, "module": "Module 5: Conditionals & Subjunctive", "q": "Find the error: Had I knew about the vacancy earlier, (A)/ I would have applied (B)/ for the position immediately. (C)/ No Error (D)", "options": ["A) (A) - 'Had I knew' should be 'Had I known' (Past Perfect V3)", "B) (B)", "C) (C)", "D) (D) No Error"], "ans": 0, "brief": "Inverted 3rd Conditional 'Had + Subject + V3' requires past participle 'known' ('Had I known')[cite: 8]."},
+        {"num": 109, "module": "Module 5: Conditionals & Subjunctive", "q": "Find the error: If I was a bird, (A)/ I would fly across (B)/ the oceans without fear. (C)/ No error (D)", "options": ["A) (A) - 'If I was' should be 'If I were'", "B) (B)", "C) (C)", "D) (D) No error"], "ans": 0, "brief": "Subjunctive mood for hypothetical wish: 'If I were a bird'[cite: 8]."},
+        {"num": 110, "module": "Module 5: Conditionals & Subjunctive", "q": "Find the error: If she had worked harder, (A)/ she would had passed (B)/ the examination easily. (C)/ No error (D)", "options": ["A) (A)", "B) (B) - 'would had passed' should be 'would have passed'", "C) (C)", "D) (D) No error"], "ans": 1, "brief": "Main clause of 3rd conditional uses 'would have + V3'[cite: 8]."},
+        {"num": 111, "module": "Module 5: Conditionals & Subjunctive", "q": "Find the error: He speaks as though (A)/ he was the chief (B)/ executive of the company. (C)/ No error (D)", "options": ["A) (A)", "B) (B) - 'was' should be 'were' (subjunctive after 'as though')", "C) (C)", "D) (D) No error"], "ans": 1, "brief": "'As though' taking a present hypothetical condition requires 'were'[cite: 8]."},
+        {"num": 112, "module": "Module 5: Conditionals & Subjunctive", "q": "Find the error: When you will reach (A)/ the airport, please call me (B)/ to confirm your arrival. (C)/ No error (D)", "options": ["A) (A) - 'When you will reach' should be 'When you reach'", "B) (B)", "C) (C)", "D) (D) No error"], "ans": 0, "brief": "Time/conditional clause after 'when' takes Simple Present ('When you reach')[cite: 8]."},
+        {"num": 113, "module": "Module 5: Conditionals & Subjunctive", "q": "Find the error: It is about time (A)/ we start preparing (B)/ for the upcoming defence exam. (C)/ No error (D)", "options": ["A) (A)", "B) (B) - 'start' should be 'started' (V2 after 'It is about time')", "C) (C)", "D) (D) No error"], "ans": 1, "brief": "'It is about time' requires Simple Past V2 ('we started')[cite: 8]."},
+        {"num": 114, "module": "Module 5: Conditionals & Subjunctive", "q": "Find the error: Had they informed us earlier, (A)/ we would had arranged (B)/ accommodation for the guests. (C)/ No error (D)", "options": ["A) (A)", "B) (B) - 'would had arranged' should be 'would have arranged'", "C) (C)", "D) (D) No error"], "ans": 1, "brief": "Modal auxiliary must be followed by base verb 'have' -> 'would have arranged'[cite: 8]."},
+        {"num": 115, "module": "Module 5: Conditionals & Subjunctive", "q": "Find the error: If he had a proper map, (A)/ he would have reached (B)/ the destination on time. (C)/ No error (D)", "options": ["A) (A) - 'If he had' should be 'If he had had' (for 3rd conditional)", "B) (B)", "C) (C)", "D) (D) No error"], "ans": 0, "brief": "With main clause 'would have reached' (3rd conditional), if-clause needs Past Perfect 'If he had had'[cite: 8]."},
+        {"num": 116, "module": "Module 5: Conditionals & Subjunctive", "q": "Find the error: Unless you will work (A)/ hard, you cannot clear (B)/ the SSB interview. (C)/ No error (D)", "options": ["A) (A) - 'Unless you will work' should be 'Unless you work'", "B) (B)", "C) (C)", "D) (D) No error"], "ans": 0, "brief": "Conditional clause after 'unless' takes Simple Present ('Unless you work')[cite: 8]."},
+        {"num": 117, "module": "Module 5: Conditionals & Subjunctive", "q": "Find the error: He walked as if (A)/ the earth belongs (B)/ to him alone. (C)/ No error (D)", "options": ["A) (A)", "B) (B) - 'belongs' should be 'belonged'", "C) (C)", "D) (D) No error"], "ans": 1, "brief": "'As if' expressing unreal condition requires past subjunctive ('belonged')[cite: 8]."},
+        {"num": 118, "module": "Module 5: Conditionals & Subjunctive", "q": "Find the error: If I was in your place, (A)/ I would not accept (B)/ such unfair terms. (C)/ No error (D)", "options": ["A) (A) - 'If I was' should be 'If I were'", "B) (B)", "C) (C)", "D) (D) No error"], "ans": 0, "brief": "Subjunctive mood for hypothetical condition: 'If I were in your place'[cite: 8]."},
+        {"num": 119, "module": "Module 5: Conditionals & Subjunctive", "q": "Find the error: It is high time (A)/ you realise your responsibilities (B)/ towards your family. (C)/ No error (D)", "options": ["A) (A)", "B) (B) - 'realise' should be 'realised' (V2 after 'high time')", "C) (C)", "D) (D) No error"], "ans": 1, "brief": "'It is high time' takes Simple Past V2 ('realised')[cite: 8]."},
+        {"num": 120, "module": "Module 5: Conditionals & Subjunctive", "q": "Find the error: Had he spoke the truth, (A)/ he would have been forgiven (B)/ by the committee. (C)/ No error (D)", "options": ["A) (A) - 'Had he spoke' should be 'Had he spoken' (V3)", "B) (B)", "C) (C)", "D) (D) No error"], "ans": 0, "brief": "'Had' auxiliary requires V3 past participle 'spoken'[cite: 8]."},
+        {"num": 121, "module": "Module 5: Conditionals & Subjunctive", "q": "Find the error: If it will rain tomorrow, (A)/ we will postpone (B)/ the outdoor drill. (C)/ No error (D)", "options": ["A) (A) - 'If it will rain' should be 'If it rains'", "B) (B)", "C) (C)", "D) (D) No error"], "ans": 0, "brief": "First conditional if-clause takes Simple Present ('If it rains')[cite: 8]."},
+        {"num": 122, "module": "Module 5: Conditionals & Subjunctive", "q": "Find the error: She orders everyone around (A)/ as though she is (B)/ the owner of the house. (C)/ No error (D)", "options": ["A) (A)", "B) (B) - 'is' should be 'were'", "C) (C)", "D) (D) No error"], "ans": 1, "brief": "'As though' taking unreal condition requires 'were'[cite: 8]."},
+        {"num": 123, "module": "Module 5: Conditionals & Subjunctive", "q": "Find the error: Had the pilot noticed the warning light, (A)/ he would had landed (B)/ the aircraft safely. (C)/ No error (D)", "options": ["A) (A)", "B) (B) - 'would had landed' should be 'would have landed'", "C) (C)", "D) (D) No error"], "ans": 1, "brief": "Modal auxiliary must be followed by base verb 'have' -> 'would have landed'[cite: 8]."},
+        {"num": 124, "module": "Module 5: Conditionals & Subjunctive", "q": "Find the error: If I were knowing his address, (A)/ I would send him (B)/ an invitation letter. (C)/ No error (D)", "options": ["A) (A) - 'If I were knowing' should be 'If I knew'", "B) (B)", "C) (C)", "D) (D) No error"], "ans": 0, "brief": "Stative verb 'know' in 2nd conditional takes Simple Past 'If I knew'[cite: 8]."},
+        {"num": 125, "module": "Module 5: Conditionals & Subjunctive", "q": "Find the error: It is time (A)/ we leave for the railway station (B)/ to catch the evening express. (C)/ No error (D)", "options": ["A) (A)", "B) (B) - 'leave' should be 'left' (V2 after 'It is time')", "C) (C)", "D) (D) No error"], "ans": 1, "brief": "'It is time' requires Simple Past V2 ('we left')[cite: 8]."},
+
+        // MODULE 6: CONFUSING VERBS, FORMS & VOCABULARY PAIRS (126-150)
+        {"num": 126, "module": "Module 6: Confusing Verb Pairs", "q": "Find the error: The sudden noise (A)/ frightened the cat, which jumped (B)/ and raised from its spot and ran outside. (C)/ No Error (D)", "options": ["A) (A)", "B) (B)", "C) (C) - 'raised' should be 'rose' (intransitive verb 'rise - rose - risen')", "D) (D) No Error"], "ans": 2, "brief": "'rise - rose - risen' is intransitive (to get up); 'raise - raised - raised' is transitive (to lift something). Here, the cat got up itself -> 'rose'[cite: 8]."},
+        {"num": 127, "module": "Module 6: Confusing Verb Pairs", "q": "Find the error: After the grueling drill, (A)/ the soldiers were ordered (B)/ to lay down on the damp grass for ten minutes. (C)/ No error. (D)", "options": ["A) (A)", "B) (B)", "C) (C) - 'to lay down' should be 'to lie down' (intransitive posture verb)", "D) (D) No error."], "ans": 2, "brief": "'lie - lay - lain' (intransitive = to recline/rest); 'lay - laid - laid' (transitive = to place/put something). Here: resting soldiers -> 'to lie down'[cite: 8]."},
+        {"num": 128, "module": "Module 6: Confusing Verb Pairs", "q": "Find the error: He was unable to recall (A)/ where he had hanged his shirt (B)/ after returning home from office. (C)/ No error (D)", "options": ["A) (A)", "B) (B) - 'hanged' should be 'hung' (suspending an object)", "C) (C)", "D) (D) No error"], "ans": 1, "brief": "'hang - hung - hung' = to suspend an object (shirt, picture); 'hang - hanged - hanged' = to execute a person by hanging[cite: 8]."},
+        {"num": 129, "module": "Module 6: Confusing Verb Pairs", "q": "Find the error: The river is in spate (A)/ and it has overflown (B)/ its banks. (C)/ No error (D)", "options": ["A) (A)", "B) (B) - 'overflown' should be 'overflowed'", "C) (C)", "D) (D) No error"], "ans": 1, "brief": "'flow - flowed - flowed' / 'overflow - overflowed - overflowed' (for water); 'fly - flew - flown' (for birds/planes)[cite: 8]."},
+        {"num": 130, "module": "Module 6: Confusing Verb Pairs", "q": "Find the error: Some of our latest canon (A)/ that have come out of the production (B)/ line have a very long range. (C)/ No error (D)", "options": ["A) (A) - 'canon' should be 'cannons' / 'cannon' (artillery gun, not rule/law)", "B) (B)", "C) (C)", "D) (D) No error"], "ans": 0, "brief": "'cannon' (with two 'n's) means an artillery gun/तोप; 'canon' (with one 'n') means a law/rule/principle/कानून[cite: 8]."},
+        {"num": 131, "module": "Module 6: Confusing Verb Pairs", "q": "Find the error: He adviced me (A)/ to join (B)/ the computer course later in the year. (C)/ No error (D)", "options": ["A) (A) - 'adviced' should be 'advised' (verb form with 's')", "B) (B)", "C) (C)", "D) (D) No error"], "ans": 0, "brief": "'advise' (with 's') is a Verb; 'advice' (with 'c') is a Noun. Similarly: 'practise' (V) vs 'practice' (N); 'prophesy' (V) vs 'prophecy' (N); 'license' (V) vs 'licence' (N)[cite: 8]."},
+        {"num": 132, "module": "Module 6: Confusing Verb Pairs", "q": "Find the error: He laid under the shade (A)/ of the banyan tree (B)/ for two hours after lunch. (C)/ No error (D)", "options": ["A) (A) - 'laid' should be 'lay' (V2 of intransitive 'lie - lay - lain')", "B) (B)", "C) (C)", "D) (D) No error"], "ans": 0, "brief": "Past tense V2 of intransitive reclining verb 'lie' is 'lay' ('He lay under the shade')[cite: 8]."},
+        {"num": 133, "module": "Module 6: Confusing Verb Pairs", "q": "Find the error: The criminal was hung (A)/ till death by order (B)/ of the sessions court. (C)/ No error (D)", "options": ["A) (A) - 'was hung' should be 'was hanged' (execution)", "B) (B)", "C) (C)", "D) (D) No error"], "ans": 0, "brief": "Execution by hanging takes past participle 'hanged' ('was hanged till death')[cite: 8]."},
+        {"num": 134, "module": "Module 6: Confusing Verb Pairs", "q": "Find the error: The sun has rose (A)/ above the eastern hills (B)/ bringing warmth to the valley. (C)/ No error (D)", "options": ["A) (A) - 'has rose' should be 'has risen' (V3)", "B) (B)", "C) (C)", "D) (D) No error"], "ans": 0, "brief": "Present perfect 'has' requires V3 past participle 'risen' ('has risen')[cite: 8]."},
+        {"num": 135, "module": "Module 6: Confusing Verb Pairs", "q": "Find the error: Please lay down (A)/ your luggage on the conveyor belt (B)/ for security scanning. (C)/ No error (D)", "options": ["A) (A)", "B) (B)", "C) (C)", "D) (D) No error - correct transitive verb 'lay' (to place an object)"], "ans": 3, "brief": "'lay down your luggage' is transitive (putting/placing an object) -> No error[cite: 8]."},
+        {"num": 136, "module": "Module 6: Confusing Verb Pairs", "q": "Find the error: The birds have overflowed (A)/ across the southern skies (B)/ towards their winter habitat. (C)/ No error (D)", "options": ["A) (A) - 'have overflowed' should be 'have flown'", "B) (B)", "C) (C)", "D) (D) No error"], "ans": 0, "brief": "Birds flying takes past participle 'flown' ('fly - flew - flown')[cite: 8]."},
+        {"num": 137, "module": "Module 6: Confusing Verb Pairs", "q": "Find the error: You must practice (A)/ speaking English daily (B)/ to improve your fluency. (C)/ No error (D)", "options": ["A) (A) - 'practice' should be 'practise' (verb form in British/Indian English)", "B) (B)", "C) (C)", "D) (D) No error"], "ans": 0, "brief": "After modal 'must', use verb form 'practise' (with 's')[cite: 8]."},
+        {"num": 138, "module": "Module 6: Confusing Verb Pairs", "q": "Find the error: The ancient saint prophecied (A)/ that a great leader (B)/ would unite the kingdom. (C)/ No error (D)", "options": ["A) (A) - 'prophecied' should be 'prophesied' (verb form with 's')", "B) (B)", "C) (C)", "D) (D) No error"], "ans": 0, "brief": "Verb form is 'prophesy -> prophesied'; noun form is 'prophecy'[cite: 8]."},
+        {"num": 139, "module": "Module 6: Confusing Verb Pairs", "q": "Find the error: He has lain his coat (A)/ on the back of the chair (B)/ in the meeting room. (C)/ No error (D)", "options": ["A) (A) - 'has lain' should be 'has laid' (transitive verb 'lay - laid - laid')", "B) (B)", "C) (C)", "D) (D) No error"], "ans": 0, "brief": "Placing an object (coat) requires transitive V3 'laid' ('has laid his coat')[cite: 8]."},
+        {"num": 140, "module": "Module 6: Confusing Verb Pairs", "q": "Find the error: She has been lying in bed (A)/ with a high fever (B)/ since yesterday evening. (C)/ No error (D)", "options": ["A) (A)", "B) (B)", "C) (C)", "D) (D) No error - correct intransitive present participle 'lying'"], "ans": 3, "brief": "Reclining intransitive verb participle is 'lying' ('lying in bed') -> No error[cite: 8]."},
+        {"num": 141, "module": "Module 6: Confusing Verb Pairs", "q": "Find the error: The government decided to raise (A)/ the minimum wage (B)/ for industrial workers. (C)/ No error (D)", "options": ["A) (A)", "B) (B)", "C) (C)", "D) (D) No error - correct transitive verb 'raise' (to lift/increase something)"], "ans": 3, "brief": "To increase/lift something takes transitive 'raise' -> No error[cite: 8]."},
+        {"num": 142, "module": "Module 6: Confusing Verb Pairs", "q": "Find the error: The river flowed (A)/ rapidly under the bridge (B)/ after the heavy rainfall. (C)/ No error (D)", "options": ["A) (A)", "B) (B)", "C) (C)", "D) (D) No error - correct past tense 'flowed' for water"], "ans": 3, "brief": "Water flowing takes past tense 'flowed' -> No error[cite: 8]."},
+        {"num": 143, "module": "Module 6: Confusing Verb Pairs", "q": "Find the error: He hunged the beautiful portrait (A)/ on the living room wall (B)/ above the fireplace. (C)/ No error (D)", "options": ["A) (A) - 'hunged' should be 'hung'", "B) (B)", "C) (C)", "D) (D) No error"], "ans": 0, "brief": "Past tense of hanging a picture is 'hung' ('hunged' is not a valid word)[cite: 8]."},
+        {"num": 144, "module": "Module 6: Confusing Verb Pairs", "q": "Find the error: The committee members raised (A)/ from their seats when (B)/ the national anthem was played. (C)/ No error (D)", "options": ["A) (A) - 'raised' should be 'rose' (intransitive getting up)", "B) (B)", "C) (C)", "D) (D) No error"], "ans": 0, "brief": "Standing up oneself takes intransitive past tense 'rose'[cite: 8]."},
+        {"num": 145, "module": "Module 6: Confusing Verb Pairs", "q": "Find the error: He has lay (A)/ awake all night (B)/ worried about his exam results. (C)/ No error (D)", "options": ["A) (A) - 'has lay' should be 'has lain' (V3 of intransitive 'lie - lay - lain')", "B) (B)", "C) (C)", "D) (D) No error"], "ans": 0, "brief": "Present perfect 'has' requires V3 past participle 'lain' ('has lain awake')[cite: 8]."},
+        {"num": 146, "module": "Module 6: Confusing Verb Pairs", "q": "Find the error: You need a driving licence (A)/ before you can drive (B)/ on public roads. (C)/ No error (D)", "options": ["A) (A)", "B) (B)", "C) (C)", "D) (D) No error - 'licence' (with 'c') is the correct Noun form"], "ans": 3, "brief": "'licence' with 'c' is the Noun form in British/Indian English -> No error[cite: 8]."},
+        {"num": 147, "module": "Module 6: Confusing Verb Pairs", "q": "Find the error: The general ordered his artillery (A)/ to fire their canons (B)/ at the enemy fortress. (C)/ No error (D)", "options": ["A) (A)", "B) (B) - 'canons' should be 'cannons' / 'cannon' (artillery gun)", "C) (C)", "D) (D) No error"], "ans": 1, "brief": "Artillery guns are 'cannons' / 'cannon' (with two 'n's)[cite: 8]."},
+        {"num": 148, "module": "Module 6: Confusing Verb Pairs", "q": "Find the error: The pilot flew (A)/ the aircraft smoothly (B)/ through the turbulent clouds. (C)/ No error (D)", "options": ["A) (A)", "B) (B)", "C) (C)", "D) (D) No error - correct past tense 'flew' for flying"], "ans": 3, "brief": "Past tense of fly is 'flew' -> No error[cite: 8]."},
+        {"num": 149, "module": "Module 6: Confusing Verb Pairs", "q": "Find the error: The hen laid (A)/ four eggs in the coop (B)/ yesterday morning. (C)/ No error (D)", "options": ["A) (A)", "B) (B)", "C) (C)", "D) (D) No error - correct transitive V2 'laid' for laying eggs"], "ans": 3, "brief": "Laying eggs takes transitive verb 'lay - laid - laid' -> No error[cite: 8]."},
+        {"num": 150, "module": "Module 6: Confusing Verb Pairs", "q": "Find the error: Please advise me (A)/ on how to prepare (B)/ for the upcoming interview. (C)/ No error (D)", "options": ["A) (A)", "B) (B)", "C) (C)", "D) (D) No error - correct verb form 'advise' (with 's')"], "ans": 3, "brief": "'advise' with 's' is the Verb form -> No error[cite: 8]."},
+
+        // MODULE 7: CONJUNCTIONS, CORRELATIVE PAIRS & INVERSION (151-175)
+        {"num": 151, "module": "Module 7: Conjunctions & Inversion", "q": "Find the error: The report not only highlights administrative lapses (A)/ but also questions the intent (B)/ behind several key decisions. (C)/ No error (D)", "options": ["A) (A)", "B) (B)", "C) (C)", "D) (D) No error - correct pairing 'not only... but also'"], "ans": 3, "brief": "Correlative conjunction pairing 'not only... but also' is correctly matched -> No error[cite: 8]."},
+        {"num": 152, "module": "Module 7: Conjunctions & Inversion", "q": "Find the error: No sooner had the proposal been circulated (A)/ that objections were raised (B)/ regarding its feasibility and financial implications. (C)/ No error (D)", "options": ["A) (A)", "B) (B) - 'that objections' should be 'than objections'", "C) (C)", "D) (D) No error"], "ans": 1, "brief": "'No sooner' is always paired with 'than' (NOT 'that', 'when', or 'then')[cite: 8]."},
+        {"num": 153, "module": "Module 7: Conjunctions & Inversion", "q": "Find the error: Professor Lal teaches both (A)/ history as well as (B)/ literature each semester. (C)/ No error (D)", "options": ["A) (A)", "B) (B) - 'as well as' should be 'and' (correlative pair 'both... and')", "C) (C)", "D) (D) No error"], "ans": 1, "brief": "The correlative conjunction 'both' is paired with 'and', NEVER with 'as well as' or 'or'[cite: 8]."},
+        {"num": 154, "module": "Module 7: Conjunctions & Inversion", "q": "Find the error: Though he is poor, (A)/ but he is (B)/ honest and hardworking. (C)/ No error. (D)", "options": ["A) (A)", "B) (B) - 'but he is' should be 'he is' / 'yet he is'", "C) (C)", "D) (D) No error."], "ans": 1, "brief": "'Though' and 'Although' are followed by a comma ',' or 'yet', NEVER by 'but', 'and', or 'so'[cite: 8]."},
+        {"num": 155, "module": "Module 7: Conjunctions & Inversion", "q": "Find the error: Hardly had the train arrived (A)/ than the passengers began (B)/ rushing towards the doors. (C)/ No error (D)", "options": ["A) (A)", "B) (B) - 'than' should be 'when'", "C) (C)", "D) (D) No error"], "ans": 1, "brief": "'Hardly', 'Scarcely', 'Barely', 'Rarely' are paired with 'when', NOT 'than'[cite: 8]."},
+        {"num": 156, "module": "Module 7: Conjunctions & Inversion", "q": "Find the error: The reason for the mission's failure (A)/ was because the communication lines (B)/ were compromised. (C)/ No error. (D)", "options": ["A) (A)", "B) (B) - 'was because' should be 'was that'", "C) (C)", "D) (D) No error."], "ans": 1, "brief": "Never use 'because', 'since', 'as', 'due to', or 'on account of' after 'the reason is/was' -> use 'that' ('The reason... was that...')[cite: 8]."},
+        {"num": 157, "module": "Module 7: Conjunctions & Inversion", "q": "Find the error: Scarcely had she stepped out (A)/ than it started (B)/ raining heavily. (C)/ No error (D)", "options": ["A) (A)", "B) (B) - 'than' should be 'when'", "C) (C)", "D) (D) No error"], "ans": 1, "brief": "'Scarcely... when' is the correct conjunction pair[cite: 8]."},
+        {"num": 158, "module": "Module 7: Conjunctions & Inversion", "q": "Find the error: Neither the chairman (A)/ or the directors (B)/ supported the merger proposal. (C)/ No error (D)", "options": ["A) (A)", "B) (B) - 'or' should be 'nor' (pair 'neither... nor')", "C) (C)", "D) (D) No error"], "ans": 1, "brief": "'Neither' is paired with 'nor' ('Neither... nor')[cite: 8]."},
+        {"num": 159, "module": "Module 7: Conjunctions & Inversion", "q": "Find the error: Either you must apologize (A)/ nor face disciplinary (B)/ action from the board. (C)/ No error (D)", "options": ["A) (A)", "B) (B) - 'nor' should be 'or' (pair 'either... or')", "C) (C)", "D) (D) No error"], "ans": 1, "brief": "'Either' is paired with 'or' ('Either... or')[cite: 8]."},
+        {"num": 160, "module": "Module 7: Conjunctions & Inversion", "q": "Find the error: Although he worked very hard, (A)/ yet he failed to secure (B)/ the first position. (C)/ No error (D)", "options": ["A) (A)", "B) (B)", "C) (C)", "D) (D) No error - 'Although... yet' is a valid grammatical pairing"], "ans": 3, "brief": "'Although' paired with 'yet' (or comma) is grammatically correct -> No error[cite: 8]."},
+        {"num": 161, "module": "Module 7: Conjunctions & Inversion", "q": "Find the error: No sooner did the speaker finish his address (A)/ when the audience erupted (B)/ in thunderous applause. (C)/ No error (D)", "options": ["A) (A)", "B) (B) - 'when' should be 'than'", "C) (C)", "D) (D) No error"], "ans": 1, "brief": "'No sooner' requires 'than' ('No sooner... than')[cite: 8]."},
+        {"num": 162, "module": "Module 7: Conjunctions & Inversion", "q": "Find the error: The reason why he was rejected (A)/ was due to his lack (B)/ of leadership experience. (C)/ No error (D)", "options": ["A) (A)", "B) (B) - 'due to' should be 'that'", "C) (C)", "D) (D) No error"], "ans": 1, "brief": "'The reason... was that' (do not use 'due to' or 'because')[cite: 8]."},
+        {"num": 163, "module": "Module 7: Conjunctions & Inversion", "q": "Find the error: Barely had the troops crossed the bridge (A)/ than the enemy (B)/ opened fire from the ridges. (C)/ No error (D)", "options": ["A) (A)", "B) (B) - 'than' should be 'when'", "C) (C)", "D) (D) No error"], "ans": 1, "brief": "'Barely... when' is the correct conjunction pairing[cite: 8]."},
+        {"num": 164, "module": "Module 7: Conjunctions & Inversion", "q": "Find the error: Not only he is a brilliant scholar (A)/ but also a competent (B)/ administrator. (C)/ No error (D)", "options": ["A) (A) - 'Not only he is' should be 'He is not only' (parallel structure)", "B) (B)", "C) (C)", "D) (D) No error"], "ans": 0, "brief": "For parallel structure, place 'not only' before 'a brilliant scholar' to match 'but also before a competent administrator' -> 'He is not only a brilliant scholar...'[cite: 8]."},
+        {"num": 165, "module": "Module 7: Conjunctions & Inversion", "q": "Find the error: Rarely does one see (A)/ such dedication among (B)/ modern civil servants. (C)/ No error (D)", "options": ["A) (A)", "B) (B)", "C) (C)", "D) (D) No error - correct inversion after negative adverb 'Rarely'"], "ans": 3, "brief": "Inversion after negative adverb 'Rarely does one see' is correct -> No error[cite: 8]."},
+        {"num": 166, "module": "Module 7: Conjunctions & Inversion", "q": "Find the error: No sooner he had entered the room (A)/ than the lights (B)/ went out suddenly. (C)/ No error (D)", "options": ["A) (A) - 'No sooner he had' should be 'No sooner had he' (inversion)", "B) (B)", "C) (C)", "D) (D) No error"], "ans": 0, "brief": "Sentences beginning with negative adverbs require inversion of auxiliary and subject -> 'No sooner had he entered'[cite: 8]."},
+        {"num": 167, "module": "Module 7: Conjunctions & Inversion", "q": "Find the error: Both the students as well as (A)/ their parents were invited (B)/ to the annual convocation. (C)/ No error (D)", "options": ["A) (A) - 'as well as' should be 'and'", "B) (B)", "C) (C)", "D) (D) No error"], "ans": 0, "brief": "'Both' must be paired with 'and' ('Both the students and their parents')[cite: 8]."},
+        {"num": 168, "module": "Module 7: Conjunctions & Inversion", "q": "Find the error: Though she was tired, (A)/ but she continued working (B)/ on the emergency report. (C)/ No error (D)", "options": ["A) (A)", "B) (B) - 'but she continued' should be 'she continued' / 'yet she continued'", "C) (C)", "D) (D) No error"], "ans": 1, "brief": "Do not pair 'Though' with 'but'[cite: 8]."},
+        {"num": 169, "module": "Module 7: Conjunctions & Inversion", "q": "Find the error: Scarcely the chief guest had arrived (A)/ when the orchestra (B)/ began playing the anthem. (C)/ No error (D)", "options": ["A) (A) - 'Scarcely the chief guest had' should be 'Scarcely had the chief guest'", "B) (B)", "C) (C)", "D) (D) No error"], "ans": 0, "brief": "Inversion is required after 'Scarcely' -> 'Scarcely had the chief guest arrived'[cite: 8]."},
+        {"num": 170, "module": "Module 7: Conjunctions & Inversion", "q": "Find the error: The reason why he was absent (A)/ was because he was (B)/ suffering from malaria. (C)/ No error (D)", "options": ["A) (A)", "B) (B) - 'was because' should be 'was that'", "C) (C)", "D) (D) No error"], "ans": 1, "brief": "'The reason... was that'[cite: 8]."},
+        {"num": 171, "module": "Module 7: Conjunctions & Inversion", "q": "Find the error: Neither he attended the meeting (A)/ nor did he send (B)/ any message to the chairman. (C)/ No error (D)", "options": ["A) (A) - 'Neither he attended' should be 'Neither did he attend' (parallel inversion)", "B) (B)", "C) (C)", "D) (D) No error"], "ans": 0, "brief": "For parallel structure and inversion: 'Neither did he attend... nor did he send...'[cite: 8]."},
+        {"num": 172, "module": "Module 7: Conjunctions & Inversion", "q": "Find the error: You can either travel by train (A)/ or by flight according (B)/ to your convenience. (C)/ No error (D)", "options": ["A) (A) - 'either travel by train' should be 'travel either by train' (parallel placement)", "B) (B)", "C) (C)", "D) (D) No error"], "ans": 0, "brief": "Place 'either' immediately before 'by train' to balance 'or by flight' -> 'travel either by train or by flight'[cite: 8]."},
+        {"num": 173, "module": "Module 7: Conjunctions & Inversion", "q": "Find the error: Hardly had he finished speaking (A)/ when the siren (B)/ sounded across the base. (C)/ No error (D)", "options": ["A) (A)", "B) (B)", "C) (C)", "D) (D) No error - correct pairing 'Hardly... when' and inversion"], "ans": 3, "brief": "Correct inversion 'Hardly had he' and conjunction pair 'when' -> No error[cite: 8]."},
+        {"num": 174, "module": "Module 7: Conjunctions & Inversion", "q": "Find the error: The reason for his delay (A)/ was on account of (B)/ heavy traffic congestion. (C)/ No error (D)", "options": ["A) (A)", "B) (B) - 'on account of' should be 'that there was'", "C) (C)", "D) (D) No error"], "ans": 1, "brief": "Do not use 'on account of' after 'the reason was'[cite: 8]."},
+        {"num": 175, "module": "Module 7: Conjunctions & Inversion", "q": "Find the error: Not only the students (A)/ but also the teacher (B)/ was present at the seminar. (C)/ No error (D)", "options": ["A) (A)", "B) (B)", "C) (C)", "D) (D) No error - verb agrees with nearer subject 'the teacher'"], "ans": 3, "brief": "In 'not only... but also', the verb agrees with the nearer subject ('the teacher' -> singular -> 'was present') -> No error[cite: 8]."},
+
+        // MODULE 8: PREPOSITIONS, IDIOMS & VERB-PREPOSITION COLLOCATIONS (176-200)
+        {"num": 176, "module": "Module 8: Prepositions & Collocations", "q": "Find the error: The diplomatic mission comprised of (A)/ five senior officials (B)/ from the Ministry of External Affairs. (C)/ No error (D)", "options": ["A) (A) - 'comprised of' should be 'comprised' / 'consisted of'", "B) (B)", "C) (C)", "D) (D) No error"], "ans": 0, "brief": "In active voice, 'comprise' (= 'consist of') takes NO preposition 'of' ('comprised five senior officials')[cite: 8]."},
+        {"num": 177, "module": "Module 8: Prepositions & Collocations", "q": "Find the error: The doctrine emphasises on (A)/ rapid mobilisation and integrated command (B)/ to ensure operational superiority. (C)/ No error (D)", "options": ["A) (A) - 'emphasises on' should be 'emphasises' (no preposition)", "B) (B)", "C) (C)", "D) (D) No error"], "ans": 0, "brief": "'emphasise', 'discuss', 'order', 'attack', 'resemble' are transitive verbs that take direct objects without prepositions[cite: 8]."},
+        {"num": 178, "module": "Module 8: Prepositions & Collocations", "q": "Find the error: The monk loved riding and hunting (A)/ and refused to conform by rules and regulations (B)/ of the ancient monastic order. (C)/ No error (D)", "options": ["A) (A)", "B) (B) - 'conform by' should be 'conform to'", "C) (C)", "D) (D) No error"], "ans": 1, "brief": "Fixed prepositional collocations: 'conform to', 'comply with', 'abide by', 'adhere to'[cite: 8]."},
+        {"num": 179, "module": "Module 8: Prepositions & Collocations", "q": "Find the error: To his innovative ideas and practices in farming (A)/ he was given (B)/ the Krishi Pandit Award last year. (C)/ No error (D)", "options": ["A) (A) - 'To his innovative ideas' should be 'For his innovative ideas'", "B) (B)", "C) (C)", "D) (D) No error"], "ans": 0, "brief": "Preposition of reason/cause: 'For his innovative ideas'[cite: 8]."},
+        {"num": 180, "module": "Module 8: Prepositions & Collocations", "q": "Find the error: When her son got a job, (A)/ she was beside (B)/ herself with joy. (C)/ No Error (D)", "options": ["A) (A)", "B) (B)", "C) (C)", "D) (D) No Error - correct idiom 'beside herself with joy'"], "ans": 3, "brief": "'beside oneself with joy/anger' is a correct English idiom meaning overwhelmed with emotion -> No Error[cite: 8]."},
+        {"num": 181, "module": "Module 8: Prepositions & Collocations", "q": "Find the error: Despite of the heavy rain, (A)/ the parade continued as scheduled (B)/ at the ceremonial ground. (C)/ No error (D)", "options": ["A) (A) - 'Despite of' should be 'Despite' / 'In spite of'", "B) (B)", "C) (C)", "D) (D) No error"], "ans": 0, "brief": "'Despite' (= 'In spite of') never takes preposition 'of' ('Despite the heavy rain')[cite: 8]."},
+        {"num": 182, "module": "Module 8: Prepositions & Collocations", "q": "Find the error: He ordered for a cup of coffee (A)/ while waiting for his colleague (B)/ at the institute canteen. (C)/ No error (D)", "options": ["A) (A) - 'ordered for' should be 'ordered'", "B) (B)", "C) (C)", "D) (D) No error"], "ans": 0, "brief": "Transitive verb 'order' takes a direct object without 'for' ('ordered a cup of coffee')[cite: 8]."},
+        {"num": 183, "module": "Module 8: Prepositions & Collocations", "q": "Find the error: The committee discussed about (A)/ the new security protocols (B)/ during the confidential session. (C)/ No error (D)", "options": ["A) (A) - 'discussed about' should be 'discussed'", "B) (B)", "C) (C)", "D) (D) No error"], "ans": 0, "brief": "Transitive verb 'discuss' takes a direct object without 'about' ('discussed the new security protocols')[cite: 8]."},
+        {"num": 184, "module": "Module 8: Prepositions & Collocations", "q": "Find the error: All the officers must abide to (A)/ the disciplinary code (B)/ of the academy. (C)/ No error (D)", "options": ["A) (A) - 'abide to' should be 'abide by'", "B) (B)", "C) (C)", "D) (D) No error"], "ans": 0, "brief": "Collocation is 'abide by' ('abide by the code')[cite: 8]."},
+        {"num": 185, "module": "Module 8: Prepositions & Collocations", "q": "Find the error: Every soldier must adhere with (A)/ the rules and instructions (B)/ given by the commanding officer. (C)/ No error (D)", "options": ["A) (A) - 'adhere with' should be 'adhere to'", "B) (B)", "C) (C)", "D) (D) No error"], "ans": 0, "brief": "Collocation is 'adhere to' ('adhere to the rules')[cite: 8]."},
+        {"num": 186, "module": "Module 8: Prepositions & Collocations", "q": "Find the error: The company failed to comply to (A)/ the safety guidelines (B)/ issued by the regulatory authority. (C)/ No error (D)", "options": ["A) (A) - 'comply to' should be 'comply with'", "B) (B)", "C) (C)", "D) (D) No error"], "ans": 0, "brief": "Collocation is 'comply with' ('comply with the guidelines')[cite: 8]."},
+        {"num": 187, "module": "Module 8: Prepositions & Collocations", "q": "Find the error: He resembles to his father (A)/ in both facial features (B)/ and calm temperament. (C)/ No error (D)", "options": ["A) (A) - 'resembles to' should be 'resembles'", "B) (B)", "C) (C)", "D) (D) No error"], "ans": 0, "brief": "Transitive verb 'resemble' takes a direct object without 'to' ('resembles his father')[cite: 8]."},
+        {"num": 188, "module": "Module 8: Prepositions & Collocations", "q": "Find the error: The enemy forces attacked on (A)/ our forward border posts (B)/ early in the morning. (C)/ No error (D)", "options": ["A) (A) - 'attacked on' should be 'attacked'", "B) (B)", "C) (C)", "D) (D) No error"], "ans": 0, "brief": "Transitive verb 'attack' takes a direct object without 'on' ('attacked our forward border posts')[cite: 8]."},
+        {"num": 189, "module": "Module 8: Prepositions & Collocations", "q": "Find the error: The delegation entered into (A)/ the conference room (B)/ precisely at 10 AM. (C)/ No error (D)", "options": ["A) (A) - 'entered into' should be 'entered' (for physical places)", "B) (B)", "C) (C)", "D) (D) No error"], "ans": 0, "brief": "'enter into' is used for agreements/negotiations; for entering a physical place (room, hall), use 'enter' without 'into'[cite: 8]."},
+        {"num": 190, "module": "Module 8: Prepositions & Collocations", "q": "Find the error: She took exception against (A)/ the unfair remarks made (B)/ during the committee meeting. (C)/ No error (D)", "options": ["A) (A) - 'exception against' should be 'exception to'", "B) (B)", "C) (C)", "D) (D) No error"], "ans": 0, "brief": "The idiomatic collocation is 'take exception to' (= object to strongly)[cite: 8]."},
+        {"num": 191, "module": "Module 8: Prepositions & Collocations", "q": "Find the error: I have great respect of (A)/ his vast learning (B)/ and philosophical wisdom. (C)/ No error (D)", "options": ["A) (A) - 'respect of' should be 'respect for'", "B) (B)", "C) (C)", "D) (D) No error"], "ans": 0, "brief": "The correct preposition is 'respect for someone/something'[cite: 8]."},
+        {"num": 192, "module": "Module 8: Prepositions & Collocations", "q": "Find the error: He is now ashamed from (A)/ his disrespectful conduct (B)/ towards his senior officers. (C)/ No error (D)", "options": ["A) (A) - 'ashamed from' should be 'ashamed of'", "B) (B)", "C) (C)", "D) (D) No error"], "ans": 0, "brief": "The correct preposition is 'ashamed of'[cite: 8]."},
+        {"num": 193, "module": "Module 8: Prepositions & Collocations", "q": "Find the error: I congratulate you for (A)/ your outstanding success (B)/ in the defence examination. (C)/ No error (D)", "options": ["A) (A) - 'congratulate you for' should be 'congratulate you on'", "B) (B)", "C) (C)", "D) (D) No error"], "ans": 0, "brief": "The correct preposition is 'congratulate someone on something'[cite: 8]."},
+        {"num": 194, "module": "Module 8: Prepositions & Collocations", "q": "Find the error: You have to choose within (A)/ bread and milk (B)/ for your breakfast. (C)/ No error (D)", "options": ["A) (A) - 'within' should be 'between'", "B) (B)", "C) (C)", "D) (D) No error"], "ans": 0, "brief": "When choosing between two items, use 'between' ('choose between bread and milk')[cite: 8]."},
+        {"num": 195, "module": "Module 8: Prepositions & Collocations", "q": "Find the error: The children are standing on (A)/ the corner of the room (B)/ waiting for the teacher. (C)/ No error (D)", "options": ["A) (A) - 'on the corner of the room' should be 'in / at the corner of the room'", "B) (B)", "C) (C)", "D) (D) No error"], "ans": 0, "brief": "Inside a room, use 'in the corner' or 'at the corner', not 'on'[cite: 8]."},
+        {"num": 196, "module": "Module 8: Prepositions & Collocations", "q": "Find the error: Besides herself with anger, (A)/ she shouted at the staff (B)/ for the avoidable delay. (C)/ No error (D)", "options": ["A) (A) - 'Besides herself' should be 'Beside herself'", "B) (B)", "C) (C)", "D) (D) No error"], "ans": 0, "brief": "The idiom is 'beside oneself with anger/joy'; 'besides' means in addition to[cite: 8]."},
+        {"num": 197, "module": "Module 8: Prepositions & Collocations", "q": "Find the error: The training program was designed (A)/ to make the employees capable to handle (B)/ complex queries efficiently. (C)/ No error (D)", "options": ["A) (A)", "B) (B) - 'capable to handle' should be 'capable of handling'", "C) (C)", "D) (D) No error"], "ans": 1, "brief": "'capable' is followed by preposition 'of' and gerund '-ing' ('capable of handling')[cite: 8]."},
+        {"num": 198, "module": "Module 8: Prepositions & Collocations", "q": "Find the error: The book comprises of (A)/ ten detailed chapters (B)/ on Indian military history. (C)/ No error (D)", "options": ["A) (A) - 'comprises of' should be 'comprises' / 'consists of'", "B) (B)", "C) (C)", "D) (D) No error"], "ans": 0, "brief": "In active voice, 'comprise' takes no preposition 'of'[cite: 8]."},
+        {"num": 199, "module": "Module 8: Prepositions & Collocations", "q": "Find the error: He insisted for (A)/ paying the entire dinner bill (B)/ at the restaurant. (C)/ No error (D)", "options": ["A) (A) - 'insisted for' should be 'insisted on'", "B) (B)", "C) (C)", "D) (D) No error"], "ans": 0, "brief": "The correct preposition after 'insist' is 'on' ('insisted on paying')[cite: 8]."},
+        {"num": 200, "module": "Module 8: Prepositions & Collocations", "q": "Find the error: He persisted to argue (A)/ even after the chairman (B)/ gave his final ruling. (C)/ No error (D)", "options": ["A) (A) - 'persisted to argue' should be 'persisted in arguing'", "B) (B)", "C) (C)", "D) (D) No error"], "ans": 0, "brief": "'persist' takes preposition 'in' + gerund ('persisted in arguing')[cite: 8]."},
+
+        // MODULE 9: ADJECTIVES, ADVERBS, DEGREES & ARTICLES (201-225)
+        {"num": 201, "module": "Module 9: Adjectives & Articles", "q": "Find the error: Your essay is (A)/ more better than his (B)/ in terms of analysis and clarity. (C)/ No error (D)", "options": ["A) (A)", "B) (B) - 'more better' should be 'better' (avoid double comparative)", "C) (C)", "D) (D) No error"], "ans": 1, "brief": "Never use double comparatives ('more better', 'more taller', 'more wiser' -> use 'better', 'taller', 'wiser')[cite: 8]."},
+        {"num": 202, "module": "Module 9: Adjectives & Articles", "q": "Find the error: The report was more preferable (A)/ to the previous version (B)/ due to its structured layout. (C)/ No error (D)", "options": ["A) (A) - 'more preferable' should be 'preferable' (no double comparative)", "B) (B)", "C) (C)", "D) (D) No error"], "ans": 0, "brief": "'preferable' is already comparative; do not add 'more' before it. Also it takes 'to' ('preferable to')[cite: 8]."},
+        {"num": 203, "module": "Module 9: Adjectives & Articles", "q": "Find the error: These days, job opportunities are not as better (A)/ as they used to be (B)/ in the early 70's. (C)/ No error (D)", "options": ["A) (A) - 'as better' should be 'as good'", "B) (B)", "C) (C)", "D) (D) No error"], "ans": 0, "brief": "Between 'as... as' or 'not so/as... as', use the Positive Degree of adjective ('as good as', NOT 'as better as')[cite: 8]."},
+        {"num": 204, "module": "Module 9: Adjectives & Articles", "q": "Find the error: The two first to arrive (A)/ were the lucky recipients (B)/ of a surprise gift. (C)/ No Error (D)", "options": ["A) (A) - 'two first' should be 'first two' (Ordinal + Cardinal order)", "B) (B)", "C) (C)", "D) (D) No Error"], "ans": 0, "brief": "Order of numeral adjectives: Ordinal number comes before Cardinal number ('the first two', 'the first three', 'the last five')[cite: 8]."},
+        {"num": 205, "module": "Module 9: Adjectives & Articles", "q": "Find the error: The report contains less errors (A)/ than the previous version (B)/ submitted last month. (C)/ No Error (D)", "options": ["A) (A) - 'less errors' should be 'fewer errors' (countable noun)", "B) (B)", "C) (C)", "D) (D) No Error"], "ans": 0, "brief": "'fewer' is used with Countable Nouns ('fewer errors', 'fewer students'); 'less' is used with Uncountable Nouns ('less water', 'less time')[cite: 8]."},
+        {"num": 206, "module": "Module 9: Adjectives & Articles", "q": "Find the error: No less than seventy people (A)/ were hurt in the accident (B)/ on the expressway. (C)/ No error (D)", "options": ["A) (A) - 'No less than seventy people' should be 'No fewer than seventy people'", "B) (B)", "C) (C)", "D) (D) No error"], "ans": 0, "brief": "'people' is a countable noun -> use 'No fewer than seventy people'[cite: 8]."},
+        {"num": 207, "module": "Module 9: Adjectives & Articles", "q": "Find the error: She speaks fluent (A)/ in English (B)/ after her training abroad. (C)/ No error. (D)", "options": ["A) (A) - 'fluent in English' should be 'fluently in English' / 'fluent English'", "B) (B)", "C) (C)", "D) (D) No error."], "ans": 0, "brief": "Adjective 'fluent' modifies noun 'English' ('fluent English'); adverb 'fluently' modifies verb 'speaks' ('speaks English fluently')[cite: 8]."},
+        {"num": 208, "module": "Module 9: Adjectives & Articles", "q": "Find the error: The committee decided to appoint (A)/ a honorary advisor for the (B)/ project despite budget constraints. (C)/ No Error (D)", "options": ["A) (A)", "B) (B) - 'a honorary advisor' should be 'an honorary advisor'", "C) (C)", "D) (D) No Error"], "ans": 1, "brief": "'honorary' begins with a silent 'h' and vowel sound `/ɒ/`, requiring indefinite article 'an' ('an honorary advisor', 'an honest man', 'an heir')[cite: 8]."},
+        {"num": 209, "module": "Module 9: Adjectives & Articles", "q": "Find the error: We happened to meet at the house of common friend (A)/ after returning from (B)/ the international conference. (C)/ No error (D)", "options": ["A) (A) - 'house of common friend' should be 'house of a common friend'", "B) (B)", "C) (C)", "D) (D) No error"], "ans": 0, "brief": "A singular countable noun ('common friend') requires an indefinite article ('a common friend')[cite: 8]."},
+        {"num": 210, "module": "Module 9: Adjectives & Articles", "q": "Find the error: Sun rises in the east (A)/ and sets in the west (B)/ every single day. (C)/ No error (D)", "options": ["A) (A) - 'Sun rises' should be 'The Sun rises'", "B) (B)", "C) (C)", "D) (D) No error"], "ans": 0, "brief": "Unique celestial bodies and cardinal directions require definite article 'the' ('The Sun rises in the East')[cite: 8]."},
+        {"num": 211, "module": "Module 9: Adjectives & Articles", "q": "Find the error: The man is mortal (A)/ and must leave this world (B)/ when his time arrives. (C)/ No error (D)", "options": ["A) (A) - 'The man is mortal' should be 'Man is mortal' (no article)", "B) (B)", "C) (C)", "D) (D) No error"], "ans": 0, "brief": "Before 'Man' or 'Woman' used in a general philosophical sense representing all humanity, NO article is used ('Man is mortal')[cite: 8]."},
+        {"num": 212, "module": "Module 9: Adjectives & Articles", "q": "Find the error: The gold is a precious metal (A)/ widely used in making (B)/ ornamental jewelry. (C)/ No error (D)", "options": ["A) (A) - 'The gold' should be 'Gold' (no article before material noun in general sense)", "B) (B)", "C) (C)", "D) (D) No error"], "ans": 0, "brief": "Uncountable material nouns used in a general sense take NO article ('Gold is a precious metal')[cite: 8]."},
+        {"num": 213, "module": "Module 9: Adjectives & Articles", "q": "Find the error: The cotton grows in India (A)/ in large quantities across (B)/ the black soil regions. (C)/ No error (D)", "options": ["A) (A) - 'The cotton' should be 'Cotton' (no article)", "B) (B)", "C) (C)", "D) (D) No error"], "ans": 0, "brief": "Material noun 'Cotton' in a general sense takes no article ('Cotton grows in India')[cite: 8]."},
+        {"num": 214, "module": "Module 9: Adjectives & Articles", "q": "Find the error: He is senior than me (A)/ by three years in the (B)/ administrative department. (C)/ No error (D)", "options": ["A) (A) - 'senior than' should be 'senior to'", "B) (B)", "C) (C)", "D) (D) No error"], "ans": 0, "brief": "Adjectives ending in '-or' ('senior', 'junior', 'inferior', 'superior', 'prior', 'posterior') take preposition 'to', NOT 'than'[cite: 8]."},
+        {"num": 215, "module": "Module 9: Adjectives & Articles", "q": "Find the error: This project proposal is (A)/ superior than the one (B)/ submitted by the rival firm. (C)/ No error (D)", "options": ["A) (A)", "B) (B) - 'superior than' should be 'superior to'", "C) (C)", "D) (D) No error"], "ans": 1, "brief": "'superior' takes preposition 'to' ('superior to')[cite: 8]."},
+        {"num": 216, "module": "Module 9: Adjectives & Articles", "q": "Find the error: He is the most tallest (A)/ candidate appearing for (B)/ the military interview. (C)/ No error (D)", "options": ["A) (A) - 'most tallest' should be 'tallest' (no double superlative)", "B) (B)", "C) (C)", "D) (D) No error"], "ans": 0, "brief": "Never use double superlatives ('most tallest' -> use 'tallest')[cite: 8]."},
+        {"num": 217, "module": "Module 9: Adjectives & Articles", "q": "Find the error: She is comparatively wiser (A)/ than her younger sister (B)/ in handling family matters. (C)/ No error (D)", "options": ["A) (A) - 'comparatively wiser' should be 'comparatively wise' / 'wiser'", "B) (B)", "C) (C)", "D) (D) No error"], "ans": 0, "brief": "Do not use comparative degree after 'comparatively' or 'relatively' -> use positive degree ('comparatively wise')[cite: 8]."},
+        {"num": 218, "module": "Module 9: Adjectives & Articles", "q": "Find the error: He is as wiser as (A)/ his brother when it comes (B)/ to financial planning. (C)/ No error (D)", "options": ["A) (A) - 'as wiser as' should be 'as wise as'", "B) (B)", "C) (C)", "D) (D) No error"], "ans": 0, "brief": "'as... as' requires positive degree ('as wise as')[cite: 8]."},
+        {"num": 219, "module": "Module 9: Adjectives & Articles", "q": "Find the error: He was elected as (A)/ an MLA from the (B)/ rural constituency last year. (C)/ No error (D)", "options": ["A) (A)", "B) (B)", "C) (C)", "D) (D) No error - 'an MLA' is correct (vowel sound /em/)"], "ans": 3, "brief": "'MLA' is pronounced /em-el-e/, starting with vowel sound /e/, requiring article 'an' ('an MLA') -> No error[cite: 8]."},
+        {"num": 220, "module": "Module 9: Adjectives & Articles", "q": "Find the error: He is a honest officer (A)/ who has served the nation (B)/ with impeccable integrity. (C)/ No error (D)", "options": ["A) (A) - 'a honest officer' should be 'an honest officer'", "B) (B)", "C) (C)", "D) (D) No error"], "ans": 0, "brief": "'honest' begins with silent 'h', requiring 'an honest officer'[cite: 8]."},
+        {"num": 221, "module": "Module 9: Adjectives & Articles", "q": "Find the error: He is the elder (A)/ of all the five brothers (B)/ in the joint family. (C)/ No error (D)", "options": ["A) (A) - 'the elder' should be 'the eldest' (superlative for more than two)", "B) (B)", "C) (C)", "D) (D) No error"], "ans": 0, "brief": "For more than two persons, use superlative 'eldest' ('the eldest of all the five brothers')[cite: 8]."},
+        {"num": 222, "module": "Module 9: Adjectives & Articles", "q": "Find the error: This is the more unique (A)/ specimen ever discovered (B)/ in the marine trench. (C)/ No error (D)", "options": ["A) (A) - 'more unique' should be 'unique' (absolute adjective)", "B) (B)", "C) (C)", "D) (D) No error"], "ans": 0, "brief": "Absolute adjectives ('unique', 'perfect', 'ideal', 'complete', 'extreme') do not take 'more' or 'most'[cite: 8]."},
+        {"num": 223, "module": "Module 9: Adjectives & Articles", "q": "Find the error: He is junior than (A)/ his supervisor by five years (B)/ in the administration. (C)/ No error (D)", "options": ["A) (A) - 'junior than' should be 'junior to'", "B) (B)", "C) (C)", "D) (D) No error"], "ans": 0, "brief": "'junior' takes preposition 'to'[cite: 8]."},
+        {"num": 224, "module": "Module 9: Adjectives & Articles", "q": "Find the error: Of the two proposals, (A)/ the second is the best (B)/ for long-term growth. (C)/ No error (D)", "options": ["A) (A)", "B) (B) - 'the best' should be 'the better' (comparative for two items)", "C) (C)", "D) (D) No error"], "ans": 1, "brief": "When comparing two items, use comparative degree ('the better of the two proposals')[cite: 8]."},
+        {"num": 225, "module": "Module 9: Adjectives & Articles", "q": "Find the error: The three first chapters (A)/ of the historical book (B)/ describe the ancient wars. (C)/ No error (D)", "options": ["A) (A) - 'three first chapters' should be 'first three chapters'", "B) (B)", "C) (C)", "D) (D) No error"], "ans": 0, "brief": "Ordinal before Cardinal -> 'the first three chapters'[cite: 8]."},
+
+        // MODULE 10: ADVANCED SPOTTING ERRORS, REDUNDANCIES & MIXED CONCEPTS (226-250)
+        {"num": 226, "module": "Module 10: Mixed Spotting Errors", "q": "Find the error: Walking down the road, (A)/ a brick fell (B)/ on his head. (C)/ No error (D)", "options": ["A) (A) - dangling participle; should be 'While he was walking down the road,'", "B) (B)", "C) (C)", "D) (D) No error"], "ans": 0, "brief": "Dangling participle error: A brick was not walking down the road! Must attach the correct subject -> 'While he was walking down the road, a brick fell...'[cite: 8]."},
+        {"num": 227, "module": "Module 10: Mixed Spotting Errors", "q": "Find the error: The new law forbade the state (A)/ banks not to lend money on real estate, (B)/ limiting their powers of discounting bills. (C)/ No error (D)", "options": ["A) (A)", "B) (B) - 'not to lend' should be 'to lend' (double negative after 'forbade')", "C) (C)", "D) (D) No error"], "ans": 1, "brief": "'forbid' / 'forbade' is inherently negative; adding 'not' creates an erroneous double negative -> 'forbade... to lend'[cite: 8]."},
+        {"num": 228, "module": "Module 10: Mixed Spotting Errors", "q": "Find the error: The thief could (A)/ not find nothing valuable (B)/ to steal from the house. (C)/ No error. (D)", "options": ["A) (A)", "B) (B) - 'not find nothing' should be 'not find anything' / 'find nothing'", "C) (C)", "D) (D) No error."], "ans": 1, "brief": "Double negative error: 'not... nothing' is incorrect -> use 'not... anything' or 'could find nothing'[cite: 8]."},
+        {"num": 229, "module": "Module 10: Mixed Spotting Errors", "q": "Find the error: He prohibited the students (A)/ not to enter the laboratory (B)/ without safety goggles. (C)/ No error (D)", "options": ["A) (A)", "B) (B) - 'not to enter' should be 'from entering' / 'to enter'", "C) (C)", "D) (D) No error"], "ans": 1, "brief": "'prohibit' is a negative verb and should not be followed by 'not'[cite: 8]."},
+        {"num": 230, "module": "Module 10: Mixed Spotting Errors", "q": "Find the error: Unless you do not work (A)/ hard, you will not succeed (B)/ in the entrance examination. (C)/ No error (D)", "options": ["A) (A) - 'Unless you do not work' should be 'Unless you work'", "B) (B)", "C) (C)", "D) (D) No error"], "ans": 0, "brief": "'Unless' is inherently negative; do not use 'not' in the unless-clause ('Unless you work hard')[cite: 8]."},
+        {"num": 231, "module": "Module 10: Mixed Spotting Errors", "q": "Find the error: Until the signal does not turn green, (A)/ vehicles must remain halted (B)/ at the intersection line. (C)/ No error (D)", "options": ["A) (A) - 'Until the signal does not turn' should be 'Until the signal turns'", "B) (B)", "C) (C)", "D) (D) No error"], "ans": 0, "brief": "'Until' is inherently negative; drop 'does not' -> 'Until the signal turns green'[cite: 8]."},
+        {"num": 232, "module": "Module 10: Mixed Spotting Errors", "q": "Find the error: Entering into the hall, (A)/ the lights went off (B)/ leaving everyone in darkness. (C)/ No error (D)", "options": ["A) (A) - dangling participle; should be 'When we entered the hall,'", "B) (B)", "C) (C)", "D) (D) No error"], "ans": 0, "brief": "Dangling participle: The lights did not enter the hall! Provide explicit subject -> 'When we entered the hall...'[cite: 8]."},
+        {"num": 233, "module": "Module 10: Mixed Spotting Errors", "q": "Find the error: Being a rainy day, (A)/ we decided to stay indoors (B)/ and prepare for our exams. (C)/ No error (D)", "options": ["A) (A) - 'Being a rainy day' should be 'It being a rainy day'", "B) (B)", "C) (C)", "D) (D) No error"], "ans": 0, "brief": "Participle clause must have its own subject when different from main clause -> 'It being a rainy day, we decided...'[cite: 8]."},
+        {"num": 234, "module": "Module 10: Mixed Spotting Errors", "q": "Find the error: He returned back (A)/ from his overseas tour (B)/ last Friday evening. (C)/ No error (D)", "options": ["A) (A) - 'returned back' should be 'returned' (redundancy)", "B) (B)", "C) (C)", "D) (D) No error"], "ans": 0, "brief": "Redundancy error: 'return' already means 'to come back', so adding 'back' is tautological -> 'He returned from...'[cite: 8]."},
+        {"num": 235, "module": "Module 10: Mixed Spotting Errors", "q": "Find the error: Please repeat again (A)/ the instructions given by (B)/ the commanding officer. (C)/ No error (D)", "options": ["A) (A) - 'repeat again' should be 'repeat' (redundancy)", "B) (B)", "C) (C)", "D) (D) No error"], "ans": 0, "brief": "Redundancy: 'repeat' means 'to say again' -> drop 'again'[cite: 8]."},
+        {"num": 236, "module": "Module 10: Mixed Spotting Errors", "q": "Find the error: The consensus opinion (A)/ of the committee was that (B)/ the project should be approved. (C)/ No error (D)", "options": ["A) (A) - 'consensus opinion' should be 'consensus' (redundancy)", "B) (B)", "C) (C)", "D) (D) No error"], "ans": 0, "brief": "Redundancy: 'consensus' means 'general opinion/agreement', so 'consensus opinion' is redundant -> use 'consensus'[cite: 8]."},
+        {"num": 237, "module": "Module 10: Mixed Spotting Errors", "q": "Find the error: The reason why he failed (A)/ was because he did not (B)/ study consistently. (C)/ No error (D)", "options": ["A) (A)", "B) (B) - 'was because' should be 'was that'", "C) (C)", "D) (D) No error"], "ans": 1, "brief": "'The reason... was that' (do not use 'because' after 'the reason')[cite: 8]."},
+        {"num": 238, "module": "Module 10: Mixed Spotting Errors", "q": "Find the error: Throughout his speech, (A)/ he emphasized on the need (B)/ for greater discipline. (C)/ No error (D)", "options": ["A) (A)", "B) (B) - 'emphasized on' should be 'emphasized'", "C) (C)", "D) (D) No error"], "ans": 1, "brief": "Transitive verb 'emphasize' takes no preposition 'on'[cite: 8]."},
+        {"num": 239, "module": "Module 10: Mixed Spotting Errors", "q": "Find the error: She is confident to win (A)/ the gold medal in the (B)/ national athletics meet. (C)/ No error (D)", "options": ["A) (A) - 'confident to win' should be 'confident of winning'", "B) (B)", "C) (C)", "D) (D) No error"], "ans": 0, "brief": "Adjective 'confident' takes preposition 'of' + gerund ('confident of winning')[cite: 8]."},
+        {"num": 240, "module": "Module 10: Mixed Spotting Errors", "q": "Find the error: The teacher prevented the boy (A)/ to enter the examination hall (B)/ without an admit card. (C)/ No error (D)", "options": ["A) (A)", "B) (B) - 'to enter' should be 'from entering'", "C) (C)", "D) (D) No error"], "ans": 1, "brief": "'prevent someone from doing something' -> 'from entering'[cite: 8]."},
+        {"num": 241, "module": "Module 10: Mixed Spotting Errors", "q": "Find the error: He has been suffering from fever (A)/ since the last three days (B)/ and needs rest. (C)/ No error (D)", "options": ["A) (A)", "B) (B) - 'since the last three days' should be 'for the last three days'", "C) (C)", "D) (D) No error"], "ans": 1, "brief": "'three days' is a duration of time -> 'for the last three days'[cite: 8]."},
+        {"num": 242, "module": "Module 10: Mixed Spotting Errors", "q": "Find the error: Neither of the two candidates (A)/ were found suitable (B)/ for the managerial position. (C)/ No error (D)", "options": ["A) (A)", "B) (B) - 'were found' should be 'was found'", "C) (C)", "D) (D) No error"], "ans": 1, "brief": "'Neither of' takes a singular verb ('was found')[cite: 8]."},
+        {"num": 243, "module": "Module 10: Mixed Spotting Errors", "q": "Find the error: She is one of the best officers (A)/ who has ever commanded (B)/ this frontier battalion. (C)/ No error (D)", "options": ["A) (A)", "B) (B) - 'has ever commanded' should be 'have ever commanded'", "C) (C)", "D) (D) No error"], "ans": 1, "brief": "'who' refers to plural 'officers' -> 'have ever commanded'[cite: 8]."},
+        {"num": 244, "module": "Module 10: Mixed Spotting Errors", "q": "Find the error: He ordered for two coffees (A)/ and a sandwich at (B)/ the airport cafeteria. (C)/ No error (D)", "options": ["A) (A) - 'ordered for' should be 'ordered'", "B) (B)", "C) (C)", "D) (D) No error"], "ans": 0, "brief": "Transitive verb 'order' takes no preposition 'for'[cite: 8]."},
+        {"num": 245, "module": "Module 10: Mixed Spotting Errors", "q": "Find the error: Though he was unwell, (A)/ but he attended the parade (B)/ on Independence Day. (C)/ No error (D)", "options": ["A) (A)", "B) (B) - 'but he attended' should be 'he attended' / 'yet he attended'", "C) (C)", "D) (D) No error"], "ans": 1, "brief": "'Though' cannot be paired with 'but'[cite: 8]."},
+        {"num": 246, "module": "Module 10: Mixed Spotting Errors", "q": "Find the error: No sooner did the siren ring (A)/ when the soldiers took (B)/ their defensive positions. (C)/ No error (D)", "options": ["A) (A)", "B) (B) - 'when' should be 'than'", "C) (C)", "D) (D) No error"], "ans": 1, "brief": "'No sooner' takes 'than'[cite: 8]."},
+        {"num": 247, "module": "Module 10: Mixed Spotting Errors", "q": "Find the error: Scarcely had we reached the camp (A)/ than the snowfall (B)/ intensified across the valley. (C)/ No error (D)", "options": ["A) (A)", "B) (B) - 'than' should be 'when'", "C) (C)", "D) (D) No error"], "ans": 1, "brief": "'Scarcely' takes 'when'[cite: 8]."},
+        {"num": 248, "module": "Module 10: Mixed Spotting Errors", "q": "Find the error: He is senior than me (A)/ in both rank and (B)/ years of military service. (C)/ No error (D)", "options": ["A) (A) - 'senior than' should be 'senior to'", "B) (B)", "C) (C)", "D) (D) No error"], "ans": 0, "brief": "'senior' takes 'to'[cite: 8]."},
+        {"num": 249, "module": "Module 10: Mixed Spotting Errors", "q": "Find the error: Each of the boys (A)/ have completed their (B)/ physical fitness test. (C)/ No error (D)", "options": ["A) (A)", "B) (B) - 'have completed their' should be 'has completed his'", "C) (C)", "D) (D) No error"], "ans": 1, "brief": "'Each of' takes singular verb 'has' and singular possessive 'his'[cite: 8]."},
+        {"num": 250, "module": "Module 10: Mixed Spotting Errors", "q": "Find the error: The committee was divided (A)/ in its opinion regarding (B)/ the new security protocol. (C)/ No error (D)", "options": ["A) (A) - 'was divided' should be 'were divided'", "B) (B) - 'its opinion' should be 'their opinions'", "C) (C)", "D) (D) No error - or both A & B change when collective noun individuals act separately ('were divided in their opinions')"], "ans": 0, "brief": "When members of a collective noun ('committee', 'jury', 'team') are divided or act individually, use a Plural Verb ('were divided') and Plural Pronoun ('their opinions')[cite: 8]."}
+    ];
+
+    let activeQuestions = [];
+    let currentScore = 0;
+    let wrongCount = 0;
+    let answeredCount = 0;
+    let activeFilter = 'All';
+    let searchQuery = '';
+    let showAllActive = false;
+    let statusFilter = 'all';
+    let questionStatus = {};
+
+    function shuffleArray(array) {
+        const arr = [...array];
+        for (let i = arr.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [arr[i], arr[j]] = [arr[j], arr[i]];
+        }
+        return arr;
+    }
+
+    function initializeAndShuffleQuiz() {
+        const prepared = originalQuestionsData.map(q => {
+            const cleanOptions = q.options.map(opt => opt.replace(/^[A-D]\)\s*/, ''));
+            const correctAnswerText = cleanOptions[q.ans];
+            const shuffledCleanOptions = shuffleArray(cleanOptions);
+            const newCorrectIdx = shuffledCleanOptions.indexOf(correctAnswerText);
+            const relabeledOptions = shuffledCleanOptions.map((opt, i) => {
+                return String.fromCharCode(65 + i) + ') ' + opt;
+            });
+            return {
+                ...q,
+                options: relabeledOptions,
+                ans: newCorrectIdx
+            };
+        });
+        activeQuestions = shuffleArray(prepared);
+        questionStatus = {};
+        currentScore = 0;
+        wrongCount = 0;
+        answeredCount = 0;
+        statusFilter = 'all';
+        document.querySelectorAll('.stat-item').forEach(el => el.classList.remove('active-filter'));
+        updateStats();
+    }
+
+    function applyFilters() {
+        searchQuery = document.getElementById('search-input').value.toLowerCase().trim();
+        renderQuiz();
+    }
+
+    function filterByStatus(status) {
+        if (statusFilter === status) {
+            statusFilter = 'all';
+            document.querySelectorAll('.stat-item').forEach(el => el.classList.remove('active-filter'));
+        } else {
+            statusFilter = status;
+            document.querySelectorAll('.stat-item').forEach(el => el.classList.remove('active-filter'));
+            if (status === 'correct') {
+                document.getElementById('correctStat').classList.add('active-filter');
+            } else if (status === 'wrong') {
+                document.getElementById('wrongStat').classList.add('active-filter');
+            } else if (status === 'left') {
+                document.getElementById('leftStat').classList.add('active-filter');
+            }
+        }
+        renderQuiz();
+    }
+
+    function renderQuiz() {
+        const container = document.getElementById('quiz-container');
+        container.innerHTML = '';
+        let displayCount = 0;
+        let seqNum = 1;
+
+        const isQidSearch = searchQuery && /^\d+$/.test(searchQuery);
+        const qidNumber = isQidSearch ? parseInt(searchQuery) : null;
+
+        activeQuestions.forEach((q) => {
+            if (activeFilter !== 'All') {
+                const qModuleMatch = q.module.match(/Module (\d+)/);
+                const qModuleNum = qModuleMatch ? qModuleMatch[1] : null;
+                const filterMatch = activeFilter.match(/Module (\d+)/);
+                const filterModuleNum = filterMatch ? filterMatch[1] : null;
+                
+                if (qModuleNum && filterModuleNum) {
+                    if (qModuleNum !== filterModuleNum) return;
+                } else {
+                    if (!q.module.startsWith(activeFilter + ':')) return;
+                }
+            }
+            
+            if (statusFilter !== 'all') {
+                const status = questionStatus[q.num];
+                if (statusFilter === 'correct' && status !== 'correct') return;
+                if (statusFilter === 'wrong' && status !== 'wrong') return;
+                if (statusFilter === 'left' && status !== undefined) return;
+            }
+            
+            if (searchQuery) {
+                if (isQidSearch) {
+                    if (q.num !== qidNumber) return;
+                } else {
+                    const match = q.q.toLowerCase().includes(searchQuery) ||
+                                  q.module.toLowerCase().includes(searchQuery) ||
+                                  q.brief.toLowerCase().includes(searchQuery) ||
+                                  q.options.some(o => o.toLowerCase().includes(searchQuery));
+                    if (!match) return;
+                }
+            }
+            
+            displayCount++;
+            const card = document.createElement('div');
+            card.className = 'question-card';
+            card.id = `card-${q.num}`;
+            
+            const savedNote = localStorage.getItem(`spotting_errors_note_QID_${q.num}`) || '';
+            const savedNoteHtml = savedNote ? `
+                <div class="saved-note-banner" id="saved-display-${q.num}">
+                    <strong>📌 Saved Note:</strong> ${savedNote}
+                </div>` : `<div id="saved-display-${q.num}"></div>`;
+            
+            const status = questionStatus[q.num];
+            let statusBadge = '';
+            if (status === 'correct') {
+                statusBadge = `<span class="q-status-badge status-correct">✅ Correct</span>`;
+            } else if (status === 'wrong') {
+                statusBadge = `<span class="q-status-badge status-wrong">❌ Wrong</span>`;
+            } else {
+                statusBadge = `<span class="q-status-badge status-unanswered">⏳ Unanswered</span>`;
+            }
+            
+            card.innerHTML = `
+                <div class="q-header">
+                    <div class="q-badges-left">
+                        <span class="q-num-badge">Question #${seqNum++}</span>
+                        <span class="qid-badge">QID:- ${q.num}</span>
+                        ${statusBadge}
+                    </div>
+                    <span class="q-mod-badge">${q.module}</span>
+                </div>
+                <div class="q-text">${q.q}</div>
+                <div class="options-grid" id="opts-${q.num}">
+                    ${q.options.map((optText, optIdx) => `
+                        <button class="opt-btn" onclick="checkAnswer(${q.num}, ${optIdx}, ${q.ans})">
+                            <span>${optText}</span>
+                        </button>
+                    `).join('')}
+                </div>
+                <div class="feedback-box" id="feedback-${q.num}">
+                    ${showAllActive && !questionStatus[q.num] ? `
+                        <div class="feedback-title">✓ Correct Answer: ${q.options[q.ans]}</div>
+                        <div><strong>Grammar Rule & Explanation:</strong> ${q.brief}</div>
+                        ${savedNoteHtml}
+                        <div class="notes-section">
+                            <button class="notes-btn" onclick="toggleNoteEditor(${q.num})">Add / Edit Notes & Points</button>
+                            <div class="note-editor" id="editor-${q.num}">
+                                <textarea class="notes-area" id="textarea-${q.num}" rows="3" placeholder="Add your notes/points here...">${savedNote}</textarea>
+                                <button class="save-note-btn" onclick="saveNote(${q.num})">Save Note Locally</button>
+                            </div>
+                        </div>
+                    ` : ''}
+                </div>
+            `;
+            container.appendChild(card);
+
+            if (questionStatus[q.num]) {
+                const optsContainer = document.getElementById(`opts-${q.num}`);
+                if (optsContainer) {
+                    const buttons = optsContainer.querySelectorAll('.opt-btn');
+                    buttons.forEach((btn, idx) => {
+                        btn.classList.add('disabled');
+                        if (idx === q.ans) {
+                            btn.classList.add('correct');
+                        }
+                        if (q._selectedIdx !== undefined && idx === q._selectedIdx && idx !== q.ans) {
+                            btn.classList.add('wrong');
+                        }
+                    });
+                }
+                const feedback = document.getElementById(`feedback-${q.num}`);
+                if (feedback) {
+                    const isCorrect = questionStatus[q.num] === 'correct';
+                    feedback.className = `feedback-box show-${isCorrect ? 'correct' : 'wrong'}`;
+                    const savedNoteDisplay = localStorage.getItem(`spotting_errors_note_QID_${q.num}`) || '';
+                    const savedNoteHtmlDisplay = savedNoteDisplay ? `
+                        <div class="saved-note-banner" id="saved-display-${q.num}">
+                            <strong>📌 Saved Note:</strong> ${savedNoteDisplay}
+                        </div>` : `<div id="saved-display-${q.num}"></div>`;
+                    
+                    if (isCorrect) {
+                        feedback.innerHTML = `
+                            <div class="feedback-title">✓ Correct Answer!</div>
+                            <div><strong>Grammar Rule & Explanation:</strong> ${q.brief}</div>
+                            ${savedNoteHtmlDisplay}
+                            <div class="notes-section">
+                                <button class="notes-btn" onclick="toggleNoteEditor(${q.num})">Add / Edit Notes & Points</button>
+                                <div class="note-editor" id="editor-${q.num}">
+                                    <textarea class="notes-area" id="textarea-${q.num}" rows="3" placeholder="Add your notes/points here...">${savedNoteDisplay}</textarea>
+                                    <button class="save-note-btn" onclick="saveNote(${q.num})">Save Note Locally</button>
+                                </div>
+                            </div>
+                        `;
+                    } else {
+                        feedback.innerHTML = `
+                            <div class="feedback-title">✗ Wrong Answer — The Correct Answer is: ${q.options[q.ans]}</div>
+                            <div><strong>Grammar Rule & Explanation:</strong> ${q.brief}</div>
+                            ${savedNoteHtmlDisplay}
+                            <div class="notes-section">
+                                <button class="notes-btn" onclick="toggleNoteEditor(${q.num})">Add / Edit Notes & Points</button>
+                                <div class="note-editor" id="editor-${q.num}">
+                                    <textarea class="notes-area" id="textarea-${q.num}" rows="3" placeholder="Add your notes/points here...">${savedNoteDisplay}</textarea>
+                                    <button class="save-note-btn" onclick="saveNote(${q.num})">Save Note Locally</button>
+                                </div>
+                            </div>
+                        `;
+                    }
+                }
+            }
+
+            if (showAllActive && !questionStatus[q.num]) {
+                const optsContainer = document.getElementById(`opts-${q.num}`);
+                if (optsContainer) {
+                    const buttons = optsContainer.querySelectorAll('.opt-btn');
+                    buttons.forEach((btn, idx) => {
+                        btn.classList.add('disabled');
+                        if (idx === q.ans) {
+                            btn.classList.add('correct');
+                        }
+                    });
+                }
+                const feedback = document.getElementById(`feedback-${q.num}`);
+                if (feedback) {
+                    feedback.className = 'feedback-box show-correct';
+                    const savedNoteDisplay = localStorage.getItem(`spotting_errors_note_QID_${q.num}`) || '';
+                    const savedNoteHtmlDisplay = savedNoteDisplay ? `
+                        <div class="saved-note-banner" id="saved-display-${q.num}">
+                            <strong>📌 Saved Note:</strong> ${savedNoteDisplay}
+                        </div>` : `<div id="saved-display-${q.num}"></div>`;
+                    
+                    if (!feedback.innerHTML) {
+                        feedback.innerHTML = `
+                            <div class="feedback-title">✓ Correct Answer: ${q.options[q.ans]}</div>
+                            <div><strong>Grammar Rule & Explanation:</strong> ${q.brief}</div>
+                            ${savedNoteHtmlDisplay}
+                            <div class="notes-section">
+                                <button class="notes-btn" onclick="toggleNoteEditor(${q.num})">Add / Edit Notes & Points</button>
+                                <div class="note-editor" id="editor-${q.num}">
+                                    <textarea class="notes-area" id="textarea-${q.num}" rows="3" placeholder="Add your notes/points here...">${savedNoteDisplay}</textarea>
+                                    <button class="save-note-btn" onclick="saveNote(${q.num})">Save Note Locally</button>
+                                </div>
+                            </div>
+                        `;
+                    }
+                }
+            }
+        });
+
+        if (displayCount === 0) {
+            let message = 'No Spotting Error MCQs matched your search.';
+            if (isQidSearch) {
+                message = `No question found with QID ${qidNumber}. Please check the QID and try again.`;
+            } else if (statusFilter === 'correct' && currentScore === 0) {
+                message = 'No correct answers yet. Keep practicing! 🎯';
+            } else if (statusFilter === 'wrong' && wrongCount === 0) {
+                message = 'No wrong answers yet! Great job! 🎉';
+            } else if (statusFilter === 'left') {
+                if (answeredCount === activeQuestions.length) {
+                    message = '🎉 All questions have been answered! No questions left to attempt.';
+                } else {
+                    message = `📝 You have ${activeQuestions.length - answeredCount} questions left to attempt. Start answering!`;
+                }
+            }
+            container.innerHTML = `<div class="no-results">${message}</div>`;
+        }
+
+        updateStats();
+    }
+
+    function checkAnswer(qNum, selectedIdx, correctIdx) {
+        if (showAllActive) return;
+        if (questionStatus[qNum]) return;
+        
+        const optsContainer = document.getElementById(`opts-${qNum}`);
+        const buttons = optsContainer.querySelectorAll('.opt-btn');
+        const feedback = document.getElementById(`feedback-${qNum}`);
+        
+        if (buttons[0].classList.contains('disabled')) {
+            return;
+        }
+        
+        const qObj = activeQuestions.find(item => item.num === qNum);
+        qObj._selectedIdx = selectedIdx;
+        
+        buttons.forEach((btn, idx) => {
+            btn.classList.add('disabled');
+            if (idx === correctIdx) {
+                btn.classList.add('correct');
+            }
+        });
+        
+        const savedNote = localStorage.getItem(`spotting_errors_note_QID_${qNum}`) || '';
+        const savedNoteHtml = savedNote ? `
+            <div class="saved-note-banner" id="saved-display-${qNum}">
+                <strong>📌 Saved Note:</strong> ${savedNote}
+            </div>` : `<div id="saved-display-${qNum}"></div>`;
+        
+        const isCorrect = selectedIdx === correctIdx;
+        if (isCorrect) {
+            currentScore++;
+            questionStatus[qNum] = 'correct';
+            buttons[selectedIdx].classList.add('correct');
+            feedback.className = 'feedback-box show-correct';
+            feedback.innerHTML = `
+                <div class="feedback-title">✓ Correct Answer!</div>
+                <div><strong>Grammar Rule & Explanation:</strong> ${qObj.brief}</div>
+                ${savedNoteHtml}
+                <div class="notes-section">
+                    <button class="notes-btn" onclick="toggleNoteEditor(${qNum})">Add / Edit Notes & Points</button>
+                    <div class="note-editor" id="editor-${qNum}">
+                        <textarea class="notes-area" id="textarea-${qNum}" rows="3" placeholder="Add your notes/points here...">${savedNote}</textarea>
+                        <button class="save-note-btn" onclick="saveNote(${qNum})">Save Note Locally</button>
+                    </div>
+                </div>
+            `;
+        } else {
+            wrongCount++;
+            questionStatus[qNum] = 'wrong';
+            buttons[selectedIdx].classList.add('wrong');
+            const correctOptText = qObj.options[correctIdx];
+            feedback.className = 'feedback-box show-wrong';
+            feedback.innerHTML = `
+                <div class="feedback-title">✗ Wrong Answer — The Correct Answer is: ${correctOptText}</div>
+                <div><strong>Grammar Rule & Explanation:</strong> ${qObj.brief}</div>
+                ${savedNoteHtml}
+                <div class="notes-section">
+                    <button class="notes-btn" onclick="toggleNoteEditor(${qNum})">Add / Edit Notes & Points</button>
+                    <div class="note-editor" id="editor-${qNum}">
+                        <textarea class="notes-area" id="textarea-${qNum}" rows="3" placeholder="Add your notes/points here...">${savedNote}</textarea>
+                        <button class="save-note-btn" onclick="saveNote(${qNum})">Save Note Locally</button>
+                    </div>
+                </div>
+            `;
+        }
+        answeredCount++;
+        
+        const badgeContainer = document.querySelector(`#card-${qNum} .q-badges-left`);
+        if (badgeContainer) {
+            const oldBadge = badgeContainer.querySelector('.q-status-badge');
+            let newBadgeHtml = '';
+            if (isCorrect) {
+                newBadgeHtml = `<span class="q-status-badge status-correct">✅ Correct</span>`;
+            } else {
+                newBadgeHtml = `<span class="q-status-badge status-wrong">❌ Wrong</span>`;
+            }
+            if (oldBadge) {
+                oldBadge.outerHTML = newBadgeHtml;
+            } else {
+                badgeContainer.innerHTML += newBadgeHtml;
+            }
+        }
+        
+        updateStats();
+        
+        if (statusFilter !== 'all') {
+            renderQuiz();
+        }
+    }
+
+    function toggleNoteEditor(qNum) {
+        const editor = document.getElementById(`editor-${qNum}`);
+        if (editor.style.display === 'block') {
+            editor.style.display = 'none';
+        } else {
+            editor.style.display = 'block';
+        }
+    }
+
+    function saveNote(qNum) {
+        const textarea = document.getElementById(`textarea-${qNum}`);
+        const noteText = textarea.value.trim();
+        const storageKey = `spotting_errors_note_QID_${qNum}`;
+        
+        if (noteText) {
+            localStorage.setItem(storageKey, noteText);
+        } else {
+            localStorage.removeItem(storageKey);
+        }
+
+        const displayContainer = document.getElementById(`saved-display-${qNum}`);
+        if (noteText) {
+            displayContainer.className = 'saved-note-banner';
+            displayContainer.innerHTML = `<strong>📌 Saved Note:</strong> ${noteText}`;
+        } else {
+            displayContainer.className = '';
+            displayContainer.innerHTML = '';
+        }
+        document.getElementById(`editor-${qNum}`).style.display = 'none';
+    }
+
+    function updateStats() {
+        const totalQuestions = activeQuestions.length;
+        const leftToAttempt = totalQuestions - answeredCount;
+        
+        document.getElementById('correct-count').textContent = currentScore;
+        document.getElementById('wrong-count').textContent = wrongCount;
+        document.getElementById('left-count').textContent = leftToAttempt;
+        
+        const pct = answeredCount > 0 ? Math.round((currentScore / answeredCount) * 100) : 0;
+        document.getElementById('pct-display').textContent = pct + '%';
+    }
+
+    function filterQuestions(modPrefix) {
+        activeFilter = modPrefix;
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.classList.remove('active');
+            if (btn.getAttribute('data-filter') === modPrefix) {
+                btn.classList.add('active');
+            }
+        });
+        renderQuiz();
+    }
+
+    function resetQuiz() {
+        if (showAllActive) {
+            showAllActive = false;
+            const btn = document.getElementById('showAllBtn');
+            btn.classList.remove('show-all-active');
+            btn.textContent = '👁️ Show All Answers (Study Mode)';
+        }
+        currentScore = 0;
+        wrongCount = 0;
+        answeredCount = 0;
+        questionStatus = {};
+        statusFilter = 'all';
+        document.querySelectorAll('.stat-item').forEach(el => el.classList.remove('active-filter'));
+        updateStats();
+        renderQuiz();
+    }
+
+    function toggleShowAll() {
+        const btn = document.getElementById('showAllBtn');
+        showAllActive = !showAllActive;
+        
+        if (showAllActive) {
+            btn.classList.add('show-all-active');
+            btn.textContent = '🔴 Hide All Answers';
+        } else {
+            btn.classList.remove('show-all-active');
+            btn.textContent = '👁️ Show All Answers (Study Mode)';
+        }
+        renderQuiz();
+    }
+
+    // Initialize
+    initializeAndShuffleQuiz();
+    renderQuiz();
+</script>
+</body>
+</html>

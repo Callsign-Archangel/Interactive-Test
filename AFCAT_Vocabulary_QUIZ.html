@@ -1,0 +1,1292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AFCAT 2026 — Complete Vocabulary 250 MCQ Interactive Quiz</title>
+<style>
+    :root {
+        --bg-main: #f8fafc;
+        --card-bg: #ffffff;
+        --primary: #0f172a;
+        --accent-red: #dc2626;
+        --accent-green: #10b981;
+        --accent-blue: #2563eb;
+        --text-main: #1e293b;
+        --text-muted: #64748b;
+        --border: #e2e8f0;
+    }
+    
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
+    
+    body {
+        font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        background-color: var(--bg-main);
+        color: var(--text-main);
+        line-height: 1.5;
+        padding-bottom: 60px;
+    }
+    
+    header {
+        background-color: var(--primary);
+        color: #ffffff;
+        padding: 24px 20px;
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+    
+    .header-container {
+        max-width: 1100px;
+        margin: 0 auto;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        align-items: center;
+        gap: 15px;
+    }
+    
+    .title-area h1 {
+        font-size: 1.4rem;
+        font-weight: 700;
+        letter-spacing: -0.5px;
+    }
+    
+    .title-area p {
+        font-size: 0.85rem;
+        color: #94a3b8;
+    }
+    
+    .stats-badge {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        background-color: #1e293b;
+        border: 2px solid #334155;
+        border-radius: 8px;
+        padding: 6px 10px;
+    }
+
+    .stat-item {
+        padding: 6px 14px;
+        border-radius: 6px;
+        text-align: center;
+        min-width: 70px;
+        cursor: pointer;
+        transition: all 0.2s;
+        border: 2px solid transparent;
+        background-color: rgba(255, 255, 255, 0.05);
+        user-select: none;
+    }
+
+    .stat-item:hover {
+        transform: scale(1.05);
+    }
+
+    .stat-item .stat-num {
+        font-size: 1.2rem;
+        font-weight: 800;
+        display: block;
+        line-height: 1.2;
+    }
+
+    .stat-item .stat-label {
+        font-size: 0.6rem;
+        text-transform: uppercase;
+        letter-spacing: 0.3px;
+        opacity: 0.8;
+    }
+
+    .stat-item.correct-stat {
+        background-color: rgba(16, 185, 129, 0.2);
+        border-color: #10b981;
+        color: #34d399;
+    }
+
+    .stat-item.correct-stat.active-filter {
+        background-color: rgba(16, 185, 129, 0.4);
+        box-shadow: 0 0 20px rgba(16, 185, 129, 0.3);
+    }
+
+    .stat-item.wrong-stat {
+        background-color: rgba(239, 68, 68, 0.2);
+        border-color: #ef4444;
+        color: #f87171;
+    }
+
+    .stat-item.wrong-stat.active-filter {
+        background-color: rgba(239, 68, 68, 0.4);
+        box-shadow: 0 0 20px rgba(239, 68, 68, 0.3);
+    }
+
+    .stat-item.left-stat {
+        background-color: rgba(234, 179, 8, 0.2);
+        border-color: #eab308;
+        color: #fbbf24;
+    }
+
+    .stat-item.left-stat.active-filter {
+        background-color: rgba(234, 179, 8, 0.4);
+        box-shadow: 0 0 20px rgba(234, 179, 8, 0.3);
+    }
+
+    .stat-item.pct-stat {
+        background-color: rgba(56, 189, 248, 0.15);
+        border-color: #38bdf8;
+        color: #38bdf8;
+        min-width: 80px;
+        cursor: default;
+    }
+
+    .stat-item.pct-stat:hover {
+        transform: none;
+    }
+
+    .stat-item .stat-pct {
+        font-size: 1.2rem;
+        font-weight: 800;
+        display: block;
+        line-height: 1.2;
+    }
+    
+    .container {
+        max-width: 1100px;
+        margin: 24px auto;
+        padding: 0 16px;
+    }
+
+    .controls-panel {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        margin-bottom: 24px;
+        background: var(--card-bg);
+        padding: 16px;
+        border-radius: 12px;
+        border: 1px solid var(--border);
+        box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+
+    .search-row {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+
+    .search-input {
+        flex: 1;
+        min-width: 260px;
+        padding: 10px 14px;
+        border: 1px solid #cbd5e1;
+        border-radius: 8px;
+        font-size: 0.95rem;
+        color: var(--text-main);
+        outline: none;
+        transition: border-color 0.2s;
+    }
+
+    .search-input:focus {
+        border-color: var(--accent-blue);
+        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+    }
+
+    .search-hint {
+        font-size: 0.75rem;
+        color: var(--text-muted);
+        margin-top: 2px;
+        font-style: italic;
+    }
+
+    .action-btn {
+        background-color: #f1f5f9;
+        border: 1px solid #cbd5e1;
+        border-radius: 8px;
+        padding: 10px 16px;
+        font-size: 0.85rem;
+        font-weight: 700;
+        color: var(--text-main);
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+    .action-btn:hover {
+        background-color: #e2e8f0;
+    }
+
+    .action-btn.primary {
+        background-color: var(--primary);
+        color: #ffffff;
+        border-color: var(--primary);
+    }
+
+    .action-btn.primary:hover {
+        background-color: #1e293b;
+    }
+
+    .action-btn.show-all-active {
+        background-color: #dc2626 !important;
+        border-color: #b91c1c !important;
+        color: #ffffff !important;
+        box-shadow: 0 0 12px rgba(220, 38, 38, 0.4);
+        transition: all 0.2s;
+    }
+    
+    .filter-bar {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 4px;
+    }
+    
+    .filter-btn {
+        background-color: #f1f5f9;
+        border: 1px solid #cbd5e1;
+        border-radius: 6px;
+        padding: 6px 12px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: var(--text-main);
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    
+    .filter-btn:hover {
+        background-color: #e2e8f0;
+    }
+
+    .filter-btn.active {
+        background-color: #0f172a;
+        color: #ffffff;
+        border-color: #0f172a;
+    }
+
+    .question-card {
+        background-color: var(--card-bg);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 20px;
+        margin-bottom: 16px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        transition: transform 0.15s;
+    }
+    
+    .question-card:hover {
+        border-color: #cbd5e1;
+    }
+    
+    .q-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 10px;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    .q-badges-left {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        flex-wrap: wrap;
+    }
+    
+    .q-num-badge {
+        background-color: #fef2f2;
+        color: var(--accent-red);
+        border: 1px solid #fecaca;
+        font-weight: 700;
+        font-size: 0.8rem;
+        padding: 3px 10px;
+        border-radius: 20px;
+    }
+
+    .qid-badge {
+        background-color: #fef08a;
+        color: #854d0e;
+        border: 1px solid #fde047;
+        font-weight: 700;
+        font-size: 0.8rem;
+        padding: 3px 10px;
+        border-radius: 20px;
+    }
+    
+    .q-mod-badge {
+        font-size: 0.75rem;
+        color: var(--text-muted);
+        font-weight: 600;
+    }
+
+    .q-status-badge {
+        font-size: 0.7rem;
+        padding: 2px 10px;
+        border-radius: 12px;
+        font-weight: 700;
+        transition: all 0.3s ease;
+    }
+
+    .q-status-badge.status-correct {
+        background-color: #d1fae5;
+        color: #065f46;
+    }
+
+    .q-status-badge.status-wrong {
+        background-color: #fecaca;
+        color: #991b1b;
+    }
+
+    .q-status-badge.status-unanswered {
+        background-color: #fef3c7;
+        color: #92400e;
+    }
+    
+    .q-text {
+        font-size: 1.05rem;
+        font-weight: 600;
+        margin-bottom: 16px;
+        color: var(--text-main);
+    }
+    
+    .options-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 10px;
+    }
+    
+    .opt-btn {
+        background-color: #f8fafc;
+        border: 1px solid #cbd5e1;
+        border-radius: 8px;
+        padding: 12px 16px;
+        text-align: left;
+        font-size: 0.95rem;
+        font-weight: 500;
+        color: var(--text-main);
+        cursor: pointer;
+        transition: all 0.2s;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+    
+    .opt-btn:hover:not(.disabled) {
+        background-color: #f1f5f9;
+        border-color: #94a3b8;
+    }
+    
+    .opt-btn.correct {
+        background-color: #ecfdf5 !important;
+        border-color: #10b981 !important;
+        color: #065f46 !important;
+        font-weight: 700;
+    }
+    
+    .opt-btn.wrong {
+        background-color: #fef2f2 !important;
+        border-color: #ef4444 !important;
+        color: #991b1b !important;
+    }
+    
+    .opt-btn.disabled {
+        cursor: default;
+    }
+    
+    .feedback-box {
+        margin-top: 14px;
+        padding: 12px 16px;
+        border-radius: 8px;
+        font-size: 0.9rem;
+        display: none;
+    }
+    
+    .feedback-box.show-correct {
+        display: block;
+        background-color: #f0fdf4;
+        border-left: 4px solid var(--accent-green);
+        color: #166534;
+    }
+    
+    .feedback-box.show-wrong {
+        display: block;
+        background-color: #fff7ed;
+        border-left: 4px solid #f97316;
+        color: #9a3412;
+    }
+    
+    .feedback-title {
+        font-weight: 700;
+        margin-bottom: 4px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .saved-note-banner {
+        background-color: #fef9c3;
+        border: 1px solid #fde047;
+        color: #713f12;
+        padding: 10px 14px;
+        border-radius: 6px;
+        margin-top: 10px;
+        font-size: 0.85rem;
+    }
+
+    .notes-section {
+        margin-top: 12px;
+        padding-top: 12px;
+        border-top: 1px dashed #cbd5e1;
+    }
+
+    .notes-btn {
+        background-color: #0f172a;
+        color: #ffffff;
+        border: 1px solid #334155;
+        padding: 6px 14px;
+        border-radius: 6px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+    .notes-btn:hover {
+        background-color: #334155;
+    }
+
+    .note-editor {
+        margin-top: 10px;
+        display: none;
+    }
+
+    .notes-area {
+        width: 100%;
+        padding: 10px;
+        border-radius: 6px;
+        border: 1px solid #cbd5e1;
+        font-family: inherit;
+        font-size: 0.85rem;
+        resize: vertical;
+        margin-bottom: 8px;
+        color: #1e293b;
+    }
+
+    .save-note-btn {
+        background-color: #10b981;
+        color: #ffffff;
+        border: none;
+        padding: 6px 14px;
+        border-radius: 6px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        cursor: pointer;
+    }
+
+    .save-note-btn:hover {
+        background-color: #059669;
+    }
+
+    .no-results {
+        text-align: center;
+        padding: 40px;
+        background: var(--card-bg);
+        border-radius: 12px;
+        border: 1px solid var(--border);
+        color: var(--text-muted);
+        font-weight: 600;
+    }
+</style>
+</head>
+<body>
+
+<header>
+    <div class="header-container">
+        <div class="title-area">
+            <h1>AFCAT 2026 — COMPLETE VOCABULARY INTERACTIVE QUIZ</h1>
+            <p>250 MCQs Extracted from "AFCAT Vocabulary (1) (1).pdf"[cite: 9] — Synonyms, Antonyms & Contextual Usage</p>
+        </div>
+        <div class="stats-badge">
+            <div class="stat-item correct-stat" id="correctStat" onclick="filterByStatus('correct')">
+                <span class="stat-num" id="correct-count">0</span>
+                <span class="stat-label">✅ Correct</span>
+            </div>
+            <div class="stat-item wrong-stat" id="wrongStat" onclick="filterByStatus('wrong')">
+                <span class="stat-num" id="wrong-count">0</span>
+                <span class="stat-label">❌ Wrong</span>
+            </div>
+            <div class="stat-item left-stat" id="leftStat" onclick="filterByStatus('left')">
+                <span class="stat-num" id="left-count">250</span>
+                <span class="stat-label">⏳ Left</span>
+            </div>
+            <div class="stat-item pct-stat">
+                <span class="stat-pct" id="pct-display">0%</span>
+                <span class="stat-label">Accuracy</span>
+            </div>
+        </div>
+    </div>
+</header>
+
+<div class="container">
+    <div class="controls-panel">
+        <div class="search-row">
+            <div style="flex:1; min-width:260px;">
+                <input type="text" id="search-input" class="search-input" placeholder="Search by word, meaning, synonym, or QID" oninput="applyFilters()">
+                <div class="search-hint">💡 Tip: Enter a number like "42" to search by QID</div>
+            </div>
+            <button class="action-btn" onclick="resetQuiz()">🔄 Reset All Answers</button>
+            <button class="action-btn primary" id="showAllBtn" onclick="toggleShowAll()">👁️ Show All Answers (Study Mode)</button>
+        </div>
+        <div class="filter-bar" id="filter-bar">
+            <button class="filter-btn active" data-filter="All" onclick="filterQuestions('All')">All 250 MCQs</button>
+            <button class="filter-btn" data-filter="Module 1" onclick="filterQuestions('Module 1')">Mod 1: Core Vocab & Synonyms</button>
+            <button class="filter-btn" data-filter="Module 2" onclick="filterQuestions('Module 2')">Mod 2: Courage & Conflict</button>
+            <button class="filter-btn" data-filter="Module 3" onclick="filterQuestions('Module 3')">Mod 3: Intellect & Deception</button>
+            <button class="filter-btn" data-filter="Module 4" onclick="filterQuestions('Module 4')">Mod 4: Emotion & Praise</button>
+            <button class="filter-btn" data-filter="Module 5" onclick="filterQuestions('Module 5')">Mod 5: Contextual Vocab I</button>
+            <button class="filter-btn" data-filter="Module 6" onclick="filterQuestions('Module 6')">Mod 6: Contextual Vocab II</button>
+            <button class="filter-btn" data-filter="Module 7" onclick="filterQuestions('Module 7')">Mod 7: Personality & Speech</button>
+            <button class="filter-btn" data-filter="Module 8" onclick="filterQuestions('Module 8')">Mod 8: Antonyms & Opposites</button>
+            <button class="filter-btn" data-filter="Module 9" onclick="filterQuestions('Module 9')">Mod 9: Idioms & Nuances</button>
+            <button class="filter-btn" data-filter="Module 10" onclick="filterQuestions('Module 10')">Mod 10: Complete Vocab Assessment</button>
+        </div>
+    </div>
+
+    <div id="quiz-container"></div>
+</div>
+
+<script>
+    // Complete 250-MCQ dataset covering all vocabulary words, synonyms, antonyms, and sentence completions from the PDF[cite: 9]
+    const originalQuestionsData = [
+        // MODULE 1: HIGH-FREQUENCY AFCAT CORE VOCAB – SYNONYMS & MEANINGS (1-25)
+        {"num": 1, "module": "Module 1: Core Vocab & Synonyms", "q": "What is the synonym of 'DAUNTLESS' as highlighted in the vocabulary lexicon?", "options": ["A) Intrepid / Brave / Valiant / Gallant", "B) Timid / Diffident", "C) Pusillanimous / Cowardly", "D) Craven / Fainthearted"], "ans": 0, "brief": "'Dauntless' means fearless, intrepid, courageous, valiant, and gallant in combat or adversity[cite: 9]."},
+        {"num": 2, "module": "Module 1: Core Vocab & Synonyms", "q": "What does the word 'APPREHENSION' mean in an emotional or psychological context?", "options": ["A) Anxiety / Fear / Dread / Foreboding / Trepidation", "B) Confidence / Courage", "C) Indifference / Sangfroid", "D) Elation / Exultation"], "ans": 0, "brief": "'Apprehension' refers to anxiety, dread, foreboding, or trepidation about something bad happening[cite: 9]."},
+        {"num": 3, "module": "Module 1: Core Vocab & Synonyms", "q": "What is the synonym of 'TRUNCATE'?", "options": ["A) Shorten / Curtail / Trim / Prune / Condense", "B) Elongate / Expand / Prolong", "C) Exaggerate / Embellish", "D) Obfuscate / Convolute"], "ans": 0, "brief": "'Truncate' means to shorten, curtail, trim, prune, or condense by cutting off a part[cite: 9]."},
+        {"num": 4, "module": "Module 1: Core Vocab & Synonyms", "q": "What does the adjective 'CAPTIOUS' describe?", "options": ["A) Critical / Fault-finding / Carping / Hypercritical / Censorious", "B) Generous / Forgiving / Magnanimous", "C) Sociable / Convivial / Affable", "D) Candid / Truthful / Frank"], "ans": 0, "brief": "'Captious' describes someone who is excessively critical, carping, fault-finding, and censorious[cite: 9]."},
+        {"num": 5, "module": "Module 1: Core Vocab & Synonyms", "q": "Which of the following words is a synonym of 'IRASCIBLE'?", "options": ["A) Irritable / Quick-tempered / Testy / Touchy / Cantankerous / Choleric", "B) Calm / Serene / Placid", "C) Amiable / Genial / Gregarious", "D) Passive / Submissive / Compliant"], "ans": 0, "brief": "'Irascible' means easily angered, irritable, quick-tempered, touchy, peevish, cantankerous, and choleric[cite: 9]."},
+        {"num": 6, "module": "Module 1: Core Vocab & Synonyms", "q": "What does the verb 'EMBELLISH' mean?", "options": ["A) Decorate / Adorn / Ornament / Enhance / Garnish", "B) Strip / Deface / Mar", "C) Simplify / Streamline", "D) Condemn / Reproach / Berate"], "ans": 0, "brief": "'Embellish' means to decorate, adorn, ornament, enhance, or garnish with beautiful details[cite: 9]."},
+        {"num": 7, "module": "Module 1: Core Vocab & Synonyms", "q": "What is the meaning of 'CONTENTIOUS'?", "options": ["A) Argumentative / Quarrelsome / Pugnacious / Truculent / Belligerent", "B) Peaceful / Conciliatory / Amicable", "C) Deferential / Submissive", "D) Joyful / Exultant / Blissful"], "ans": 0, "brief": "'Contentious' means argumentative, quarrelsome, pugnacious, truculent, and eager to argue or fight[cite: 9]."},
+        {"num": 8, "module": "Module 1: Core Vocab & Synonyms", "q": "What does the verb 'DEIFY' mean?", "options": ["A) Worship / Idolize / Revere / Venerate / Exalt", "B) Condemn / Disparage / Belittle", "C) Ignore / Overlook / Neglect", "D) RIDICULE / Mock / Scorn"], "ans": 0, "brief": "'Deify' means to worship, idolize, revere, venerate, or exalt someone as a god[cite: 9]."},
+        {"num": 9, "module": "Module 1: Core Vocab & Synonyms", "q": "What is the synonym of 'VANQUISH'?", "options": ["A) Conquer / Defeat / Subdue / Overcome / Subjugate", "B) Surrender / Yield / Capitulate", "C) Support / Foster / Assist", "D) Escape / Flee / Retreat"], "ans": 0, "brief": "'Vanquish' means to conquer, defeat, subdue, overcome, and subjugate an enemy completely[cite: 9]."},
+        {"num": 10, "module": "Module 1: Core Vocab & Synonyms", "q": "What does the verb 'ACQUIESCE' mean?", "options": ["A) Agree / Consent / Comply / Yield / Submit / Accede / Concede", "B) Protest / Object / Resist", "C) Dispute / Argue / Contend", "D) Refuse / Deny / Reject"], "ans": 0, "brief": "'Acquiesce' means to agree, consent, comply, yield, submit, accede, or concede without protest[cite: 9]."},
+        {"num": 11, "module": "Module 1: Core Vocab & Synonyms", "q": "What is the meaning of 'CAPITULATE'?", "options": ["A) Surrender / Yield / Give in / Succumb / Submit", "B) Fight / Resist / Persevere", "C) Dominate / Command / Rule", "D) Celebrate / Triumph / Exult"], "ans": 0, "brief": "'Capitulate' means to surrender, yield, give in, succumb, or submit to an opponent's demands[cite: 9]."},
+        {"num": 12, "module": "Module 1: Core Vocab & Synonyms", "q": "Which of the following is a synonym of 'ASTUTE'?", "options": ["A) Sharp / Shrewd / Acute / Discerning / Perceptive / Sagacious", "B) Dull / Obtuse / Stupid", "C) Gullible / Naive / Credulous", "D) Clumsy / Inept / Awkward"], "ans": 0, "brief": "'Astute' means sharp, shrewd, acute, discerning, perceptive, sagacious, and practically intelligent[cite: 9]."},
+        {"num": 13, "module": "Module 1: Core Vocab & Synonyms", "q": "What does the verb 'EXTENUATE' mean in the context of an offense?", "options": ["A) Mitigate / Lessen / Diminish / Palliate / Excuse", "B) Exaggerate / Aggravate / Worsen", "C) Prosecute / Indict / Arraign", "D) Condemn / Censure / Rebuke"], "ans": 0, "brief": "'Extenuate' means to mitigate, lessen, diminish, palliate, or excuse the seriousness of a fault[cite: 9]."},
+        {"num": 14, "module": "Module 1: Core Vocab & Synonyms", "q": "What is the synonym of 'ASSUAGE'?", "options": ["A) Soothe / Alleviate / Relieve / Ease / Mitigate / Palliate / Appease", "B) Exacerbate / Worsen / Aggravate", "C) Irritate / Provoke / Agitate", "D) Intensify / Magnify / Heighten"], "ans": 0, "brief": "'Assuage' means to soothe, alleviate, relieve, ease, mitigate, palliate, or appease grief or pain[cite: 9]."},
+        {"num": 15, "module": "Module 1: Core Vocab & Synonyms", "q": "What does the adjective 'SLOVENLY' describe?", "options": ["A) Untidy / Messy / Scruffy / Slipshod / Disheveled", "B) Neat / Meticulous / Punctilious", "C) Elegant / Refined / Urbane", "D) Fastidious / Immaculate / Prissy"], "ans": 0, "brief": "'Slovenly' describes someone untidy, messy, scruffy, slipshod, or disheveled in personal appearance[cite: 9]."},
+        {"num": 16, "module": "Module 1: Core Vocab & Synonyms", "q": "What is the meaning of 'CONVIVIAL'?", "options": ["A) Sociable / Friendly / Genial / Affable / Amiable / Gregarious", "B) Reclusive / Antisocial / Hermit-like", "C) Hostile / Belligerent / Truculent", "D) Morose / Sullen / Doleful"], "ans": 0, "brief": "'Convivial' describes a friendly, sociable, genial, affable, amiable, and gregarious atmosphere or person[cite: 9]."},
+        {"num": 17, "module": "Module 1: Core Vocab & Synonyms", "q": "What does the word 'ANTEDILUVIAN' mean?", "options": ["A) Ancient / Archaic / Obsolete / Prehistoric / Primitive", "B) Modern / Contemporary / Avant-Garde", "C) Innovative / Experimental / Novel", "D) Futuristic / Progressive / Cutting-edge"], "ans": 0, "brief": "'Antediluvian' literally means 'before the flood', referring to ancient, archaic, obsolete, primitive things[cite: 9]."},
+        {"num": 18, "module": "Module 1: Core Vocab & Synonyms", "q": "What is the synonym of 'DELPHIC'?", "options": ["A) Obscure / Enigmatic / Mysterious / Cryptic / Ambiguous / Arcane", "B) Clear / Pellucid / Limpid / Explicit", "C) Straightforward / Frank / Candid", "D) Simple / Elementary / Basic"], "ans": 0, "brief": "'Delphic' means obscure, enigmatic, mysterious, cryptic, ambiguous, and arcane like an oracle[cite: 9]."},
+        {"num": 19, "module": "Module 1: Core Vocab & Synonyms", "q": "What does the verb 'PRECLUDE' mean?", "options": ["A) Prevent / Prohibit / Impede / Hinder / Exclude", "B) Encourage / Assist / Facilitate", "C) Permit / Allow / Authorize", "D) Invite / Welcome / Embrace"], "ans": 0, "brief": "'Preclude' means to prevent, prohibit, impede, hinder, or make impossible from happening[cite: 9]."},
+        {"num": 20, "module": "Module 1: Core Vocab & Synonyms", "q": "What is the synonym of 'EXONERATE'?", "options": ["A) Absolve / Clear / Acquit / Vindicate / Exculpate", "B) Accuse / Blame / Inculpate", "C) Indict / Arraign / Prosecute", "D) Convict / Condemn / Imprison"], "ans": 0, "brief": "'Exonerate' means to absolve, clear, acquit, vindicate, or exculpate from blame or wrongdoing[cite: 9]."},
+        {"num": 21, "module": "Module 1: Core Vocab & Synonyms", "q": "What does 'MAUDLIN' mean?", "options": ["A) Sentimental / Emotional / Tearful / Over-sentimental / Gooey", "B) Unemotional / Stoic / Impassive", "C) Rational / Logical / Pragmatic", "D) Cynical / Sceptical / Harsh"], "ans": 0, "brief": "'Maudlin' means self-pityingly sentimental, emotional, tearful, over-sentimental, and gooey[cite: 9]."},
+        {"num": 22, "module": "Module 1: Core Vocab & Synonyms", "q": "What is the synonym of 'DISCONSOLATE'?", "options": ["A) Sad / Unhappy / Doleful / Dejected / Crestfallen / Woebegone / Forlorn / Morose", "B) Cheerful / Joyful / Exultant", "C) Optimistic / Sanguine / Buoyant", "D) Convivial / Gregarious / Amiable"], "ans": 0, "brief": "'Disconsolate' means hopelessly sad, doleful, dejected, crestfallen, woebegone, forlorn, and morose[cite: 9]."},
+        {"num": 23, "module": "Module 1: Core Vocab & Synonyms", "q": "What does 'SUPERCILIOUSNESS' mean?", "options": ["A) Arrogance / Haughtiness / Conceit / Disdain / Contempt / Scorn", "B) Humility / Modesty / Diffidence", "C) Respect / Deference / Reverence", "D) Kindness / Benevolence / Altruism"], "ans": 0, "brief": "'Superciliousness' refers to arrogant haughtiness, conceit, disdain, contempt, and scornful behavior[cite: 9]."},
+        {"num": 24, "module": "Module 1: Core Vocab & Synonyms", "q": "What is the meaning of 'TENUOUS'?", "options": ["A) Weak / Flimsy / Slight / Fragile / Insubstantial", "B) Strong / Robust / Substantial", "C) Firm / Solid / Unshakeable", "D) Permanent / Durable / Indelible"], "ans": 0, "brief": "'Tenuous' means weak, flimsy, slight, fragile, and insubstantial in connection or evidence[cite: 9]."},
+        {"num": 25, "module": "Module 1: Core Vocab & Synonyms", "q": "What does the adjective 'CAUSTIC' describe when applied to speech or wit?", "options": ["A) Sarcastic / Cutting / Mordant / Bitter / Scathing / Acerbic", "B) Soothing / Lenitive / Gentle", "C) Praiseful / Encomiastic / Laudatory", "D) Mild / Innocuous / Harmless"], "ans": 0, "brief": "'Caustic' describes sarcastic, cutting, mordant, bitter, scathing, and acerbic remarks[cite: 9]."},
+
+        // MODULE 2: ADVANCED SYNONYMS – COURAGE, CONFLICT & APPEASEMENT (26-50)
+        {"num": 26, "module": "Module 2: Courage & Conflict", "q": "Which word means 'derogatory, slighting, disparaging, denigratory, belittling'?", "options": ["A) Pejorative", "B) Encomiastic", "C) Didactic", "D) Conciliatory"], "ans": 0, "brief": "'Pejorative' refers to remarks that are derogatory, slighting, disparaging, and belittling[cite: 9]."},
+        {"num": 27, "module": "Module 2: Courage & Conflict", "q": "What does the word 'OSTENSIBLE' mean?", "options": ["A) Apparent / Outward / Superficial / Professed / Putative", "B) Genuine / Authentic / Real", "C) Secret / Clandestine / Covert", "D) Deep / Profound / Arcane"], "ans": 0, "brief": "'Ostensible' means apparent, outward, superficial, professed, and putative (as opposed to real)[cite: 9]."},
+        {"num": 28, "module": "Module 2: Courage & Conflict", "q": "What is the synonym of 'ECCLESIASTICAL'?", "options": ["A) Religious / Clerical / Churchly / Pastoral / Spiritual", "B) Secular / Worldly / Temporal", "C) Military / Martial / Soldierly", "D) Political / Diplomatic / Civic"], "ans": 0, "brief": "'Ecclesiastical' relates to the Christian Church, clergy, pastoral, and spiritual matters[cite: 9]."},
+        {"num": 29, "module": "Module 2: Courage & Conflict", "q": "What does 'LABYRINTHINE' mean?", "options": ["A) Complicated / Intricate / Complex / Convoluted / Tortuous", "B) Simple / Straightforward / Direct", "C) Short / Brief / Concise", "D) Transparent / Clear / Obvious"], "ans": 0, "brief": "'Labyrinthine' means complicated, intricate, complex, convoluted, and tortuous like a labyrinth[cite: 9]."},
+        {"num": 30, "module": "Module 2: Courage & Conflict", "q": "What is the meaning of 'FORESHADOW'?", "options": ["A) Indicate / Portend / Signal / Presage / Adumbrate", "B) Obfuscate / Hide / Conceal", "C) Ignore / Neglect / Overlook", "D) Remember / Reminisce / Recall"], "ans": 0, "brief": "'Foreshadow' means to indicate, portend, signal, presage, or adumbrate a future event[cite: 9]."},
+        {"num": 31, "module": "Module 2: Courage & Conflict", "q": "What does the adjective 'DIFFIDENT' describe?", "options": ["A) Shy / Bashful / Modest / Unconfident / Timid", "B) Bold / Audacious / Confident", "C) Arrogant / Supercilious / Conceited", "D) Aggressive / Pugnacious / Belligerent"], "ans": 0, "brief": "'Diffident' describes someone who is shy, bashful, modest, unconfident, and timid[cite: 9]."},
+        {"num": 32, "module": "Module 2: Courage & Conflict", "q": "What is the synonym of 'VOCIFEROUS'?", "options": ["A) Outspoken / Vocal / Clamorous / Noisy / Boisterous / Raucous / Strident", "B) Silent / Taciturn / Reticent", "C) Calm / Peaceful / Placid", "D) Secret / Discreet / Inconspicuous"], "ans": 0, "brief": "'Vociferous' means outspoken, vocal, clamorous, noisy, boisterous, raucous, and strident[cite: 9]."},
+        {"num": 33, "module": "Module 2: Courage & Conflict", "q": "What does 'INVIDIOUS' mean?", "options": ["A) Unpleasant / Awkward / Difficult / Undesirable / Objectionable", "B) Desirable / Pleasant / Agreeable", "C) Fair / Just / Equitable", "D) Praiseworthy / Meritorious / Excellent"], "ans": 0, "brief": "'Invidious' describes an action or situation that is unpleasant, awkward, difficult, and objectionable[cite: 9]."},
+        {"num": 34, "module": "Module 2: Courage & Conflict", "q": "Which word is a synonym of 'AMATEUR' as a beginner?", "options": ["A) Beginner / Novice / Learner / Tyro / Fledgling", "B) Veteran / Maestro / Virtuoso", "C) Professional / Expert / Connoisseur", "D) Aficionado / Specialist / Authority"], "ans": 0, "brief": "'Amateur' means beginner, novice, learner, tyro, and fledgling[cite: 9]."},
+        {"num": 35, "module": "Module 2: Courage & Conflict", "q": "What does the verb 'CHASTISE' mean?", "options": ["A) Scold / Reprimand / Rebuke / Upbraid / Chide / Berate / Admonish / Reprove / Censure", "B) Praise / Extol / Laud / Glorify", "C) Forgive / Pardon / Absolve", "D) Encourage / Assist / Support"], "ans": 0, "brief": "'Chastise' means to scold, reprimand, rebuke, upbraid, chide, berate, admonish, reprove, and censure[cite: 9]."},
+        {"num": 36, "module": "Module 2: Courage & Conflict", "q": "What does 'CONCEIT' mean?", "options": ["A) Arrogance / Vanity / Pride / Egotism / Narcissism", "B) Humility / Modesty / Diffidence", "C) Kindness / Benevolence / Altruism", "D) Wisdom / Sagacity / Prudence"], "ans": 0, "brief": "'Conceit' means arrogance, vanity, pride, egotism, and excessive self-love[cite: 9]."},
+        {"num": 37, "module": "Module 2: Courage & Conflict", "q": "What is the synonym of 'CORPULENT'?", "options": ["A) Fat / Obese / Overweight / Chubby / Portly / Rotund", "B) Thin / Slender / Gaunt / Emaciated", "C) Tall / Lanky / Towering", "D) Muscular / Robust / Athletic"], "ans": 0, "brief": "'Corpulent' describes someone fat, obese, overweight, chubby, portly, and rotund[cite: 9]."},
+        {"num": 38, "module": "Module 2: Courage & Conflict", "q": "What does the verb 'EXTOL' mean?", "options": ["A) Praise / Celebrate / Laud / Glorify / Eulogize / Exalt", "B) Disparage / Belittle / Denigrate", "C) Scold / Reprimand / Rebuke", "D) Ignore / Neglect / Overlook"], "ans": 0, "brief": "'Extol' means to praise enthusiastically, celebrate, laud, glorify, eulogize, and exalt[cite: 9]."},
+        {"num": 39, "module": "Module 2: Courage & Conflict", "q": "What does 'RAMPAGE' mean in terms of wild action?", "options": ["A) Berserk / Frenzy / Turmoil / Bedlam / Delirium / Furor / Tempest", "B) Calm / Composure / Sangfroid", "C) Silence / Reticence / Stillness", "D) Harmony / Accord / Peace"], "ans": 0, "brief": "'Rampage' means running berserk in a frenzy, turmoil, bedlam, delirium, furor, and tempest[cite: 9]."},
+        {"num": 40, "module": "Module 2: Courage & Conflict", "q": "What is the synonym of 'TEDIUM'?", "options": ["A) Boredom / Monotony / Dullness / Routine / Ennui", "B) Excitement / Thrill / Elation", "C) Variety / Diversity / Novelty", "D) Energy / Alacrity / Zeal"], "ans": 0, "brief": "'Tedium' refers to boredom, monotony, dullness, routine, and ennui[cite: 9]."},
+        {"num": 41, "module": "Module 2: Courage & Conflict", "q": "What does the verb 'CONFOUND' mean?", "options": ["A) Amaze / Astonish / Dumbfound / Stagger / Bewilder / Baffle", "B) Explain / Clarify / Elucidate", "C) Support / Corroborate / Validate", "D) Simplify / Streamline / Facilitate"], "ans": 0, "brief": "'Confound' means to amaze, astonish, dumbfound, stagger, bewilder, and baffle completely[cite: 9]."},
+        {"num": 42, "module": "Module 2: Courage & Conflict", "q": "What is the meaning of 'JEOPARDY'?", "options": ["A) Danger / Hazard / Peril / Risk / Vulnerability", "B) Safety / Security / Protection", "C) Stability / Firmness / Solidity", "D) Success / Triumph / Achievement"], "ans": 0, "brief": "'Jeopardy' means danger, hazard, peril, risk, and vulnerability[cite: 9]."},
+        {"num": 43, "module": "Module 2: Courage & Conflict", "q": "What does the verb 'OSTRACIZE' mean?", "options": ["A) Exclude / Banish / Shun / Snub / Reject / Repudiate", "B) Welcome / Embrace / Include", "C) Praise / Extol / Laud", "D) Forgive / Pardon / Absolve"], "ans": 0, "brief": "'Ostracize' means to exclude from a group, banish, shun, snub, reject, and repudiate[cite: 9]."},
+        {"num": 44, "module": "Module 2: Courage & Conflict", "q": "What is the synonym of 'OSTENTATIOUS'?", "options": ["A) Showy / Pretentious / Flamboyant / Gaudy", "B) Modest / Simple / Unobtrusive", "C) Quiet / Reserved / Demure", "D) Cheap / Poor / Shabby"], "ans": 0, "brief": "'Ostentatious' means showy, pretentious, flamboyant, and gaudy in displaying wealth[cite: 9]."},
+        {"num": 45, "module": "Module 2: Courage & Conflict", "q": "What does 'PENCHANT' mean?", "options": ["A) Liking / Fondness / Preference / Inclination / Predilection / Proclivity", "B) Hatred / Aversion / Antipathy / Loathing", "C) Fear / Dread / Phobia", "D) Indifference / Apathy / Unconcern"], "ans": 0, "brief": "'Penchant' means a strong liking, fondness, preference, inclination, predilection, or proclivity[cite: 9]."},
+        {"num": 46, "module": "Module 2: Courage & Conflict", "q": "What is the meaning of 'PENITENCE'?", "options": ["A) Repentance / Contrition / Remorse / Regret / Qualm", "B) Pride / Arrogance / Vanity", "C) Cruelty / Callousness / Brutality", "D) Joy / Happiness / Bliss"], "ans": 0, "brief": "'Penitence' refers to repentance, contrition, remorse, regret, and sorrow for sins[cite: 9]."},
+        {"num": 47, "module": "Module 2: Courage & Conflict", "q": "What does the verb 'RESCIND' mean?", "options": ["A) Revoke / Cancel / Repeal / Annul / Nullify / Void", "B) Enact / Establish / Validate", "C) Support / Approve / Endorse", "D) Propose / Introduce / Initiate"], "ans": 0, "brief": "'Rescind' means to revoke, cancel, repeal, annul, nullify, or void an official law or order[cite: 9]."},
+        {"num": 48, "module": "Module 2: Courage & Conflict", "q": "What does 'SERENDIPITY' mean?", "options": ["A) Chance / Happy accident / Luck / Fluke / Fortuity", "B) Misfortune / Tragedy / Disaster", "C) Planning / Strategy / Foresight", "D) Certainty / Guarantee / Inevitability"], "ans": 0, "brief": "'Serendipity' refers to a chance occurrence, happy accident, luck, fluke, or fortuity[cite: 9]."},
+        {"num": 49, "module": "Module 2: Courage & Conflict", "q": "What is the synonym of 'SPURIOUS'?", "options": ["A) Bogus / Fake / False / Counterfeit / Fraudulent", "B) Genuine / Authentic / Real", "C) Honest / Candid / Frank", "D) Clear / Pellucid / Explicit"], "ans": 0, "brief": "'Spurious' means bogus, fake, false, counterfeit, and fraudulent in origin[cite: 9]."},
+        {"num": 50, "module": "Module 2: Courage & Conflict", "q": "Which word means 'a bone of contention / argumentative / quarrelsome'?", "options": ["A) Contentious", "B) Convivial", "C) Astute", "D) Tenuous"], "ans": 0, "brief": "'Contentious' is described as 'a bone of contention', meaning argumentative and quarrelsome[cite: 9]."},
+
+        // MODULE 3: ADVANCED SYNONYMS – INTELLECT, DECEPTION & ARROGANCE (51-75)
+        {"num": 51, "module": "Module 3: Intellect & Deception", "q": "What does the adjective 'HEDONISTIC' describe?", "options": ["A) Pleasure-seeking / Sensual / Epicurean", "B) Ascetic / Self-denying / Austere", "C) Religious / Pious / Devout", "D) Hardworking / Diligent / Industrious"], "ans": 0, "brief": "'Hedonistic' describes someone devoted to the pursuit of sensual pleasure[cite: 9]."},
+        {"num": 52, "module": "Module 3: Intellect & Deception", "q": "What is the meaning of 'MAGNANIMOUS'?", "options": ["A) Generous / Forgiving / Noble / Unselfish", "B) Petty / Stingy / Mean / Parsimonious", "C) Cruel / Callous / Ruthless", "D) Timid / Cowardly / Diffident"], "ans": 0, "brief": "'Magnanimous' means noble-spirited, generous, forgiving, and unselfish toward rivals[cite: 9]."},
+        {"num": 53, "module": "Module 3: Intellect & Deception", "q": "What does 'FRACTIOUS' mean?", "options": ["A) Irritable / Quarrelsome / Unruly / Bad-tempered", "B) Obedient / Compliant / Docile", "C) Friendly / Sociable / Amiable", "D) Calm / Peaceful / Serene"], "ans": 0, "brief": "'Fractious' means irritable, quarrelsome, unruly, and difficult to control[cite: 9]."},
+        {"num": 54, "module": "Module 3: Intellect & Deception", "q": "What is the synonym of 'TORPOR'?", "options": ["A) Lethargy / Sluggishness / Inertia / Inactivity", "B) Energy / Alacrity / Vigor / Zeal", "C) Excitement / Enthusiasm / Passion", "D) Speed / Swiftness / Rapidity"], "ans": 0, "brief": "'Torpor' means physical or mental lethargy, sluggishness, inertia, and inactivity[cite: 9]."},
+        {"num": 55, "module": "Module 3: Intellect & Deception", "q": "What does 'EFFICACY' mean?", "options": ["A) Effectiveness / Success / Potency / Capability", "B) Failure / Inability / Inefficiency", "C) Weakness / Fragility / Tenuousness", "D) Danger / Peril / Hazard"], "ans": 0, "brief": "'Efficacy' means the ability to produce a desired or intended effective result[cite: 9]."},
+        {"num": 56, "module": "Module 3: Intellect & Deception", "q": "What is the meaning of 'TENACITY'?", "options": ["A) Persistence / Determination / Perseverance / Grip", "B) Weakness / Flimsiness / Fragility", "C) Laziness / Sluggishness / Torpor", "D) Fear / Timidity / Cowardice"], "ans": 0, "brief": "'Tenacity' refers to persistence, determination, perseverance, and strong grip[cite: 9]."},
+        {"num": 57, "module": "Module 3: Intellect & Deception", "q": "What does the verb 'INTIMIDATE' mean?", "options": ["A) Frighten / Bully / Menace / Daunt / Threaten", "B) Encourage / Comfort / Reassure", "C) Assist / Help / Support", "D) Praise / Laud / Extol"], "ans": 0, "brief": "'Intimidate' means to frighten, bully, menace, daunt, or threaten someone[cite: 9]."},
+        {"num": 58, "module": "Module 3: Intellect & Deception", "q": "What is the synonym of 'PROPITIATE'?", "options": ["A) Appease / Placate / Pacify / Mollify / Conciliate", "B) Provoke / Agitate / Irritate / Incite", "C) Fight / Oppose / Resist", "D) Ignore / Neglect / Overlook"], "ans": 0, "brief": "'Propitiate' means to win or regain favor by appeasing, placating, or pacifying[cite: 9]."},
+        {"num": 59, "module": "Module 3: Intellect & Deception", "q": "What does the verb 'PROCRASTINATE' mean?", "options": ["A) Delay / Put off / Postpone / Stall", "B) Hasten / Hurry / Expedite", "C) Complete / Finish / Achieve", "D) Organize / Arrange / Structure"], "ans": 0, "brief": "'Procrastinate' means to delay, put off, postpone, or stall action[cite: 9]."},
+        {"num": 60, "module": "Module 3: Intellect & Deception", "q": "What is the meaning of 'EXACERBATE'?", "options": ["A) Worsen / Aggravate / Intensify / Inflame", "B) Soothe / Assuage / Alleviate / Relieve", "C) Improve / Enhance / Better", "D) Mitigate / Lessen / Diminish"], "ans": 0, "brief": "'Exacerbate' means to make a problem, bad situation, or feeling worse and aggravated[cite: 9]."},
+        {"num": 61, "module": "Module 3: Intellect & Deception", "q": "What does 'IMPERIOUS' mean?", "options": ["A) Arrogant / Domineering / Overbearing / Authoritarian", "B) Humble / Submissive / Modest", "C) Friendly / Polite / Urbane", "D) Weak / Timid / Diffident"], "ans": 0, "brief": "'Imperious' describes arrogant, domineering, overbearing, and authoritarian behavior[cite: 9]."},
+        {"num": 62, "module": "Module 3: Intellect & Deception", "q": "What is the synonym of 'INNOCUOUS'?", "options": ["A) Harmless / Safe / Inoffensive / Mild", "B) Harmful / Dangerous / Toxic / Pernicious", "C) Offending / Insulting / Pejorative", "D) Powerful / Mighty / Strong"], "ans": 0, "brief": "'Innocuous' means harmless, safe, inoffensive, and mild[cite: 9]."},
+        {"num": 63, "module": "Module 3: Intellect & Deception", "q": "What does 'MALICIOUS' mean?", "options": ["A) Spiteful / Malevolent / Vengeful / Evil", "B) Benevolent / Kind / Altruistic", "C) Generous / Munificent / Bountiful", "D) Honest / Truthful / Candid"], "ans": 0, "brief": "'Malicious' describes spiteful, malevolent, vengeful, and evil intentions[cite: 9]."},
+        {"num": 64, "module": "Module 3: Intellect & Deception", "q": "What is the meaning of 'BELLIGERENT'?", "options": ["A) Aggressive / Warlike / Hostile / Combatant", "B) Peaceful / Conciliatory / Amicable", "C) Submissive / Compliant / Docile", "D) Friendly / Genial / Convivial"], "ans": 0, "brief": "'Belligerent' means aggressive, warlike, hostile, and engaged in combat[cite: 9]."},
+        {"num": 65, "module": "Module 3: Intellect & Deception", "q": "What does the adjective 'FASTIDIOUS' describe?", "options": ["A) Meticulous / Attentive to detail / Hard to please / Particular", "B) Careless / Slipshod / Slovenly", "C) Easygoing / Flexible / Tolerant", "D) Untidy / Messy / Disheveled"], "ans": 0, "brief": "'Fastidious' describes someone meticulous, attentive to detail, and hard to please ('a speck of dust here!')[cite: 9]."},
+        {"num": 66, "module": "Module 3: Intellect & Deception", "q": "What is the synonym of 'LACKADAISICAL'?", "options": ["A) Lazy / Careless / Apathetic / Lethargic / Half-hearted", "B) Hardworking / Diligent / Industrious / Zealous", "C) Careful / Meticulous / Punctilious", "D) Energetic / Active / Vigorous"], "ans": 0, "brief": "'Lackadaisical' means lazy, careless, apathetic, lethargic, and half-hearted[cite: 9]."},
+        {"num": 67, "module": "Module 3: Intellect & Deception", "q": "What does 'OBSTREPEROUS' mean?", "options": ["A) Noisy / Difficult to control / Unruly / Boisterous", "B) Quiet / Calm / Peaceful", "C) Obedient / Docile / Compliant", "D) Polite / Urbane / Refined"], "ans": 0, "brief": "'Obstreperous' means noisy, difficult to control, unruly, and boisterous[cite: 9]."},
+        {"num": 68, "module": "Module 3: Intellect & Deception", "q": "What is the meaning of 'PUNCTILIOUS'?", "options": ["A) Meticulous / Diligent / Conscientious / Careful", "B) Careless / Slovenly / Slipshod", "C) Lazy / Indolent / Sluggish", "D) Rude / Churlish / Boorish"], "ans": 0, "brief": "'Punctilious' describes someone meticulous, diligent, conscientious, and careful of proper behavior[cite: 9]."},
+        {"num": 69, "module": "Module 3: Intellect & Deception", "q": "What does the adjective 'URBANE' describe?", "options": ["A) Cultured / Refined / Polite / Sophisticated / Suave", "B) Rude / Boorish / Churlish / Uncouth", "C) Rural / Rustic / Primitive", "D) Clumsy / Inept / Awkward"], "ans": 0, "brief": "'Urbane' describes cultured, refined, polite, sophisticated, and suave manners[cite: 9]."},
+        {"num": 70, "module": "Module 3: Intellect & Deception", "q": "What is the synonym of 'CHURLISH'?", "options": ["A) Rude / Boorish / Impolite / Uncouth / Surly", "B) Polite / Urbane / Refined / Courteous", "C) Friendly / Affable / Amiable", "D) Kind / Benevolent / Generous"], "ans": 0, "brief": "'Churlish' means rude, boorish, impolite, uncouth, and surly[cite: 9]."},
+        {"num": 71, "module": "Module 3: Intellect & Deception", "q": "What does 'SUAVE' mean?", "options": ["A) Charming / Confident / Sophisticated / Urbane", "B) Awkward / Clumsy / Inelegant", "C) Rude / Impolite / Boorish", "D) Shy / Timid / Diffident"], "ans": 0, "brief": "'Suave' describes a charming, confident, sophisticated, and urbane man[cite: 9]."},
+        {"num": 72, "module": "Module 3: Intellect & Deception", "q": "What is the meaning of 'SUBTERFUGE'?", "options": ["A) Trickery / Deception / Guile / Stratagem / Ruse", "B) Honesty / Probity / Candor / Frankness", "C) Courage / Valor / Gallantry", "D) Peace / Harmony / Accord"], "ans": 0, "brief": "'Subterfuge' means trickery, deception, guile, stratagem, and ruse to achieve a goal[cite: 9]."},
+        {"num": 73, "module": "Module 3: Intellect & Deception", "q": "What does 'PROBITY' mean?", "options": ["A) Honesty / Integrity / Uprightness / Rectitude", "B) Dishonesty / Corruption / Duplicity", "C) Cowardice / Timidity / Fear", "D) Laziness / Sluggishness / Indolence"], "ans": 0, "brief": "'Probity' refers to absolute honesty, integrity, uprightness, and rectitude[cite: 9]."},
+        {"num": 74, "module": "Module 3: Intellect & Deception", "q": "What is the synonym of 'DUPLICITY'?", "options": ["A) Deceitfulness / Double-dealing / Trickery / Fraud", "B) Honesty / Probity / Candor / Truthfulness", "C) Generosity / Munificence / Charity", "D) Bravery / Dauntlessness / Courage"], "ans": 0, "brief": "'Duplicity' means deceitfulness, double-dealing, trickery, and fraud[cite: 9]."},
+        {"num": 75, "module": "Module 3: Intellect & Deception", "q": "What does 'MACHINATION' mean?", "options": ["A) Plot / Scheme / Conspiracy / Intrigue / Cabal", "B) Agreement / Accord / Treaty", "C) Success / Triumph / Victory", "D) Honesty / Candor / Uprightness"], "ans": 0, "brief": "'Machination' refers to a crafty plot, scheme, conspiracy, or intrigue[cite: 9]."},
+
+        // MODULE 4: ADVANCED SYNONYMS – EMOTION, PRAISE & CRITICISM (76-100)
+        {"num": 76, "module": "Module 4: Emotion & Praise", "q": "What is the synonym of 'MEAGER'?", "options": ["A) Scanty / Inadequate / Sparse / Paltry / Insufficient", "B) Abundant / Plentiful / Profuse / Bountiful", "C) Massive / Gigantic / Colossal", "D) Rich / Wealthy / Opulent"], "ans": 0, "brief": "'Meager' means scanty, inadequate, sparse, paltry, and insufficient in amount[cite: 9]."},
+        {"num": 77, "module": "Module 4: Emotion & Praise", "q": "What does 'PARSIMONIOUS' mean?", "options": ["A) Stingy / Frugal / Miserly / Penurious / Niggardly", "B) Generous / Munificent / Extravagant / Bountiful", "C) Kind / Benevolent / Altruistic", "D) Brave / Dauntless / Intrepid"], "ans": 0, "brief": "'Parsimonious' describes someone stingy, frugal, miserly, penurious, and niggardly with money[cite: 9]."},
+        {"num": 78, "module": "Module 4: Emotion & Praise", "q": "What is the meaning of 'SPORADIC'?", "options": ["A) Occasional / Infrequent / Irregular / Intermittent", "B) Continuous / Constant / Unbroken / Perpetual", "C) Daily / Routine / Quotidian", "D) Fast / Rapid / Swift"], "ans": 0, "brief": "'Sporadic' means occurring at irregular intervals, occasional, infrequent, and intermittent[cite: 9]."},
+        {"num": 79, "module": "Module 4: Emotion & Praise", "q": "What does the adjective 'FLAGRANT' describe?", "options": ["A) Blatant / Outrageous / Glaring / Egregious / Shameless", "B) Secret / Hidden / Covert / Clandestine", "C) Slight / Minor / Unimportant", "D) Polite / Respectful / Courteous"], "ans": 0, "brief": "'Flagrant' describes a blatant, outrageous, glaring, egregious, and shameless violation[cite: 9]."},
+        {"num": 80, "module": "Module 4: Emotion & Praise", "q": "What is the synonym of 'PROMINENT'?", "options": ["A) Famous / Conspicuous / Well-known / Eminent / Distinguished", "B) Unknown / Obscure / Hidden / Secret", "C) Weak / Feeble / Fragile", "D) Poor / Destitute / Impecunious"], "ans": 0, "brief": "'Prominent' means famous, conspicuous, well-known, eminent, and distinguished[cite: 9]."},
+        {"num": 81, "module": "Module 4: Emotion & Praise", "q": "What does 'OBTRUSIVE' mean?", "options": ["A) Noticeable / Prominent / Intrusive / Pronounced", "B) Inconspicuous / Discreet / Unobtrusive", "C) Shy / Timid / Diffident", "D) Calm / Quiet / Serene"], "ans": 0, "brief": "'Obtrusive' means noticeably intrusive, prominent, and impossible to overlook[cite: 9]."},
+        {"num": 82, "module": "Module 4: Emotion & Praise", "q": "What is the meaning of 'UNOBTRUSIVE'?", "options": ["A) Inconspicuous / Discreet / Unpretentious / Restrained", "B) Obtrusive / Blatant / Flamboyant", "C) Aggressive / Belligerent / Pugnacious", "D) Loud / Vociferous / Clamorous"], "ans": 0, "brief": "'Unobtrusive' means not attracting attention, inconspicuous, discreet, and restrained[cite: 9]."},
+        {"num": 83, "module": "Module 4: Emotion & Praise", "q": "What does 'SKEPTICAL' mean?", "options": ["A) Doubtful / Unconvinced / Cynical / Questioning", "B) Gullible / Credulous / Naive", "C) Certain / Sure / Confident", "D) Enthusiastic / Eager / Zealous"], "ans": 0, "brief": "'Skeptical' means doubtful, unconvinced, cynical, and questioning claims[cite: 9]."},
+        {"num": 84, "module": "Module 4: Emotion & Praise", "q": "What is the synonym of 'GULLIBLE'?", "options": ["A) Easily deceived / Credulous / Naive / Trusting / Greenhorn", "B) Skeptical / Cynical / Distrustful", "C) Shrewd / Astute / Sagacious", "D) Stubborn / Intransigent / Recalcitrant"], "ans": 0, "brief": "'Gullible' describes someone easily deceived, credulous, naive, and trusting[cite: 9]."},
+        {"num": 85, "module": "Module 4: Emotion & Praise", "q": "What does 'CYNICAL' mean?", "options": ["A) Distrustful / Skeptical / Pessimistic / Misplaced trust", "B) Optimistic / Sanguine / Hopeful", "C) Trusting / Gullible / Credulous", "D) Kind / Benevolent / Altruistic"], "ans": 0, "brief": "'Cynical' means distrustful of human sincerity, skeptical, and pessimistic[cite: 9]."},
+        {"num": 86, "module": "Module 4: Emotion & Praise", "q": "What is the meaning of 'SAGACIOUS'?", "options": ["A) Wise / Shrewd / Astute / Discerning / Intelligent", "B) Foolish / Stupid / Inept", "C) Lazy / Indolent / Lackadaisical", "D) Cruel / Callous / Ruthless"], "ans": 0, "brief": "'Sagacious' means possessing keen practical wisdom, shrewd, astute, and discerning[cite: 9]."},
+        {"num": 87, "module": "Module 4: Emotion & Praise", "q": "What does 'PAUCITY' mean?", "options": ["A) Scarcity / Shortage / Dearth / Lack / Deficit", "B) Abundance / Plethora / Excess / Surfeit", "C) Wealth / Opulence / Affluence", "D) Success / Triumph / Victory"], "ans": 0, "brief": "'Paucity' means scarcity, shortage, dearth, lack, and deficit[cite: 9]."},
+        {"num": 88, "module": "Module 4: Emotion & Praise", "q": "What is the synonym of 'SCARCITY'?", "options": ["A) Lack / Shortage / Paucity / Dearth", "B) Plenty / Abundance / Plethora", "C) Excess / Surplus / Overflow", "D) Generosity / Munificence / Bounty"], "ans": 0, "brief": "'Scarcity' refers to a lack, shortage, paucity, and dearth of supplies[cite: 9]."},
+        {"num": 89, "module": "Module 4: Emotion & Praise", "q": "What does 'PLETHORA' mean?", "options": ["A) Abundance / Excess / Surfeit / Superfluity / Myriad", "B) Scarcity / Shortage / Paucity / Dearth", "C) Poverty / Destitution / Penury", "D) Sadness / Melancholy / Grief"], "ans": 0, "brief": "'Plethora' means an excessive abundance, surfeit, superfluity, and myriad of something[cite: 9]."},
+        {"num": 90, "module": "Module 4: Emotion & Praise", "q": "What is the meaning of 'DEFICIT'?", "options": ["A) Shortfall / Loss / Deficiency / Shortage", "B) Surplus / Excess / Profit", "C) Abundance / Plethora / Plenty", "D) Success / Victory / Triumph"], "ans": 0, "brief": "'Deficit' means a shortfall, loss, deficiency, or amount by which something is too small[cite: 9]."},
+        {"num": 91, "module": "Module 4: Emotion & Praise", "q": "What does 'OPINIONATED' mean?", "options": ["A) Dogmatic / Prejudiced / Biased / Inflexible", "B) Open-minded / Liberal / Flexible", "C) Shy / Diffident / Modest", "D) Kind / Generous / Benevolent"], "ans": 0, "brief": "'Opinionated' describes someone dogmatic, prejudiced, biased, and refusing to change views[cite: 9]."},
+        {"num": 92, "module": "Module 4: Emotion & Praise", "q": "What is the synonym of 'PRAGMATIC'?", "options": ["A) Practical / Realistic / Sensible / Utilitarian", "B) Idealistic / Quixotic / Utopian / Unrealistic", "C) Romantic / Emotional / Sentimental", "D) Theoretical / Abstract / Hypothetical"], "ans": 0, "brief": "'Pragmatic' means practical, realistic, sensible, and utilitarian based on facts[cite: 9]."},
+        {"num": 93, "module": "Module 4: Emotion & Praise", "q": "What does 'FLEXIBLE' mean in character or attitude?", "options": ["A) Adaptable / Versatile / Malleable / Compliant", "B) Rigid / Stubborn / Intransigent / Obstinate", "C) Cruel / Callous / Ruthless", "D) Weak / Fragile / Tenuous"], "ans": 0, "brief": "'Flexible' means adaptable, versatile, malleable, and ready to change[cite: 9]."},
+        {"num": 94, "module": "Module 4: Emotion & Praise", "q": "What is the meaning of 'LIBERAL'?", "options": ["A) Open-minded / Progressive / Broad-minded / Generous", "B) Conservative / Rigid / Dogmatic", "C) Stingy / Miserly / Parsimonious", "D) Cowardly / Timid / Craven"], "ans": 0, "brief": "'Liberal' means open-minded, progressive, broad-minded, and generous[cite: 9]."},
+        {"num": 95, "module": "Module 4: Emotion & Praise", "q": "What does the verb 'RUIN' mean?", "options": ["A) Destroy / Devastate / Wreck / Shatter / Demolish", "B) Build / Construct / Establish", "C) Protect / Guard / Preserve", "D) Improve / Enhance / Better"], "ans": 0, "brief": "'Ruin' means to destroy, devastate, wreck, shatter, or demolish completely[cite: 9]."},
+        {"num": 96, "module": "Module 4: Emotion & Praise", "q": "What are 'CITADELS / FORTRESSES / BASTIONS'?", "options": ["A) Strongholds / Fortifications / Redoubts / Refuges", "B) Slums / Shacks / Hovels", "C) Markets / Bazaars / Shops", "D) Schools / Colleges / Academies"], "ans": 0, "brief": "'Citadels', 'fortresses', and 'bastions' are fortified strongholds and military refuges[cite: 9]."},
+        {"num": 97, "module": "Module 4: Emotion & Praise", "q": "What does the verb 'EMULATE' mean?", "options": ["A) Imitate / Copy / Follow / Rival / Mirror", "B) Disregard / Ignore / Reject", "C) Condemn / Censure / Criticize", "D) Destroy / Ruin / Shatter"], "ans": 0, "brief": "'Emulate' means to imitate, copy, follow, or match an admired model[cite: 9]."},
+        {"num": 98, "module": "Module 4: Emotion & Praise", "q": "What does the verb 'FLOUT' mean?", "options": ["A) Defy / Disregard / Scorn / Mock / Break", "B) Obey / Comply / Observe / Follow", "C) Praise / Extol / Laud", "D) Protect / Guard / Shield"], "ans": 0, "brief": "'Flout' means to openly defy, disregard, scorn, or break rules and laws[cite: 9]."},
+        {"num": 99, "module": "Module 4: Emotion & Praise", "q": "What is the meaning of 'RENOUNCE'?", "options": ["A) Give up / Reject / Relinquish / Repudiate / Abdicate", "B) Accept / Adopt / Embrace", "C) Support / Foster / Assist", "D) Seek / Pursue / Desire"], "ans": 0, "brief": "'Renounce' means to give up, reject, relinquish, repudiate, or abandon a claim or belief[cite: 9]."},
+        {"num": 100, "module": "Module 4: Emotion & Praise", "q": "What do 'CHRONIC / HABITUAL / ENTRENCHED' mean?", "options": ["A) Persistent / Deep-rooted / Long-standing / Incurable", "B) Temporary / Fleeting / Transient / Ephemeral", "C) Weak / Flimsy / Tenuous", "D) Occasional / Sporadic / Rare"], "ans": 0, "brief": "'Chronic', 'habitual', and 'entrenched' describe persistent, deep-rooted, long-standing conditions[cite: 9]."},
+
+        // MODULE 5: SENTENCE COMPLETION & ADVANCED CONTEXTUAL VOCAB I (101-125)
+        {"num": 101, "module": "Module 5: Contextual Vocab I", "q": "\"Forced to auction off generations of ancestral heirlooms, the ________ aristocrat struggled to maintain the facade of noble grandeur in a rapidly modernizing society.\" Which word fits best?", "options": ["A) Impecunious", "B) Affluent", "C) Solvent", "D) Opulent"], "ans": 0, "brief": "'Impecunious' means having little or no money (destitute/penniless), which contrasts with 'affluent', 'solvent', and 'opulent'[cite: 9]."},
+        {"num": 102, "module": "Module 5: Contextual Vocab I", "q": "\"The university chancellor delivered a ________ commencement address, overflowing with archaic metaphors and philosophical digressions that left the graduating class thoroughly bewildered.\" Which word fits best?", "options": ["A) Grandiloquent / Bombastic", "B) Unpretentious", "C) Simple", "D) Concise"], "ans": 0, "brief": "'Grandiloquent' (bombastic/magniloquent) describes pompous, extravagant language intended to impress[cite: 9]."},
+        {"num": 103, "module": "Module 5: Contextual Vocab I", "q": "\"Recognizing the severe financial strain on rural healthcare facilities, the anonymous benefactor's ________ to fund their critical operations saved countless lives.\" Which word fits best?", "options": ["A) Munificence", "B) Cupidity", "C) Penury", "D) Avarice"], "ans": 0, "brief": "'Munificence' means extreme generosity, which contrasts with 'cupidity' (greed) and 'penury' (poverty)[cite: 9]."},
+        {"num": 104, "module": "Module 5: Contextual Vocab I", "q": "\"The museum curator meticulously handled the ancient, ________ silk garments, marveling at how such delicate, almost weightless textiles had survived the ravages of time without disintegrating.\" Which word fits best?", "options": ["A) Diaphanous / Gossamer / Pellucid", "B) Opaque", "C) Heavy", "D) Coarse"], "ans": 0, "brief": "'Diaphanous', 'gossamer', and 'pellucid' mean light, delicate, and translucent[cite: 9]."},
+        {"num": 105, "module": "Module 5: Contextual Vocab I", "q": "\"The human rights commission condemned the dictator's regime in the strongest possible terms, citing the ________ conditions within the state-run facilities as a gross violation of international law.\" Which word fits best?", "options": ["A) Execrable / Odious", "B) Meritorious", "C) Venerable", "D) Praiseworthy"], "ans": 0, "brief": "'Execrable' and 'odious' mean extremely bad, abhorrent, and detestable[cite: 9]."},
+        {"num": 106, "module": "Module 5: Contextual Vocab I", "q": "\"As the twilight settled over the abandoned battlefield, the solitary cellist performed a deeply ________ composition, its mournful notes evoking a profound sense of historical loss and collective sorrow.\" Which word fits best?", "options": ["A) Elegiac / Plaintive / Sepulchral", "B) Exultant", "C) Joyful", "D) Convivial"], "ans": 0, "brief": "'Elegiac', 'plaintive', and 'sepulchral' express sorrow, mourning, and melancholy[cite: 9]."},
+        {"num": 107, "module": "Module 5: Contextual Vocab I", "q": "\"Facing the overwhelming evidence of systemic corruption within the inner council, the reforming monarch demanded that all royal advisors publicly ________ their prior allegiances to the disgraced faction.\" Which word fits best?", "options": ["A) Abjure / Forswear", "B) Espouse", "C) Vindicate", "D) Corroborate"], "ans": 0, "brief": "'Abjure' and 'forswear' mean to formally reject, renounce, or abandon[cite: 9]."},
+        {"num": 108, "module": "Module 5: Contextual Vocab I", "q": "\"The committee's initial legislative draft only served to ________ the sweeping economic reforms, leaving the anxious market analysts desperate for a comprehensive and detailed breakdown of the new fiscal policies.\" Which word fits best?", "options": ["A) Adumbrate / Portend", "B) Elucidate", "C) Obfuscate", "D) Explain"], "ans": 0, "brief": "'Adumbrate' means to outline or sketch broadly without giving detailed information[cite: 9]."},
+        {"num": 109, "module": "Module 5: Contextual Vocab I", "q": "\"The cultural critic's review of the contemporary art exhibition was littered with ________ remarks, dismissing the avant-garde installations as mere amateurish provocations rather than genuine artistic expressions.\" Which word fits best?", "options": ["A) Pejorative / Derogatory", "B) Encomiastic", "C) Conciliatory", "D) Didactic"], "ans": 0, "brief": "'Pejorative' and 'derogatory' mean expressing contempt, disapproval, or belittling[cite: 9]."},
+        {"num": 110, "module": "Module 5: Contextual Vocab I", "q": "\"The veteran ambassador was appalled when the visiting envoy reduced the complex, high-stakes bilateral trade negotiations to a series of ________ complaints regarding the banquet's catering arrangements.\" Which word fits best?", "options": ["A) Puerile / Jejune / Fatuous / Vapid", "B) Judicious", "C) Sagacious", "D) Mature"], "ans": 0, "brief": "'Puerile', 'jejune', 'fatuous', and 'vapid' describe childish, silly, and immature behavior[cite: 9]."},
+        {"num": 111, "module": "Module 5: Contextual Vocab I", "q": "\"At the high-profile press conference, the acclaimed author merely offered a ________ smile in response to the overwhelming praise, gracefully shifting the spotlight toward her editors and research team.\" Which word fits best?", "options": ["A) Demure / Reserved", "B) Histrionic", "C) Acerbic", "D) Petulant"], "ans": 0, "brief": "'Demure' and 'reserved' describe modest, shy, and unassuming behavior[cite: 9]."},
+        {"num": 112, "module": "Module 5: Contextual Vocab I", "q": "\"Relying entirely on outdated demographic data to project next year's market trends proved to be a barely ________ strategy for the regional sales team.\" Which word fits best?", "options": ["A) Tenable / Germane", "B) Incontrovertible", "C) Epistolary", "D) Unsustainable"], "ans": 0, "brief": "'Tenable' means able to be maintained or defended against objection[cite: 9]."},
+        {"num": 113, "module": "Module 5: Contextual Vocab I", "q": "\"The sudden and uninvited arrival of the outspoken critic created an ________ situation at the gallery opening, prompting the organizers to swiftly intervene and manage the press.\" Which word fits best?", "options": ["A) Untoward / Inconvenient", "B) Expedient", "C) Dilatory", "D) Discomfit"], "ans": 0, "brief": "'Untoward' means inconvenient, awkward, unexpected, and inappropriate[cite: 9]."},
+        {"num": 114, "module": "Module 5: Contextual Vocab I", "q": "\"Seated at the head of the expansive boardroom table, the veteran director chose to ________ the intern's innovative marketing proposal, branding the entire concept as a naive miscalculation.\" Which word fits best?", "options": ["A) Deride / Excoriate / Impugn / Cavil", "B) Edify", "C) Praise", "D) Extol"], "ans": 0, "brief": "'Deride', 'excoriate', 'impugn', and 'cavil' mean to ridicule, mock, and severely criticize[cite: 9]."},
+        {"num": 115, "module": "Module 5: Contextual Vocab I", "q": "\"Eager to distance himself from the ensuing corporate scandal, the embattled CEO took to national television to vehemently ________ the whistleblower's damaging allegations.\" Which word fits best?", "options": ["A) Repudiate / Gainsay", "B) Conflate", "C) Condone", "D) Construe"], "ans": 0, "brief": "'Repudiate' and 'gainsay' mean to deny the truth or validity of an allegation[cite: 9]."},
+        {"num": 116, "module": "Module 5: Contextual Vocab I", "q": "\"The sudden arrival of the advanced mechanized infantry units gave a massive ________ to the stalled ground offensive, instantly forcing the enemy lines to fall back.\" Which word fits best?", "options": ["A) Impetus / Gambit", "B) Fetter", "C) Hindrance", "D) Obstacle"], "ans": 0, "brief": "'Impetus' means a driving force, momentum, or stimulus that makes something happen faster[cite: 9]."},
+        {"num": 117, "module": "Module 5: Contextual Vocab I", "q": "\"The citizens soon realized that their newly elected leader was essentially a ________, ruling the provincial capital with an iron fist and immediately crushing all political opposition.\" Which word fits best?", "options": ["A) Despot / Autocrat", "B) Derelict", "C) Ecumenical", "D) Desultory"], "ans": 0, "brief": "'Despot' and 'autocrat' refer to a tyrant ruler holding absolute power[cite: 9]."},
+        {"num": 118, "module": "Module 5: Contextual Vocab I", "q": "\"The frustrated professor wrote a lengthy ________ against the modern education system, and the controversial article quickly went viral across various academic forums.\" Which word fits best?", "options": ["A) Polemic / Assail", "B) Conciliation", "C) Bedlam", "D) Eulogy"], "ans": 0, "brief": "'Polemic' is a strong verbal or written attack against someone's opinions or institutions[cite: 9]."},
+        {"num": 119, "module": "Module 5: Contextual Vocab I", "q": "\"The various local community organizations decided to ________ into a single unified council ahead of the highly anticipated municipal elections.\" Which word fits best?", "options": ["A) Coalesce", "B) Fissure", "C) Countermand", "D) Disintegrate"], "ans": 0, "brief": "'Coalesce' means to come together to form one mass or whole[cite: 9]."},
+        {"num": 120, "module": "Module 5: Contextual Vocab I", "q": "\"The centuries-old mountain outpost acted as an impenetrable ________ for the retreating infantry battalion, effectively shielding their vulnerable supply lines from the relentless artillery bombardments.\" Which word fits best?", "options": ["A) Bastion / Citadel / Fortress", "B) Vulnerability", "C) Defile", "D) Fissure"], "ans": 0, "brief": "'Bastion', 'citadel', and 'fortress' denote an impenetrable stronghold protecting against attack[cite: 9]."},
+        {"num": 121, "module": "Module 5: Contextual Vocab I", "q": "What is the antonym of 'IMPECUNIOUS' from the aristocrat sentence context?", "options": ["A) Affluent / Solvent / Opulent", "B) Destitute / Poor", "C) Penurious / Miserly", "D) Bankrupt / Insolvent"], "ans": 0, "brief": "'Impecunious' (poor) is contrasted with 'affluent', 'solvent', and 'opulent' (wealthy)[cite: 9]."},
+        {"num": 122, "module": "Module 5: Contextual Vocab I", "q": "What is the antonym of 'GRANDILOQUENT' from the commencement address context?", "options": ["A) Unpretentious / Simple", "B) Bombastic / Magniloquent", "C) Rhetorical / Pompous", "D) Verbose / Loquacious"], "ans": 0, "brief": "'Grandiloquent' (pompous) is contrasted with 'unpretentious' and simple speech[cite: 9]."},
+        {"num": 123, "module": "Module 5: Contextual Vocab I", "q": "What is the antonym of 'MUNIFICENCE' from the rural healthcare context?", "options": ["A) Cupidity / Penury / Avarice", "B) Generosity / Bounty", "C) Charity / Altruism", "D) Benevolence"], "ans": 0, "brief": "'Munificence' (extreme generosity) is contrasted with 'cupidity' (greed) and 'penury' (poverty)[cite: 9]."},
+        {"num": 124, "module": "Module 5: Contextual Vocab I", "q": "What is the antonym of 'DIAPHANOUS' from the museum silk garment context?", "options": ["A) Opaque / Thick / Coarse", "B) Gossamer / Pellucid / Limpid", "C) Translucent / Clear", "D) Fragile / Delicate"], "ans": 0, "brief": "'Diaphanous' (delicate/translucent) is contrasted with 'opaque' and coarse[cite: 9]."},
+        {"num": 125, "module": "Module 5: Contextual Vocab I", "q": "What is the antonym of 'EXECRABLE' from the human rights commission context?", "options": ["A) Meritorious / Venerable / Praiseworthy", "B) Odious / Abhorrent", "C) Detestable / Loathsome", "D) Terrible / Horroble"], "ans": 0, "brief": "'Execrable' (extremely bad) is contrasted with 'meritorious' and 'venerable'[cite: 9]."},
+
+        // MODULE 6: SENTENCE COMPLETION & ADVANCED CONTEXTUAL VOCAB II (126-150)
+        {"num": 126, "module": "Module 6: Contextual Vocab II", "q": "What is the antonym of 'ELEGIAC' from the solitary cellist context?", "options": ["A) Exultant / Joyful / Jubilant", "B) Plaintive / Sepulchral", "C) Mournful / Sorrowful", "D) Melancholy / Sad"], "ans": 0, "brief": "'Elegiac' (mournful) is contrasted with 'exultant' and joyful[cite: 9]."},
+        {"num": 127, "module": "Module 6: Contextual Vocab II", "q": "What is the antonym of 'ABJURE' from the royal advisors context?", "options": ["A) Espouse / Vindicate / Corroborate", "B) Forswear / Renounce", "C) Reject / Abandon", "D) Deny / Repudiate"], "ans": 0, "brief": "'Abjure' (renounce) is contrasted with 'espouse' (adopt/support) and 'corroborate'[cite: 9]."},
+        {"num": 128, "module": "Module 6: Contextual Vocab II", "q": "What is the antonym of 'ADUMBRATE' from the legislative draft context?", "options": ["A) Elucidate / Explain clearly", "B) Portend / Foreshadow", "C) Obfuscate / Cloud", "D) Suggest / Outline"], "ans": 0, "brief": "'Adumbrate' (vague outline) is contrasted with 'elucidate' (explain clearly)[cite: 9]."},
+        {"num": 129, "module": "Module 6: Contextual Vocab II", "q": "What is the antonym of 'PEJORATIVE' from the art exhibition review context?", "options": ["A) Encomiastic / Conciliatory / Didactic", "B) Derogatory / Disparaging", "C) Belittling / Slighting", "D) Denigratory / Abusive"], "ans": 0, "brief": "'Pejorative' (belittling) is contrasted with 'encomiastic' (praising highly)[cite: 9]."},
+        {"num": 130, "module": "Module 6: Contextual Vocab II", "q": "What is the antonym of 'PUERILE' from the bilateral trade negotiations context?", "options": ["A) Judicious / Sagacious / Mature", "B) Jejune / Fatuous / Vapid", "C) Childish / Immature", "D) Silly / Foolish"], "ans": 0, "brief": "'Puerile' (childish/silly) is contrasted with 'judicious' (wise/mature)[cite: 9]."},
+        {"num": 131, "module": "Module 6: Contextual Vocab II", "q": "What is the antonym of 'DEMURE' from the press conference context?", "options": ["A) Histrionic / Acerbic / Petulant", "B) Reserved / Modest", "C) Shy / Bashful", "D) Quiet / Unassuming"], "ans": 0, "brief": "'Demure' (modest/reserved) is contrasted with 'histrionic' (dramatic/theatrical)[cite: 9]."},
+        {"num": 132, "module": "Module 6: Contextual Vocab II", "q": "What is the antonym of 'TENABLE' from the demographic data strategy context?", "options": ["A) Unsustainable / Incontrovertible / Epistolary", "B) Germane / Defensible", "C) Valid / Reasonable", "D) Logical / Practical"], "ans": 0, "brief": "'Tenable' (defensible) is contrasted with 'unsustainable'[cite: 9]."},
+        {"num": 133, "module": "Module 6: Contextual Vocab II", "q": "What is the antonym of 'UNTOWARD' from the gallery opening context?", "options": ["A) Expedient / Favorable / Convenient", "B) Inconvenient / Awkward", "C) Dilatory / Slow", "D) Discomfit / Embarrassing"], "ans": 0, "brief": "'Untoward' (inconvenient/inappropriate) is contrasted with 'expedient' and favorable[cite: 9]."},
+        {"num": 134, "module": "Module 6: Contextual Vocab II", "q": "What is the antonym of 'DERIDE' from the boardroom marketing proposal context?", "options": ["A) Edify / Praise / Extol", "B) Excoriate / Impugn / Cavil", "C) Mock / Ridicule", "D) Scorn / Belittle"], "ans": 0, "brief": "'Deride' (ridicule) is contrasted with 'edify' (instruct/improve) and praise[cite: 9]."},
+        {"num": 135, "module": "Module 6: Contextual Vocab II", "q": "What is the antonym of 'REPUDIATE' from the CEO scandal context?", "options": ["A) Condone / Conflate / Construe / Admit", "B) Gainsay / Deny", "C) Reject / Disown", "D) Renounce / Abjure"], "ans": 0, "brief": "'Repudiate' (deny/reject) is contrasted with 'condone' (accept/allow)[cite: 9]."},
+        {"num": 136, "module": "Module 6: Contextual Vocab II", "q": "What is the antonym of 'IMPETUS' from the mechanized infantry context?", "options": ["A) Fetter / Hindrance / Obstacle", "B) Gambit / Stimulus", "C) Momentum / Drive", "D) Force / Boost"], "ans": 0, "brief": "'Impetus' (driving force) is contrasted with 'fetter' (shackle/hindrance)[cite: 9]."},
+        {"num": 137, "module": "Module 6: Contextual Vocab II", "q": "What is the antonym of 'DESPOT' from the newly elected leader context?", "options": ["A) Democrat / Egalitarian", "B) Autocrat / Tyrant", "C) Derelict", "D) Desultory"], "ans": 0, "brief": "'Despot' (absolute tyrant) is contrasted with democratic or egalitarian leaders[cite: 9]."},
+        {"num": 138, "module": "Module 6: Contextual Vocab II", "q": "What is the antonym of 'POLEMIC' from the education system article context?", "options": ["A) Conciliation / Praise / Agreement", "B) Assail / Attack", "C) Bedlam / Turmoil", "D) Controversy / Dispute"], "ans": 0, "brief": "'Polemic' (aggressive verbal attack) is contrasted with 'conciliation' and agreement[cite: 9]."},
+        {"num": 139, "module": "Module 6: Contextual Vocab II", "q": "What is the antonym of 'COALESCE' from the municipal elections context?", "options": ["A) Fissure / Disintegrate / Separate", "B) Unite / Combine", "C) Extant / Existing", "D) Countermand / Cancel"], "ans": 0, "brief": "'Coalesce' (unite into one) is contrasted with 'fissure' (split/separate)[cite: 9]."},
+        {"num": 140, "module": "Module 6: Contextual Vocab II", "q": "What is the antonym of 'BASTION' from the mountain outpost context?", "options": ["A) Vulnerability / Weakness", "B) Citadel / Fortress", "C) Plenary / Complete", "D) Indelible / Permanent"], "ans": 0, "brief": "'Bastion' (stronghold) is contrasted with 'vulnerability' and weakness[cite: 9]."},
+        {"num": 141, "module": "Module 6: Contextual Vocab II", "q": "Which word means 'temporary, fleeting, ephemeral, short-lived'?", "options": ["A) Transient", "B) Chronic", "C) Habitual", "D) Entrenched"], "ans": 0, "brief": "'Transient' means lasting only for a short time, fleeting, and ephemeral[cite: 9]."},
+        {"num": 142, "module": "Module 6: Contextual Vocab II", "q": "Which word means 'stubborn, uncompromising, refusing to change views'?", "options": ["A) Intransigent / Recalcitrant", "B) Flexible", "C) Compliant", "D) Liberal"], "ans": 0, "brief": "'Intransigent' and 'recalcitrant' mean stubbornly uncompromising and refusing to comply[cite: 9]."},
+        {"num": 143, "module": "Module 6: Contextual Vocab II", "q": "Which word means 'eager or quick to argue, quarrel, or fight'?", "options": ["A) Pugnacious / Belligerent / Contentious", "B) Peaceful / Amicable", "C) Convivial / Gregarious", "D) Passive / Submissive"], "ans": 0, "brief": "'Pugnacious' means eager or quick to argue, quarrel, or fight[cite: 9]."},
+        {"num": 144, "module": "Module 6: Contextual Vocab II", "q": "Which word means 'fertile, productive, capable of producing new life'?", "options": ["A) Fecund / Generative / Teeming", "B) Sterile / Barren", "C) Dry / Arid", "D) Meager / Scanty"], "ans": 0, "brief": "'Fecund', 'generative', and 'teeming' mean fertile and highly productive[cite: 9]."},
+        {"num": 145, "module": "Module 6: Contextual Vocab II", "q": "Which word means 'infertile, barren, unable to produce offspring'?", "options": ["A) Sterile", "B) Fecund", "C) Generative", "D) Teeming"], "ans": 0, "brief": "'Sterile' means infertile, barren, and incapable of reproduction[cite: 9]."},
+        {"num": 146, "module": "Module 6: Contextual Vocab II", "q": "Which word means 'sharp, harsh, corrosive, or biting in taste or speech'?", "options": ["A) Astringent / Caustic", "B) Lenitive / Soothing", "C) Mild / Innocuous", "D) Sweet / Gooey"], "ans": 0, "brief": "'Astringent' and 'caustic' mean sharp, harsh, corrosive, or biting[cite: 9]."},
+        {"num": 147, "module": "Module 6: Contextual Vocab II", "q": "Which word means 'soothing, gentle, capable of easing pain or distress'?", "options": ["A) Lenitive", "B) Astringent", "C) Caustic", "D) Mordant"], "ans": 0, "brief": "'Lenitive' means soothing, gentle, and capable of relieving pain[cite: 9]."},
+        {"num": 148, "module": "Module 6: Contextual Vocab II", "q": "Which word means 'in an early stage of development; beginning; incipient; nascent'?", "options": ["A) Embryonic / Incipient / Nascent", "B) Consummate / Supreme", "C) Obsolete / Archaic", "D) Fully formed / Mature"], "ans": 0, "brief": "'Embryonic', 'incipient', and 'nascent' mean beginning to develop or just emerging[cite: 9]."},
+        {"num": 149, "module": "Module 6: Contextual Vocab II", "q": "Which word means 'complete, perfect, supreme, or highly skilled'?", "options": ["A) Consummate", "B) Embryonic", "C) Nascent", "D) Amateur"], "ans": 0, "brief": "'Consummate' means showing a supreme degree of skill and flair; complete and perfect[cite: 9]."},
+        {"num": 150, "module": "Module 6: Contextual Vocab II", "q": "Which word means 'a clever witty remark or jest'?", "options": ["A) Bon mot", "B) Polemic", "C) Harangue", "D) Tirade"], "ans": 0, "brief": "'Bon mot' literally means a good word, denoting a clever witty remark or repartee[cite: 9]."},
+
+        // MODULE 7: PERSONALITY, SPEECH & BEHAVIORAL TRAITS (151-175)
+        {"num": 151, "module": "Module 7: Personality & Speech", "q": "What does 'ELOQUENT' mean in terms of speech?", "options": ["A) Fluent / Articulate / Persuasive in speaking or writing", "B) Silent / Taciturn / Reticent", "C) Hesitant / Stuttering", "D) Incoherent / Confused"], "ans": 0, "brief": "'Eloquent' means fluent, articulate, and persuasive in speech or writing[cite: 9]."},
+        {"num": 152, "module": "Module 7: Personality & Speech", "q": "What does 'LOQUACIOUS / GLIB' mean?", "options": ["A) Talkative / Voluble / Chatty / Fluent in a shallow way", "B) Silent / Reserved / Taciturn", "C) Shy / Timid / Diffident", "D) Rude / Churlish / Surly"], "ans": 0, "brief": "'Loquacious' means talkative and voluble; 'glib' means fluent but shallow or insincere[cite: 9]."},
+        {"num": 153, "module": "Module 7: Personality & Speech", "q": "What does 'TACITURN / RETICENT' mean?", "options": ["A) Habitually silent / Reluctant to speak / Reserved ('कम बोलने वाला')", "B) Talkative / Loquacious / Voluble", "C) Outspoken / Vociferous / Clamorous", "D) Boisterous / Obstreperous / Unruly"], "ans": 0, "brief": "'Taciturn' and 'reticent' describe a person habitually silent and reluctant to speak[cite: 9]."},
+        {"num": 154, "module": "Module 7: Personality & Speech", "q": "What is the meaning of 'ARTICULATE' as an adjective?", "options": ["A) Able to speak clearly and expressively; eloquent", "B) Silent / Speechless / Mute", "C) Clumsy / Inept / Awkward", "D) Confused / Muddled / Unclear"], "ans": 0, "brief": "'Articulate' describes someone able to express thoughts clearly and eloquently[cite: 9]."},
+        {"num": 155, "module": "Module 7: Personality & Speech", "q": "What does 'BANTER' mean?", "options": ["A) Clever repartee / Jesting / Joke / Chaff / Persiflage / Ribbing / Good teasing", "B) Serious argument / Dispute / Fight", "C) Severe scolding / Reprimand / Rebuke", "D) Sorrowful lament / Elegy / Dirge"], "ans": 0, "brief": "'Banter' refers to playful, friendly teasing, clever repartee, jesting, chaff, persiflage, and ribbing[cite: 9]."},
+        {"num": 156, "module": "Module 7: Personality & Speech", "q": "What does 'PERSIFLAGE' mean?", "options": ["A) Playful mocking / Light banter / Chaff / Teasing", "B) Serious criticism / Polemic / Attack", "C) Deep sorrow / Melancholy / Grief", "D) Absolute honesty / Probity / Integrity"], "ans": 0, "brief": "'Persiflage' means light, playful mockery and banter[cite: 9]."},
+        {"num": 157, "module": "Module 7: Personality & Speech", "q": "What does the adjective 'IRKSOME' describe?", "options": ["A) Irritating / Annoying / Tedious / Vexing ('He is whistling again! It's so irksome.')", "B) Pleasant / Enjoyable / Delightful", "C) Calm / Serene / Placid", "D) Generous / Munificent / Bountiful"], "ans": 0, "brief": "'Irksome' means irritating, annoying, tedious, and vexing[cite: 9]."},
+        {"num": 158, "module": "Module 7: Personality & Speech", "q": "What does 'BON MOT' mean?", "options": ["A) Clever / Witty remark / Repartee", "B) Foolish speech / Puerile talk", "C) Sad poem / Elegy / Lament", "D) Secret plot / Machination"], "ans": 0, "brief": "'Bon mot' means a clever, witty remark or smart repartee[cite: 9]."},
+        {"num": 159, "module": "Module 7: Personality & Speech", "q": "What does 'REPARTEE' mean?", "options": ["A) Swift, clever, and witty reply; banter", "B) Long boring lecture / Harangue", "C) Hesitant stammer / Speechlessness", "D) Defamatory speech / Obloquy"], "ans": 0, "brief": "'Repartee' refers to conversation characterized by quick, witty, and clever replies[cite: 9]."},
+        {"num": 160, "module": "Module 7: Personality & Speech", "q": "What is 'JESTING / CHAFF / RIBBING'?", "options": ["A) Good-humored teasing / Banter / Joke", "B) Bitter sarcasm / Caustic insult", "C) Violent attack / Assault / Polemic", "D) Sorrowful crying / Maudlin weeping"], "ans": 0, "brief": "'Jesting', 'chaff', and 'ribbing' mean friendly, good-humored teasing and banter[cite: 9]."},
+        {"num": 161, "module": "Module 7: Personality & Speech", "q": "What does the word 'IMPASSIVE' mean?", "options": ["A) Showing no emotion / Unmoved / Expressionless / Stoic", "B) Highly emotional / Maudlin / Tearful", "C) Enthusiastic / Eager / Zealous", "D) Angry / Irascible / Choleric"], "ans": 0, "brief": "'Impassive' means showing no emotion, unmoved, expressionless, and stoic ('She remained impassive')[cite: 9]."},
+        {"num": 162, "module": "Module 7: Personality & Speech", "q": "What does 'VOLUBLE' mean?", "options": ["A) Speaking incessantly and fluently; loquacious; talkative", "B) Habitually silent / Taciturn", "C) Shy / Bashful / Diffident", "D) Clumsy / Inept / Awkward"], "ans": 0, "brief": "'Voluble' means speaking incessantly, fluently, and talkatively[cite: 9]."},
+        {"num": 163, "module": "Module 7: Personality & Speech", "q": "What does 'GLIB' mean?", "options": ["A) Fluent and voluble but insincere and shallow", "B) Deeply thoughtful / Sagacious / Astute", "C) Silent / Reticent / Taciturn", "D) Rude / Boorish / Churlish"], "ans": 0, "brief": "'Glib' describes speech that is fluent and smooth but shallow and insincere[cite: 9]."},
+        {"num": 164, "module": "Module 7: Personality & Speech", "q": "What is the meaning of 'SCORNFUL / DISDAINFUL'?", "options": ["A) Showing contempt or lack of respect; supercilious", "B) Showing deep respect; venerable", "C) Friendly and sociable; convivial", "D) Modest and shy; diffident"], "ans": 0, "brief": "'Scornful' and 'disdainful' mean showing contempt and supercilious lack of respect[cite: 9]."},
+        {"num": 165, "module": "Module 7: Personality & Speech", "q": "What does 'DENIGRATORY / DISPARAGING' mean?", "options": ["A) Belittling / Slighting / Pejorative / Defamatory", "B) Praising / Extolling / Encomiastic", "C) Forgiving / Magnanimous / Generous", "D) Honest / Truthful / Candid"], "ans": 0, "brief": "'Denigratory' and 'disparaging' mean belittling, slighting, pejorative, and speaking ill of[cite: 9]."},
+        {"num": 166, "module": "Module 7: Personality & Speech", "q": "What does 'RAMBUNCTIOUS / BOISTEROUS' mean?", "options": ["A) Unruly / Uncontrollable / Noisy / Clamorous / Vociferous", "B) Quiet / Placid / Serene / Calm", "C) Modest / Demure / Reserved", "D) Lazy / Lackadaisical / Torpid"], "ans": 0, "brief": "'Rambunctious' and 'boisterous' mean uncontrollably noisy, unruly, and clamorous[cite: 9]."},
+        {"num": 167, "module": "Module 7: Personality & Speech", "q": "What is the meaning of 'BEDLAM / COMMOTION / MAYHEM'?", "options": ["A) Uproar / Chaos / Confusion / Rampage / Turmoil", "B) Silence / Peace / Tranquility", "C) Order / Structure / Arrangement", "D) Honesty / Probity / Integrity"], "ans": 0, "brief": "'Bedlam', 'commotion', and 'mayhem' mean wild uproar, chaos, confusion, and turmoil[cite: 9]."},
+        {"num": 168, "module": "Module 7: Personality & Speech", "q": "What does 'RAUCOUS / STRIDENT' mean?", "options": ["A) Harsh / Loud / Screeching / Noisy / Vociferous", "B) Soothing / Melodious / Gentle / Lenitive", "C) Silent / Mute / Quiet", "D) Soft / Whispered / Subtle"], "ans": 0, "brief": "'Raucous' and 'strident' describe loud, harsh, screeching, and deafening sounds[cite: 9]."},
+        {"num": 169, "module": "Module 7: Personality & Speech", "q": "What does 'BERATE / UPBRAID / CHIDE' mean?", "options": ["A) Scold / Reprimand / Rebuke / Chastise / Admonish", "B) Praise / Extol / Laud / Glorify", "C) Comfort / Assuage / Soothe", "D) Obey / Comply / Acquiesce"], "ans": 0, "brief": "'Berate', 'upbraid', and 'chide' mean to scold angrily, reprimand, and rebuke[cite: 9]."},
+        {"num": 170, "module": "Module 7: Personality & Speech", "q": "What does 'LAMBASTE / CENSURE / VITUPERATE' mean?", "options": ["A) Criticize severely / Condemn / Reproach / Berate", "B) Extol / Praise enthusiastically / Eulogize", "C) Forgive / Exonerate / Absolve", "D) Support / Assist / Foster"], "ans": 0, "brief": "'Lambaste', 'censure', and 'vituperate' mean to condemn and criticize severely[cite: 9]."},
+        {"num": 171, "module": "Module 7: Personality & Speech", "q": "What does 'EULOGIZE / LAUD' mean?", "options": ["A) Praise highly / Extol / Celebrate / Glorify", "B) Belittle / Denigrate / Disparage", "C) Scold / Reprimand / Rebuke", "D) Ignore / Neglect / Overlook"], "ans": 0, "brief": "'Eulogize' and 'laud' mean to praise highly and celebrate someone's achievements[cite: 9]."},
+        {"num": 172, "module": "Module 7: Personality & Speech", "q": "What does 'DELIRIUM / HYSTERIA / FUROR' mean?", "options": ["A) Uncontrolled wild excitement / Frenzy / Rampage", "B) Calm coolness / Sangfroid / Composure", "C) Deep sadness / Melancholy / Grief", "D) Laziness / Torpor / Indolence"], "ans": 0, "brief": "'Delirium', 'hysteria', and 'furor' refer to uncontrolled wild excitement and frenzy[cite: 9]."},
+        {"num": 173, "module": "Module 7: Personality & Speech", "q": "What does 'LOATHE / REVILE / DISPARAGE' mean?", "options": ["A) Hate intensely / Abuse verbally / Belittle / Contemn", "B) Love / Admire / Deify / Exalt", "C) Assist / Help / Support", "D) Respect / Revere / Venerate"], "ans": 0, "brief": "'Loathe', 'revile', and 'disparage' mean to hate intensely and abuse verbally[cite: 9]."},
+        {"num": 174, "module": "Module 7: Personality & Speech", "q": "What does 'PROCLIVITY / PREDILECTION' mean?", "options": ["A) Natural liking / Penchant / Fondness / Inclination", "B) Natural hatred / Aversion / Loathing", "C) Fear / Trepidation / Dread", "D) Ignorance / Lack of skill / Amateurishness"], "ans": 0, "brief": "'Proclivity' and 'predilection' mean a natural liking, penchant, or inclination toward something[cite: 9]."},
+        {"num": 175, "module": "Module 7: Personality & Speech", "q": "What does 'QUALM / CONTRITION / REMORSE' mean?", "options": ["A) Feeling of doubt / Repentance / Sorrow for sin / Penitence", "B) Feeling of pride / Conceit / Vanity", "C) Feeling of anger / Irascibility / Truculence", "D) Feeling of joy / Elation / Exultation"], "ans": 0, "brief": "'Qualm', 'contrition', and 'remorse' mean feelings of doubt, repentance, and penitence[cite: 9]."},
+
+        // MODULE 8: ANTONYMS & WORD OPPOSITES – AFCAT PYQ PATTERNS (176-200)
+        {"num": 176, "module": "Module 8: Antonyms & Opposites", "q": "What is the antonym of 'OUTLANDISH' as listed in the final surprise section?", "options": ["A) Conventional / Normal / Commonplace", "B) Bizarre / Weird / Exotic", "C) Foreign / Alien", "D) Wild / Uncontrolled"], "ans": 0, "brief": "'Outlandish' (bizarre/unconventional) is contrasted with conventional, normal, and ordinary[cite: 9]."},
+        {"num": 177, "module": "Module 8: Antonyms & Opposites", "q": "What is the antonym of 'ROUNDABOUT'?", "options": ["A) Direct / Straightforward / Concise", "B) Indirect / Circuitous / Tortuous", "C) Complicated / Labyrinthine", "D) Vague / Ambiguous / Delphic"], "ans": 0, "brief": "'Roundabout' (circuitous/indirect) is contrasted with direct and straightforward[cite: 9]."},
+        {"num": 178, "module": "Module 8: Antonyms & Opposites", "q": "What is the antonym of 'EMASCULATE'?", "options": ["A) Strengthen / Invigorate / Empower", "B) Weaken / Enfeeble / Debilitate", "C) Destroy / Ruin / Wreck", "D) Exclude / Ostracize / Banish"], "ans": 0, "brief": "'Emasculate' (weaken/deprive of strength) is contrasted with strengthen and empower[cite: 9]."},
+        {"num": 179, "module": "Module 8: Antonyms & Opposites", "q": "What is the antonym of 'BRACE'?", "options": ["A) Weaken / Loosen / Relax", "B) Support / Fortify / Reinforce", "C) Connect / Join / Link", "D) Prepare / Ready"], "ans": 0, "brief": "'Brace' (support/strengthen/prepare) is contrasted with weaken, loosen, or relax[cite: 9]."},
+        {"num": 180, "module": "Module 8: Antonyms & Opposites", "q": "What is the antonym of 'GULL' (verb: to deceive)?", "options": ["A) Enlighten / Undeceive / Be honest with", "B) Cheat / Trick / Dupe", "C) Fool / Mislead / Beguile", "D) Mock / Deride / Scorn"], "ans": 0, "brief": "'Gull' (to deceive/dupe) is contrasted with enlighten, undeceive, or deal honestly[cite: 9]."},
+        {"num": 181, "module": "Module 8: Antonyms & Opposites", "q": "What is the antonym of 'INCAPACITATE'?", "options": ["A) Enable / Facilitate / Empower / Restore", "B) Disable / Cripple / Impair", "C) Hinder / Impede / Preclude", "D) Weaken / Enfeeble"], "ans": 0, "brief": "'Incapacitate' (disable/impair) is contrasted with enable, facilitate, and restore[cite: 9]."},
+        {"num": 182, "module": "Module 8: Antonyms & Opposites", "q": "What is the antonym of 'PLACEBO'?", "options": ["A) True cure / Genuine medicine / Elixir", "B) Inactive sugar pill / Dummy treatment", "C) Fake remedy / Bogus cure", "D) Poison / Toxin"], "ans": 0, "brief": "'Placebo' (dummy/inactive pill) is contrasted with a genuine cure or active medicine[cite: 9]."},
+        {"num": 183, "module": "Module 8: Antonyms & Opposites", "q": "What is the antonym of 'ELIXIR'?", "options": ["A) Poison / Toxin / Harmful potion", "B) Cure-all / Panacea / Magical remedy", "C) Medicine / Tonic / Restoration", "D) Water / Liquid / Drink"], "ans": 0, "brief": "'Elixir' (magical restorative potion) is contrasted with poison or toxin[cite: 9]."},
+        {"num": 184, "module": "Module 8: Antonyms & Opposites", "q": "What is the antonym of 'MENDACITY'?", "options": ["A) Candor / Truthfulness / Honesty / Probity", "B) Deceit / Lying / Duplicity / Fraud", "C) Arrogance / Conceit / Vanity", "D) Laziness / Torpor / Sluggishness"], "ans": 0, "brief": "'Mendacity' (lying/deceitfulness) is contrasted with candor, truthfulness, and probity[cite: 9]."},
+        {"num": 185, "module": "Module 8: Antonyms & Opposites", "q": "What is the antonym of 'CANDOUR'?", "options": ["A) Mendacity / Deceitfulness / Subterfuge / Duplicity", "B) Frankness / Openness / Honesty", "C) Bravery / Courage / Valor", "D) Kindness / Charity / Benevolence"], "ans": 0, "brief": "'Candour' (open honesty) is contrasted with mendacity and duplicity[cite: 9]."},
+        {"num": 186, "module": "Module 8: Antonyms & Opposites", "q": "What is the antonym of 'PLACID'?", "options": ["A) Turbulent / Stormy / Agitated / Boisterous", "B) Calm / Peaceful / Serene / Untroubled", "C) Quiet / Silent / Taciturn", "D) Kind / Gentle / Lenitive"], "ans": 0, "brief": "'Placid' (calm/peaceful) is contrasted with turbulent, stormy, and agitated[cite: 9]."},
+        {"num": 187, "module": "Module 8: Antonyms & Opposites", "q": "What is the antonym of 'PROFUSE'?", "options": ["A) Scanty / Meager / Sparse / Paltry", "B) Abundant / Plentiful / Copious / Plethora", "C) Generous / Munificent / Bountiful", "D) Showy / Ostentatious / Flamboyant"], "ans": 0, "brief": "'Profuse' (abundant/copious) is contrasted with scanty, meager, and sparse[cite: 9]."},
+        {"num": 188, "module": "Module 8: Antonyms & Opposites", "q": "What is the antonym of 'PENURIOUS'?", "options": ["A) Generous / Lavish / Affluent / Munificent", "B) Stingy / Miserly / Parsimonious / Destitute", "C) Cruel / Callous / Ruthless", "D) Lazy / Indolent / Lackadaisical"], "ans": 0, "brief": "'Penurious' (miserly/extremely poor) is contrasted with generous, lavish, and affluent[cite: 9]."},
+        {"num": 189, "module": "Module 8: Antonyms & Opposites", "q": "What is the antonym of 'STINGY'?", "options": ["A) Generous / Liberal / Munificent / Bountiful", "B) Parsimonious / Miserly / Penurious", "C) Greedy / Avaricious / Rapacious", "D) Shy / Timid / Diffident"], "ans": 0, "brief": "'Stingy' (unwilling to spend) is contrasted with generous, liberal, and munificent[cite: 9]."},
+        {"num": 190, "module": "Module 8: Antonyms & Opposites", "q": "What is the antonym of 'DAUNTLESS'?", "options": ["A) Craven / Timid / Cowardly / Pusillanimous", "B) Intrepid / Valiant / Brave", "C) Confident / Bold / Audacious", "D) Polite / Urbane / Refined"], "ans": 0, "brief": "'Dauntless' (fearless) is contrasted with craven, timid, and cowardly[cite: 9]."},
+        {"num": 191, "module": "Module 8: Antonyms & Opposites", "q": "What is the antonym of 'APPREHENSION'?", "options": ["A) Confidence / Tranquility / Peace of mind / Assurance", "B) Anxiety / Dread / Trepidation", "C) Anger / Furor / Rage", "D) Boredom / Tedium / Ennui"], "ans": 0, "brief": "'Apprehension' (anxious dread) is contrasted with confidence and tranquility[cite: 9]."},
+        {"num": 192, "module": "Module 8: Antonyms & Opposites", "q": "What is the antonym of 'TRUNCATE'?", "options": ["A) Elongate / Extend / Prolong / Lengthen", "B) Shorten / Trim / Prune", "C) Destroy / Ruin / Shatter", "D) Exclude / Banish / Ostracize"], "ans": 0, "brief": "'Truncate' (shorten by cutting) is contrasted with elongate, extend, and prolong[cite: 9]."},
+        {"num": 193, "module": "Module 8: Antonyms & Opposites", "q": "What is the antonym of 'CAPTIOUS'?", "options": ["A) Generous / Forgiving / Uncritical / Appreciative", "B) Fault-finding / Carping / Censorious", "C) Argumentative / Contentious / Pugnacious", "D) Arrogant / Supercilious / Conceited"], "ans": 0, "brief": "'Captious' (hypercritical/fault-finding) is contrasted with forgiving, uncritical, and appreciative[cite: 9]."},
+        {"num": 194, "module": "Module 8: Antonyms & Opposites", "q": "What is the antonym of 'IRASCIBLE'?", "options": ["A) Even-tempered / Calm / Genial / Good-natured", "B) Quick-tempered / Cantankerous / Choleric", "C) Lazy / Sluggish / Torpid", "D) Proud / Vanity-filled / Narcissistic"], "ans": 0, "brief": "'Irascible' (easily angered) is contrasted with even-tempered, calm, and genial[cite: 9]."},
+        {"num": 195, "module": "Module 8: Antonyms & Opposites", "q": "What is the antonym of 'EMBELLISH'?", "options": ["A) Simplify / Strip / Deface / Mar / Disfigure", "B) Adorn / Decorate / Garnish", "C) Praise / Extol / Laud", "D) Connect / Coalesce / Join"], "ans": 0, "brief": "'Embellish' (adorn/decorate) is contrasted with simplify, strip, deface, or mar[cite: 9]."},
+        {"num": 196, "module": "Module 8: Antonyms & Opposites", "q": "What is the antonym of 'CONTENTIOUS'?", "options": ["A) Amicable / Peaceable / Conciliatory / Agreeable", "B) Quarrelsome / Pugnacious / Belligerent", "C) Secret / Covert / Clandestine", "D) Showy / Ostentatious / Flamboyant"], "ans": 0, "brief": "'Contentious' (quarrelsome) is contrasted with amicable, peaceable, and conciliatory[cite: 9]."},
+        {"num": 197, "module": "Module 8: Antonyms & Opposites", "q": "What is the antonym of 'DEIFY'?", "options": ["A) Degrading / Disparaging / Belittling / Demonizing", "B) Worshiping / Exalting / Idolizing", "C) Supporting / Assisting / Fostering", "D) Creating / Generating / Establishing"], "ans": 0, "brief": "'Deify' (exalt as god) is contrasted with degrading, disparaging, and demonizing[cite: 9]."},
+        {"num": 198, "module": "Module 8: Antonyms & Opposites", "q": "What is the antonym of 'VANQUISH'?", "options": ["A) Succumb / Surrender / Yield / Lose to", "B) Conquer / Overcome / Subdue", "C) Fight / Combat / Struggle", "D) Escape / Flee / Retreat"], "ans": 0, "brief": "'Vanquish' (conquer/defeat) is contrasted with succumb, surrender, and yield[cite: 9]."},
+        {"num": 199, "module": "Module 8: Antonyms & Opposites", "q": "What is the antonym of 'ACQUIESCE'?", "options": ["A) Resist / Object / Protest / Deny / Dispute", "B) Agree / Comply / Accede / Concede", "C) Help / Assist / Facilitate", "D) Relax / Rest / Slumber"], "ans": 0, "brief": "'Acquiesce' (submit quietly) is contrasted with resist, object, and protest[cite: 9]."},
+        {"num": 200, "module": "Module 8: Antonyms & Opposites", "q": "What is the antonym of 'CAPITULATE'?", "options": ["A) Resist / Fight on / Persevere / Hold out", "B) Surrender / Yield / Give in / Succumb", "C) Agree / Accede / Comply", "D) Escape / Run away / Flee"], "ans": 0, "brief": "'Capitulate' (surrender/yield) is contrasted with resist, fight on, and persevere[cite: 9]."},
+
+        // MODULE 9: IDIOMATIC VOCAB, NUANCES & TRICKY DISTINCTIONS (201-225)
+        {"num": 201, "module": "Module 9: Idioms & Nuances", "q": "What is the antonym of 'ASTUTE'?", "options": ["A) Obtuse / Gullible / Foolish / Inept", "B) Shrewd / Discerning / Sagacious", "C) Brave / Valiant / Dauntless", "D) Generous / Liberal / Munificent"], "ans": 0, "brief": "'Astute' (shrewd/sharp) is contrasted with obtuse, gullible, and foolish[cite: 9]."},
+        {"num": 202, "module": "Module 9: Idioms & Nuances", "q": "What is the antonym of 'EXTENUATE'?", "options": ["A) Aggravate / Exacerbate / Worsen / Intensify", "B) Palliate / Lessen / Diminish", "C) Excuse / Forgive / Absolve", "D) Hide / Conceal / Obfuscate"], "ans": 0, "brief": "'Extenuate' (lessen/mitigate seriousness) is contrasted with aggravate and exacerbate[cite: 9]."},
+        {"num": 203, "module": "Module 9: Idioms & Nuances", "q": "What is the antonym of 'ASSUAGE'?", "options": ["A) Aggravate / Exacerbate / Provoke / Inflame", "B) Soothe / Palliate / Relieve / Ease", "C) Help / Support / Assist", "D) Welcome / Embrace / Include"], "ans": 0, "brief": "'Assuage' (soothe/alleviate) is contrasted with aggravate, exacerbate, and inflame[cite: 9]."},
+        {"num": 204, "module": "Module 9: Idioms & Nuances", "q": "What is the antonym of 'SLOVENLY'?", "options": ["A) Immaculate / Meticulous / Neat / Fastidious", "B) Slipshod / Untidy / Messy", "C) Lazy / Apathetic / Torpid", "D) Rude / Surly / Churlish"], "ans": 0, "brief": "'Slovenly' (untidy/slipshod) is contrasted with immaculate, meticulous, and neat[cite: 9]."},
+        {"num": 205, "module": "Module 9: Idioms & Nuances", "q": "What is the antonym of 'CONVIVIAL'?", "options": ["A) Antisocial / Reclusive / Morose / Aloof", "B) Sociable / Gregarious / Genial", "C) Kind / Benevolent / Altruistic", "D) Wise / Sagacious / Astute"], "ans": 0, "brief": "'Convivial' (sociable/friendly) is contrasted with antisocial, reclusive, and morose[cite: 9]."},
+        {"num": 206, "module": "Module 9: Idioms & Nuances", "q": "What is the antonym of 'ANTEDILUVIAN'?", "options": ["A) Modern / Cutting-edge / Avant-Garde / Contemporary", "B) Archaic / Primitive / Prehistoric", "C) Old-fashioned / Obsolete / Ancient", "D) Simple / Elementary / Basic"], "ans": 0, "brief": "'Antediluvian' (prehistoric/ancient) is contrasted with modern, cutting-edge, and avant-garde[cite: 9]."},
+        {"num": 207, "module": "Module 9: Idioms & Nuances", "q": "What is the antonym of 'DELPHIC'?", "options": ["A) Explicit / Clear / Unambiguous / Pellucid", "B) Cryptic / Enigmatic / Arcane", "C) Mysterious / Obscure / Hidden", "D) Secret / Clandestine / Covert"], "ans": 0, "brief": "'Delphic' (cryptic/enigmatic) is contrasted with explicit, clear, and unambiguous[cite: 9]."},
+        {"num": 208, "module": "Module 9: Idioms & Nuances", "q": "What is the antonym of 'PRECLUDE'?", "options": ["A) Facilitate / Permit / Allow / Enable", "B) Prevent / Hinder / Impede", "C) Exclude / Banish / Ostracize", "D) Destroy / Wreck / Devastate"], "ans": 0, "brief": "'Preclude' (prevent/make impossible) is contrasted with facilitate, permit, and allow[cite: 9]."},
+        {"num": 209, "module": "Module 9: Idioms & Nuances", "q": "What is the antonym of 'EXONERATE'?", "options": ["A) Convict / Condemn / Inculpate / Incriminate", "B) Acquit / Absolve / Vindicate", "C) Forgive / Pardon / Release", "D) Praise / Extol / Laud"], "ans": 0, "brief": "'Exonerate' (clear from blame) is contrasted with convict, condemn, and inculpate[cite: 9]."},
+        {"num": 210, "module": "Module 9: Idioms & Nuances", "q": "What is the antonym of 'MAUDLIN'?", "options": ["A) Stoic / Unemotional / Matter-of-fact / Pragmatic", "B) Sentimental / Gooey / Tearful", "C) Sad / Disconsolate / Doleful", "D) Happy / Joyful / Exultant"], "ans": 0, "brief": "'Maudlin' (over-sentimental/gooey) is contrasted with stoic, unemotional, and pragmatic[cite: 9]."},
+        {"num": 211, "module": "Module 9: Idioms & Nuances", "q": "What is the antonym of 'DISCONSOLATE'?", "options": ["A) Joyful / Cheerful / Exultant / Blissful", "B) Doleful / Dejected / Crestfallen", "C) Woebegone / Forlorn / Morose", "D) Lonely / Abandoned / Solitary"], "ans": 0, "brief": "'Disconsolate' (hopelessly sad) is contrasted with joyful, cheerful, and exultant[cite: 9]."},
+        {"num": 212, "module": "Module 9: Idioms & Nuances", "q": "What is the antonym of 'SUPERCILIOUSNESS'?", "options": ["A) Humility / Modesty / Deference / Respect", "B) Arrogance / Haughtiness / Scorn", "C) Pride / Conceit / Egotism", "D) Cruelty / Callousness / Brutality"], "ans": 0, "brief": "'Superciliousness' (arrogant scorn) is contrasted with humility, modesty, and deference[cite: 9]."},
+        {"num": 213, "module": "Module 9: Idioms & Nuances", "q": "What is the antonym of 'TENUOUS'?", "options": ["A) Substantial / Strong / Robust / Firm", "B) Weak / Flimsy / Fragile", "C) Slight / Insubstantial / Shaky", "D) Temporary / Fleeting / Transient"], "ans": 0, "brief": "'Tenuous' (weak/flimsy) is contrasted with substantial, strong, and robust[cite: 9]."},
+        {"num": 214, "module": "Module 9: Idioms & Nuances", "q": "What is the antonym of 'CAUSTIC'?", "options": ["A) Soothing / Lenitive / Kind / Gentle / Gracious", "B) Mordant / Sarcastic / Scathing", "C) Bitter / Cutting / Acerbic", "D) Rude / Churlish / Uncouth"], "ans": 0, "brief": "'Caustic' (cutting/sarcastic) is contrasted with soothing, lenitive, kind, and gentle[cite: 9]."},
+        {"num": 215, "module": "Module 9: Idioms & Nuances", "q": "What is the antonym of 'PEJORATIVE'?", "options": ["A) Encomiastic / Praiseful / Laudatory / Complimentary", "B) Disparaging / Slighting / Belittling", "C) Denigratory / Derogatory / Insulting", "D) Hostile / Belligerent / Pugnacious"], "ans": 0, "brief": "'Pejorative' (belittling) is contrasted with encomiastic, praiseful, and complimentary[cite: 9]."},
+        {"num": 216, "module": "Module 9: Idioms & Nuances", "q": "What is the antonym of 'OSTENSIBLE'?", "options": ["A) Real / Genuine / Authentic / Actual", "B) Apparent / Outward / Superficial", "C) Professed / Putative / Alleged", "D) Secret / Hidden / Clandestine"], "ans": 0, "brief": "'Ostensible' (apparent/superficial) is contrasted with real, genuine, and actual[cite: 9]."},
+        {"num": 217, "module": "Module 9: Idioms & Nuances", "q": "What is the antonym of 'ECCLESIASTICAL'?", "options": ["A) Secular / Lay / Worldly / Temporal", "B) Churchly / Clerical / Spiritual", "C) Pastoral / Religious / Holy", "D) Sacred / Divine / Blessed"], "ans": 0, "brief": "'Ecclesiastical' (churchly/spiritual) is contrasted with secular, lay, and worldly[cite: 9]."},
+        {"num": 218, "module": "Module 9: Idioms & Nuances", "q": "What is the antonym of 'LABYRINTHINE'?", "options": ["A) Simple / Straightforward / Clear / Direct", "B) Complex / Intricate / Convoluted", "C) Tortuous / Tangled / Twisted", "D) Arcane / Enigmatic / Delphic"], "ans": 0, "brief": "'Labyrinthine' (complex/convoluted) is contrasted with simple, straightforward, and direct[cite: 9]."},
+        {"num": 219, "module": "Module 9: Idioms & Nuances", "q": "What is the antonym of 'FORESHADOW'?", "options": ["A) Look back / Record past / Retrogress", "B) Portend / Presage / Adumbrate", "C) Signal / Indicate / Herald", "D) Explain / Elucidate / Clarify"], "ans": 0, "brief": "'Foreshadow' (indicate future) is contrasted with looking back or recording the past[cite: 9]."},
+        {"num": 220, "module": "Module 9: Idioms & Nuances", "q": "What is the antonym of 'DIFFIDENT'?", "options": ["A) Confident / Audacious / Bold / Self-assured", "B) Shy / Timid / Bashful", "C) Modest / Unassuming / Retiring", "D) Cowardly / Craven / Pusillanimous"], "ans": 0, "brief": "'Diffident' (shy/timid) is contrasted with confident, audacious, and bold[cite: 9]."},
+        {"num": 221, "module": "Module 9: Idioms & Nuances", "q": "What is the antonym of 'VOCIFEROUS'?", "options": ["A) Quiet / Silent / Reticent / Taciturn", "B) Clamorous / Raucous / Strident", "C) Noisy / Boisterous / Loud", "D) Outspoken / Vocal / Assertive"], "ans": 0, "brief": "'Vociferous' (noisy/outspoken) is contrasted with quiet, silent, and taciturn[cite: 9]."},
+        {"num": 222, "module": "Module 9: Idioms & Nuances", "q": "What is the antonym of 'INVIDIOUS'?", "options": ["A) Desirable / Pleasant / Agreeable / Welcome", "B) Objectionable / Awkward / Difficult", "C) Unpleasant / Odious / Hateful", "D) Cruel / Callous / Ruthless"], "ans": 0, "brief": "'Invidious' (objectionable/unpleasant) is contrasted with desirable, pleasant, and agreeable[cite: 9]."},
+        {"num": 223, "module": "Module 9: Idioms & Nuances", "q": "What is the antonym of 'AMATEUR'?", "options": ["A) Professional / Expert / Maestro / Veteran", "B) Tyro / Novice / Learner", "C) Beginner / Fledgling / Greenhorn", "D) Dabbler / Dilettante"], "ans": 0, "brief": "'Amateur' (beginner/novice) is contrasted with professional, expert, and veteran[cite: 9]."},
+        {"num": 224, "module": "Module 9: Idioms & Nuances", "q": "What is the antonym of 'CHASTISE'?", "options": ["A) Praise / Extol / Laud / Reward", "B) Scold / Reprimand / Rebuke", "C) Upbraid / Berate / Admonish", "D) Censure / Chide / Reprove"], "ans": 0, "brief": "'Chastise' (scold/reprimand) is contrasted with praise, extol, laud, and reward[cite: 9]."},
+        {"num": 225, "module": "Module 9: Idioms & Nuances", "q": "What is the antonym of 'CONCEIT'?", "options": ["A) Modesty / Humility / Self-effacement", "B) Vanity / Arrogance / Egotism", "C) Pride / Narcissism / Haughtiness", "D) Courage / Valor / Gallantry"], "ans": 0, "brief": "'Conceit' (vanity/arrogance) is contrasted with modesty, humility, and self-effacement[cite: 9]."},
+
+        // MODULE 10: COMPREHENSIVE AFCAT 2026 MIXED VOCAB ASSESSMENT (226-250)
+        {"num": 226, "module": "Module 10: Complete Vocab Assessment", "q": "What is the antonym of 'CORPULENT'?", "options": ["A) Slender / Thin / Emaciated / Gaunt", "B) Fat / Obese / Overweight", "C) Chubby / Portly / Rotund", "D) Muscular / Robust / Athletic"], "ans": 0, "brief": "'Corpulent' (obese/fat) is contrasted with slender, thin, emaciated, and gaunt[cite: 9]."},
+        {"num": 227, "module": "Module 10: Complete Vocab Assessment", "q": "What is the antonym of 'EXTOL'?", "options": ["A) Disparage / Belittle / Denigrate / Criticize", "B) Praise / Laud / Celebrate", "C) Glorify / Exalt / Eulogize", "D) Respect / Revere / Venerate"], "ans": 0, "brief": "'Extol' (praise highly) is contrasted with disparage, belittle, and denigrate[cite: 9]."},
+        {"num": 228, "module": "Module 10: Complete Vocab Assessment", "q": "What is the antonym of 'RAMPAGE'?", "options": ["A) Calm / Composure / Peace / Stillness", "B) Berserk / Frenzy / Turmoil", "C) Bedlam / Delirium / Furor", "D) Tempest / Chaos / Uproar"], "ans": 0, "brief": "'Rampage' (wild frenzy) is contrasted with calm, composure, peace, and stillness[cite: 9]."},
+        {"num": 229, "module": "Module 10: Complete Vocab Assessment", "q": "What is the antonym of 'TEDIUM'?", "options": ["A) Excitement / Novelty / Interest / Thrill", "B) Boredom / Monotony / Ennui", "C) Dullness / Routine / Sameness", "D) Laziness / Sluggishness / Torpor"], "ans": 0, "brief": "'Tedium' (boredom/monotony) is contrasted with excitement, novelty, and thrill[cite: 9]."},
+        {"num": 230, "module": "Module 10: Complete Vocab Assessment", "q": "What is the antonym of 'CONFOUND'?", "options": ["A) Elucidate / Clarify / Explain / Enlighten", "B) Bewilder / Baffle / Perplex", "C) Amaze / Astonish / Stagger", "D) Dumbfound / Confuse / Mystify"], "ans": 0, "brief": "'Confound' (bewilder/baffle) is contrasted with elucidate, clarify, and explain[cite: 9]."},
+        {"num": 231, "module": "Module 10: Complete Vocab Assessment", "q": "What is the antonym of 'JEOPARDY'?", "options": ["A) Safety / Security / Protection / Assurance", "B) Danger / Hazard / Peril", "C) Risk / Vulnerability / Threat", "D) Fear / Dread / Trepidation"], "ans": 0, "brief": "'Jeopardy' (danger/peril) is contrasted with safety, security, and protection[cite: 9]."},
+        {"num": 232, "module": "Module 10: Complete Vocab Assessment", "q": "What is the antonym of 'OSTRACIZE'?", "options": ["A) Welcome / Embrace / Include / Accept", "B) Banish / Shun / Snub", "C) Reject / Repudiate / Exclude", "D) Ignore / Neglect / Overlook"], "ans": 0, "brief": "'Ostracize' (banish/shun) is contrasted with welcome, embrace, and include[cite: 9]."},
+        {"num": 233, "module": "Module 10: Complete Vocab Assessment", "q": "What is the antonym of 'OSTENTATIOUS'?", "options": ["A) Modest / Unpretentious / Restrained / Simple", "B) Showy / Flamboyant / Gaudy", "C) Pretentious / Flashy / Extravagant", "D) Rich / Wealthy / Opulent"], "ans": 0, "brief": "'Ostentatious' (showy/pretentious) is contrasted with modest, unpretentious, and simple[cite: 9]."},
+        {"num": 234, "module": "Module 10: Complete Vocab Assessment", "q": "What is the antonym of 'PENCHANT'?", "options": ["A) Aversion / Antipathy / Dislike / Loathing", "B) Liking / Fondness / Inclination", "C) Preference / Predilection / Proclivity", "D) Habit / Routine / Custom"], "ans": 0, "brief": "'Penchant' (strong liking) is contrasted with aversion, antipathy, and dislike[cite: 9]."},
+        {"num": 235, "module": "Module 10: Complete Vocab Assessment", "q": "What is the antonym of 'PENITENCE'?", "options": ["A) Impenitence / Shamelessness / Pride / Hard-heartedness", "B) Repentance / Contrition / Remorse", "C) Regret / Sorrow / Qualm", "D) Sadness / Grief / Melancholy"], "ans": 0, "brief": "'Penitence' (remorse for sin) is contrasted with impenitence and shamelessness[cite: 9]."},
+        {"num": 236, "module": "Module 10: Complete Vocab Assessment", "q": "What is the antonym of 'RESCIND'?", "options": ["A) Enact / Establish / Ratify / Validate", "B) Revoke / Cancel / Repeal", "C) Annul / Nullify / Void", "D) Destroy / Wreck / Shatter"], "ans": 0, "brief": "'Rescind' (revoke/cancel) is contrasted with enact, establish, and ratify[cite: 9]."},
+        {"num": 237, "module": "Module 10: Complete Vocab Assessment", "q": "What is the antonym of 'SERENDIPITY'?", "options": ["A) Misfortune / Bad luck / Calamity / Tragedy", "B) Chance / Happy accident / Luck", "C) Fluke / Fortuity / Blessing", "D) Strategy / Planning / Design"], "ans": 0, "brief": "'Serendipity' (happy accident/good luck) is contrasted with misfortune and bad luck[cite: 9]."},
+        {"num": 238, "module": "Module 10: Complete Vocab Assessment", "q": "What is the antonym of 'SPURIOUS'?", "options": ["A) Genuine / Authentic / Real / Bona fide", "B) Bogus / Fake / False", "C) Counterfeit / Fraudulent / Phony", "D) Obscure / Enigmatic / Delphic"], "ans": 0, "brief": "'Spurious' (bogus/counterfeit) is contrasted with genuine, authentic, and real[cite: 9]."},
+        {"num": 239, "module": "Module 10: Complete Vocab Assessment", "q": "What is the antonym of 'HEDONISTIC'?", "options": ["A) Ascetic / Self-denying / Austere / Spartan", "B) Pleasure-seeking / Epicurean / Sensual", "C) Generous / Munificent / Bountiful", "D) Sociable / Convivial / Gregarious"], "ans": 0, "brief": "'Hedonistic' (pleasure-seeking) is contrasted with ascetic, self-denying, and austere[cite: 9]."},
+        {"num": 240, "module": "Module 10: Complete Vocab Assessment", "q": "What is the antonym of 'MAGNANIMOUS'?", "options": ["A) Petty / Mean / Vindictive / Unforgiving / Stingy", "B) Generous / Noble / Unselfish", "C) Forgiving / Chivalrous / Big-hearted", "D) Brave / Dauntless / Intrepid"], "ans": 0, "brief": "'Magnanimous' (noble/forgiving) is contrasted with petty, mean, and vindictive[cite: 9]."},
+        {"num": 241, "module": "Module 10: Complete Vocab Assessment", "q": "What is the antonym of 'FRACTIOUS'?", "options": ["A) Compliant / Docile / Obedient / Good-natured", "B) Irritable / Quarrelsome / Unruly", "C) Bad-tempered / Peevish / Cantankerous", "D) Noisy / Obstreperous / Clamorous"], "ans": 0, "brief": "'Fractious' (irritable/unruly) is contrasted with compliant, docile, and obedient[cite: 9]."},
+        {"num": 242, "module": "Module 10: Complete Vocab Assessment", "q": "What is the antonym of 'TORPOR'?", "options": ["A) Vigor / Alacrity / Energy / Vitality / Zeal", "B) Lethargy / Sluggishness / Inertia", "C) Inactivity / Drowsiness / Languor", "D) Boredom / Tedium / Ennui"], "ans": 0, "brief": "'Torpor' (sluggish lethargy) is contrasted with vigor, alacrity, and energetic vitality[cite: 9]."},
+        {"num": 243, "module": "Module 10: Complete Vocab Assessment", "q": "What is the antonym of 'EFFICACY'?", "options": ["A) Inefficacy / Uselessness / Ineffectiveness / Failure", "B) Potency / Capability / Effectiveness", "C) Success / Triumph / Power", "D) Wisdom / Sagacity / Shrewdness"], "ans": 0, "brief": "'Efficacy' (effectiveness) is contrasted with inefficacy, uselessness, and failure[cite: 9]."},
+        {"num": 244, "module": "Module 10: Complete Vocab Assessment", "q": "What is the antonym of 'TENACITY'?", "options": ["A) Irresolution / Weakness / Flimsiness / Giving up easily", "B) Persistence / Determination / Perseverance", "C) Grip / Steadfastness / Resolve", "D) Courage / Valor / Gallantry"], "ans": 0, "brief": "'Tenacity' (persistent determination) is contrasted with irresolution and giving up easily[cite: 9]."},
+        {"num": 245, "module": "Module 10: Complete Vocab Assessment", "q": "What is the antonym of 'INTIMIDATE'?", "options": ["A) Encourage / Reassure / Embolden / Comfort", "B) Frighten / Bully / Menace", "C) Threaten / Daunt / Cow", "D) Scold / Reprimand / Rebuke"], "ans": 0, "brief": "'Intimidate' (frighten/threaten) is contrasted with encourage, reassure, and embolden[cite: 9]."},
+        {"num": 246, "module": "Module 10: Complete Vocab Assessment", "q": "What is the antonym of 'PROPITIATE'?", "options": ["A) Provoke / Antagonize / Alienate / Irritate", "B) Appease / Placate / Pacify", "C) Mollify / Conciliate / Soothe", "D) Praise / Extol / Laud"], "ans": 0, "brief": "'Propitiate' (appease/placate) is contrasted with provoke, antagonize, and alienate[cite: 9]."},
+        {"num": 247, "module": "Module 10: Complete Vocab Assessment", "q": "What is the antonym of 'PROCRASTINATE'?", "options": ["A) Expedite / Hasten / Act promptly / Hurry", "B) Delay / Put off / Postpone", "C) Stall / Dally / Lag", "D) Ignore / Neglect / Overlook"], "ans": 0, "brief": "'Procrastinate' (delay action) is contrasted with expedite, hasten, and act promptly[cite: 9]."},
+        {"num": 248, "module": "Module 10: Complete Vocab Assessment", "q": "What is the antonym of 'EXACERBATE'?", "options": ["A) Alleviate / Assuage / Soothe / Mitigate / Relieve", "B) Worsen / Aggravate / Intensify", "C) Inflame / Provoke / Irritate", "D) Destroy / Wreck / Devastate"], "ans": 0, "brief": "'Exacerbate' (worsen/aggravate) is contrasted with alleviate, assuage, and mitigate[cite: 9]."},
+        {"num": 249, "module": "Module 10: Complete Vocab Assessment", "q": "What is the antonym of 'IMPERIOUS'?", "options": ["A) Humble / Submissive / Modest / Meek", "B) Arrogant / Domineering / Overbearing", "C) Authoritarian / Dictatorial / Tyrannical", "D) Loud / Vociferous / Raucous"], "ans": 0, "brief": "'Imperious' (arrogant/domineering) is contrasted with humble, submissive, and meek[cite: 9]."},
+        {"num": 250, "module": "Module 10: Complete Vocab Assessment", "q": "What is the antonym of 'INNOCUOUS'?", "options": ["A) Harmful / Toxic / Pernicious / Noxious / Dangerous", "B) Harmless / Safe / Inoffensive", "C) Mild / Gentle / Lenitive", "D) Clear / Pellucid / Limpid"], "ans": 0, "brief": "'Innocuous' (harmless/safe) is contrasted with harmful, toxic, pernicious, and noxious[cite: 9]."}
+    ];
+
+    let activeQuestions = [];
+    let currentScore = 0;
+    let wrongCount = 0;
+    let answeredCount = 0;
+    let activeFilter = 'All';
+    let searchQuery = '';
+    let showAllActive = false;
+    let statusFilter = 'all';
+    let questionStatus = {};
+
+    function shuffleArray(array) {
+        const arr = [...array];
+        for (let i = arr.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [arr[i], arr[j]] = [arr[j], arr[i]];
+        }
+        return arr;
+    }
+
+    function initializeAndShuffleQuiz() {
+        const prepared = originalQuestionsData.map(q => {
+            const cleanOptions = q.options.map(opt => opt.replace(/^[A-D]\)\s*/, ''));
+            const correctAnswerText = cleanOptions[q.ans];
+            const shuffledCleanOptions = shuffleArray(cleanOptions);
+            const newCorrectIdx = shuffledCleanOptions.indexOf(correctAnswerText);
+            const relabeledOptions = shuffledCleanOptions.map((opt, i) => {
+                return String.fromCharCode(65 + i) + ') ' + opt;
+            });
+            return {
+                ...q,
+                options: relabeledOptions,
+                ans: newCorrectIdx
+            };
+        });
+        activeQuestions = shuffleArray(prepared);
+        questionStatus = {};
+        currentScore = 0;
+        wrongCount = 0;
+        answeredCount = 0;
+        statusFilter = 'all';
+        document.querySelectorAll('.stat-item').forEach(el => el.classList.remove('active-filter'));
+        updateStats();
+    }
+
+    function applyFilters() {
+        searchQuery = document.getElementById('search-input').value.toLowerCase().trim();
+        renderQuiz();
+    }
+
+    function filterByStatus(status) {
+        if (statusFilter === status) {
+            statusFilter = 'all';
+            document.querySelectorAll('.stat-item').forEach(el => el.classList.remove('active-filter'));
+        } else {
+            statusFilter = status;
+            document.querySelectorAll('.stat-item').forEach(el => el.classList.remove('active-filter'));
+            if (status === 'correct') {
+                document.getElementById('correctStat').classList.add('active-filter');
+            } else if (status === 'wrong') {
+                document.getElementById('wrongStat').classList.add('active-filter');
+            } else if (status === 'left') {
+                document.getElementById('leftStat').classList.add('active-filter');
+            }
+        }
+        renderQuiz();
+    }
+
+    function renderQuiz() {
+        const container = document.getElementById('quiz-container');
+        container.innerHTML = '';
+        let displayCount = 0;
+        let seqNum = 1;
+
+        const isQidSearch = searchQuery && /^\d+$/.test(searchQuery);
+        const qidNumber = isQidSearch ? parseInt(searchQuery) : null;
+
+        activeQuestions.forEach((q) => {
+            if (activeFilter !== 'All') {
+                const qModuleMatch = q.module.match(/Module (\d+)/);
+                const qModuleNum = qModuleMatch ? qModuleMatch[1] : null;
+                const filterMatch = activeFilter.match(/Module (\d+)/);
+                const filterModuleNum = filterMatch ? filterMatch[1] : null;
+                
+                if (qModuleNum && filterModuleNum) {
+                    if (qModuleNum !== filterModuleNum) return;
+                } else {
+                    if (!q.module.startsWith(activeFilter + ':')) return;
+                }
+            }
+            
+            if (statusFilter !== 'all') {
+                const status = questionStatus[q.num];
+                if (statusFilter === 'correct' && status !== 'correct') return;
+                if (statusFilter === 'wrong' && status !== 'wrong') return;
+                if (statusFilter === 'left' && status !== undefined) return;
+            }
+            
+            if (searchQuery) {
+                if (isQidSearch) {
+                    if (q.num !== qidNumber) return;
+                } else {
+                    const match = q.q.toLowerCase().includes(searchQuery) ||
+                                  q.module.toLowerCase().includes(searchQuery) ||
+                                  q.brief.toLowerCase().includes(searchQuery) ||
+                                  q.options.some(o => o.toLowerCase().includes(searchQuery));
+                    if (!match) return;
+                }
+            }
+            
+            displayCount++;
+            const card = document.createElement('div');
+            card.className = 'question-card';
+            card.id = `card-${q.num}`;
+            
+            const savedNote = localStorage.getItem(`afcat_vocab_note_QID_${q.num}`) || '';
+            const savedNoteHtml = savedNote ? `
+                <div class="saved-note-banner" id="saved-display-${q.num}">
+                    <strong>📌 Saved Note:</strong> ${savedNote}
+                </div>` : `<div id="saved-display-${q.num}"></div>`;
+            
+            const status = questionStatus[q.num];
+            let statusBadge = '';
+            if (status === 'correct') {
+                statusBadge = `<span class="q-status-badge status-correct">✅ Correct</span>`;
+            } else if (status === 'wrong') {
+                statusBadge = `<span class="q-status-badge status-wrong">❌ Wrong</span>`;
+            } else {
+                statusBadge = `<span class="q-status-badge status-unanswered">⏳ Unanswered</span>`;
+            }
+            
+            card.innerHTML = `
+                <div class="q-header">
+                    <div class="q-badges-left">
+                        <span class="q-num-badge">Question #${seqNum++}</span>
+                        <span class="qid-badge">QID:- ${q.num}</span>
+                        ${statusBadge}
+                    </div>
+                    <span class="q-mod-badge">${q.module}</span>
+                </div>
+                <div class="q-text">${q.q}</div>
+                <div class="options-grid" id="opts-${q.num}">
+                    ${q.options.map((optText, optIdx) => `
+                        <button class="opt-btn" onclick="checkAnswer(${q.num}, ${optIdx}, ${q.ans})">
+                            <span>${optText}</span>
+                        </button>
+                    `).join('')}
+                </div>
+                <div class="feedback-box" id="feedback-${q.num}">
+                    ${showAllActive && !questionStatus[q.num] ? `
+                        <div class="feedback-title">✓ Correct Answer: ${q.options[q.ans]}</div>
+                        <div><strong>Word Meaning & Usage:</strong> ${q.brief}</div>
+                        ${savedNoteHtml}
+                        <div class="notes-section">
+                            <button class="notes-btn" onclick="toggleNoteEditor(${q.num})">Add / Edit Notes & Points</button>
+                            <div class="note-editor" id="editor-${q.num}">
+                                <textarea class="notes-area" id="textarea-${q.num}" rows="3" placeholder="Add your notes/points here...">${savedNote}</textarea>
+                                <button class="save-note-btn" onclick="saveNote(${q.num})">Save Note Locally</button>
+                            </div>
+                        </div>
+                    ` : ''}
+                </div>
+            `;
+            container.appendChild(card);
+
+            if (questionStatus[q.num]) {
+                const optsContainer = document.getElementById(`opts-${q.num}`);
+                if (optsContainer) {
+                    const buttons = optsContainer.querySelectorAll('.opt-btn');
+                    buttons.forEach((btn, idx) => {
+                        btn.classList.add('disabled');
+                        if (idx === q.ans) {
+                            btn.classList.add('correct');
+                        }
+                        if (q._selectedIdx !== undefined && idx === q._selectedIdx && idx !== q.ans) {
+                            btn.classList.add('wrong');
+                        }
+                    });
+                }
+                const feedback = document.getElementById(`feedback-${q.num}`);
+                if (feedback) {
+                    const isCorrect = questionStatus[q.num] === 'correct';
+                    feedback.className = `feedback-box show-${isCorrect ? 'correct' : 'wrong'}`;
+                    const savedNoteDisplay = localStorage.getItem(`afcat_vocab_note_QID_${q.num}`) || '';
+                    const savedNoteHtmlDisplay = savedNoteDisplay ? `
+                        <div class="saved-note-banner" id="saved-display-${q.num}">
+                            <strong>📌 Saved Note:</strong> ${savedNoteDisplay}
+                        </div>` : `<div id="saved-display-${q.num}"></div>`;
+                    
+                    if (isCorrect) {
+                        feedback.innerHTML = `
+                            <div class="feedback-title">✓ Correct Answer!</div>
+                            <div><strong>Word Meaning & Usage:</strong> ${q.brief}</div>
+                            ${savedNoteHtmlDisplay}
+                            <div class="notes-section">
+                                <button class="notes-btn" onclick="toggleNoteEditor(${q.num})">Add / Edit Notes & Points</button>
+                                <div class="note-editor" id="editor-${q.num}">
+                                    <textarea class="notes-area" id="textarea-${q.num}" rows="3" placeholder="Add your notes/points here...">${savedNoteDisplay}</textarea>
+                                    <button class="save-note-btn" onclick="saveNote(${q.num})">Save Note Locally</button>
+                                </div>
+                            </div>
+                        `;
+                    } else {
+                        feedback.innerHTML = `
+                            <div class="feedback-title">✗ Wrong Answer — The Correct Answer is: ${q.options[q.ans]}</div>
+                            <div><strong>Word Meaning & Usage:</strong> ${q.brief}</div>
+                            ${savedNoteHtmlDisplay}
+                            <div class="notes-section">
+                                <button class="notes-btn" onclick="toggleNoteEditor(${q.num})">Add / Edit Notes & Points</button>
+                                <div class="note-editor" id="editor-${q.num}">
+                                    <textarea class="notes-area" id="textarea-${q.num}" rows="3" placeholder="Add your notes/points here...">${savedNoteDisplay}</textarea>
+                                    <button class="save-note-btn" onclick="saveNote(${q.num})">Save Note Locally</button>
+                                </div>
+                            </div>
+                        `;
+                    }
+                }
+            }
+
+            if (showAllActive && !questionStatus[q.num]) {
+                const optsContainer = document.getElementById(`opts-${q.num}`);
+                if (optsContainer) {
+                    const buttons = optsContainer.querySelectorAll('.opt-btn');
+                    buttons.forEach((btn, idx) => {
+                        btn.classList.add('disabled');
+                        if (idx === q.ans) {
+                            btn.classList.add('correct');
+                        }
+                    });
+                }
+                const feedback = document.getElementById(`feedback-${q.num}`);
+                if (feedback) {
+                    feedback.className = 'feedback-box show-correct';
+                    const savedNoteDisplay = localStorage.getItem(`afcat_vocab_note_QID_${q.num}`) || '';
+                    const savedNoteHtmlDisplay = savedNoteDisplay ? `
+                        <div class="saved-note-banner" id="saved-display-${q.num}">
+                            <strong>📌 Saved Note:</strong> ${savedNoteDisplay}
+                        </div>` : `<div id="saved-display-${q.num}"></div>`;
+                    
+                    if (!feedback.innerHTML) {
+                        feedback.innerHTML = `
+                            <div class="feedback-title">✓ Correct Answer: ${q.options[q.ans]}</div>
+                            <div><strong>Word Meaning & Usage:</strong> ${q.brief}</div>
+                            ${savedNoteHtmlDisplay}
+                            <div class="notes-section">
+                                <button class="notes-btn" onclick="toggleNoteEditor(${q.num})">Add / Edit Notes & Points</button>
+                                <div class="note-editor" id="editor-${q.num}">
+                                    <textarea class="notes-area" id="textarea-${q.num}" rows="3" placeholder="Add your notes/points here...">${savedNoteDisplay}</textarea>
+                                    <button class="save-note-btn" onclick="saveNote(${q.num})">Save Note Locally</button>
+                                </div>
+                            </div>
+                        `;
+                    }
+                }
+            }
+        });
+
+        if (displayCount === 0) {
+            let message = 'No Vocabulary MCQs matched your search.';
+            if (isQidSearch) {
+                message = `No question found with QID ${qidNumber}. Please check the QID and try again.`;
+            } else if (statusFilter === 'correct' && currentScore === 0) {
+                message = 'No correct answers yet. Keep practicing! 🎯';
+            } else if (statusFilter === 'wrong' && wrongCount === 0) {
+                message = 'No wrong answers yet! Great job! 🎉';
+            } else if (statusFilter === 'left') {
+                if (answeredCount === activeQuestions.length) {
+                    message = '🎉 All questions have been answered! No questions left to attempt.';
+                } else {
+                    message = `📝 You have ${activeQuestions.length - answeredCount} questions left to attempt. Start answering!`;
+                }
+            }
+            container.innerHTML = `<div class="no-results">${message}</div>`;
+        }
+
+        updateStats();
+    }
+
+    function checkAnswer(qNum, selectedIdx, correctIdx) {
+        if (showAllActive) return;
+        if (questionStatus[qNum]) return;
+        
+        const optsContainer = document.getElementById(`opts-${qNum}`);
+        const buttons = optsContainer.querySelectorAll('.opt-btn');
+        const feedback = document.getElementById(`feedback-${qNum}`);
+        
+        if (buttons[0].classList.contains('disabled')) {
+            return;
+        }
+        
+        const qObj = activeQuestions.find(item => item.num === qNum);
+        qObj._selectedIdx = selectedIdx;
+        
+        buttons.forEach((btn, idx) => {
+            btn.classList.add('disabled');
+            if (idx === correctIdx) {
+                btn.classList.add('correct');
+            }
+        });
+        
+        const savedNote = localStorage.getItem(`afcat_vocab_note_QID_${qNum}`) || '';
+        const savedNoteHtml = savedNote ? `
+            <div class="saved-note-banner" id="saved-display-${qNum}">
+                <strong>📌 Saved Note:</strong> ${savedNote}
+            </div>` : `<div id="saved-display-${qNum}"></div>`;
+        
+        const isCorrect = selectedIdx === correctIdx;
+        if (isCorrect) {
+            currentScore++;
+            questionStatus[qNum] = 'correct';
+            buttons[selectedIdx].classList.add('correct');
+            feedback.className = 'feedback-box show-correct';
+            feedback.innerHTML = `
+                <div class="feedback-title">✓ Correct Answer!</div>
+                <div><strong>Word Meaning & Usage:</strong> ${qObj.brief}</div>
+                ${savedNoteHtml}
+                <div class="notes-section">
+                    <button class="notes-btn" onclick="toggleNoteEditor(${qNum})">Add / Edit Notes & Points</button>
+                    <div class="note-editor" id="editor-${qNum}">
+                        <textarea class="notes-area" id="textarea-${qNum}" rows="3" placeholder="Add your notes/points here...">${savedNote}</textarea>
+                        <button class="save-note-btn" onclick="saveNote(${qNum})">Save Note Locally</button>
+                    </div>
+                </div>
+            `;
+        } else {
+            wrongCount++;
+            questionStatus[qNum] = 'wrong';
+            buttons[selectedIdx].classList.add('wrong');
+            const correctOptText = qObj.options[correctIdx];
+            feedback.className = 'feedback-box show-wrong';
+            feedback.innerHTML = `
+                <div class="feedback-title">✗ Wrong Answer — The Correct Answer is: ${correctOptText}</div>
+                <div><strong>Word Meaning & Usage:</strong> ${qObj.brief}</div>
+                ${savedNoteHtml}
+                <div class="notes-section">
+                    <button class="notes-btn" onclick="toggleNoteEditor(${qNum})">Add / Edit Notes & Points</button>
+                    <div class="note-editor" id="editor-${qNum}">
+                        <textarea class="notes-area" id="textarea-${qNum}" rows="3" placeholder="Add your notes/points here...">${savedNote}</textarea>
+                        <button class="save-note-btn" onclick="saveNote(${qNum})">Save Note Locally</button>
+                    </div>
+                </div>
+            `;
+        }
+        answeredCount++;
+        
+        const badgeContainer = document.querySelector(`#card-${qNum} .q-badges-left`);
+        if (badgeContainer) {
+            const oldBadge = badgeContainer.querySelector('.q-status-badge');
+            let newBadgeHtml = '';
+            if (isCorrect) {
+                newBadgeHtml = `<span class="q-status-badge status-correct">✅ Correct</span>`;
+            } else {
+                newBadgeHtml = `<span class="q-status-badge status-wrong">❌ Wrong</span>`;
+            }
+            if (oldBadge) {
+                oldBadge.outerHTML = newBadgeHtml;
+            } else {
+                badgeContainer.innerHTML += newBadgeHtml;
+            }
+        }
+        
+        updateStats();
+        
+        if (statusFilter !== 'all') {
+            renderQuiz();
+        }
+    }
+
+    function toggleNoteEditor(qNum) {
+        const editor = document.getElementById(`editor-${qNum}`);
+        if (editor.style.display === 'block') {
+            editor.style.display = 'none';
+        } else {
+            editor.style.display = 'block';
+        }
+    }
+
+    function saveNote(qNum) {
+        const textarea = document.getElementById(`textarea-${qNum}`);
+        const noteText = textarea.value.trim();
+        const storageKey = `afcat_vocab_note_QID_${qNum}`;
+        
+        if (noteText) {
+            localStorage.setItem(storageKey, noteText);
+        } else {
+            localStorage.removeItem(storageKey);
+        }
+
+        const displayContainer = document.getElementById(`saved-display-${qNum}`);
+        if (noteText) {
+            displayContainer.className = 'saved-note-banner';
+            displayContainer.innerHTML = `<strong>📌 Saved Note:</strong> ${noteText}`;
+        } else {
+            displayContainer.className = '';
+            displayContainer.innerHTML = '';
+        }
+        document.getElementById(`editor-${qNum}`).style.display = 'none';
+    }
+
+    function updateStats() {
+        const totalQuestions = activeQuestions.length;
+        const leftToAttempt = totalQuestions - answeredCount;
+        
+        document.getElementById('correct-count').textContent = currentScore;
+        document.getElementById('wrong-count').textContent = wrongCount;
+        document.getElementById('left-count').textContent = leftToAttempt;
+        
+        const pct = answeredCount > 0 ? Math.round((currentScore / answeredCount) * 100) : 0;
+        document.getElementById('pct-display').textContent = pct + '%';
+    }
+
+    function filterQuestions(modPrefix) {
+        activeFilter = modPrefix;
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.classList.remove('active');
+            if (btn.getAttribute('data-filter') === modPrefix) {
+                btn.classList.add('active');
+            }
+        });
+        renderQuiz();
+    }
+
+    function resetQuiz() {
+        if (showAllActive) {
+            showAllActive = false;
+            const btn = document.getElementById('showAllBtn');
+            btn.classList.remove('show-all-active');
+            btn.textContent = '👁️ Show All Answers (Study Mode)';
+        }
+        currentScore = 0;
+        wrongCount = 0;
+        answeredCount = 0;
+        questionStatus = {};
+        statusFilter = 'all';
+        document.querySelectorAll('.stat-item').forEach(el => el.classList.remove('active-filter'));
+        updateStats();
+        renderQuiz();
+    }
+
+    function toggleShowAll() {
+        const btn = document.getElementById('showAllBtn');
+        showAllActive = !showAllActive;
+        
+        if (showAllActive) {
+            btn.classList.add('show-all-active');
+            btn.textContent = '🔴 Hide All Answers';
+        } else {
+            btn.classList.remove('show-all-active');
+            btn.textContent = '👁️ Show All Answers (Study Mode)';
+        }
+        renderQuiz();
+    }
+
+    // Initialize
+    initializeAndShuffleQuiz();
+    renderQuiz();
+</script>
+</body>
+</html>

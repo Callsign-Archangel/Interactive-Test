@@ -1,0 +1,1292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AFCAT 2026 — Interactive 250 MCQ International & National Organisations Quiz</title>
+<style>
+    :root {
+        --bg-main: #f8fafc;
+        --card-bg: #ffffff;
+        --primary: #0f172a;
+        --accent-red: #dc2626;
+        --accent-green: #10b981;
+        --accent-blue: #2563eb;
+        --text-main: #1e293b;
+        --text-muted: #64748b;
+        --border: #e2e8f0;
+    }
+    
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
+    
+    body {
+        font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        background-color: var(--bg-main);
+        color: var(--text-main);
+        line-height: 1.5;
+        padding-bottom: 60px;
+    }
+    
+    header {
+        background-color: var(--primary);
+        color: #ffffff;
+        padding: 24px 20px;
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+    
+    .header-container {
+        max-width: 1100px;
+        margin: 0 auto;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        align-items: center;
+        gap: 15px;
+    }
+    
+    .title-area h1 {
+        font-size: 1.4rem;
+        font-weight: 700;
+        letter-spacing: -0.5px;
+    }
+    
+    .title-area p {
+        font-size: 0.85rem;
+        color: #94a3b8;
+    }
+    
+    .stats-badge {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        background-color: #1e293b;
+        border: 2px solid #334155;
+        border-radius: 8px;
+        padding: 6px 10px;
+    }
+
+    .stat-item {
+        padding: 6px 14px;
+        border-radius: 6px;
+        text-align: center;
+        min-width: 70px;
+        cursor: pointer;
+        transition: all 0.2s;
+        border: 2px solid transparent;
+        background-color: rgba(255, 255, 255, 0.05);
+        user-select: none;
+    }
+
+    .stat-item:hover {
+        transform: scale(1.05);
+    }
+
+    .stat-item .stat-num {
+        font-size: 1.2rem;
+        font-weight: 800;
+        display: block;
+        line-height: 1.2;
+    }
+
+    .stat-item .stat-label {
+        font-size: 0.6rem;
+        text-transform: uppercase;
+        letter-spacing: 0.3px;
+        opacity: 0.8;
+    }
+
+    .stat-item.correct-stat {
+        background-color: rgba(16, 185, 129, 0.2);
+        border-color: #10b981;
+        color: #34d399;
+    }
+
+    .stat-item.correct-stat.active-filter {
+        background-color: rgba(16, 185, 129, 0.4);
+        box-shadow: 0 0 20px rgba(16, 185, 129, 0.3);
+    }
+
+    .stat-item.wrong-stat {
+        background-color: rgba(239, 68, 68, 0.2);
+        border-color: #ef4444;
+        color: #f87171;
+    }
+
+    .stat-item.wrong-stat.active-filter {
+        background-color: rgba(239, 68, 68, 0.4);
+        box-shadow: 0 0 20px rgba(239, 68, 68, 0.3);
+    }
+
+    .stat-item.left-stat {
+        background-color: rgba(234, 179, 8, 0.2);
+        border-color: #eab308;
+        color: #fbbf24;
+    }
+
+    .stat-item.left-stat.active-filter {
+        background-color: rgba(234, 179, 8, 0.4);
+        box-shadow: 0 0 20px rgba(234, 179, 8, 0.3);
+    }
+
+    .stat-item.pct-stat {
+        background-color: rgba(56, 189, 248, 0.15);
+        border-color: #38bdf8;
+        color: #38bdf8;
+        min-width: 80px;
+        cursor: default;
+    }
+
+    .stat-item.pct-stat:hover {
+        transform: none;
+    }
+
+    .stat-item .stat-pct {
+        font-size: 1.2rem;
+        font-weight: 800;
+        display: block;
+        line-height: 1.2;
+    }
+    
+    .container {
+        max-width: 1100px;
+        margin: 24px auto;
+        padding: 0 16px;
+    }
+
+    .controls-panel {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        margin-bottom: 24px;
+        background: var(--card-bg);
+        padding: 16px;
+        border-radius: 12px;
+        border: 1px solid var(--border);
+        box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+
+    .search-row {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+
+    .search-input {
+        flex: 1;
+        min-width: 260px;
+        padding: 10px 14px;
+        border: 1px solid #cbd5e1;
+        border-radius: 8px;
+        font-size: 0.95rem;
+        color: var(--text-main);
+        outline: none;
+        transition: border-color 0.2s;
+    }
+
+    .search-input:focus {
+        border-color: var(--accent-blue);
+        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+    }
+
+    .search-hint {
+        font-size: 0.75rem;
+        color: var(--text-muted);
+        margin-top: 2px;
+        font-style: italic;
+    }
+
+    .action-btn {
+        background-color: #f1f5f9;
+        border: 1px solid #cbd5e1;
+        border-radius: 8px;
+        padding: 10px 16px;
+        font-size: 0.85rem;
+        font-weight: 700;
+        color: var(--text-main);
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+    .action-btn:hover {
+        background-color: #e2e8f0;
+    }
+
+    .action-btn.primary {
+        background-color: var(--primary);
+        color: #ffffff;
+        border-color: var(--primary);
+    }
+
+    .action-btn.primary:hover {
+        background-color: #1e293b;
+    }
+
+    .action-btn.show-all-active {
+        background-color: #dc2626 !important;
+        border-color: #b91c1c !important;
+        color: #ffffff !important;
+        box-shadow: 0 0 12px rgba(220, 38, 38, 0.4);
+        transition: all 0.2s;
+    }
+    
+    .filter-bar {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 4px;
+    }
+    
+    .filter-btn {
+        background-color: #f1f5f9;
+        border: 1px solid #cbd5e1;
+        border-radius: 6px;
+        padding: 6px 12px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: var(--text-main);
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    
+    .filter-btn:hover {
+        background-color: #e2e8f0;
+    }
+
+    .filter-btn.active {
+        background-color: #0f172a;
+        color: #ffffff;
+        border-color: #0f172a;
+    }
+
+    .question-card {
+        background-color: var(--card-bg);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 20px;
+        margin-bottom: 16px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        transition: transform 0.15s;
+    }
+    
+    .question-card:hover {
+        border-color: #cbd5e1;
+    }
+    
+    .q-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 10px;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    .q-badges-left {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        flex-wrap: wrap;
+    }
+    
+    .q-num-badge {
+        background-color: #fef2f2;
+        color: var(--accent-red);
+        border: 1px solid #fecaca;
+        font-weight: 700;
+        font-size: 0.8rem;
+        padding: 3px 10px;
+        border-radius: 20px;
+    }
+
+    .qid-badge {
+        background-color: #fef08a;
+        color: #854d0e;
+        border: 1px solid #fde047;
+        font-weight: 700;
+        font-size: 0.8rem;
+        padding: 3px 10px;
+        border-radius: 20px;
+    }
+    
+    .q-mod-badge {
+        font-size: 0.75rem;
+        color: var(--text-muted);
+        font-weight: 600;
+    }
+
+    .q-status-badge {
+        font-size: 0.7rem;
+        padding: 2px 10px;
+        border-radius: 12px;
+        font-weight: 700;
+        transition: all 0.3s ease;
+    }
+
+    .q-status-badge.status-correct {
+        background-color: #d1fae5;
+        color: #065f46;
+    }
+
+    .q-status-badge.status-wrong {
+        background-color: #fecaca;
+        color: #991b1b;
+    }
+
+    .q-status-badge.status-unanswered {
+        background-color: #fef3c7;
+        color: #92400e;
+    }
+    
+    .q-text {
+        font-size: 1.05rem;
+        font-weight: 600;
+        margin-bottom: 16px;
+        color: var(--text-main);
+    }
+    
+    .options-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 10px;
+    }
+    
+    .opt-btn {
+        background-color: #f8fafc;
+        border: 1px solid #cbd5e1;
+        border-radius: 8px;
+        padding: 12px 16px;
+        text-align: left;
+        font-size: 0.95rem;
+        font-weight: 500;
+        color: var(--text-main);
+        cursor: pointer;
+        transition: all 0.2s;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+    
+    .opt-btn:hover:not(.disabled) {
+        background-color: #f1f5f9;
+        border-color: #94a3b8;
+    }
+    
+    .opt-btn.correct {
+        background-color: #ecfdf5 !important;
+        border-color: #10b981 !important;
+        color: #065f46 !important;
+        font-weight: 700;
+    }
+    
+    .opt-btn.wrong {
+        background-color: #fef2f2 !important;
+        border-color: #ef4444 !important;
+        color: #991b1b !important;
+    }
+    
+    .opt-btn.disabled {
+        cursor: default;
+    }
+    
+    .feedback-box {
+        margin-top: 14px;
+        padding: 12px 16px;
+        border-radius: 8px;
+        font-size: 0.9rem;
+        display: none;
+    }
+    
+    .feedback-box.show-correct {
+        display: block;
+        background-color: #f0fdf4;
+        border-left: 4px solid var(--accent-green);
+        color: #166534;
+    }
+    
+    .feedback-box.show-wrong {
+        display: block;
+        background-color: #fff7ed;
+        border-left: 4px solid #f97316;
+        color: #9a3412;
+    }
+    
+    .feedback-title {
+        font-weight: 700;
+        margin-bottom: 4px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .saved-note-banner {
+        background-color: #fef9c3;
+        border: 1px solid #fde047;
+        color: #713f12;
+        padding: 10px 14px;
+        border-radius: 6px;
+        margin-top: 10px;
+        font-size: 0.85rem;
+    }
+
+    .notes-section {
+        margin-top: 12px;
+        padding-top: 12px;
+        border-top: 1px dashed #cbd5e1;
+    }
+
+    .notes-btn {
+        background-color: #0f172a;
+        color: #ffffff;
+        border: 1px solid #334155;
+        padding: 6px 14px;
+        border-radius: 6px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+    .notes-btn:hover {
+        background-color: #334155;
+    }
+
+    .note-editor {
+        margin-top: 10px;
+        display: none;
+    }
+
+    .notes-area {
+        width: 100%;
+        padding: 10px;
+        border-radius: 6px;
+        border: 1px solid #cbd5e1;
+        font-family: inherit;
+        font-size: 0.85rem;
+        resize: vertical;
+        margin-bottom: 8px;
+        color: #1e293b;
+    }
+
+    .save-note-btn {
+        background-color: #10b981;
+        color: #ffffff;
+        border: none;
+        padding: 6px 14px;
+        border-radius: 6px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        cursor: pointer;
+    }
+
+    .save-note-btn:hover {
+        background-color: #059669;
+    }
+
+    .no-results {
+        text-align: center;
+        padding: 40px;
+        background: var(--card-bg);
+        border-radius: 12px;
+        border: 1px solid var(--border);
+        color: var(--text-muted);
+        font-weight: 600;
+    }
+</style>
+</head>
+<body>
+
+<header>
+    <div class="header-container">
+        <div class="title-area">
+            <h1>AFCAT 2026 — INTERNATIONAL & NATIONAL ORGANISATIONS QUIZ</h1>
+            <p>250 MCQs Extracted from "Organizations class_compressed (1).pdf"[cite: 7] — HQs, Summits & Heads</p>
+        </div>
+        <div class="stats-badge">
+            <div class="stat-item correct-stat" id="correctStat" onclick="filterByStatus('correct')">
+                <span class="stat-num" id="correct-count">0</span>
+                <span class="stat-label">✅ Correct</span>
+            </div>
+            <div class="stat-item wrong-stat" id="wrongStat" onclick="filterByStatus('wrong')">
+                <span class="stat-num" id="wrong-count">0</span>
+                <span class="stat-label">❌ Wrong</span>
+            </div>
+            <div class="stat-item left-stat" id="leftStat" onclick="filterByStatus('left')">
+                <span class="stat-num" id="left-count">250</span>
+                <span class="stat-label">⏳ Left</span>
+            </div>
+            <div class="stat-item pct-stat">
+                <span class="stat-pct" id="pct-display">0%</span>
+                <span class="stat-label">Accuracy</span>
+            </div>
+        </div>
+    </div>
+</header>
+
+<div class="container">
+    <div class="controls-panel">
+        <div class="search-row">
+            <div style="flex:1; min-width:260px;">
+                <input type="text" id="search-input" class="search-input" placeholder="Search by organization, HQ, head, or QID" oninput="applyFilters()">
+                <div class="search-hint">💡 Tip: Enter a number like "42" to search by QID</div>
+            </div>
+            <button class="action-btn" onclick="resetQuiz()">🔄 Reset All Answers</button>
+            <button class="action-btn primary" id="showAllBtn" onclick="toggleShowAll()">👁️ Show All Answers (Study Mode)</button>
+        </div>
+        <div class="filter-bar" id="filter-bar">
+            <button class="filter-btn active" data-filter="All" onclick="filterQuestions('All')">All 250 MCQs</button>
+            <button class="filter-btn" data-filter="Module 1" onclick="filterQuestions('Module 1')">Mod 1: BRICS & NDB</button>
+            <button class="filter-btn" data-filter="Module 2" onclick="filterQuestions('Module 2')">Mod 2: BIMSTEC, QUAD & ASEAN</button>
+            <button class="filter-btn" data-filter="Module 3" onclick="filterQuestions('Module 3')">Mod 3: SAARC, UN & IAEA</button>
+            <button class="filter-btn" data-filter="Module 4" onclick="filterQuestions('Module 4')">Mod 4: FAO, WHO, WTO & UNIDO</button>
+            <button class="filter-btn" data-filter="Module 5" onclick="filterQuestions('Module 5')">Mod 5: G7, G20 & AU</button>
+            <button class="filter-btn" data-filter="Module 6" onclick="filterQuestions('Module 6')">Mod 6: WB, IMF, NATO & SCO</button>
+            <button class="filter-btn" data-filter="Module 7" onclick="filterQuestions('Module 7')">Mod 7: INTERPOL, FATF & UNESCO</button>
+            <button class="filter-btn" data-filter="Module 8" onclick="filterQuestions('Module 8')">Mod 8: UNICEF, IBCA & NITI Aayog</button>
+            <button class="filter-btn" data-filter="Module 9" onclick="filterQuestions('Module 9')">Mod 9: NABARD, ISRO & RBI</button>
+            <button class="filter-btn" data-filter="Module 10" onclick="filterQuestions('Module 10')">Mod 10: IRDAI, SEBI, FSSAI & HQs</button>
+        </div>
+    </div>
+
+    <div id="quiz-container"></div>
+</div>
+
+<script>
+    // Complete 250-MCQ dataset covering all topics extracted from the PDF[cite: 7]
+    const originalQuestionsData = [
+        // MODULE 1: BRICS, NEW DEVELOPMENT BANK (NDB) & UNIDO PARTNERSHIP (1-25)
+        {"num": 1, "module": "Module 1: BRICS & NDB", "q": "Who introduced the term 'BRIC' in 2001?", "options": ["A) Jim O'Neill (Goldman Sachs economist)", "B) Klaus Schwab", "C) Christine Lagarde", "D) Joseph Stiglitz"], "ans": 0, "brief": "The term 'BRIC' was introduced in 2001 by Goldman Sachs economist Jim O'Neill[cite: 7]."},
+        {"num": 2, "module": "Module 1: BRICS & NDB", "q": "In which year did South Africa join the BRIC grouping, turning it into BRICS?", "options": ["A) 2010", "B) 2008", "C) 2012", "D) 2014"], "ans": 0, "brief": "South Africa joined in 2010, transforming BRIC into BRICS[cite: 7]."},
+        {"num": 3, "module": "Module 1: BRICS & NDB", "q": "Where is the headquarters of BRICS located?", "options": ["A) Shanghai, China", "B) Moscow, Russia", "C) New Delhi, India", "D) Pretoria, South Africa"], "ans": 0, "brief": "BRICS is headquartered in Shanghai, China (though it has no permanent secretariat)[cite: 7]."},
+        {"num": 4, "module": "Module 1: BRICS & NDB", "q": "BRICS accounts for approximately what percentage of world GDP and global population respectively?", "options": ["A) 25% of world GDP and 40% of global population", "B) 15% of world GDP and 30% of global population", "C) 35% of world GDP and 50% of global population", "D) 20% of world GDP and 25% of global population"], "ans": 0, "brief": "BRICS represents 25% of world GDP and 40% of the global population[cite: 7]."},
+        {"num": 5, "module": "Module 1: BRICS & NDB", "q": "Which country hosted the 15th BRICS Summit in 2023?", "options": ["A) South Africa", "B) Russia", "C) Brazil", "D) India"], "ans": 0, "brief": "South Africa hosted the 15th BRICS Summit in 2023[cite: 7]."},
+        {"num": 6, "module": "Module 1: BRICS & NDB", "q": "Which country hosted the 16th BRICS Summit in 2024, where countries like Iran and UAE joined as new members?", "options": ["A) Russia (Kazan)", "B) Brazil", "C) China", "D) South Africa"], "ans": 0, "brief": "Russia hosted the 16th BRICS Summit in 2024[cite: 7]."},
+        {"num": 7, "module": "Module 1: BRICS & NDB", "q": "Where was the 17th BRICS Summit held in 2025?", "options": ["A) Rio de Janeiro, Brazil", "B) New Delhi, India", "C) Durban, South Africa", "D) Moscow, Russia"], "ans": 0, "brief": "Brazil hosted the 17th BRICS Summit in Rio de Janeiro in 2025[cite: 7]."},
+        {"num": 8, "module": "Module 1: BRICS & NDB", "q": "Which country is scheduled to chair and host the 18th BRICS Summit in 2026?", "options": ["A) India (New Delhi at Bharat Mandapam)", "B) China", "C) South Africa", "D) Brazil"], "ans": 0, "brief": "India will chair and host the 18th BRICS Summit in New Delhi in September 2026[cite: 7]."},
+        {"num": 9, "module": "Module 1: BRICS & NDB", "q": "What was the theme of the 17th BRICS Summit held in Rio de Janeiro, Brazil?", "options": ["A) Strengthening Global South Cooperation for More Inclusive and Sustainable Governance", "B) Building for Resilience, Innovation, Cooperation and Sustainability", "C) Inclusive Growth for a Multipolar World", "D) Global South Unity for Shared Prosperity"], "ans": 0, "brief": "The theme at Rio de Janeiro was 'Strengthening Global South Cooperation for More Inclusive and Sustainable Governance'[cite: 7]."},
+        {"num": 10, "module": "Module 1: BRICS & NDB", "q": "Who is India's BRICS Sherpa and Secretary (Economic Relations)?", "options": ["A) Sudhakar Dalela", "B) Dammu Ravi", "C) Vinay Mohan Kwatra", "D) Harsh Vardhan Shringla"], "ans": 0, "brief": "Sudhakar Dalela serves as India's BRICS Sherpa and Secretary (Economic Relations)[cite: 7]."},
+        {"num": 11, "module": "Module 1: BRICS & NDB", "q": "How many times has India assumed the BRICS Chairmanship including the 2026 term?", "options": ["A) Fourth time (previously in 2012, 2016, and 2021)", "B) Third time (previously in 2014 and 2020)", "C) Fifth time", "D) Second time"], "ans": 0, "brief": "India is assuming BRICS Chairmanship for the fourth time (previously 2012, 2016, and 2021)[cite: 7]."},
+        {"num": 12, "module": "Module 1: BRICS & NDB", "q": "At which summit was the New Development Bank (NDB) jointly founded by BRICS countries in 2014?", "options": ["A) 6th BRICS Summit in Fortaleza, Brazil", "B) 5th BRICS Summit in Durban, South Africa", "C) 7th BRICS Summit in Ufa, Russia", "D) 8th BRICS Summit in Goa, India"], "ans": 0, "brief": "NDB was founded at the 6th BRICS Summit in Fortaleza, Brazil, in 2014[cite: 7]."},
+        {"num": 13, "module": "Module 1: BRICS & NDB", "q": "Where is the headquarters of the New Development Bank (NDB) located?", "options": ["A) Shanghai, China", "B) Beijing, China", "C) Moscow, Russia", "D) New Delhi, India"], "ans": 0, "brief": "The New Development Bank (NDB) is headquartered in Shanghai, China[cite: 7]."},
+        {"num": 14, "module": "Module 1: BRICS & NDB", "q": "Who is the current head (President) of the New Development Bank (NDB)?", "options": ["A) Dilma Vana Rousseff", "B) K. V. Kamath", "C) Marcos Troyjo", "D) Jim O'Neill"], "ans": 0, "brief": "Former Brazilian President Dilma Vana Rousseff is the current head of the NDB[cite: 7]."},
+        {"num": 15, "module": "Module 1: BRICS & NDB", "q": "What is the primary objective of the New Development Bank (NDB)?", "options": ["A) Support infrastructure and sustainable development efforts in BRICS and underserved emerging economies", "B) Provide emergency balance of payments bailouts to member states", "C) Regulate global currency exchange rates", "D) Issue global sovereign credit ratings"], "ans": 0, "brief": "NDB supports infrastructure and sustainable development in BRICS and emerging economies[cite: 7]."},
+        {"num": 16, "module": "Module 1: BRICS & NDB", "q": "Which organization operates in partnership with the BRICS Centre for Industrial Competencies (BCIC) that India recently joined?", "options": ["A) UNIDO (United Nations Industrial Development Organization)", "B) UNESCO", "C) UNDP", "D) ILO"], "ans": 0, "brief": "India joined BCIC, which operates in partnership with UNIDO to boost industrial and manufacturing skills[cite: 7]."},
+        {"num": 17, "module": "Module 1: BRICS & NDB", "q": "When was the United Nations Industrial Development Organization (UNIDO) established, and where is it headquartered?", "options": ["A) 1966; Vienna, Austria", "B) 1945; Rome, Italy", "C) 1948; Geneva, Switzerland", "D) 1957; Vienna, Austria"], "ans": 0, "brief": "UNIDO was established in 1966 and is headquartered in Vienna, Austria[cite: 7]."},
+        {"num": 18, "module": "Module 1: BRICS & NDB", "q": "Who is the current head (Director-General) of UNIDO?", "options": ["A) Gerd Müller", "B) Rafael Mariano Grossi", "C) Qu Dongyu", "D) Tedros Adhanom"], "ans": 0, "brief": "Gerd Müller is the current head of UNIDO[cite: 7]."},
+        {"num": 19, "module": "Module 1: BRICS & NDB", "q": "Where will the World Seafood Congress 2026 take place for the first time in India, bringing together global policymakers and scientists?", "options": ["A) Chennai", "B) Kochi", "C) Visakhapatnam", "D) Mumbai"], "ans": 0, "brief": "The World Seafood Congress 2026 will take place in Chennai, India, for the first time[cite: 7]."},
+        {"num": 20, "module": "Module 1: BRICS & NDB", "q": "Which grouping was formed to act as a counter to Western economic blocs like the G7 and the World Bank?", "options": ["A) BRICS", "B) ASEAN", "C) BIMSTEC", "D) OECD"], "ans": 0, "brief": "BRICS acts as a counterweight to Western-dominated institutions like the G7 and World Bank[cite: 7]."},
+        {"num": 21, "module": "Module 1: BRICS & NDB", "q": "Which country was removed from the G8 in 2014, reverting the group back to G7?", "options": ["A) Russia", "B) China", "C) Brazil", "D) India"], "ans": 0, "brief": "Russia was removed from the G8 in 2014 after the Crimea annexation, reverting it to G7[cite: 7]."},
+        {"num": 22, "module": "Module 1: BRICS & NDB", "q": "Which Southeast Asian nation was highlighted among the new expansion members of BRICS in recent years?", "options": ["A) Indonesia", "B) Singapore", "C) Thailand", "D) Vietnam"], "ans": 0, "brief": "Indonesia was noted among the recent expansion members of BRICS[cite: 7]."},
+        {"num": 23, "module": "Module 1: BRICS & NDB", "q": "Which Middle Eastern nation joined BRICS during its recent expansion?", "options": ["A) United Arab Emirates (UAE) / Iran", "B) Qatar", "C) Kuwait", "D) Oman"], "ans": 0, "brief": "Iran and UAE were highlighted as new Middle Eastern members of BRICS[cite: 7]."},
+        {"num": 24, "module": "Module 1: BRICS & NDB", "q": "Which of the following statements regarding BRICS is correct?", "options": ["A) It has no permanent headquarters or secretariat", "B) It has a permanent secretariat in Geneva", "C) It requires mandatory military defense treaties", "D) It was founded by the United Nations in 1995"], "ans": 0, "brief": "BRICS is an informal forum and has no permanent headquarters or secretariat[cite: 7]."},
+        {"num": 25, "module": "Module 1: BRICS & NDB", "q": "In the AFCAT PYQ review, which combination of statements regarding India's BRICS 2026 role is correct: 1. Sudhakar Dalela is BRICS Sherpa, 2. India assumes Chairmanship for 4th time, 3. 18th Summit to be held in New Delhi?", "options": ["A) All of the above (1, 2, and 3)", "B) Only 1 and 2", "C) Only 2 and 3", "D) Only 1 and 3"], "ans": 0, "brief": "All three statements regarding India's 2026 BRICS Chairmanship and Sherpa are correct[cite: 7]."},
+
+        // MODULE 2: BIMSTEC, QUAD & ASEAN (26-50)
+        {"num": 26, "module": "Module 2: BIMSTEC, QUAD & ASEAN", "q": "When was BIMSTEC established, and through which declaration?", "options": ["A) 6 June 1997; Bangkok Declaration", "B) 8 December 1985; Dhaka Declaration", "C) 8 August 1967; Bangkok Declaration", "D) 15 August 1995; Colombo Declaration"], "ans": 0, "brief": "BIMSTEC was established on 6 June 1997 through the Bangkok Declaration[cite: 7]."},
+        {"num": 27, "module": "Module 2: BIMSTEC, QUAD & ASEAN", "q": "Where is the Secretariat (Headquarters) of BIMSTEC located?", "options": ["A) Dhaka, Bangladesh", "B) Kathmandu, Nepal", "C) Bangkok, Thailand", "D) Colombo, Sri Lanka"], "ans": 0, "brief": "BIMSTEC Secretariat is located in Dhaka, Bangladesh[cite: 7]."},
+        {"num": 28, "module": "Module 2: BIMSTEC, QUAD & ASEAN", "q": "How many member countries comprise BIMSTEC, and what is the regional breakdown?", "options": ["A) 7 members (5 South Asian + 2 Southeast Asian)", "B) 8 members (all South Asian)", "C) 10 members (all Southeast Asian)", "D) 5 members (littoral Bay of Bengal states only)"], "ans": 0, "brief": "BIMSTEC has 7 members: 5 South Asian (India, Bangladesh, Bhutan, Nepal, Sri Lanka) + 2 Southeast Asian (Myanmar, Thailand)[cite: 7]."},
+        {"num": 29, "module": "Module 2: BIMSTEC, QUAD & ASEAN", "q": "Who is the current Secretary General of BIMSTEC?", "options": ["A) Ambassador Indra Mani Pandey", "B) Tenzin Lekphell", "C) Esala Ruwan Weerakoon", "D) Shahidul Islam"], "ans": 0, "brief": "Ambassador Indra Mani Pandey is the Secretary General of BIMSTEC[cite: 7]."},
+        {"num": 30, "module": "Module 2: BIMSTEC, QUAD & ASEAN", "q": "Where was the first-ever Foreign Ministers' retreat/meeting of BIMSTEC held recently?", "options": ["A) Bangkok, Thailand (and retreat in New Delhi)", "B) Dhaka, Bangladesh", "C) Colombo, Sri Lanka", "D) Kathmandu, Nepal"], "ans": 0, "brief": "The first-ever BIMSTEC Foreign Ministers' meeting began in Bangkok, Thailand (with a retreat in New Delhi)[cite: 7]."},
+        {"num": 31, "module": "Module 2: BIMSTEC, QUAD & ASEAN", "q": "Which four countries comprise the Quadrilateral Security Dialogue (QUAD)?", "options": ["A) USA, India, Australia, and Japan", "B) USA, UK, India, and Australia", "C) India, Japan, South Korea, and Australia", "D) USA, France, India, and Japan"], "ans": 0, "brief": "QUAD comprises the United States, India, Australia, and Japan[cite: 7]."},
+        {"num": 32, "module": "Module 2: BIMSTEC, QUAD & ASEAN", "q": "The QUAD began as a humanitarian coordination mechanism after which disaster?", "options": ["A) 2004 Indian Ocean tsunami", "B) 2008 Fukushima earthquake", "C) 2011 Thailand tsunami", "D) 2001 Gujarat earthquake"], "ans": 0, "brief": "QUAD originated as a humanitarian coordination group after the 2004 Indian Ocean tsunami[cite: 7]."},
+        {"num": 33, "module": "Module 2: BIMSTEC, QUAD & ASEAN", "q": "Which Japanese Prime Minister was instrumental in proposing and revitalizing the QUAD?", "options": ["A) Shinzo Abe", "B) Fumio Kishida", "C) Yoshihide Suga", "D) Junichiro Koizumi"], "ans": 0, "brief": "Late Japanese PM Shinzo Abe was the primary architect of the QUAD concept[cite: 7]."},
+        {"num": 34, "module": "Module 2: BIMSTEC, QUAD & ASEAN", "q": "Where was the 11th Quad Foreign Ministers' Meeting held?", "options": ["A) New Delhi, India", "B) Tokyo, Japan", "C) Melbourne, Australia", "D) Washington D.C., USA"], "ans": 0, "brief": "The 11th Quad Foreign Ministers' Meeting was held in New Delhi, India[cite: 7]."},
+        {"num": 35, "module": "Module 2: BIMSTEC, QUAD & ASEAN", "q": "Which of the following is correct regarding the institutional structure of the QUAD?", "options": ["A) It has no permanent headquarters or secretariat", "B) Its headquarters is located in Tokyo", "C) It is a formal NATO-style military alliance", "D) Its secretariat is based in Canberra"], "ans": 0, "brief": "QUAD is an informal diplomatic and security dialogue with no permanent headquarters or secretariat[cite: 7]."},
+        {"num": 36, "module": "Module 2: BIMSTEC, QUAD & ASEAN", "q": "When was ASEAN (Association of Southeast Asian Nations) established, and through which declaration?", "options": ["A) 8 August 1967; Bangkok Declaration", "B) 6 June 1997; Bangkok Declaration", "C) 8 December 1985; Dhaka Declaration", "D) 16 November 1945; Paris Declaration"], "ans": 0, "brief": "ASEAN was founded on 8 August 1967 through the Bangkok Declaration[cite: 7]."},
+        {"num": 37, "module": "Module 2: BIMSTEC, QUAD & ASEAN", "q": "What is the official motto of ASEAN?", "options": ["A) 'One Vision, One Identity, One Community'", "B) 'Unity in Diversity'", "C) 'Shared Prosperity for Southeast Asia'", "D) 'Peace, Progress, and Prosperity'"], "ans": 0, "brief": "The official motto of ASEAN is 'One Vision, One Identity, One Community'[cite: 7]."},
+        {"num": 38, "module": "Module 2: BIMSTEC, QUAD & ASEAN", "q": "Where is the Secretariat of ASEAN located?", "options": ["A) Jakarta, Indonesia", "B) Bangkok, Thailand", "C) Manila, Philippines", "D) Singapore"], "ans": 0, "brief": "ASEAN Secretariat is located in Jakarta, Indonesia[cite: 7]."},
+        {"num": 39, "module": "Module 2: BIMSTEC, QUAD & ASEAN", "q": "How many member countries comprise ASEAN after the latest addition?", "options": ["A) 11 members (with Timor-Leste as the latest addition)", "B) 10 members", "C) 8 members", "D) 12 members"], "ans": 0, "brief": "ASEAN now has 11 member nations, with Timor-Leste as the newest addition[cite: 7]."},
+        {"num": 40, "module": "Module 2: BIMSTEC, QUAD & ASEAN", "q": "Which country is the latest (11th) addition to ASEAN?", "options": ["A) Timor-Leste", "B) Papua New Guinea", "C) Cambodia", "D) Brunei"], "ans": 0, "brief": "Timor-Leste is the 11th and latest member of ASEAN[cite: 7]."},
+        {"num": 41, "module": "Module 2: BIMSTEC, QUAD & ASEAN", "q": "Where are the 59th ASEAN Foreign Ministers' Meeting and related Post-Ministerial Conferences (2026) taking place?", "options": ["A) Manila, Philippines", "B) Jakarta, Indonesia", "C) Bangkok, Thailand", "D) Kuala Lumpur, Malaysia"], "ans": 0, "brief": "The 59th ASEAN Foreign Ministers' Meeting is being hosted in Manila, Philippines[cite: 7]."},
+        {"num": 42, "module": "Module 2: BIMSTEC, QUAD & ASEAN", "q": "What is the theme of the 2026 ASEAN Chairmanship hosted by the Philippines?", "options": ["A) 'Navigating Our Future, Together'", "B) 'ASEAN Matters: Epicentrum of Growth'", "C) 'One Community for Peace'", "D) 'Sustainable Southeast Asia'"], "ans": 0, "brief": "The Philippines' 2026 ASEAN Chairmanship theme is 'Navigating Our Future, Together'[cite: 7]."},
+        {"num": 43, "module": "Module 2: BIMSTEC, QUAD & ASEAN", "q": "Which ASEAN member country has the largest population and land area among the group?", "options": ["A) Indonesia", "B) Vietnam", "C) Thailand", "D) Philippines"], "ans": 0, "brief": "Indonesia is the largest ASEAN country by both population and land area[cite: 7]."},
+        {"num": 44, "module": "Module 2: BIMSTEC, QUAD & ASEAN", "q": "Which two countries are members of BIMSTEC but NOT members of SAARC?", "options": ["A) Myanmar and Thailand", "B) Bangladesh and Sri Lanka", "C) Nepal and Bhutan", "D) India and Maldives"], "ans": 0, "brief": "Myanmar and Thailand are Southeast Asian members of BIMSTEC and do not belong to SAARC[cite: 7]."},
+        {"num": 45, "module": "Module 2: BIMSTEC, QUAD & ASEAN", "q": "When is ASEAN Day observed annually?", "options": ["A) 8 August", "B) 6 June", "C) 8 December", "D) 24 October"], "ans": 0, "brief": "ASEAN Day is observed annually on 8 August[cite: 7]."},
+        {"num": 46, "module": "Module 2: BIMSTEC, QUAD & ASEAN", "q": "Which naval exercise is conducted among the QUAD member nations?", "options": ["A) Exercise Malabar", "B) Exercise MILAN", "C) Exercise RIMPAC", "D) Exercise Kakadu"], "ans": 0, "brief": "Exercise Malabar is the premier multilateral naval exercise among QUAD nations[cite: 7]."},
+        {"num": 47, "module": "Module 2: BIMSTEC, QUAD & ASEAN", "q": "Which of the following countries is a founding member of ASEAN (1967)?", "options": ["A) Indonesia, Malaysia, Philippines, Singapore, and Thailand", "B) Vietnam, Laos, Cambodia, and Myanmar", "C) Brunei and Timor-Leste", "D) India and China"], "ans": 0, "brief": "The five founding fathers of ASEAN in 1967 were Indonesia, Malaysia, Philippines, Singapore, and Thailand[cite: 7]."},
+        {"num": 48, "module": "Module 2: BIMSTEC, QUAD & ASEAN", "q": "Which strait was highlighted in the QUAD ministerial meeting regarding rising geopolitical maritime tensions?", "options": ["A) Strait of Hormuz (and South China Sea)", "B) Strait of Malacca", "C) Bab-el-Mandeb", "D) Bosphorus Strait"], "ans": 0, "brief": "The QUAD meeting announced initiatives amidst tensions in the Strait of Hormuz and South China Sea[cite: 7]."},
+        {"num": 49, "module": "Module 2: BIMSTEC, QUAD & ASEAN", "q": "Which of the following South Asian countries is a member of both SAARC and BIMSTEC?", "options": ["A) India, Bangladesh, Bhutan, Nepal, and Sri Lanka", "B) Pakistan and Afghanistan", "C) Maldives", "D) Myanmar"], "ans": 0, "brief": "India, Bangladesh, Bhutan, Nepal, and Sri Lanka belong to both SAARC and BIMSTEC[cite: 7]."},
+        {"num": 50, "module": "Module 2: BIMSTEC, QUAD & ASEAN", "q": "Which body hosts the ASEAN Post-Ministerial Conference with India?", "options": ["A) ASEAN (currently Philippines 2026)", "B) SAARC", "C) BRICS", "D) SCO"], "ans": 0, "brief": "The ASEAN Post-Ministerial Conference with India is hosted during the ASEAN Ministerial meetings[cite: 7]."},
+
+        // MODULE 3: SAARC, UNITED NATIONS (UN) & IAEA (51-75)
+        {"num": 51, "module": "Module 3: SAARC, UN & IAEA", "q": "When was SAARC established, and through the signing of which charter?", "options": ["A) 8 December 1985; SAARC Charter at Dhaka, Bangladesh", "B) 6 June 1997; Bangkok Charter", "C) 8 August 1967; Bangkok Declaration", "D) 24 October 1945; San Francisco Charter"], "ans": 0, "brief": "SAARC was founded on 8 December 1985 through the SAARC Charter in Dhaka[cite: 7]."},
+        {"num": 52, "module": "Module 3: SAARC, UN & IAEA", "q": "Where is the Secretariat (Headquarters) of SAARC located?", "options": ["A) Kathmandu, Nepal", "B) Dhaka, Bangladesh", "C) New Delhi, India", "D) Colombo, Sri Lanka"], "ans": 0, "brief": "SAARC Secretariat is located in Kathmandu, Nepal[cite: 7]."},
+        {"num": 53, "module": "Module 3: SAARC, UN & IAEA", "q": "How many member countries comprise SAARC?", "options": ["A) 8 members", "B) 7 members", "C) 10 members", "D) 5 members"], "ans": 0, "brief": "SAARC comprises 8 South Asian member countries[cite: 7]."},
+        {"num": 54, "module": "Module 3: SAARC, UN & IAEA", "q": "Which country became the 8th member of SAARC in 2007 (approved at the 13th Summit in 2005)?", "options": ["A) Afghanistan", "B) Maldives", "C) Bhutan", "D) Myanmar"], "ans": 0, "brief": "Afghanistan formally joined SAARC as its 8th member state in 2007[cite: 7]."},
+        {"num": 55, "module": "Module 3: SAARC, UN & IAEA", "q": "When was the United Nations (UN) founded, and how many Member States does it currently have?", "options": ["A) 24 October 1945; 193 Member States", "B) 16 November 1945; 195 Member States", "C) 15 August 1947; 190 Member States", "D) 1 January 1950; 189 Member States"], "ans": 0, "brief": "The UN was founded on 24 October 1945 and currently has 193 Member States[cite: 7]."},
+        {"num": 56, "module": "Module 3: SAARC, UN & IAEA", "q": "Where is the headquarters of the United Nations (UN) located?", "options": ["A) New York City, USA", "B) Geneva, Switzerland", "C) Vienna, Austria", "D) The Hague, Netherlands"], "ans": 0, "brief": "The UN is headquartered in New York City, USA[cite: 7]."},
+        {"num": 57, "module": "Module 3: SAARC, UN & IAEA", "q": "Who is the current Secretary-General of the United Nations?", "options": ["A) António Guterres", "B) Ban Ki-moon", "C) Tedros Adhanom", "D) Rafael Grossi"], "ans": 0, "brief": "António Guterres is the current Secretary-General of the United Nations[cite: 7]."},
+        {"num": 58, "module": "Module 3: SAARC, UN & IAEA", "q": "How many main organs constitute the United Nations?", "options": ["A) 6 (General Assembly, Security Council, ECOSOC, Trusteeship Council, ICJ, Secretariat)", "B) 5", "C) 4", "D) 7"], "ans": 0, "brief": "The UN has 6 main organs: UNGA, UNSC, ECOSOC, Trusteeship Council, ICJ, and Secretariat[cite: 7]."},
+        {"num": 59, "module": "Module 3: SAARC, UN & IAEA", "q": "Which is the only main organ of the United Nations that is NOT headquartered in New York City?", "options": ["A) International Court of Justice (ICJ) — located in The Hague, Netherlands", "B) UN General Assembly (UNGA)", "C) UN Security Council (UNSC)", "D) Economic and Social Council (ECOSOC)"], "ans": 0, "brief": "The International Court of Justice (ICJ) is headquartered at The Hague, Netherlands[cite: 7]."},
+        {"num": 60, "module": "Module 3: SAARC, UN & IAEA", "q": "How many judges sit on the International Court of Justice (ICJ), and what is their term length?", "options": ["A) 15 judges elected for 9-year terms", "B) 10 judges elected for 5-year terms", "C) 15 judges elected for 5-year terms", "D) 20 judges elected for 6-year terms"], "ans": 0, "brief": "The ICJ consists of 15 judges elected for 9-year terms[cite: 7]."},
+        {"num": 61, "module": "Module 3: SAARC, UN & IAEA", "q": "How many official languages does the United Nations have?", "options": ["A) 6 (Arabic, Chinese, English, French, Russian, Spanish)", "B) 4 (English, French, Russian, Chinese)", "C) 5 (Arabic, English, French, Russian, Spanish)", "D) 2 (English and French)"], "ans": 0, "brief": "The UN has 6 official languages: Arabic, Chinese, English, French, Russian, and Spanish[cite: 7]."},
+        {"num": 62, "module": "Module 3: SAARC, UN & IAEA", "q": "Which five countries hold permanent veto power in the UN Security Council (UNSC)?", "options": ["A) USA, United Kingdom, France, Russia, and China", "B) USA, Germany, Japan, India, and UK", "C) USA, Russia, China, India, and France", "D) UK, France, Germany, Russia, and USA"], "ans": 0, "brief": "The 5 permanent veto-wielding members of UNSC are USA, UK, France, Russia, and China[cite: 7]."},
+        {"num": 63, "module": "Module 3: SAARC, UN & IAEA", "q": "When was the International Atomic Energy Agency (IAEA) established?", "options": ["A) 1957", "B) 1945", "C) 1960", "D) 1948"], "ans": 0, "brief": "The IAEA was established in 1957 as the 'Atoms for Peace' organization[cite: 7]."},
+        {"num": 64, "module": "Module 3: SAARC, UN & IAEA", "q": "Where is the headquarters of the International Atomic Energy Agency (IAEA) located?", "options": ["A) Vienna, Austria", "B) Geneva, Switzerland", "C) Paris, France", "D) New York, USA"], "ans": 0, "brief": "IAEA is headquartered in Vienna, Austria[cite: 7]."},
+        {"num": 65, "module": "Module 3: SAARC, UN & IAEA", "q": "Who is the current Director General of the International Atomic Energy Agency (IAEA)?", "options": ["A) Rafael Mariano Grossi", "B) Tedros Adhanom", "C) Qu Dongyu", "D) Gerd Müller"], "ans": 0, "brief": "Rafael Mariano Grossi is the Director General of the IAEA[cite: 7]."},
+        {"num": 66, "module": "Module 3: SAARC, UN & IAEA", "q": "Why was the IAEA recently highlighted in international news?", "options": ["A) Because of inspections and monitoring of Iran's nuclear programme", "B) For designing new nuclear submarines", "C) For funding solar energy projects in Africa", "D) For resolving maritime trade disputes"], "ans": 0, "brief": "IAEA was in the news regarding inspections and monitoring of Iran's nuclear programme[cite: 7]."},
+        {"num": 67, "module": "Module 3: SAARC, UN & IAEA", "q": "What is the primary mandate of the International Atomic Energy Agency (IAEA)?", "options": ["A) To promote peaceful use of nuclear energy and verify that civilian programs are not diverted for military purposes", "B) To manufacture enriched uranium for developing countries", "C) To control global fossil fuel prices", "D) To prosecute war criminals at The Hague"], "ans": 0, "brief": "IAEA promotes peaceful nuclear energy and inspects civilian nuclear sites against military diversion[cite: 7]."},
+        {"num": 68, "module": "Module 3: SAARC, UN & IAEA", "q": "Where is the headquarters of the United Nations Environment Programme (UNEP) located?", "options": ["A) Nairobi, Kenya", "B) Geneva, Switzerland", "C) Vienna, Austria", "D) Montreal, Canada"], "ans": 0, "brief": "UNEP is headquartered in Nairobi, Kenya[cite: 7]."},
+        {"num": 69, "module": "Module 3: SAARC, UN & IAEA", "q": "Where is the headquarters of UN-Habitat located?", "options": ["A) Nairobi, Kenya", "B) Rome, Italy", "C) Paris, France", "D) New York, USA"], "ans": 0, "brief": "UN-Habitat is headquartered in Nairobi, Kenya[cite: 7]."},
+        {"num": 70, "module": "Module 3: SAARC, UN & IAEA", "q": "Where is the headquarters of the United Nations High Commissioner for Refugees (UNHCR) located?", "options": ["A) Geneva, Switzerland", "B) Rome, Italy", "C) Vienna, Austria", "D) Paris, France"], "ans": 0, "brief": "UNHCR is headquartered in Geneva, Switzerland[cite: 7]."},
+        {"num": 71, "module": "Module 3: SAARC, UN & IAEA", "q": "Where is the headquarters of the World Intellectual Property Organization (WIPO) located?", "options": ["A) Geneva, Switzerland", "B) Paris, France", "C) London, UK", "D) Vienna, Austria"], "ans": 0, "brief": "WIPO is headquartered in Geneva, Switzerland[cite: 7]."},
+        {"num": 72, "module": "Module 3: SAARC, UN & IAEA", "q": "Where is the headquarters of the International Telecommunication Union (ITU) located?", "options": ["A) Geneva, Switzerland", "B) Montreal, Canada", "C) London, UK", "D) Washington D.C., USA"], "ans": 0, "brief": "ITU is headquartered in Geneva, Switzerland[cite: 7]."},
+        {"num": 73, "module": "Module 3: SAARC, UN & IAEA", "q": "Where is the headquarters of UNCTAD (UN Conference on Trade and Development) located?", "options": ["A) Geneva, Switzerland", "B) Paris, France", "C) Rome, Italy", "D) New York, USA"], "ans": 0, "brief": "UNCTAD is headquartered in Geneva, Switzerland[cite: 7]."},
+        {"num": 74, "module": "Module 3: SAARC, UN & IAEA", "q": "Where is the headquarters of the International Maritime Organization (IMO) located?", "options": ["A) London, United Kingdom", "B) Geneva, Switzerland", "C) Vienna, Austria", "D) Hamburg, Netherlands"], "ans": 0, "brief": "IMO is headquartered in London, United Kingdom[cite: 7]."},
+        {"num": 75, "module": "Module 3: SAARC, UN & IAEA", "q": "Which of the following is correct regarding the United Nations Population Fund (UNFPA)?", "options": ["A) Headquartered in New York City, USA", "B) Headquartered in Geneva, Switzerland", "C) Headquartered in Rome, Italy", "D) Headquartered in Nairobi, Kenya"], "ans": 0, "brief": "UNFPA is headquartered in New York City, USA[cite: 7]."},
+
+        // MODULE 4: FAO, WHO, WTO & UNIDO SPECIALIZED AGENCIES (76-100)
+        {"num": 76, "module": "Module 4: FAO, WHO, WTO & UNIDO", "q": "Which is the oldest permanent specialized agency of the United Nations, established in October 1945?", "options": ["A) Food and Agriculture Organization (FAO)", "B) World Health Organization (WHO)", "C) UNESCO", "D) UNICEF"], "ans": 0, "brief": "FAO is the oldest permanent specialized agency of the UN, founded in October 1945[cite: 7]."},
+        {"num": 77, "module": "Module 4: FAO, WHO, WTO & UNIDO", "q": "Where is the headquarters of the Food and Agriculture Organization (FAO) located?", "options": ["A) Rome, Italy", "B) Geneva, Switzerland", "C) Paris, France", "D) Vienna, Austria"], "ans": 0, "brief": "FAO is headquartered in Rome, Italy[cite: 7]."},
+        {"num": 78, "module": "Module 4: FAO, WHO, WTO & UNIDO", "q": "How many members does the FAO currently have?", "options": ["A) 195 members (194 countries + European Union)", "B) 193 members", "C) 190 members", "D) 164 members"], "ans": 0, "brief": "FAO currently has 195 members: 194 countries and the European Union[cite: 7]."},
+        {"num": 79, "module": "Module 4: FAO, WHO, WTO & UNIDO", "q": "Who is the current Director-General of the FAO?", "options": ["A) Qu Dongyu", "B) Tedros Adhanom", "C) Ngozi Okonjo-Iweala", "D) Rafael Grossi"], "ans": 0, "brief": "Qu Dongyu is the current Director-General of the FAO[cite: 7]."},
+        {"num": 80, "module": "Module 4: FAO, WHO, WTO & UNIDO", "q": "What is the Latin motto of the FAO appearing on its emblem ('FIAT PANIS')?", "options": ["A) 'Let there be bread'", "B) 'Food for all'", "C) 'World without hunger'", "D) 'Agriculture and Prosperity'"], "ans": 0, "brief": "The FAO emblem bears the Latin inscription 'FIAT PANIS', meaning 'Let there be bread'[cite: 7]."},
+        {"num": 81, "module": "Module 4: FAO, WHO, WTO & UNIDO", "q": "Which highest honour of the FAO was conferred upon PM Narendra Modi for 2026?", "options": ["A) Agricola Medal", "B) World Food Prize", "C) Norman Borlaug Award", "D) FIAT PANIS Order"], "ans": 0, "brief": "PM Narendra Modi was conferred the Agricola Medal for 2026 by FAO in Rome, Italy[cite: 7]."},
+        {"num": 82, "module": "Module 4: FAO, WHO, WTO & UNIDO", "q": "Which former Indian Prime Minister previously received the FAO Agricola Medal in 2008?", "options": ["A) Dr. Manmohan Singh", "B) Atal Bihari Vajpayee", "C) P. V. Narasimha Rao", "D) Indira Gandhi"], "ans": 0, "brief": "Former PM Manmohan Singh received the Agricola Medal in 2008 for modernizing agriculture[cite: 7]."},
+        {"num": 83, "module": "Module 4: FAO, WHO, WTO & UNIDO", "q": "Where is the headquarters of the World Food Programme (WFP), which won the Nobel Peace Prize in 2020?", "options": ["A) Rome, Italy", "B) Geneva, Switzerland", "C) New York, USA", "D) Paris, France"], "ans": 0, "brief": "The World Food Programme (WFP) is headquartered in Rome, Italy[cite: 7]."},
+        {"num": 84, "module": "Module 4: FAO, WHO, WTO & UNIDO", "q": "When was the World Health Organization (WHO) established, and where is it headquartered?", "options": ["A) 1948; Geneva, Switzerland", "B) 1945; Rome, Italy", "C) 1957; Vienna, Austria", "D) 1995; Geneva, Switzerland"], "ans": 0, "brief": "WHO was established in 1948 and is headquartered in Geneva, Switzerland[cite: 7]."},
+        {"num": 85, "module": "Module 4: FAO, WHO, WTO & UNIDO", "q": "Who is the current Director-General of the World Health Organization (WHO)?", "options": ["A) Dr. Tedros Adhanom Ghebreyesus", "B) Dr. Ngozi Okonjo-Iweala", "C) Dr. Qu Dongyu", "D) Dr. Gerd Müller"], "ans": 0, "brief": "Dr. Tedros Adhanom is the current Director-General of WHO[cite: 7]."},
+        {"num": 86, "module": "Module 4: FAO, WHO, WTO & UNIDO", "q": "When was the World Trade Organization (WTO) established, replacing GATT?", "options": ["A) 1995", "B) 1948", "C) 1985", "D) 2001"], "ans": 0, "brief": "WTO was established in 1995, replacing GATT (which governed trade from 1948 to 1995)[cite: 7]."},
+        {"num": 87, "module": "Module 4: FAO, WHO, WTO & UNIDO", "q": "Where is the headquarters of the World Trade Organization (WTO) located?", "options": ["A) Geneva, Switzerland", "B) Brussels, Belgium", "C) Washington D.C., USA", "D) London, UK"], "ans": 0, "brief": "WTO is headquartered in Geneva, Switzerland[cite: 7]."},
+        {"num": 88, "module": "Module 4: FAO, WHO, WTO & UNIDO", "q": "How many member countries currently belong to the World Trade Organization (WTO)?", "options": ["A) 164 members", "B) 193 members", "C) 150 members", "D) 189 members"], "ans": 0, "brief": "The WTO currently has 164 member states[cite: 7]."},
+        {"num": 89, "module": "Module 4: FAO, WHO, WTO & UNIDO", "q": "Who is the current Director-General of the World Trade Organization (WTO)?", "options": ["A) Dr. Ngozi Okonjo-Iweala", "B) Dr. Tedros Adhanom", "C) Dilma Rousseff", "D) Kristalina Georgieva"], "ans": 0, "brief": "Dr. Ngozi Okonjo-Iweala is the current Director-General of the WTO[cite: 7]."},
+        {"num": 90, "module": "Module 4: FAO, WHO, WTO & UNIDO", "q": "What multilateral instrument governed international trade from 1948 until the WTO was established in 1995?", "options": ["A) GATT (General Agreement on Tariffs and Trade)", "B) GATS", "C) TRIPS", "D) NAFTA"], "ans": 0, "brief": "GATT was the multilateral instrument governing global trade from 1948 to 1995[cite: 7]."},
+        {"num": 91, "module": "Module 4: FAO, WHO, WTO & UNIDO", "q": "Where is the headquarters of the International Labour Organization (ILO), which won the Nobel Peace Prize in 1969?", "options": ["A) Geneva, Switzerland", "B) Paris, France", "C) Rome, Italy", "D) Vienna, Austria"], "ans": 0, "brief": "ILO is headquartered in Geneva, Switzerland[cite: 7]."},
+        {"num": 92, "module": "Module 4: FAO, WHO, WTO & UNIDO", "q": "Which organization won the Nobel Peace Prize three times (in 1917, 1944, and 1963)?", "options": ["A) International Committee of the Red Cross (ICRC)", "B) UNHCR", "C) UNICEF", "D) WHO"], "ans": 0, "brief": "The Red Cross (ICRC), headquartered in Geneva, won the Nobel Peace Prize three times (1917, 1944, 1963)[cite: 7]."},
+        {"num": 93, "module": "Module 4: FAO, WHO, WTO & UNIDO", "q": "Which UN agency headquartered in Geneva won the Nobel Peace Prize twice (1954 and 1981)?", "options": ["A) UNHCR (UN High Commissioner for Refugees)", "B) UNICEF", "C) ILO", "D) IAEA"], "ans": 0, "brief": "UNHCR won the Nobel Peace Prize twice, in 1954 and 1981[cite: 7]."},
+        {"num": 94, "module": "Module 4: FAO, WHO, WTO & UNIDO", "q": "In which year did UNICEF win the Nobel Peace Prize?", "options": ["A) 1965", "B) 1954", "C) 1981", "D) 2020"], "ans": 0, "brief": "UNICEF won the Nobel Peace Prize in 1965[cite: 7]."},
+        {"num": 95, "module": "Module 4: FAO, WHO, WTO & UNIDO", "q": "Which of the following UN agencies has never won the Nobel Peace Prize according to the comparative chart?", "options": ["A) UNESCO", "B) ILO", "C) UNICEF", "D) WFP"], "ans": 0, "brief": "UNESCO is noted in the chart as not having won the Nobel Peace Prize ('No mila')[cite: 7]."},
+        {"num": 96, "module": "Module 4: FAO, WHO, WTO & UNIDO", "q": "Where is the International Civil Aviation Organization (ICAO) headquartered?", "options": ["A) Montreal, Canada", "B) Geneva, Switzerland", "C) London, UK", "D) Paris, France"], "ans": 0, "brief": "ICAO is headquartered in Montreal, Canada[cite: 7]."},
+        {"num": 97, "module": "Module 4: FAO, WHO, WTO & UNIDO", "q": "Where is the Organization of the Petroleum Exporting Countries (OPEC) headquartered?", "options": ["A) Vienna, Austria", "B) Riyadh, Saudi Arabia", "C) Geneva, Switzerland", "D) Baghdad, Iraq"], "ans": 0, "brief": "OPEC was founded in Baghdad in 1960 but is headquartered in Vienna, Austria[cite: 7]."},
+        {"num": 98, "module": "Module 4: FAO, WHO, WTO & UNIDO", "q": "Where is the OECD (Organisation for Economic Co-operation and Development) headquartered?", "options": ["A) Paris, France", "B) Geneva, Switzerland", "C) Brussels, Belgium", "D) London, UK"], "ans": 0, "brief": "OECD is headquartered in Paris, France[cite: 7]."},
+        {"num": 99, "module": "Module 4: FAO, WHO, WTO & UNIDO", "q": "Where is the Commonwealth of Nations headquartered?", "options": ["A) London, United Kingdom", "B) Geneva, Switzerland", "C) Brussels, Belgium", "D) New York, USA"], "ans": 0, "brief": "The Commonwealth of Nations is headquartered in London, United Kingdom[cite: 7]."},
+        {"num": 100, "module": "Module 4: FAO, WHO, WTO & UNIDO", "q": "Which city hosts the headquarters of both ILO and WHO?", "options": ["A) Geneva, Switzerland", "B) Paris, France", "C) Rome, Italy", "D) Vienna, Austria"], "ans": 0, "brief": "Both ILO and WHO are headquartered in Geneva, Switzerland[cite: 7]."},
+
+        // MODULE 5: G7, G20 & AFRICAN UNION (101-125)
+        {"num": 101, "module": "Module 5: G7, G20 & AU", "q": "When was the Group of Seven (G7) informal bloc of industrialized democracies formed?", "options": ["A) 1975 (Canada joined in 1976)", "B) 1985", "C) 1949", "D) 1995"], "ans": 0, "brief": "G7 was formed in 1975, with Canada joining in 1976[cite: 7]."},
+        {"num": 102, "module": "Module 5: G7, G20 & AU", "q": "Which seven nations constitute the G7?", "options": ["A) France, Germany, Italy, United Kingdom, Japan, United States, and Canada", "B) USA, UK, Germany, France, Japan, China, and Russia", "C) USA, UK, France, Germany, Italy, Australia, and Canada", "D) USA, UK, France, Germany, Japan, India, and Canada"], "ans": 0, "brief": "The G7 consists of France, Germany, Italy, UK, Japan, USA, and Canada[cite: 7]."},
+        {"num": 103, "module": "Module 5: G7, G20 & AU", "q": "Which of the following is true regarding India's membership status in the G7?", "options": ["A) India is not a permanent member of the G7 (attends as an invited outreach guest)", "B) India is a founding permanent member of G7", "C) India joined G7 in 2023", "D) India holds veto power in G7"], "ans": 0, "brief": "India is not a permanent member of the G7 but regularly attends outreach summits[cite: 7]."},
+        {"num": 104, "module": "Module 5: G7, G20 & AU", "q": "Where was the 52nd G7 Summit (2026) Outreach Session attended by PM Narendra Modi held?", "options": ["A) Évian, France", "B) Biarritz, France", "C) Hiroshima, Japan", "D) Elmau, Germany"], "ans": 0, "brief": "PM Modi attended the 52nd G7 Summit Outreach Session (2026) at Évian, France[cite: 7]."},
+        {"num": 105, "module": "Module 5: G7, G20 & AU", "q": "What was the theme of the 52nd G7 Summit Outreach Session held at Évian, France?", "options": ["A) 'Forging New Partnerships and Rebuilding International Solidarity'", "B) 'One Earth, One Family, One Future'", "C) 'Building a Fairer Global South'", "D) 'Solidarity, Equality, Sustainability'"], "ans": 0, "brief": "The theme at Évian was 'Forging New Partnerships and Rebuilding International Solidarity'[cite: 7]."},
+        {"num": 106, "module": "Module 5: G7, G20 & AU", "q": "The G20 is an informal grouping of 19 major economies along with which two regional unions?", "options": ["A) European Union (EU) and African Union (AU)", "B) European Union (EU) and ASEAN", "C) African Union (AU) and SAARC", "D) European Union (EU) and OPEC"], "ans": 0, "brief": "G20 comprises 19 countries plus the European Union (EU) and the African Union (AU)[cite: 7]."},
+        {"num": 107, "module": "Module 5: G7, G20 & AU", "q": "G20 members account for approximately what percentage of global GDP, world trade, and world population?", "options": ["A) 85% of global GDP, over 75% of world trade, and two-thirds of global population", "B) 50% of global GDP, 50% of world trade, and half of population", "C) 95% of global GDP, 90% of world trade, and 80% of population", "D) 60% of global GDP, 60% of world trade, and 40% of population"], "ans": 0, "brief": "G20 represents 85% of global GDP, over 75% of world trade, and nearly two-thirds of population[cite: 7]."},
+        {"num": 108, "module": "Module 5: G7, G20 & AU", "q": "Which city and country hosted the 20th G20 Summit in 2025, marking the first-ever G20 summit on the African continent?", "options": ["A) Johannesburg, South Africa", "B) Cairo, Egypt", "C) Addis Ababa, Ethiopia", "D) Nairobi, Kenya"], "ans": 0, "brief": "The 20th G20 Summit 2025 was hosted in Johannesburg, South Africa[cite: 7]."},
+        {"num": 109, "module": "Module 5: G7, G20 & AU", "q": "What was the official theme of the 20th G20 Summit held in Johannesburg, South Africa?", "options": ["A) 'Solidarity, Equality, Sustainability'", "B) 'Vasudhaiva Kutumbakam'", "C) 'Navigating Our Future, Together'", "D) 'Building for Resilience and Innovation'"], "ans": 0, "brief": "The theme of the Johannesburg G20 Summit was 'Solidarity, Equality, Sustainability'[cite: 7]."},
+        {"num": 110, "module": "Module 5: G7, G20 & AU", "q": "When was the African Union (AU) established, succeeding the Organization of African Unity (OAU)?", "options": ["A) 2002 (OAU founded in 1963)", "B) 1963", "C) 1995", "D) 2010"], "ans": 0, "brief": "The African Union was established in 2002, replacing the OAU founded in 1963[cite: 7]."},
+        {"num": 111, "module": "Module 5: G7, G20 & AU", "q": "Where is the headquarters of the African Union (AU) located?", "options": ["A) Addis Ababa, Ethiopia", "B) Johannesburg, South Africa", "C) Nairobi, Kenya", "D) Cairo, Egypt"], "ans": 0, "brief": "The African Union is headquartered in Addis Ababa, Ethiopia[cite: 7]."},
+        {"num": 112, "module": "Module 5: G7, G20 & AU", "q": "How many member nations make up the African Union (AU)?", "options": ["A) 55 African nations", "B) 50 African nations", "C) 48 African nations", "D) 60 African nations"], "ans": 0, "brief": "The African Union consists of 55 member nations of the African continent[cite: 7]."},
+        {"num": 113, "module": "Module 5: G7, G20 & AU", "q": "Which is the highest decision-making body of the African Union?", "options": ["A) AU Assembly (Heads of State & Government)", "B) AU Executive Council", "C) AU Commission", "D) AU Parliament"], "ans": 0, "brief": "The Assembly of Heads of State and Government is the AU's highest decision-making body[cite: 7]."},
+        {"num": 114, "module": "Module 5: G7, G20 & AU", "q": "What was the main theme of the 39th Ordinary Session of the Assembly of the African Union Summit 2026?", "options": ["A) 'Ensuring the sustainable availability of safe water and sanitation systems'", "B) 'Silence the Guns in Africa'", "C) 'Accelerating African Continental Free Trade Area'", "D) 'Food Security and Nutrition in Africa'"], "ans": 0, "brief": "The 2026 AU Summit theme focused on safe water and clean sanitation facilities[cite: 7]."},
+        {"num": 115, "module": "Module 5: G7, G20 & AU", "q": "Which arm of the African Union serves as its administrative branch implementing decisions from Addis Ababa?", "options": ["A) AU Commission", "B) AU Assembly", "C) AU Executive Council", "D) AU Peace and Security Council"], "ans": 0, "brief": "The AU Commission is the administrative arm implementing AU decisions from Addis Ababa[cite: 7]."},
+        {"num": 116, "module": "Module 5: G7, G20 & AU", "q": "Which body of the African Union comprises Foreign Affairs Ministers who handle policy and make recommendations to the Assembly?", "options": ["A) AU Executive Council", "B) AU Commission", "C) AU Secretariat", "D) Pan-African Parliament"], "ans": 0, "brief": "The Executive Council comprises Foreign Ministers who prepare recommendations for the Assembly[cite: 7]."},
+        {"num": 117, "module": "Module 5: G7, G20 & AU", "q": "All G7 member countries are also permanent members of which other major economic grouping?", "options": ["A) G20", "B) BRICS", "C) ASEAN", "D) SCO"], "ans": 0, "brief": "All seven G7 countries are members of the G20[cite: 7]."},
+        {"num": 118, "module": "Module 5: G7, G20 & AU", "q": "Which G7 member is an Asian island nation?", "options": ["A) Japan", "B) Singapore", "C) South Korea", "D) Philippines"], "ans": 0, "brief": "Japan is the only Asian member of the G7[cite: 7]."},
+        {"num": 119, "module": "Module 5: G7, G20 & AU", "q": "Which of the following is a founding member of the G20?", "options": ["A) India", "B) Pakistan", "C) Bangladesh", "D) Sri Lanka"], "ans": 0, "brief": "India is a founding member of the G20[cite: 7]."},
+        {"num": 120, "module": "Module 5: G7, G20 & AU", "q": "Which regional union was recently admitted as a permanent member of the G20, bringing total regional unions to two?", "options": ["A) African Union (AU)", "B) ASEAN", "C) SAARC", "D) BIMSTEC"], "ans": 0, "brief": "The African Union was admitted as a permanent member of the G20[cite: 7]."},
+        {"num": 121, "module": "Module 5: G7, G20 & AU", "q": "When was the Organization of African Unity (OAU) founded?", "options": ["A) 1963", "B) 1950", "C) 1975", "D) 1990"], "ans": 0, "brief": "OAU was founded in 1963 to promote cooperation among independent African states[cite: 7]."},
+        {"num": 122, "module": "Module 5: G7, G20 & AU", "q": "Which of the following countries is a member of BOTH BRICS and G20?", "options": ["A) Brazil, Russia, India, China, and South Africa", "B) Singapore and Thailand", "C) Egypt and Ethiopia only", "D) Iran and UAE only"], "ans": 0, "brief": "The core five BRICS nations (Brazil, Russia, India, China, South Africa) are all G20 members[cite: 7]."},
+        {"num": 123, "module": "Module 5: G7, G20 & AU", "q": "Which organization has its headquarters in Brussels, Belgium?", "options": ["A) European Union (EU) and NATO", "B) G7", "C) G20", "D) African Union"], "ans": 0, "brief": "Brussels, Belgium, hosts the headquarters of both the European Union and NATO[cite: 7]."},
+        {"num": 124, "module": "Module 5: G7, G20 & AU", "q": "In which month of 2026 was the 39th AU Summit scheduled in Addis Ababa?", "options": ["A) February 14-15, 2026", "B) May 10-11, 2026", "C) September 12-13, 2026", "D) October 24, 2026"], "ans": 0, "brief": "The 39th AU Summit was scheduled for February 14-15, 2026, in Addis Ababa[cite: 7]."},
+        {"num": 125, "module": "Module 5: G7, G20 & AU", "q": "What was the primary goal of succeeding the OAU with the African Union in 2002?", "options": ["A) To accelerate the economic integration of the African continent", "B) To create a single African military army", "C) To establish a common African currency immediately", "D) To relocate headquarters to Cairo"], "ans": 0, "brief": "A primary goal of the AU was to accelerate the economic integration of the continent[cite: 7]."},
+
+        // MODULE 6: WORLD BANK, IMF, NATO & SCO (126-150)
+        {"num": 126, "module": "Module 6: WB, IMF, NATO & SCO", "q": "Following which historic 1944 conference were both the World Bank and International Monetary Fund (IMF) established?", "options": ["A) Bretton Woods Conference", "B) Yalta Conference", "C) San Francisco Conference", "D) Geneva Convention"], "ans": 0, "brief": "The World Bank and IMF were established following the Bretton Woods Conference in 1944[cite: 7]."},
+        {"num": 127, "module": "Module 6: WB, IMF, NATO & SCO", "q": "Where are the headquarters of both the World Bank and the IMF located?", "options": ["A) Washington, D.C., USA", "B) New York City, USA", "C) Geneva, Switzerland", "D) London, United Kingdom"], "ans": 0, "brief": "Both the World Bank and IMF are headquartered in Washington, D.C.[cite: 7]."},
+        {"num": 128, "module": "Module 6: WB, IMF, NATO & SCO", "q": "How many member countries belong to the World Bank Group?", "options": ["A) 189 member countries", "B) 190 member countries", "C) 193 member countries", "D) 164 member countries"], "ans": 0, "brief": "The World Bank Group consists of 189 member countries[cite: 7]."},
+        {"num": 129, "module": "Module 6: WB, IMF, NATO & SCO", "q": "How many development institutions make up the World Bank Group?", "options": ["A) 5 institutions (IBRD, IDA, IFC, MIGA, ICSID)", "B) 3 institutions", "C) 4 institutions", "D) 6 institutions"], "ans": 0, "brief": "The World Bank Group comprises 5 institutions: IBRD, IDA, IFC, MIGA, and ICSID[cite: 7]."},
+        {"num": 130, "module": "Module 6: WB, IMF, NATO & SCO", "q": "Which World Bank Group institution insures lenders and investors against political risks such as war?", "options": ["A) MIGA (Multilateral Investment Guarantee Agency)", "B) IBRD", "C) IDA", "D) IFC"], "ans": 0, "brief": "MIGA insures lenders and investors against political risks like war and civil disturbance[cite: 7]."},
+        {"num": 131, "module": "Module 6: WB, IMF, NATO & SCO", "q": "Which World Bank institution handles the settlement of international investment disputes?", "options": ["A) ICSID (International Centre for Settlement of Investment Disputes)", "B) IFC", "C) IBRD", "D) IDA"], "ans": 0, "brief": "ICSID provides facilities for conciliation and arbitration of international investment disputes[cite: 7]."},
+        {"num": 132, "module": "Module 6: WB, IMF, NATO & SCO", "q": "How many member countries belong to the International Monetary Fund (IMF)?", "options": ["A) 190 member countries", "B) 189 member countries", "C) 193 member countries", "D) 195 member countries"], "ans": 0, "brief": "The IMF is an organization of 190 member countries[cite: 7]."},
+        {"num": 133, "module": "Module 6: WB, IMF, NATO & SCO", "q": "What is the primary role of the International Monetary Fund (IMF)?", "options": ["A) Provide short- to medium-term financial assistance for balance of payments crises and monitor global economic surveillance", "B) Finance long-term rural infrastructure dams", "C) Regulate international intellectual property laws", "D) Conduct military peacekeeping missions"], "ans": 0, "brief": "IMF provides balance of payments financial assistance and monitors economic surveillance[cite: 7]."},
+        {"num": 134, "module": "Module 6: WB, IMF, NATO & SCO", "q": "When was NATO (North Atlantic Treaty Organization) established, and through which treaty?", "options": ["A) April 1949; North Atlantic Treaty (Washington Treaty)", "B) 1957; Rome Treaty", "C) 1945; Paris Treaty", "D) 1960; Brussels Treaty"], "ans": 0, "brief": "NATO was established in April 1949 by the North Atlantic / Washington Treaty[cite: 7]."},
+        {"num": 135, "module": "Module 6: WB, IMF, NATO & SCO", "q": "Where is the political headquarters of NATO located?", "options": ["A) Brussels, Belgium", "B) Mons, Belgium", "C) Geneva, Switzerland", "D) London, UK"], "ans": 0, "brief": "NATO's political headquarters is located in Brussels, Belgium[cite: 7]."},
+        {"num": 136, "module": "Module 6: WB, IMF, NATO & SCO", "q": "Where is the headquarters of NATO's Allied Command Operations (military headquarters) located?", "options": ["A) Mons, Belgium", "B) Brussels, Belgium", "C) Paris, France", "D) Ramstein, Germany"], "ans": 0, "brief": "Allied Command Operations (SHAPE) is headquartered in Mons, Belgium[cite: 7]."},
+        {"num": 137, "module": "Module 6: WB, IMF, NATO & SCO", "q": "How many member states currently belong to NATO after Sweden joined in 2024?", "options": ["A) 32 member states", "B) 30 member states", "C) 31 member states", "D) 28 member states"], "ans": 0, "brief": "With Sweden joining as the 32nd member in 2024, NATO now has 32 member states[cite: 7]."},
+        {"num": 138, "module": "Module 6: WB, IMF, NATO & SCO", "q": "Which country joined NATO as its 32nd member state in 2024 during NATO's 75th anniversary?", "options": ["A) Sweden", "B) Finland", "C) Ukraine", "D) Austria"], "ans": 0, "brief": "Sweden joined NATO as its 32nd member in 2024[cite: 7]."},
+        {"num": 139, "module": "Module 6: WB, IMF, NATO & SCO", "q": "What is the core collective defense clause of the North Atlantic Treaty stating that an attack against one member is an attack against all?", "options": ["A) Article 5", "B) Article 4", "C) Article 10", "D) Article 1"], "ans": 0, "brief": "Article 5 is NATO's collective defense clause[cite: 7]."},
+        {"num": 140, "module": "Module 6: WB, IMF, NATO & SCO", "q": "Which of the following European Union (EU) members is NOT a member of NATO?", "options": ["A) Austria, Ireland, Cyprus, and Malta", "B) France and Germany", "C) Italy and Spain", "D) Poland and Romania"], "ans": 0, "brief": "Austria, Ireland, Cyprus, and Malta are EU members but do not belong to NATO[cite: 7]."},
+        {"num": 141, "module": "Module 6: WB, IMF, NATO & SCO", "q": "When was the Shanghai Cooperation Organisation (SCO) established, and where is its Secretariat located?", "options": ["A) 2001; Beijing, China", "B) 1996; Shanghai, China", "C) 2005; Moscow, Russia", "D) 2017; Tashkent, Uzbekistan"], "ans": 0, "brief": "SCO was established in 2001 and its Secretariat is in Beijing, China[cite: 7]."},
+        {"num": 142, "module": "Module 6: WB, IMF, NATO & SCO", "q": "From which earlier mechanism did the Shanghai Cooperation Organisation (SCO) evolve?", "options": ["A) Shanghai Five mechanism", "B) Eurasian Six dialogue", "C) Tashkent Pact", "D) Central Asian Security Bloc"], "ans": 0, "brief": "The SCO evolved from the earlier Shanghai Five mechanism[cite: 7]."},
+        {"num": 143, "module": "Module 6: WB, IMF, NATO & SCO", "q": "Where is the Regional Anti-Terrorist Structure (RATS) of the SCO located?", "options": ["A) Tashkent, Uzbekistan", "B) Bishkek, Kyrgyzstan", "C) Almaty, Kazakhstan", "D) Dushanbe, Tajikistan"], "ans": 0, "brief": "SCO-RATS is located in Tashkent, Uzbekistan[cite: 7]."},
+        {"num": 144, "module": "Module 6: WB, IMF, NATO & SCO", "q": "In which year did India (and Pakistan) become full members of the Shanghai Cooperation Organisation (SCO)?", "options": ["A) 2017", "B) 2015", "C) 2012", "D) 2020"], "ans": 0, "brief": "India became a full member of the SCO in 2017 at the Astana Summit[cite: 7]."},
+        {"num": 145, "module": "Module 6: WB, IMF, NATO & SCO", "q": "Which Central Asian nation is notably NOT a member of the Shanghai Cooperation Organisation (SCO)?", "options": ["A) Turkmenistan (attends as a guest)", "B) Kazakhstan", "C) Kyrgyzstan", "D) Tajikistan"], "ans": 0, "brief": "Turkmenistan is not an SCO member state (it maintains permanent neutrality and attends as a guest)[cite: 7]."},
+        {"num": 146, "module": "Module 6: WB, IMF, NATO & SCO", "q": "Which of the following lists correctly identifies member states of the SCO?", "options": ["A) Kazakhstan, Kyrgyzstan, Tajikistan, Uzbekistan, India, Pakistan, China, Russia, Iran, Belarus", "B) Turkmenistan, Afghanistan, Nepal, Sri Lanka, Turkey", "C) Japan, South Korea, Australia, USA", "D) Ukraine, Poland, Romania, Hungary"], "ans": 0, "brief": "Full SCO members include Kazakhstan, Kyrgyzstan, Tajikistan, Uzbekistan, India, Pakistan, China, Russia, Iran, and Belarus[cite: 7]."},
+        {"num": 147, "module": "Module 6: WB, IMF, NATO & SCO", "q": "Which of the following countries has Observer status in the SCO?", "options": ["A) Afghanistan and Mongolia", "B) India and China", "C) Russia and Belarus", "D) Kazakhstan and Uzbekistan"], "ans": 0, "brief": "Afghanistan and Mongolia hold Observer status in the SCO[cite: 7]."},
+        {"num": 148, "module": "Module 6: WB, IMF, NATO & SCO", "q": "Which of the following countries is a Dialogue Partner of the SCO?", "options": ["A) Nepal, Sri Lanka, Turkey, Cambodia, Armenia, Azerbaijan", "B) USA and UK", "C) France and Germany", "D) Australia and Japan"], "ans": 0, "brief": "Nepal, Sri Lanka, Turkey, Cambodia, Armenia, and Azerbaijan are SCO Dialogue Partners[cite: 7]."},
+        {"num": 149, "module": "Module 6: WB, IMF, NATO & SCO", "q": "Which organizations attend SCO summits as guest international organizations?", "options": ["A) ASEAN, CIS, and United Nations (UN)", "B) NATO and EU", "C) SAARC and BIMSTEC", "D) OPEC and G7"], "ans": 0, "brief": "ASEAN, CIS, and the United Nations attend SCO summits as guest organizations[cite: 7]."},
+        {"num": 150, "module": "Module 6: WB, IMF, NATO & SCO", "q": "Which World Bank Group institution is specifically known as 'IBRD'?", "options": ["A) International Bank for Reconstruction and Development", "B) International Bureau of Rural Development", "C) Indian Bank for Reconstruction and Development", "D) International Board of Regional Development"], "ans": 0, "brief": "IBRD stands for International Bank for Reconstruction and Development[cite: 7]."},
+
+        // MODULE 7: INTERPOL, FATF & UNESCO (151-175)
+        {"num": 151, "module": "Module 7: INTERPOL, FATF & UNESCO", "q": "When was INTERPOL (International Criminal Police Organization - ICPO) established, and where is its headquarters located?", "options": ["A) 1923; Lyon, France", "B) 1945; New York, USA", "C) 1957; Geneva, Switzerland", "D) 1960; Paris, France"], "ans": 0, "brief": "INTERPOL was established in 1923 and is headquartered in Lyon, France[cite: 7]."},
+        {"num": 152, "module": "Module 7: INTERPOL, FATF & UNESCO", "q": "Which of the following is correct regarding INTERPOL's organizational affiliation?", "options": ["A) INTERPOL is an independent intergovernmental police organization and is NOT a United Nations agency", "B) INTERPOL is the 7th main organ of the UN", "C) INTERPOL is a subsidiary of NATO", "D) INTERPOL is headquartered at The Hague"], "ans": 0, "brief": "INTERPOL is an independent international police organization and NOT a UN agency ('Not UN')[cite: 7]."},
+        {"num": 153, "module": "Module 7: INTERPOL, FATF & UNESCO", "q": "What is an INTERPOL 'Red Notice'?", "options": ["A) A request to law enforcement agencies worldwide to locate and provisionally detain a person pending extradition", "B) A warning about hidden explosive devices", "C) A notification of a missing child", "D) An alert regarding unexploded naval mines"], "ans": 0, "brief": "A Red Notice seeks the location and provisional arrest of wanted persons pending extradition[cite: 7]."},
+        {"num": 154, "module": "Module 7: INTERPOL, FATF & UNESCO", "q": "What is an INTERPOL 'Yellow Notice' used for?", "options": ["A) To locate missing persons (especially minors)", "B) To warn about criminal recidivists", "C) To identify dead bodies", "D) To request information about a criminal's identity"], "ans": 0, "brief": "A Yellow Notice is issued to help locate missing persons, especially minors[cite: 7]."},
+        {"num": 155, "module": "Module 7: INTERPOL, FATF & UNESCO", "q": "What is an INTERPOL 'Blue Notice' used for?", "options": ["A) To collect additional information about a person's identity, location, or activities in relation to a crime", "B) To request provisional arrest for extradition", "C) To warn about potential terrorist threats", "D) To locate stolen artworks"], "ans": 0, "brief": "A Blue Notice is used to collect information about a person's identity or location[cite: 7]."},
+        {"num": 156, "module": "Module 7: INTERPOL, FATF & UNESCO", "q": "What is an INTERPOL 'Green Notice' used for?", "options": ["A) To warn about a person's criminal activities if they are considered a possible threat to public safety (likely to repeat crimes)", "B) To identify unidentified dead bodies", "C) To locate missing persons", "D) To request arrest of escaped convicts"], "ans": 0, "brief": "A Green Notice warns about persons likely to commit criminal acts in other countries[cite: 7]."},
+        {"num": 157, "module": "Module 7: INTERPOL, FATF & UNESCO", "q": "What is an INTERPOL 'Black Notice' used for?", "options": ["A) To seek information on unidentified dead bodies", "B) To warn about biological weapons", "C) To track illicit financial flows", "D) To notify about cyber security attacks"], "ans": 0, "brief": "A Black Notice is issued to seek information on unidentified dead bodies[cite: 7]."},
+        {"num": 158, "module": "Module 7: INTERPOL, FATF & UNESCO", "q": "Who is the current President of INTERPOL?", "options": ["A) Lucas Philippe", "B) Ahmed Naser Al-Raisi", "C) Jürgen Stock", "D) Meng Hongwei"], "ans": 0, "brief": "Lucas Philippe is noted as the President of INTERPOL[cite: 7]."},
+        {"num": 159, "module": "Module 7: INTERPOL, FATF & UNESCO", "q": "When was the Financial Action Task Force (FATF) established, and by which group?", "options": ["A) 1989; by the G7 summit in Paris", "B) 1995; by the United Nations", "C) 2001; by the G20", "D) 1975; by OECD"], "ans": 0, "brief": "FATF was established in 1989 by the G7 at its Paris summit[cite: 7]."},
+        {"num": 160, "module": "Module 7: INTERPOL, FATF & UNESCO", "q": "Where is the headquarters (Secretariat) of the Financial Action Task Force (FATF) located?", "options": ["A) Paris, France (at OECD headquarters)", "B) Geneva, Switzerland", "C) London, UK", "D) New York, USA"], "ans": 0, "brief": "FATF is headquartered in Paris, France (housed at the OECD)[cite: 7]."},
+        {"num": 161, "module": "Module 7: INTERPOL, FATF & UNESCO", "q": "What is the primary mandate of the Financial Action Task Force (FATF)?", "options": ["A) Develop international standards to combat money laundering, terrorist financing, and proliferation financing", "B) Provide development loans for agricultural banks", "C) Inspect nuclear enrichment facilities", "D) Regulate maritime trade tariffs"], "ans": 0, "brief": "FATF combats money laundering, terrorist financing, and proliferation financing[cite: 7]."},
+        {"num": 162, "module": "Module 7: INTERPOL, FATF & UNESCO", "q": "What does the FATF 'Grey List' represent?", "options": ["A) Jurisdictions under increased monitoring that have committed to resolve strategic deficiencies", "B) High-risk jurisdictions subject to call for countermeasures", "C) Countries banned from the United Nations", "D) Nations with zero taxation laws"], "ans": 0, "brief": "The Grey List identifies jurisdictions under increased monitoring working to fix AML/CFT deficiencies[cite: 7]."},
+        {"num": 163, "module": "Module 7: INTERPOL, FATF & UNESCO", "q": "What does the FATF 'Black List' represent?", "options": ["A) High-risk jurisdictions subject to a call for countermeasures/sanctions", "B) Countries under temporary IMF surveillance", "C) Non-members of the World Bank", "D) Nations hosting regional military bases"], "ans": 0, "brief": "The Black List identifies high-risk jurisdictions subject to a call for countermeasures[cite: 7]."},
+        {"num": 164, "module": "Module 7: INTERPOL, FATF & UNESCO", "q": "Which senior Indian IAS officer has been named to take over as Vice-President of the FATF for the July 2026 – June 2027 term?", "options": ["A) Vivek Aggarwal", "B) T. Raja Kumar", "C) Ajay Seth", "D) Tarun Bajaj"], "ans": 0, "brief": "Senior IAS officer Vivek Aggarwal is set to take over as FATF Vice-President for 2026-2027[cite: 7]."},
+        {"num": 165, "module": "Module 7: INTERPOL, FATF & UNESCO", "q": "When was UNESCO (United Nations Educational, Scientific and Cultural Organization) founded, and where is it headquartered?", "options": ["A) 16 November 1945; Paris, France", "B) 24 October 1945; Geneva, Switzerland", "C) 1948; Rome, Italy", "D) 1950; New York, USA"], "ans": 0, "brief": "UNESCO was founded on 16 November 1945 and is headquartered in Paris, France[cite: 7]."},
+        {"num": 166, "module": "Module 7: INTERPOL, FATF & UNESCO", "q": "Who is the current head (Director-General) of UNESCO?", "options": ["A) Khaled El-Enany", "B) Audrey Azoulay", "C) Irina Bokova", "D) Koïchiro Matsuura"], "ans": 0, "brief": "Khaled El-Enany is noted as the current head of UNESCO[cite: 7]."},
+        {"num": 167, "module": "Module 7: INTERPOL, FATF & UNESCO", "q": "Which organization won the UNESCO/Guillermo Cano World Press Freedom Prize 2026?", "options": ["A) Sudanese Journalists Syndicate", "B) Reporters Without Borders", "C) Palestinian Journalists Union", "D) Afghan Women Journalists Association"], "ans": 0, "brief": "The UNESCO/Guillermo Cano Prize 2026 was awarded to the Sudanese Journalists Syndicate[cite: 7]."},
+        {"num": 168, "module": "Module 7: INTERPOL, FATF & UNESCO", "q": "When was the UNESCO Guillermo Cano World Press Freedom Prize established, and after whom is it named?", "options": ["A) Established in 1997; named after Guillermo Cano Isaza (Colombian journalist assassinated in 1986)", "B) Established in 1985; named after a Spanish editor", "C) Established in 2000; named after a Mexican war correspondent", "D) Established in 1990; named after an Italian publisher"], "ans": 0, "brief": "Established in 1997, named after Colombian journalist Guillermo Cano Isaza assassinated in 1986[cite: 7]."},
+        {"num": 169, "module": "Module 7: INTERPOL, FATF & UNESCO", "q": "On which date is the UNESCO Guillermo Cano World Press Freedom Prize conferred annually?", "options": ["A) 3 May (World Press Freedom Day)", "B) 10 December (Human Rights Day)", "C) 16 November (UNESCO Day)", "D) 24 October (UN Day)"], "ans": 0, "brief": "The prize is conferred annually on 3 May, World Press Freedom Day[cite: 7]."},
+        {"num": 170, "module": "Module 7: INTERPOL, FATF & UNESCO", "q": "India and China are in discussions for a joint UNESCO nomination of which 7th-century travel account by a Chinese Buddhist monk-scholar?", "options": ["A) 'The Great Tang Records on the Western Regions' by Xuanzang (Hiuen Tsang)", "B) 'Records of Buddhist Kingdoms' by Faxian (Fa-Hien)", "C) 'A Record of the Buddhist Religion' by Yijing (I-Tsing)", "D) 'Travels in India' by Marco Polo"], "ans": 0, "brief": "India and China discussed nominating Xuanzang's 'The Great Tang Records on the Western Regions'[cite: 7]."},
+        {"num": 171, "module": "Module 7: INTERPOL, FATF & UNESCO", "q": "What is the primary mission of UNESCO?", "options": ["A) Build peace through international cooperation in Education, the Sciences and Culture", "B) Finance balance of payments deficits", "C) Enforce international maritime law", "D) Provide peacekeeping infantry troops"], "ans": 0, "brief": "UNESCO seeks to build peace through cooperation in Education, the Sciences, and Culture[cite: 7]."},
+        {"num": 172, "module": "Module 7: INTERPOL, FATF & UNESCO", "q": "Which organization is headquartered in Lyon, France?", "options": ["A) INTERPOL", "B) FATF", "C) UNESCO", "D) OECD"], "ans": 0, "brief": "INTERPOL is headquartered in Lyon, France[cite: 7]."},
+        {"num": 173, "module": "Module 7: INTERPOL, FATF & UNESCO", "q": "Which organization is headquartered in Paris, France, alongside UNESCO and OECD?", "options": ["A) Financial Action Task Force (FATF)", "B) INTERPOL", "C) WTO", "D) ILO"], "ans": 0, "brief": "FATF is headquartered in Paris, France (at the OECD)[cite: 7]."},
+        {"num": 174, "module": "Module 7: INTERPOL, FATF & UNESCO", "q": "Which notice type in INTERPOL's color-coded system is used for locating missing minors?", "options": ["A) Yellow Notice", "B) Red Notice", "C) Blue Notice", "D) Black Notice"], "ans": 0, "brief": "Yellow Notices are issued for locating missing persons, especially minors[cite: 7]."},
+        {"num": 175, "module": "Module 7: INTERPOL, FATF & UNESCO", "q": "Which notice type in INTERPOL is used for seeking information on unidentified dead bodies?", "options": ["A) Black Notice", "B) Green Notice", "C) Yellow Notice", "D) Blue Notice"], "ans": 0, "brief": "Black Notices are issued to seek information on unidentified dead bodies[cite: 7]."},
+
+        // MODULE 8: UNICEF, IBCA & NITI AAYOG INITIATIVES (176-200)
+        {"num": 176, "module": "Module 8: UNICEF, IBCA & NITI Aayog", "q": "When was UNICEF originally created, and what did its acronym stand for at that time?", "options": ["A) 1946; International Children's Emergency Fund (ICEF)", "B) 1953; United Nations Children's Foundation", "C) 1945; United Nations International Children's Educational Fund", "D) 1950; International Child Relief Fund"], "ans": 0, "brief": "UNICEF was created in 1946 as the International Children's Emergency Fund (ICEF) to aid WWII children[cite: 7]."},
+        {"num": 177, "module": "Module 8: UNICEF, IBCA & NITI Aayog", "q": "In which year did UNICEF become a permanent part of the United Nations system?", "options": ["A) 1953", "B) 1946", "C) 1965", "D) 1970"], "ans": 0, "brief": "UNICEF became a permanent part of the United Nations in 1953[cite: 7]."},
+        {"num": 178, "module": "Module 8: UNICEF, IBCA & NITI Aayog", "q": "Where is the headquarters of UNICEF located?", "options": ["A) New York City, USA", "B) Geneva, Switzerland", "C) Paris, France", "D) Rome, Italy"], "ans": 0, "brief": "UNICEF is headquartered in New York City, USA[cite: 7]."},
+        {"num": 179, "module": "Module 8: UNICEF, IBCA & NITI Aayog", "q": "When and where was the first International Big Cat Alliance (IBCA) Summit 2026 held?", "options": ["A) June 1-2, 2026; New Delhi, India", "B) July 15-16, 2026; Nairobi, Kenya", "C) August 12, 2026; Vladivostok, Russia", "D) October 4, 2026; Johannesburg, South Africa"], "ans": 0, "brief": "The first IBCA Summit was held on June 1-2, 2026, in New Delhi, India[cite: 7]."},
+        {"num": 180, "module": "Module 8: UNICEF, IBCA & NITI Aayog", "q": "What was the official theme of the first International Big Cat Alliance (IBCA) Summit 2026?", "options": ["A) 'Save Big Cats, Save Humanity, Save Ecosystem'", "B) 'Protecting Seven Big Cats of the World'", "C) 'Global Tiger Recovery and Beyond'", "D) 'Living in Harmony with Large Felines'"], "ans": 0, "brief": "The theme of the first IBCA Summit was 'Save Big Cats, Save Humanity, Save Ecosystem'[cite: 7]."},
+        {"num": 181, "module": "Module 8: UNICEF, IBCA & NITI Aayog", "q": "In which year was the International Big Cat Alliance (IBCA) launched by India, and how many range countries does it cover?", "options": ["A) Launched in 2023; 95 range countries", "B) Launched in 2021; 50 range countries", "C) Launched in 2025; 120 range countries", "D) Launched in 2018; 30 range countries"], "ans": 0, "brief": "IBCA was launched in 2023 as a treaty-based alliance covering 95 range countries[cite: 7]."},
+        {"num": 182, "module": "Module 8: UNICEF, IBCA & NITI Aayog", "q": "Which seven big cat species are protected under the International Big Cat Alliance (IBCA)?", "options": ["A) Tiger, lion, leopard, snow leopard, cheetah, jaguar, and puma", "B) Tiger, lion, leopard, cheetah, lynx, ocelot, and serval", "C) Tiger, lion, snow leopard, clouded leopard, caracal, puma, and jaguar", "D) Tiger, lion, leopard, cheetah, cougar, bobcat, and panther"], "ans": 0, "brief": "The 7 big cats covered by IBCA are tiger, lion, leopard, snow leopard, cheetah, jaguar, and puma[cite: 7]."},
+        {"num": 183, "module": "Module 8: UNICEF, IBCA & NITI Aayog", "q": "When did NITI Aayog (National Institution for Transforming India) replace the Planning Commission?", "options": ["A) 1st January 2015", "B) 15 August 2014", "C) 1 April 2016", "D) 26 January 2015"], "ans": 0, "brief": "NITI Aayog replaced the Planning Commission on 1st January 2015[cite: 7]."},
+        {"num": 184, "module": "Module 8: UNICEF, IBCA & NITI Aayog", "q": "Who serves as the ex-officio Chairperson of NITI Aayog?", "options": ["A) Prime Minister of India (Narendra Modi)", "B) Union Finance Minister", "C) Union Commerce Minister", "D) Chief Economic Advisor"], "ans": 0, "brief": "The Prime Minister of India serves as the Chairperson of NITI Aayog[cite: 7]."},
+        {"num": 185, "module": "Module 8: UNICEF, IBCA & NITI Aayog", "q": "Who is the Vice Chairperson of NITI Aayog mentioned in the PDF notes?", "options": ["A) Ashok Kumar Lahiri", "B) Suman Bery", "C) Arvind Panagariya", "D) Rajiv Kumar"], "ans": 0, "brief": "Ashok Kumar Lahiri is noted as the Vice Chairperson of NITI Aayog[cite: 7]."},
+        {"num": 186, "module": "Module 8: UNICEF, IBCA & NITI Aayog", "q": "Who is the Chief Executive Officer (CEO) of NITI Aayog mentioned in the PDF notes?", "options": ["A) Anurag Jain", "B) B. V. R. Subrahmanyam", "C) Amitabh Kant", "D) Parameswaran Iyer"], "ans": 0, "brief": "Anurag Jain is noted as the CEO of NITI Aayog[cite: 7]."},
+        {"num": 187, "module": "Module 8: UNICEF, IBCA & NITI Aayog", "q": "What is 'Sampoornata Abhiyan 2.0', launched by NITI Aayog for Jan-Apr 2026?", "options": ["A) A 3-month campaign to achieve saturation of key development indicators in 112 Aspirational Districts and 513 Blocks", "B) A digital literacy drive in 500 tribal villages", "C) A financial inclusion campaign for rural women", "D) A solar roof installation drive across border blocks"], "ans": 0, "brief": "Sampoornata Abhiyan 2.0 targets saturation of development indicators in 112 Aspirational Districts and 513 Blocks[cite: 7]."},
+        {"num": 188, "module": "Module 8: UNICEF, IBCA & NITI Aayog", "q": "Where was the first overseas Atal Innovation Centre established by Atal Innovation Mission (AIM)?", "options": ["A) IIT Delhi Abu Dhabi campus", "B) IIT Madras Zanzibar campus", "C) IIT Kharagpur Kuala Lumpur campus", "D) IIM Ahmedabad Dubai campus"], "ans": 0, "brief": "The first overseas Atal Innovation Centre was established at IIT Delhi Abu Dhabi[cite: 7]."},
+        {"num": 189, "module": "Module 8: UNICEF, IBCA & NITI Aayog", "q": "When was Atal Innovation Mission (AIM) set up under NITI Aayog to promote innovation and entrepreneurship?", "options": ["A) 2016", "B) 2015", "C) 2018", "D) 2020"], "ans": 0, "brief": "Atal Innovation Mission (AIM) was set up under NITI Aayog in 2016[cite: 7]."},
+        {"num": 190, "module": "Module 8: UNICEF, IBCA & NITI Aayog", "q": "What is the 'We Rise Initiative', launched under NITI Aayog?", "options": ["A) A joint programme of NITI Aayog's Women Entrepreneurship Platform (WEP) and DP World to promote export-ready women-led MSMEs", "B) A scholarship program for girl students in STEM", "C) A sports coaching initiative for rural female athletes", "D) A maternal nutrition drive in aspirational blocks"], "ans": 0, "brief": "We Rise Initiative is a joint WEP-DP World program supporting 100 women-led MSMEs for global export[cite: 7]."},
+        {"num": 191, "module": "Module 8: UNICEF, IBCA & NITI Aayog", "q": "Which international trade hub is mentioned as an access platform for women entrepreneurs under the We Rise Initiative?", "options": ["A) Bharat Mart (Dubai)", "B) India Trade Centre (London)", "C) Bharat Pavilion (Singapore)", "D) Global Mart (New York)"], "ans": 0, "brief": "We Rise supports access to international markets like Bharat Mart in Dubai[cite: 7]."},
+        {"num": 192, "module": "Module 8: UNICEF, IBCA & NITI Aayog", "q": "Which key indicators are monitored for saturation under NITI Aayog's Sampoornata Abhiyan 2.0?", "options": ["A) Health, nutrition, education, sanitation, and livestock vaccination (e.g., ICDS nutrition, TB detection, toilets)", "B) Rural road length and broadband fiber connectivity", "C) Bank account opening and micro-insurance enrollment", "D) Solar pump installation and biogas plants"], "ans": 0, "brief": "Sampoornata Abhiyan 2.0 monitors ICDS nutrition, TB detection, toilets in schools/Anganwadis, and livestock vaccination[cite: 7]."},
+        {"num": 193, "module": "Module 8: UNICEF, IBCA & NITI Aayog", "q": "Which of the following is an executive body established via a Cabinet resolution rather than a Constitutional or Statutory Act?", "options": ["A) NITI Aayog", "B) SEBI", "C) NABARD", "D) IRDAI"], "ans": 0, "brief": "NITI Aayog is a non-statutory executive body formed by a Union Cabinet resolution in 2015[cite: 7]."},
+        {"num": 194, "module": "Module 8: UNICEF, IBCA & NITI Aayog", "q": "What is the primary target group of Atal Innovation Mission (AIM) in schools?", "options": ["A) Building a problem-solving mindset and establishing Atal Tinkering Labs (ATLs)", "B) Conducting national athletic championships", "C) Offering foreign study scholarships", "D) Training students for civil services"], "ans": 0, "brief": "AIM focuses on building a problem-solving mindset in schools through tinkering labs[cite: 7]."},
+        {"num": 195, "module": "Module 8: UNICEF, IBCA & NITI Aayog", "q": "Which of the following institutions is headquartered in New Delhi according to the Indian institutions summary?", "options": ["A) NITI Aayog, Election Commission, CAG, UPSC, CBI, and NIA", "B) RBI, SEBI, LIC, and NABARD", "C) IRDAI and SIDBI", "D) ISRO and TEA"], "ans": 0, "brief": "NITI Aayog, Election Commission, CAG, UPSC, CBI, and NIA are all headquartered in New Delhi[cite: 7]."},
+
+        // MODULE 9: NABARD, ISRO & RESERVE BANK OF INDIA (RBI) (196-220)
+        {"num": 196, "module": "Module 9: NABARD, ISRO & RBI", "q": "When was NABARD established, and under which Parliamentary Act?", "options": ["A) 1982; under the National Bank for Agriculture and Rural Development Act, 1981", "B) 1990; under the SIDBI Act, 1989", "C) 1992; under the SEBI Act, 1992", "D) 1935; under the RBI Act, 1934"], "ans": 0, "brief": "NABARD was established in 1982 under the NABARD Act of 1981[cite: 7]."},
+        {"num": 197, "module": "Module 9: NABARD, ISRO & RBI", "q": "Where is the headquarters of NABARD located?", "options": ["A) Mumbai, Maharashtra", "B) Lucknow, Uttar Pradesh", "C) Hyderabad, Telangana", "D) New Delhi"], "ans": 0, "brief": "NABARD is headquartered in Mumbai, Maharashtra[cite: 7]."},
+        {"num": 198, "module": "Module 9: NABARD, ISRO & RBI", "q": "What is the primary function of NABARD?", "options": ["A) Apex banking institution to provide finance for agriculture, rural development, small/cottage industries, and village projects", "B) Regulate stock exchanges and protect equity investors", "C) Issue national currency and control monetary policy", "D) Regulate insurance and reinsurance companies"], "ans": 0, "brief": "NABARD is the apex development bank for agriculture, rural development, and cottage industries[cite: 7]."},
+        {"num": 199, "module": "Module 9: NABARD, ISRO & RBI", "q": "When was the Indian Space Research Organisation (ISRO) established, and where is it headquartered?", "options": ["A) 15 August 1969; Bengaluru, Karnataka", "B) 26 January 1950; New Delhi", "C) 15 August 1972; Sriharikota, AP", "D) 1 April 1962; Hyderabad, Telangana"], "ans": 0, "brief": "ISRO was established on 15 August 1969 and is headquartered in Bengaluru[cite: 7]."},
+        {"num": 200, "module": "Module 9: NABARD, ISRO & RBI", "q": "From which earlier committee initiated by Dr. Vikram Sarabhai in 1962 did ISRO evolve?", "options": ["A) INCOSPAR (Indian National Committee for Space Research)", "B) TIFR Space Wing", "C) TERLS (Thumba Equatorial Rocket Launching Station)", "D) DRDO Space Cell"], "ans": 0, "brief": "ISRO evolved from INCOSPAR, initiated by Dr. Vikram Sarabhai in 1962[cite: 7]."},
+        {"num": 201, "module": "Module 9: NABARD, ISRO & RBI", "q": "Under which Government of India department does ISRO operate?", "options": ["A) Department of Space (DoS)", "B) Department of Science and Technology (DST)", "C) Department of Defence Research and Development (DDR&D)", "D) Ministry of Earth Sciences"], "ans": 0, "brief": "ISRO operates under the Department of Space, Government of India[cite: 7]."},
+        {"num": 202, "module": "Module 9: NABARD, ISRO & RBI", "q": "With which Ministry did ISRO sign an MoU in June 2026 for satellite technology applications in reservoir monitoring and river basin mapping?", "options": ["A) Ministry of Jal Shakti", "B) Ministry of Earth Sciences", "C) Ministry of Agriculture & Farmers Welfare", "D) Ministry of Environment, Forest and Climate Change"], "ans": 0, "brief": "ISRO signed an MoU with the Ministry of Jal Shakti in June 2026 for water resource monitoring[cite: 7]."},
+        {"num": 203, "module": "Module 9: NABARD, ISRO & RBI", "q": "What is the target year set by ISRO for establishing the Bharatiya Antariksh Station (India Space Station), and for a crewed Moon mission?", "options": ["A) Space Station around 2035; crewed Moon mission by 2040", "B) Space Station around 2030; crewed Moon mission by 2035", "C) Space Station around 2040; crewed Moon mission by 2047", "D) Space Station around 2028; crewed Moon mission by 2032"], "ans": 0, "brief": "ISRO targets the Bharatiya Antariksh Station around 2035 and a crewed Moon mission by 2040[cite: 7]."},
+        {"num": 204, "module": "Module 9: NABARD, ISRO & RBI", "q": "What is 'IMEX-2026' (Indian Microgravity Experiments) announced by ISRO?", "options": ["A) An Announcement of Opportunity inviting researchers and startups to propose microgravity experiments for Gaganyaan and BAS", "B) A joint maritime satellite mission with Indonesia", "C) An international lunar rover competition for universities", "D) A solar weather forecasting payload"], "ans": 0, "brief": "IMEX-2026 invites microgravity experiment proposals for Gaganyaan and Bharatiya Antariksh Station[cite: 7]."},
+        {"num": 205, "module": "Module 9: NABARD, ISRO & RBI", "q": "Which scientific organization hosted the 6th RISE Conclave 2026 in Bengaluru where ISRO participated with a space exhibition?", "options": ["A) Council of Scientific & Industrial Research (CSIR)", "B) DRDO", "C) Indian Institute of Science (IISc)", "D) Indian National Science Academy (INSA)"], "ans": 0, "brief": "CSIR organized the 6th RISE Conclave 2026 in Bengaluru[cite: 7]."},
+        {"num": 206, "module": "Module 9: NABARD, ISRO & RBI", "q": "Why was Ladakh chosen as the location for ISRO's 'Mission Mitra' high-altitude experiment?", "options": ["A) Due to extreme environmental conditions (low oxygen and freezing temperatures) to prepare astronauts for space isolation and stress", "B) For optimum satellite communication telemetry", "C) To test solar panels in high UV radiation", "D) To launch small sub-orbital sounding rockets"], "ans": 0, "brief": "Ladakh's low oxygen and freezing temperatures simulate space stress and isolation for Gaganyaan astronauts[cite: 7]."},
+        {"num": 207, "module": "Module 9: NABARD, ISRO & RBI", "q": "When was the Reserve Bank of India (RBI) established, and under which act?", "options": ["A) April 1, 1935; Reserve Bank of India Act, 1934", "B) January 1, 1949; Banking Regulation Act, 1949", "C) August 15, 1947; RBI Act, 1947", "D) April 1, 1950; Imperial Bank Act, 1950"], "ans": 0, "brief": "RBI was established on April 1, 1935, under the RBI Act of 1934[cite: 7]."},
+        {"num": 208, "module": "Module 9: NABARD, ISRO & RBI", "q": "Where was the Central Office of the RBI initially established in 1935, and when was it permanently moved to Mumbai?", "options": ["A) Initially in Calcutta; permanently moved to Mumbai in 1937", "B) Initially in New Delhi; moved to Mumbai in 1949", "C) Initially in Madras; moved to Mumbai in 1950", "D) Initially in Pune; moved to Mumbai in 1945"], "ans": 0, "brief": "RBI's Central Office was initially in Calcutta and moved to Mumbai in 1937[cite: 7]."},
+        {"num": 209, "module": "Module 9: NABARD, ISRO & RBI", "q": "When was the Reserve Bank of India (RBI) nationalized?", "options": ["A) 1949 (January 1)", "B) 1935", "C) 1955", "D) 1969"], "ans": 0, "brief": "Though originally privately owned, RBI was nationalized on January 1, 1949[cite: 7]."},
+        {"num": 210, "module": "Module 9: NABARD, ISRO & RBI", "q": "Who is the present Governor of the Reserve Bank of India (RBI) mentioned in the PDF notes?", "options": ["A) Sanjay Malhotra", "B) Shaktikanta Das", "C) Urjit Patel", "D) Raghuram Rajan"], "ans": 0, "brief": "Sanjay Malhotra is noted as the present Governor of the RBI[cite: 7]."},
+        {"num": 211, "module": "Module 9: NABARD, ISRO & RBI", "q": "Who was the first Indian Governor of the Reserve Bank of India (RBI)?", "options": ["A) C. D. Deshmukh", "B) Osborne Smith", "C) Benegal Rama Rau", "D) L. K. Jha"], "ans": 0, "brief": "Sir C.D. Deshmukh was the first Indian Governor of the RBI[cite: 7]."},
+        {"num": 212, "module": "Module 9: NABARD, ISRO & RBI", "q": "What is 'Reelathon 2026', launched by the RBI in June 2026?", "options": ["A) A nationwide short-video/reel competition to educate young users on cyber security and financial fraud prevention", "B) A digital currency awareness drive for rural banks", "C) A film festival for banking sector employees", "D) An online quiz on Indian banking history"], "ans": 0, "brief": "Reelathon 2026 is an RBI short-video competition on cyber security and fraud prevention[cite: 7]."},
+        {"num": 213, "module": "Module 9: NABARD, ISRO & RBI", "q": "In which city was the RBI's Reelathon 2026 campaign initiated?", "options": ["A) Thiruvananthapuram", "B) Mumbai", "C) New Delhi", "D) Bengaluru"], "ans": 0, "brief": "Reelathon 2026 was initiated in Thiruvananthapuram, Kerala[cite: 7]."},
+        {"num": 214, "module": "Module 9: NABARD, ISRO & RBI", "q": "In the AFCAT PYQ 2026 review, which former RBI Governor was appointed as an Executive Director at the International Monetary Fund (IMF) for a three-year term in August 2025?", "options": ["A) Urjit Patel (or former RBI governor context in PYQ)", "B) Raghuram Rajan", "C) Shaktikanta Das", "D) Viral Acharya"], "ans": 0, "brief": "A former RBI Governor was appointed as an Executive Director at the IMF in August 2025[cite: 7]."},
+        {"num": 215, "module": "Module 9: NABARD, ISRO & RBI", "q": "How many members constitute the Monetary Policy Committee (MPC) of the RBI?", "options": ["A) 6 members (3 RBI officials + 3 external Government nominees)", "B) 5 members", "C) 7 members", "D) 4 members"], "ans": 0, "brief": "The MPC consists of 6 members: 3 from RBI and 3 appointed by the government[cite: 7]."},
+        {"num": 216, "module": "Module 9: NABARD, ISRO & RBI", "q": "Which of the following institutions is headquartered in Mumbai according to the Indian institutions summary?", "options": ["A) RBI, SEBI, LIC, NABARD, NSE, and BSE", "B) NITI Aayog, CAG, and UPSC", "C) SIDBI and IRDAI", "D) FSSAI and NGT"], "ans": 0, "brief": "RBI, SEBI, LIC, NABARD, National Stock Exchange (NSE), and Bombay Stock Exchange (BSE) are all in Mumbai[cite: 7]."},
+        {"num": 217, "module": "Module 9: NABARD, ISRO & RBI", "q": "Where is the headquarters of the Life Insurance Corporation of India (LIC)?", "options": ["A) Mumbai, Maharashtra", "B) New Delhi", "C) Hyderabad, Telangana", "D) Kolkata, West Bengal"], "ans": 0, "brief": "LIC is headquartered in Mumbai, Maharashtra[cite: 7]."},
+        {"num": 218, "module": "Module 9: NABARD, ISRO & RBI", "q": "Where are the headquarters of both the National Stock Exchange (NSE) and Bombay Stock Exchange (BSE) located?", "options": ["A) Mumbai, Maharashtra", "B) New Delhi", "C) Ahmedabad, Gujarat", "D) Kolkata, West Bengal"], "ans": 0, "brief": "Both NSE and BSE are headquartered in Mumbai, Maharashtra[cite: 7]."},
+        {"num": 219, "module": "Module 9: NABARD, ISRO & RBI", "q": "Which Indian city is known as the financial capital of India and hosts the headquarters of RBI, SEBI, and NABARD?", "options": ["A) Mumbai", "B) New Delhi", "C) Bengaluru", "D) Ahmedabad"], "ans": 0, "brief": "Mumbai is the financial capital hosting RBI, SEBI, NABARD, LIC, NSE, and BSE[cite: 7]."},
+        {"num": 220, "module": "Module 9: NABARD, ISRO & RBI", "q": "What slogan/campaign is associated with RBI's financial literacy and unclaimed deposits awareness ('78k cr unclaimed')?", "options": ["A) 'Your money, your right'", "B) 'Jago Grahak Jago'", "C) 'RBI Kehta Hai'", "D) 'Satark Rahe, Surakshit Rahe'"], "ans": 0, "brief": "The slogan 'Your money, your right' is highlighted alongside RBI's unclaimed deposits campaign[cite: 7]."},
+
+        // MODULE 10: IRDAI, SEBI, FSSAI, SIDBI & COMPREHENSIVE HEADQUARTERS (221-250)
+        {"num": 221, "module": "Module 10: IRDAI, SEBI, FSSAI & HQs", "q": "When was IRDAI (Insurance Regulatory and Development Authority of India) established, and where is its headquarters located?", "options": ["A) 2000 (under IRDA Act, 1999); Hyderabad, Telangana", "B) 1992; Mumbai, Maharashtra", "C) 1990; Lucknow, Uttar Pradesh", "D) 2006; New Delhi"], "ans": 0, "brief": "IRDAI was established in 2000 under the IRDA Act 1999 and is headquartered in Hyderabad[cite: 7]."},
+        {"num": 222, "module": "Module 10: IRDAI, SEBI, FSSAI & HQs", "q": "What is the primary function of IRDAI?", "options": ["A) Regulate and promote the insurance sector in India and protect policyholders' interests", "B) Regulate stock exchanges and mutual funds", "C) Provide refinance for small scale industries", "D) Formulate national accounting standards"], "ans": 0, "brief": "IRDAI regulates insurance companies and protects policyholders' interests[cite: 7]."},
+        {"num": 223, "module": "Module 10: IRDAI, SEBI, FSSAI & HQs", "q": "When was SEBI (Securities and Exchange Board of India) established as a statutory body, and where is it headquartered?", "options": ["A) April 12, 1992; Mumbai, Maharashtra", "B) 1988; New Delhi", "C) 2000; Hyderabad, Telangana", "D) 1990; Lucknow, Uttar Pradesh"], "ans": 0, "brief": "SEBI became a statutory body on April 12, 1992, and is headquartered in Mumbai[cite: 7]."},
+        {"num": 224, "module": "Module 10: IRDAI, SEBI, FSSAI & HQs", "q": "Who is the current Chairman of SEBI mentioned in the PDF notes?", "options": ["A) Tuhin Kanta Pandey", "B) Madhabi Puri Buch", "C) Ajay Tyagi", "D) U. K. Sinha"], "ans": 0, "brief": "Tuhin Kanta Pandey is noted as the Chairman of SEBI in the PDF[cite: 7]."},
+        {"num": 225, "module": "Module 10: IRDAI, SEBI, FSSAI & HQs", "q": "When was FSSAI (Food Safety and Standards Authority of India) established, and under which Union Ministry does it operate?", "options": ["A) 2008 (under FSS Act, 2006); Ministry of Health & Family Welfare", "B) 2010; Ministry of Consumer Affairs", "C) 2005; Ministry of Agriculture", "D) 2012; Ministry of Commerce and Industry"], "ans": 0, "brief": "FSSAI was established under the FSS Act 2006 under the Ministry of Health & Family Welfare[cite: 7]."},
+        {"num": 226, "module": "Module 10: IRDAI, SEBI, FSSAI & HQs", "q": "Where is the headquarters of FSSAI located?", "options": ["A) New Delhi", "B) Mumbai", "C) Hyderabad", "D) Lucknow"], "ans": 0, "brief": "FSSAI is headquartered in New Delhi[cite: 7]."},
+        {"num": 227, "module": "Module 10: IRDAI, SEBI, FSSAI & HQs", "q": "When was SIDBI (Small Industries Development Bank of India) set up by an Act of Parliament, and where is its headquarters located?", "options": ["A) 1990; Lucknow, Uttar Pradesh", "B) 1982; Mumbai, Maharashtra", "C) 1992; New Delhi", "D) 2000; Hyderabad, Telangana"], "ans": 0, "brief": "SIDBI was set up in 1990 by an Act of Parliament and is headquartered in Lucknow[cite: 7]."},
+        {"num": 228, "module": "Module 10: IRDAI, SEBI, FSSAI & HQs", "q": "Who is the current Chairman and Managing Director (CMD) of SIDBI?", "options": ["A) Manoj Mittal", "B) S. Raman", "C) Mohammad Mustafa", "D) K. V. Kamath"], "ans": 0, "brief": "Manoj Mittal is the current CMD of SIDBI[cite: 7]."},
+        {"num": 229, "module": "Module 10: IRDAI, SEBI, FSSAI & HQs", "q": "Which institution set up in 1990 acts as the principal financial institution for promotion, financing, and development of the MSME sector? [AFCAT PYQ 2026]", "options": ["A) Small Industries Development Bank of India (SIDBI)", "B) Industrial Development Bank of India (IDBI)", "C) National Bank for Agriculture and Rural Development (NABARD)", "D) Small Industries Credit and Investment Corporation of India"], "ans": 0, "brief": "SIDBI is the principal financial institution for the MSME sector[cite: 7]."},
+        {"num": 230, "module": "Module 10: IRDAI, SEBI, FSSAI & HQs", "q": "Where is the headquarters of the International Solar Alliance (ISA) located?", "options": ["A) Gurugram, Haryana, India", "B) New Delhi, India", "C) Paris, France", "D) Geneva, Switzerland"], "ans": 0, "brief": "ISA is headquartered in Gurugram, Haryana, India[cite: 7]."},
+        {"num": 231, "module": "Module 10: IRDAI, SEBI, FSSAI & HQs", "q": "Where is the Forest Research Institute (FRI) of India located?", "options": ["A) Dehradun, Uttarakhand", "B) Bhopal, Madhya Pradesh", "C) Shimla, Himachal Pradesh", "D) Jorhat, Assam"], "ans": 0, "brief": "The Forest Research Institute is located in Dehradun, Uttarakhand[cite: 7]."},
+        {"num": 232, "module": "Module 10: IRDAI, SEBI, FSSAI & HQs", "q": "Where is the National Sugar Institute (NSI) of India located?", "options": ["A) Kanpur, Uttar Pradesh", "B) Lucknow, Uttar Pradesh", "C) Coimbatore, Tamil Nadu", "D) Pune, Maharashtra"], "ans": 0, "brief": "The National Sugar Institute is located in Kanpur, Uttar Pradesh[cite: 7]."},
+        {"num": 233, "module": "Module 10: IRDAI, SEBI, FSSAI & HQs", "q": "Where is the Indian Institute of Sugarcane Research (IISR) located?", "options": ["A) Lucknow, Uttar Pradesh", "B) Kanpur, Uttar Pradesh", "C) Coimbatore, Tamil Nadu", "D) Karnal, Assam"], "ans": 0, "brief": "The Indian Institute of Sugarcane Research is located in Lucknow, Uttar Pradesh[cite: 7]."},
+        {"num": 234, "module": "Module 10: IRDAI, SEBI, FSSAI & HQs", "q": "Where is the Bhabha Atomic Research Centre (BARC) located?", "options": ["A) Trombay, Mumbai, Maharashtra", "B) Kalpakkam, Tamil Nadu", "C) Rawatbhata, Gujarat", "D) Narora, Rajasthan"], "ans": 0, "brief": "BARC is located at Trombay, Mumbai, Maharashtra[cite: 7]."},
+        {"num": 235, "module": "Module 10: IRDAI, SEBI, FSSAI & HQs", "q": "Where is the Institute of Life Sciences (ILS) located?", "options": ["A) Bhubaneswar, Odisha", "B) Hyderabad, Telangana", "C) Bengaluru, Karnataka", "D) Kolkata, West Bengal"], "ans": 0, "brief": "The Institute of Life Sciences is located in Bhubaneswar, Odisha[cite: 7]."},
+        {"num": 236, "module": "Module 10: IRDAI, SEBI, FSSAI & HQs", "q": "Where is the Indian Agricultural Research Institute (IARI - Pusa Institute) headquartered?", "options": ["A) New Delhi", "B) Karnal, Haryana", "C) Hyderabad, Telangana", "D) Ludhiana, Punjab"], "ans": 0, "brief": "IARI is headquartered in New Delhi[cite: 7]."},
+        {"num": 237, "module": "Module 10: IRDAI, SEBI, FSSAI & HQs", "q": "Where is the India Meteorological Department (IMD) headquartered?", "options": ["A) New Delhi (Mausam Bhawan)", "B) Pune, Maharashtra", "C) Kolkata, West Bengal", "D) Shimla, Himachal Pradesh"], "ans": 0, "brief": "IMD is headquartered at Mausam Bhawan in New Delhi[cite: 7]."},
+        {"num": 238, "module": "Module 10: IRDAI, SEBI, FSSAI & HQs", "q": "Where is the National Highways Authority of India (NHAI) headquartered?", "options": ["A) New Delhi", "B) Gurugram, Haryana", "C) Noida, Haryana", "D) Mumbai, Maharashtra"], "ans": 0, "brief": "NHAI is headquartered in New Delhi[cite: 7]."},
+        {"num": 239, "module": "Module 10: IRDAI, SEBI, FSSAI & HQs", "q": "Where is the Central Drug Research Institute (CDRI) located?", "options": ["A) Lucknow, Uttar Pradesh", "B) Hyderabad, Telangana", "C) New Delhi", "D) Kasauli, Himachal Pradesh"], "ans": 0, "brief": "CDRI is located in Lucknow, Uttar Pradesh[cite: 7]."},
+        {"num": 240, "module": "Module 10: IRDAI, SEBI, FSSAI & HQs", "q": "Where is the headquarters of the Comptroller and Auditor General of India (CAG) located?", "options": ["A) New Delhi", "B) Mumbai, Maharashtra", "C) Kolkata, West Bengal", "D) Shimla, Himachal Pradesh"], "ans": 0, "brief": "CAG is headquartered in New Delhi[cite: 7]."},
+        {"num": 241, "module": "Module 10: IRDAI, SEBI, FSSAI & HQs", "q": "Where is the headquarters of the Union Public Service Commission (UPSC) located?", "options": ["A) New Delhi (Dholpur House)", "B) Mussoorie, Uttarakhand", "C) Hyderabad, Telangana", "D) Shimla, Himachal Pradesh"], "ans": 0, "brief": "UPSC is headquartered at Dholpur House in New Delhi[cite: 7]."},
+        {"num": 242, "module": "Module 10: IRDAI, SEBI, FSSAI & HQs", "q": "Where is the headquarters of the Central Bureau of Investigation (CBI) located?", "options": ["A) New Delhi", "B) Mumbai, Maharashtra", "C) Hyderabad, Telangana", "D) Kolkata, West Bengal"], "ans": 0, "brief": "CBI is headquartered in New Delhi[cite: 7]."},
+        {"num": 243, "module": "Module 10: IRDAI, SEBI, FSSAI & HQs", "q": "Where is the headquarters of the National Investigation Agency (NIA) located?", "options": ["A) New Delhi", "B) Mumbai, Maharashtra", "C) Hyderabad, Telangana", "D) Kolkata, West Bengal"], "ans": 0, "brief": "NIA is headquartered in New Delhi[cite: 7]."},
+        {"num": 244, "module": "Module 10: IRDAI, SEBI, FSSAI & HQs", "q": "Where are the headquarters of both the Central Board of Direct Taxes (CBDT) and Central Board of Indirect Taxes and Customs (CBIC) located?", "options": ["A) New Delhi", "B) Mumbai, Maharashtra", "C) Kolkata, West Bengal", "D) Chennai, Tamil Nadu"], "ans": 0, "brief": "Both CBDT and CBIC are headquartered in New Delhi[cite: 7]."},
+        {"num": 245, "module": "Module 10: IRDAI, SEBI, FSSAI & HQs", "q": "Where is the headquarters of the Council of Scientific and Industrial Research (CSIR) located?", "options": ["A) New Delhi (Anusandhan Bhawan)", "B) Bengaluru, Karnataka", "C) Hyderabad, Telangana", "D) Kolkata, West Bengal"], "ans": 0, "brief": "CSIR is headquartered in New Delhi[cite: 7]."},
+        {"num": 246, "module": "Module 10: IRDAI, SEBI, FSSAI & HQs", "q": "Where is the headquarters of the National Green Tribunal (NGT) located?", "options": ["A) New Delhi", "B) Bhopal, Madhya Pradesh", "C) Pune, Maharashtra", "D) Kolkata, West Bengal"], "ans": 0, "brief": "NGT's principal bench and headquarters are in New Delhi[cite: 7]."},
+        {"num": 247, "module": "Module 10: IRDAI, SEBI, FSSAI & HQs", "q": "Where is the headquarters of the Competition Commission of India (CCI) located?", "options": ["A) New Delhi", "B) Mumbai, Maharashtra", "C) Hyderabad, Telangana", "D) Kolkata, West Bengal"], "ans": 0, "brief": "CCI is headquartered in New Delhi[cite: 7]."},
+        {"num": 248, "module": "Module 10: IRDAI, SEBI, FSSAI & HQs", "q": "Where is the headquarters of the Central Statistics Office (CSO / NSO) located?", "options": ["A) New Delhi", "B) Kolkata, West Bengal", "C) Mumbai, Maharashtra", "D) Hyderabad, Telangana"], "ans": 0, "brief": "CSO is headquartered in New Delhi[cite: 7]."},
+        {"num": 249, "module": "Module 10: IRDAI, SEBI, FSSAI & HQs", "q": "Where is the headquarters of the Institute of Chartered Accountants of India (ICAI) located?", "options": ["A) New Delhi", "B) Mumbai, Maharashtra", "C) Kolkata, West Bengal", "D) Chennai, Tamil Nadu"], "ans": 0, "brief": "ICAI is headquartered in New Delhi[cite: 7]."},
+        {"num": 250, "module": "Module 10: IRDAI, SEBI, FSSAI & HQs", "q": "Where is the headquarters of the Food Corporation of India (FCI) located?", "options": ["A) New Delhi", "B) Mumbai, Maharashtra", "C) Kolkata, West Bengal", "D) Chennai, Tamil Nadu"], "ans": 0, "brief": "FCI is headquartered in New Delhi[cite: 7]."}
+    ];
+
+    let activeQuestions = [];
+    let currentScore = 0;
+    let wrongCount = 0;
+    let answeredCount = 0;
+    let activeFilter = 'All';
+    let searchQuery = '';
+    let showAllActive = false;
+    let statusFilter = 'all';
+    let questionStatus = {};
+
+    function shuffleArray(array) {
+        const arr = [...array];
+        for (let i = arr.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [arr[i], arr[j]] = [arr[j], arr[i]];
+        }
+        return arr;
+    }
+
+    function initializeAndShuffleQuiz() {
+        const prepared = originalQuestionsData.map(q => {
+            const cleanOptions = q.options.map(opt => opt.replace(/^[A-D]\)\s*/, ''));
+            const correctAnswerText = cleanOptions[q.ans];
+            const shuffledCleanOptions = shuffleArray(cleanOptions);
+            const newCorrectIdx = shuffledCleanOptions.indexOf(correctAnswerText);
+            const relabeledOptions = shuffledCleanOptions.map((opt, i) => {
+                return String.fromCharCode(65 + i) + ') ' + opt;
+            });
+            return {
+                ...q,
+                options: relabeledOptions,
+                ans: newCorrectIdx
+            };
+        });
+        activeQuestions = shuffleArray(prepared);
+        questionStatus = {};
+        currentScore = 0;
+        wrongCount = 0;
+        answeredCount = 0;
+        statusFilter = 'all';
+        document.querySelectorAll('.stat-item').forEach(el => el.classList.remove('active-filter'));
+        updateStats();
+    }
+
+    function applyFilters() {
+        searchQuery = document.getElementById('search-input').value.toLowerCase().trim();
+        renderQuiz();
+    }
+
+    function filterByStatus(status) {
+        if (statusFilter === status) {
+            statusFilter = 'all';
+            document.querySelectorAll('.stat-item').forEach(el => el.classList.remove('active-filter'));
+        } else {
+            statusFilter = status;
+            document.querySelectorAll('.stat-item').forEach(el => el.classList.remove('active-filter'));
+            if (status === 'correct') {
+                document.getElementById('correctStat').classList.add('active-filter');
+            } else if (status === 'wrong') {
+                document.getElementById('wrongStat').classList.add('active-filter');
+            } else if (status === 'left') {
+                document.getElementById('leftStat').classList.add('active-filter');
+            }
+        }
+        renderQuiz();
+    }
+
+    function renderQuiz() {
+        const container = document.getElementById('quiz-container');
+        container.innerHTML = '';
+        let displayCount = 0;
+        let seqNum = 1;
+
+        const isQidSearch = searchQuery && /^\d+$/.test(searchQuery);
+        const qidNumber = isQidSearch ? parseInt(searchQuery) : null;
+
+        activeQuestions.forEach((q) => {
+            if (activeFilter !== 'All') {
+                const qModuleMatch = q.module.match(/Module (\d+)/);
+                const qModuleNum = qModuleMatch ? qModuleMatch[1] : null;
+                const filterMatch = activeFilter.match(/Module (\d+)/);
+                const filterModuleNum = filterMatch ? filterMatch[1] : null;
+                
+                if (qModuleNum && filterModuleNum) {
+                    if (qModuleNum !== filterModuleNum) return;
+                } else {
+                    if (!q.module.startsWith(activeFilter + ':')) return;
+                }
+            }
+            
+            if (statusFilter !== 'all') {
+                const status = questionStatus[q.num];
+                if (statusFilter === 'correct' && status !== 'correct') return;
+                if (statusFilter === 'wrong' && status !== 'wrong') return;
+                if (statusFilter === 'left' && status !== undefined) return;
+            }
+            
+            if (searchQuery) {
+                if (isQidSearch) {
+                    if (q.num !== qidNumber) return;
+                } else {
+                    const match = q.q.toLowerCase().includes(searchQuery) ||
+                                  q.module.toLowerCase().includes(searchQuery) ||
+                                  q.brief.toLowerCase().includes(searchQuery) ||
+                                  q.options.some(o => o.toLowerCase().includes(searchQuery));
+                    if (!match) return;
+                }
+            }
+            
+            displayCount++;
+            const card = document.createElement('div');
+            card.className = 'question-card';
+            card.id = `card-${q.num}`;
+            
+            const savedNote = localStorage.getItem(`organisations_gk_note_QID_${q.num}`) || '';
+            const savedNoteHtml = savedNote ? `
+                <div class="saved-note-banner" id="saved-display-${q.num}">
+                    <strong>📌 Saved Note:</strong> ${savedNote}
+                </div>` : `<div id="saved-display-${q.num}"></div>`;
+            
+            const status = questionStatus[q.num];
+            let statusBadge = '';
+            if (status === 'correct') {
+                statusBadge = `<span class="q-status-badge status-correct">✅ Correct</span>`;
+            } else if (status === 'wrong') {
+                statusBadge = `<span class="q-status-badge status-wrong">❌ Wrong</span>`;
+            } else {
+                statusBadge = `<span class="q-status-badge status-unanswered">⏳ Unanswered</span>`;
+            }
+            
+            card.innerHTML = `
+                <div class="q-header">
+                    <div class="q-badges-left">
+                        <span class="q-num-badge">Question #${seqNum++}</span>
+                        <span class="qid-badge">QID:- ${q.num}</span>
+                        ${statusBadge}
+                    </div>
+                    <span class="q-mod-badge">${q.module}</span>
+                </div>
+                <div class="q-text">${q.q}</div>
+                <div class="options-grid" id="opts-${q.num}">
+                    ${q.options.map((optText, optIdx) => `
+                        <button class="opt-btn" onclick="checkAnswer(${q.num}, ${optIdx}, ${q.ans})">
+                            <span>${optText}</span>
+                        </button>
+                    `).join('')}
+                </div>
+                <div class="feedback-box" id="feedback-${q.num}">
+                    ${showAllActive && !questionStatus[q.num] ? `
+                        <div class="feedback-title">✓ Correct Answer: ${q.options[q.ans]}</div>
+                        <div><strong>Key Fact & Explanation:</strong> ${q.brief}</div>
+                        ${savedNoteHtml}
+                        <div class="notes-section">
+                            <button class="notes-btn" onclick="toggleNoteEditor(${q.num})">Add / Edit Notes & Points</button>
+                            <div class="note-editor" id="editor-${q.num}">
+                                <textarea class="notes-area" id="textarea-${q.num}" rows="3" placeholder="Add your notes/points here...">${savedNote}</textarea>
+                                <button class="save-note-btn" onclick="saveNote(${q.num})">Save Note Locally</button>
+                            </div>
+                        </div>
+                    ` : ''}
+                </div>
+            `;
+            container.appendChild(card);
+
+            if (questionStatus[q.num]) {
+                const optsContainer = document.getElementById(`opts-${q.num}`);
+                if (optsContainer) {
+                    const buttons = optsContainer.querySelectorAll('.opt-btn');
+                    buttons.forEach((btn, idx) => {
+                        btn.classList.add('disabled');
+                        if (idx === q.ans) {
+                            btn.classList.add('correct');
+                        }
+                        if (q._selectedIdx !== undefined && idx === q._selectedIdx && idx !== q.ans) {
+                            btn.classList.add('wrong');
+                        }
+                    });
+                }
+                const feedback = document.getElementById(`feedback-${q.num}`);
+                if (feedback) {
+                    const isCorrect = questionStatus[q.num] === 'correct';
+                    feedback.className = `feedback-box show-${isCorrect ? 'correct' : 'wrong'}`;
+                    const savedNoteDisplay = localStorage.getItem(`organisations_gk_note_QID_${q.num}`) || '';
+                    const savedNoteHtmlDisplay = savedNoteDisplay ? `
+                        <div class="saved-note-banner" id="saved-display-${q.num}">
+                            <strong>📌 Saved Note:</strong> ${savedNoteDisplay}
+                        </div>` : `<div id="saved-display-${q.num}"></div>`;
+                    
+                    if (isCorrect) {
+                        feedback.innerHTML = `
+                            <div class="feedback-title">✓ Correct Answer!</div>
+                            <div><strong>Key Fact & Explanation:</strong> ${q.brief}</div>
+                            ${savedNoteHtmlDisplay}
+                            <div class="notes-section">
+                                <button class="notes-btn" onclick="toggleNoteEditor(${q.num})">Add / Edit Notes & Points</button>
+                                <div class="note-editor" id="editor-${q.num}">
+                                    <textarea class="notes-area" id="textarea-${q.num}" rows="3" placeholder="Add your notes/points here...">${savedNoteDisplay}</textarea>
+                                    <button class="save-note-btn" onclick="saveNote(${q.num})">Save Note Locally</button>
+                                </div>
+                            </div>
+                        `;
+                    } else {
+                        feedback.innerHTML = `
+                            <div class="feedback-title">✗ Wrong Answer — The Correct Answer is: ${q.options[q.ans]}</div>
+                            <div><strong>Key Fact & Explanation:</strong> ${q.brief}</div>
+                            ${savedNoteHtmlDisplay}
+                            <div class="notes-section">
+                                <button class="notes-btn" onclick="toggleNoteEditor(${q.num})">Add / Edit Notes & Points</button>
+                                <div class="note-editor" id="editor-${q.num}">
+                                    <textarea class="notes-area" id="textarea-${q.num}" rows="3" placeholder="Add your notes/points here...">${savedNoteDisplay}</textarea>
+                                    <button class="save-note-btn" onclick="saveNote(${q.num})">Save Note Locally</button>
+                                </div>
+                            </div>
+                        `;
+                    }
+                }
+            }
+
+            if (showAllActive && !questionStatus[q.num]) {
+                const optsContainer = document.getElementById(`opts-${q.num}`);
+                if (optsContainer) {
+                    const buttons = optsContainer.querySelectorAll('.opt-btn');
+                    buttons.forEach((btn, idx) => {
+                        btn.classList.add('disabled');
+                        if (idx === q.ans) {
+                            btn.classList.add('correct');
+                        }
+                    });
+                }
+                const feedback = document.getElementById(`feedback-${q.num}`);
+                if (feedback) {
+                    feedback.className = 'feedback-box show-correct';
+                    const savedNoteDisplay = localStorage.getItem(`organisations_gk_note_QID_${q.num}`) || '';
+                    const savedNoteHtmlDisplay = savedNoteDisplay ? `
+                        <div class="saved-note-banner" id="saved-display-${q.num}">
+                            <strong>📌 Saved Note:</strong> ${savedNoteDisplay}
+                        </div>` : `<div id="saved-display-${q.num}"></div>`;
+                    
+                    if (!feedback.innerHTML) {
+                        feedback.innerHTML = `
+                            <div class="feedback-title">✓ Correct Answer: ${q.options[q.ans]}</div>
+                            <div><strong>Key Fact & Explanation:</strong> ${q.brief}</div>
+                            ${savedNoteHtmlDisplay}
+                            <div class="notes-section">
+                                <button class="notes-btn" onclick="toggleNoteEditor(${q.num})">Add / Edit Notes & Points</button>
+                                <div class="note-editor" id="editor-${q.num}">
+                                    <textarea class="notes-area" id="textarea-${q.num}" rows="3" placeholder="Add your notes/points here...">${savedNoteDisplay}</textarea>
+                                    <button class="save-note-btn" onclick="saveNote(${q.num})">Save Note Locally</button>
+                                </div>
+                            </div>
+                        `;
+                    }
+                }
+            }
+        });
+
+        if (displayCount === 0) {
+            let message = 'No Organisation MCQs matched your search.';
+            if (isQidSearch) {
+                message = `No question found with QID ${qidNumber}. Please check the QID and try again.`;
+            } else if (statusFilter === 'correct' && currentScore === 0) {
+                message = 'No correct answers yet. Keep practicing! 🎯';
+            } else if (statusFilter === 'wrong' && wrongCount === 0) {
+                message = 'No wrong answers yet! Great job! 🎉';
+            } else if (statusFilter === 'left') {
+                if (answeredCount === activeQuestions.length) {
+                    message = '🎉 All questions have been answered! No questions left to attempt.';
+                } else {
+                    message = `📝 You have ${activeQuestions.length - answeredCount} questions left to attempt. Start answering!`;
+                }
+            }
+            container.innerHTML = `<div class="no-results">${message}</div>`;
+        }
+
+        updateStats();
+    }
+
+    function checkAnswer(qNum, selectedIdx, correctIdx) {
+        if (showAllActive) return;
+        if (questionStatus[qNum]) return;
+        
+        const optsContainer = document.getElementById(`opts-${qNum}`);
+        const buttons = optsContainer.querySelectorAll('.opt-btn');
+        const feedback = document.getElementById(`feedback-${qNum}`);
+        
+        if (buttons[0].classList.contains('disabled')) {
+            return;
+        }
+        
+        const qObj = activeQuestions.find(item => item.num === qNum);
+        qObj._selectedIdx = selectedIdx;
+        
+        buttons.forEach((btn, idx) => {
+            btn.classList.add('disabled');
+            if (idx === correctIdx) {
+                btn.classList.add('correct');
+            }
+        });
+        
+        const savedNote = localStorage.getItem(`organisations_gk_note_QID_${qNum}`) || '';
+        const savedNoteHtml = savedNote ? `
+            <div class="saved-note-banner" id="saved-display-${qNum}">
+                <strong>📌 Saved Note:</strong> ${savedNote}
+            </div>` : `<div id="saved-display-${qNum}"></div>`;
+        
+        const isCorrect = selectedIdx === correctIdx;
+        if (isCorrect) {
+            currentScore++;
+            questionStatus[qNum] = 'correct';
+            buttons[selectedIdx].classList.add('correct');
+            feedback.className = 'feedback-box show-correct';
+            feedback.innerHTML = `
+                <div class="feedback-title">✓ Correct Answer!</div>
+                <div><strong>Key Fact & Explanation:</strong> ${qObj.brief}</div>
+                ${savedNoteHtml}
+                <div class="notes-section">
+                    <button class="notes-btn" onclick="toggleNoteEditor(${qNum})">Add / Edit Notes & Points</button>
+                    <div class="note-editor" id="editor-${qNum}">
+                        <textarea class="notes-area" id="textarea-${qNum}" rows="3" placeholder="Add your notes/points here...">${savedNote}</textarea>
+                        <button class="save-note-btn" onclick="saveNote(${qNum})">Save Note Locally</button>
+                    </div>
+                </div>
+            `;
+        } else {
+            wrongCount++;
+            questionStatus[qNum] = 'wrong';
+            buttons[selectedIdx].classList.add('wrong');
+            const correctOptText = qObj.options[correctIdx];
+            feedback.className = 'feedback-box show-wrong';
+            feedback.innerHTML = `
+                <div class="feedback-title">✗ Wrong Answer — The Correct Answer is: ${correctOptText}</div>
+                <div><strong>Key Fact & Explanation:</strong> ${qObj.brief}</div>
+                ${savedNoteHtml}
+                <div class="notes-section">
+                    <button class="notes-btn" onclick="toggleNoteEditor(${qNum})">Add / Edit Notes & Points</button>
+                    <div class="note-editor" id="editor-${qNum}">
+                        <textarea class="notes-area" id="textarea-${qNum}" rows="3" placeholder="Add your notes/points here...">${savedNote}</textarea>
+                        <button class="save-note-btn" onclick="saveNote(${qNum})">Save Note Locally</button>
+                    </div>
+                </div>
+            `;
+        }
+        answeredCount++;
+        
+        const badgeContainer = document.querySelector(`#card-${qNum} .q-badges-left`);
+        if (badgeContainer) {
+            const oldBadge = badgeContainer.querySelector('.q-status-badge');
+            let newBadgeHtml = '';
+            if (isCorrect) {
+                newBadgeHtml = `<span class="q-status-badge status-correct">✅ Correct</span>`;
+            } else {
+                newBadgeHtml = `<span class="q-status-badge status-wrong">❌ Wrong</span>`;
+            }
+            if (oldBadge) {
+                oldBadge.outerHTML = newBadgeHtml;
+            } else {
+                badgeContainer.innerHTML += newBadgeHtml;
+            }
+        }
+        
+        updateStats();
+        
+        if (statusFilter !== 'all') {
+            renderQuiz();
+        }
+    }
+
+    function toggleNoteEditor(qNum) {
+        const editor = document.getElementById(`editor-${qNum}`);
+        if (editor.style.display === 'block') {
+            editor.style.display = 'none';
+        } else {
+            editor.style.display = 'block';
+        }
+    }
+
+    function saveNote(qNum) {
+        const textarea = document.getElementById(`textarea-${qNum}`);
+        const noteText = textarea.value.trim();
+        const storageKey = `organisations_gk_note_QID_${qNum}`;
+        
+        if (noteText) {
+            localStorage.setItem(storageKey, noteText);
+        } else {
+            localStorage.removeItem(storageKey);
+        }
+
+        const displayContainer = document.getElementById(`saved-display-${qNum}`);
+        if (noteText) {
+            displayContainer.className = 'saved-note-banner';
+            displayContainer.innerHTML = `<strong>📌 Saved Note:</strong> ${noteText}`;
+        } else {
+            displayContainer.className = '';
+            displayContainer.innerHTML = '';
+        }
+        document.getElementById(`editor-${qNum}`).style.display = 'none';
+    }
+
+    function updateStats() {
+        const totalQuestions = activeQuestions.length;
+        const leftToAttempt = totalQuestions - answeredCount;
+        
+        document.getElementById('correct-count').textContent = currentScore;
+        document.getElementById('wrong-count').textContent = wrongCount;
+        document.getElementById('left-count').textContent = leftToAttempt;
+        
+        const pct = answeredCount > 0 ? Math.round((currentScore / answeredCount) * 100) : 0;
+        document.getElementById('pct-display').textContent = pct + '%';
+    }
+
+    function filterQuestions(modPrefix) {
+        activeFilter = modPrefix;
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.classList.remove('active');
+            if (btn.getAttribute('data-filter') === modPrefix) {
+                btn.classList.add('active');
+            }
+        });
+        renderQuiz();
+    }
+
+    function resetQuiz() {
+        if (showAllActive) {
+            showAllActive = false;
+            const btn = document.getElementById('showAllBtn');
+            btn.classList.remove('show-all-active');
+            btn.textContent = '👁️ Show All Answers (Study Mode)';
+        }
+        currentScore = 0;
+        wrongCount = 0;
+        answeredCount = 0;
+        questionStatus = {};
+        statusFilter = 'all';
+        document.querySelectorAll('.stat-item').forEach(el => el.classList.remove('active-filter'));
+        updateStats();
+        renderQuiz();
+    }
+
+    function toggleShowAll() {
+        const btn = document.getElementById('showAllBtn');
+        showAllActive = !showAllActive;
+        
+        if (showAllActive) {
+            btn.classList.add('show-all-active');
+            btn.textContent = '🔴 Hide All Answers';
+        } else {
+            btn.classList.remove('show-all-active');
+            btn.textContent = '👁️ Show All Answers (Study Mode)';
+        }
+        renderQuiz();
+    }
+
+    // Initialize
+    initializeAndShuffleQuiz();
+    renderQuiz();
+</script>
+</body>
+</html>

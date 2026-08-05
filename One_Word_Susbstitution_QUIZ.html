@@ -1,0 +1,1292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AFCAT 2026 — Interactive 250 MCQ One-Word Substitution Quiz</title>
+<style>
+    :root {
+        --bg-main: #f8fafc;
+        --card-bg: #ffffff;
+        --primary: #0f172a;
+        --accent-red: #dc2626;
+        --accent-green: #10b981;
+        --accent-blue: #2563eb;
+        --text-main: #1e293b;
+        --text-muted: #64748b;
+        --border: #e2e8f0;
+    }
+    
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
+    
+    body {
+        font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        background-color: var(--bg-main);
+        color: var(--text-main);
+        line-height: 1.5;
+        padding-bottom: 60px;
+    }
+    
+    header {
+        background-color: var(--primary);
+        color: #ffffff;
+        padding: 24px 20px;
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+    
+    .header-container {
+        max-width: 1100px;
+        margin: 0 auto;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        align-items: center;
+        gap: 15px;
+    }
+    
+    .title-area h1 {
+        font-size: 1.4rem;
+        font-weight: 700;
+        letter-spacing: -0.5px;
+    }
+    
+    .title-area p {
+        font-size: 0.85rem;
+        color: #94a3b8;
+    }
+    
+    .stats-badge {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        background-color: #1e293b;
+        border: 2px solid #334155;
+        border-radius: 8px;
+        padding: 6px 10px;
+    }
+
+    .stat-item {
+        padding: 6px 14px;
+        border-radius: 6px;
+        text-align: center;
+        min-width: 70px;
+        cursor: pointer;
+        transition: all 0.2s;
+        border: 2px solid transparent;
+        background-color: rgba(255, 255, 255, 0.05);
+        user-select: none;
+    }
+
+    .stat-item:hover {
+        transform: scale(1.05);
+    }
+
+    .stat-item .stat-num {
+        font-size: 1.2rem;
+        font-weight: 800;
+        display: block;
+        line-height: 1.2;
+    }
+
+    .stat-item .stat-label {
+        font-size: 0.6rem;
+        text-transform: uppercase;
+        letter-spacing: 0.3px;
+        opacity: 0.8;
+    }
+
+    .stat-item.correct-stat {
+        background-color: rgba(16, 185, 129, 0.2);
+        border-color: #10b981;
+        color: #34d399;
+    }
+
+    .stat-item.correct-stat.active-filter {
+        background-color: rgba(16, 185, 129, 0.4);
+        box-shadow: 0 0 20px rgba(16, 185, 129, 0.3);
+    }
+
+    .stat-item.wrong-stat {
+        background-color: rgba(239, 68, 68, 0.2);
+        border-color: #ef4444;
+        color: #f87171;
+    }
+
+    .stat-item.wrong-stat.active-filter {
+        background-color: rgba(239, 68, 68, 0.4);
+        box-shadow: 0 0 20px rgba(239, 68, 68, 0.3);
+    }
+
+    .stat-item.left-stat {
+        background-color: rgba(234, 179, 8, 0.2);
+        border-color: #eab308;
+        color: #fbbf24;
+    }
+
+    .stat-item.left-stat.active-filter {
+        background-color: rgba(234, 179, 8, 0.4);
+        box-shadow: 0 0 20px rgba(234, 179, 8, 0.3);
+    }
+
+    .stat-item.pct-stat {
+        background-color: rgba(56, 189, 248, 0.15);
+        border-color: #38bdf8;
+        color: #38bdf8;
+        min-width: 80px;
+        cursor: default;
+    }
+
+    .stat-item.pct-stat:hover {
+        transform: none;
+    }
+
+    .stat-item .stat-pct {
+        font-size: 1.2rem;
+        font-weight: 800;
+        display: block;
+        line-height: 1.2;
+    }
+    
+    .container {
+        max-width: 1100px;
+        margin: 24px auto;
+        padding: 0 16px;
+    }
+
+    .controls-panel {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        margin-bottom: 24px;
+        background: var(--card-bg);
+        padding: 16px;
+        border-radius: 12px;
+        border: 1px solid var(--border);
+        box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+
+    .search-row {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+
+    .search-input {
+        flex: 1;
+        min-width: 260px;
+        padding: 10px 14px;
+        border: 1px solid #cbd5e1;
+        border-radius: 8px;
+        font-size: 0.95rem;
+        color: var(--text-main);
+        outline: none;
+        transition: border-color 0.2s;
+    }
+
+    .search-input:focus {
+        border-color: var(--accent-blue);
+        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+    }
+
+    .search-hint {
+        font-size: 0.75rem;
+        color: var(--text-muted);
+        margin-top: 2px;
+        font-style: italic;
+    }
+
+    .action-btn {
+        background-color: #f1f5f9;
+        border: 1px solid #cbd5e1;
+        border-radius: 8px;
+        padding: 10px 16px;
+        font-size: 0.85rem;
+        font-weight: 700;
+        color: var(--text-main);
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+    .action-btn:hover {
+        background-color: #e2e8f0;
+    }
+
+    .action-btn.primary {
+        background-color: var(--primary);
+        color: #ffffff;
+        border-color: var(--primary);
+    }
+
+    .action-btn.primary:hover {
+        background-color: #1e293b;
+    }
+
+    .action-btn.show-all-active {
+        background-color: #dc2626 !important;
+        border-color: #b91c1c !important;
+        color: #ffffff !important;
+        box-shadow: 0 0 12px rgba(220, 38, 38, 0.4);
+        transition: all 0.2s;
+    }
+    
+    .filter-bar {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 4px;
+    }
+    
+    .filter-btn {
+        background-color: #f1f5f9;
+        border: 1px solid #cbd5e1;
+        border-radius: 6px;
+        padding: 6px 12px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: var(--text-main);
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    
+    .filter-btn:hover {
+        background-color: #e2e8f0;
+    }
+
+    .filter-btn.active {
+        background-color: #0f172a;
+        color: #ffffff;
+        border-color: #0f172a;
+    }
+
+    .question-card {
+        background-color: var(--card-bg);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 20px;
+        margin-bottom: 16px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        transition: transform 0.15s;
+    }
+    
+    .question-card:hover {
+        border-color: #cbd5e1;
+    }
+    
+    .q-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 10px;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    .q-badges-left {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        flex-wrap: wrap;
+    }
+    
+    .q-num-badge {
+        background-color: #fef2f2;
+        color: var(--accent-red);
+        border: 1px solid #fecaca;
+        font-weight: 700;
+        font-size: 0.8rem;
+        padding: 3px 10px;
+        border-radius: 20px;
+    }
+
+    .qid-badge {
+        background-color: #fef08a;
+        color: #854d0e;
+        border: 1px solid #fde047;
+        font-weight: 700;
+        font-size: 0.8rem;
+        padding: 3px 10px;
+        border-radius: 20px;
+    }
+    
+    .q-mod-badge {
+        font-size: 0.75rem;
+        color: var(--text-muted);
+        font-weight: 600;
+    }
+
+    .q-status-badge {
+        font-size: 0.7rem;
+        padding: 2px 10px;
+        border-radius: 12px;
+        font-weight: 700;
+        transition: all 0.3s ease;
+    }
+
+    .q-status-badge.status-correct {
+        background-color: #d1fae5;
+        color: #065f46;
+    }
+
+    .q-status-badge.status-wrong {
+        background-color: #fecaca;
+        color: #991b1b;
+    }
+
+    .q-status-badge.status-unanswered {
+        background-color: #fef3c7;
+        color: #92400e;
+    }
+    
+    .q-text {
+        font-size: 1.05rem;
+        font-weight: 600;
+        margin-bottom: 16px;
+        color: var(--text-main);
+    }
+    
+    .options-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 10px;
+    }
+    
+    .opt-btn {
+        background-color: #f8fafc;
+        border: 1px solid #cbd5e1;
+        border-radius: 8px;
+        padding: 12px 16px;
+        text-align: left;
+        font-size: 0.95rem;
+        font-weight: 500;
+        color: var(--text-main);
+        cursor: pointer;
+        transition: all 0.2s;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+    
+    .opt-btn:hover:not(.disabled) {
+        background-color: #f1f5f9;
+        border-color: #94a3b8;
+    }
+    
+    .opt-btn.correct {
+        background-color: #ecfdf5 !important;
+        border-color: #10b981 !important;
+        color: #065f46 !important;
+        font-weight: 700;
+    }
+    
+    .opt-btn.wrong {
+        background-color: #fef2f2 !important;
+        border-color: #ef4444 !important;
+        color: #991b1b !important;
+    }
+    
+    .opt-btn.disabled {
+        cursor: default;
+    }
+    
+    .feedback-box {
+        margin-top: 14px;
+        padding: 12px 16px;
+        border-radius: 8px;
+        font-size: 0.9rem;
+        display: none;
+    }
+    
+    .feedback-box.show-correct {
+        display: block;
+        background-color: #f0fdf4;
+        border-left: 4px solid var(--accent-green);
+        color: #166534;
+    }
+    
+    .feedback-box.show-wrong {
+        display: block;
+        background-color: #fff7ed;
+        border-left: 4px solid #f97316;
+        color: #9a3412;
+    }
+    
+    .feedback-title {
+        font-weight: 700;
+        margin-bottom: 4px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .saved-note-banner {
+        background-color: #fef9c3;
+        border: 1px solid #fde047;
+        color: #713f12;
+        padding: 10px 14px;
+        border-radius: 6px;
+        margin-top: 10px;
+        font-size: 0.85rem;
+    }
+
+    .notes-section {
+        margin-top: 12px;
+        padding-top: 12px;
+        border-top: 1px dashed #cbd5e1;
+    }
+
+    .notes-btn {
+        background-color: #0f172a;
+        color: #ffffff;
+        border: 1px solid #334155;
+        padding: 6px 14px;
+        border-radius: 6px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+    .notes-btn:hover {
+        background-color: #334155;
+    }
+
+    .note-editor {
+        margin-top: 10px;
+        display: none;
+    }
+
+    .notes-area {
+        width: 100%;
+        padding: 10px;
+        border-radius: 6px;
+        border: 1px solid #cbd5e1;
+        font-family: inherit;
+        font-size: 0.85rem;
+        resize: vertical;
+        margin-bottom: 8px;
+        color: #1e293b;
+    }
+
+    .save-note-btn {
+        background-color: #10b981;
+        color: #ffffff;
+        border: none;
+        padding: 6px 14px;
+        border-radius: 6px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        cursor: pointer;
+    }
+
+    .save-note-btn:hover {
+        background-color: #059669;
+    }
+
+    .no-results {
+        text-align: center;
+        padding: 40px;
+        background: var(--card-bg);
+        border-radius: 12px;
+        border: 1px solid var(--border);
+        color: var(--text-muted);
+        font-weight: 600;
+    }
+</style>
+</head>
+<body>
+
+<header>
+    <div class="header-container">
+        <div class="title-area">
+            <h1>AFCAT 2026 — ONE-WORD SUBSTITUTION INTERACTIVE QUIZ</h1>
+            <p>250 MCQs Extracted from "One word substitution. (1).pdf"[cite: 6] — Root Words, Etymology & Tricks</p>
+        </div>
+        <div class="stats-badge">
+            <div class="stat-item correct-stat" id="correctStat" onclick="filterByStatus('correct')">
+                <span class="stat-num" id="correct-count">0</span>
+                <span class="stat-label">✅ Correct</span>
+            </div>
+            <div class="stat-item wrong-stat" id="wrongStat" onclick="filterByStatus('wrong')">
+                <span class="stat-num" id="wrong-count">0</span>
+                <span class="stat-label">❌ Wrong</span>
+            </div>
+            <div class="stat-item left-stat" id="leftStat" onclick="filterByStatus('left')">
+                <span class="stat-num" id="left-count">250</span>
+                <span class="stat-label">⏳ Left</span>
+            </div>
+            <div class="stat-item pct-stat">
+                <span class="stat-pct" id="pct-display">0%</span>
+                <span class="stat-label">Accuracy</span>
+            </div>
+        </div>
+    </div>
+</header>
+
+<div class="container">
+    <div class="controls-panel">
+        <div class="search-row">
+            <div style="flex:1; min-width:260px;">
+                <input type="text" id="search-input" class="search-input" placeholder="Search by word, root, meaning, or QID" oninput="applyFilters()">
+                <div class="search-hint">💡 Tip: Enter a number like "42" to search by QID</div>
+            </div>
+            <button class="action-btn" onclick="resetQuiz()">🔄 Reset All Answers</button>
+            <button class="action-btn primary" id="showAllBtn" onclick="toggleShowAll()">👁️ Show All Answers (Study Mode)</button>
+        </div>
+        <div class="filter-bar" id="filter-bar">
+            <button class="filter-btn active" data-filter="All" onclick="filterQuestions('All')">All 250 MCQs</button>
+            <button class="filter-btn" data-filter="Module 1" onclick="filterQuestions('Module 1')">Mod 1: Governance & Rule</button>
+            <button class="filter-btn" data-filter="Module 2" onclick="filterQuestions('Module 2')">Mod 2: Killings & Crime</button>
+            <button class="filter-btn" data-filter="Module 3" onclick="filterQuestions('Module 3')">Mod 3: Phobias & Manias</button>
+            <button class="filter-btn" data-filter="Module 4" onclick="filterQuestions('Module 4')">Mod 4: Speech & Language</button>
+            <button class="filter-btn" data-filter="Module 5" onclick="filterQuestions('Module 5')">Mod 5: Sciences & Studies</button>
+            <button class="filter-btn" data-filter="Module 6" onclick="filterQuestions('Module 6')">Mod 6: Literature & Poetry</button>
+            <button class="filter-btn" data-filter="Module 7" onclick="filterQuestions('Module 7')">Mod 7: Personality & Character</button>
+            <button class="filter-btn" data-filter="Module 8" onclick="filterQuestions('Module 8')">Mod 8: Religion & Belief</button>
+            <button class="filter-btn" data-filter="Module 9" onclick="filterQuestions('Module 9')">Mod 9: Marriage & Family</button>
+            <button class="filter-btn" data-filter="Module 10" onclick="filterQuestions('Module 10')">Mod 10: General Vocab & Roots</button>
+        </div>
+    </div>
+
+    <div id="quiz-container"></div>
+</div>
+
+<script>
+    // Complete 250-MCQ dataset covering all topics extracted from the PDF[cite: 6]
+    const originalQuestionsData = [
+        // MODULE 1: GOVERNANCE, POLITICAL SYSTEMS & RULE (1-25)
+        {"num": 1, "module": "Module 1: Governance & Rule", "q": "Rule by the wealthy is called — [Q.41]", "options": ["A) Plutocracy", "B) Kratocracy", "C) Theocracy", "D) Anarchy"], "ans": 0, "brief": "Plutocracy is rule by the wealthy; Kratocracy is rule by strong/powerful people; Theocracy is rule by religious leaders; Anarchy is no rule/no government[cite: 6]."},
+        {"num": 2, "module": "Module 1: Governance & Rule", "q": "A government by the people is called —", "options": ["A) Democracy", "B) Oligarchy", "C) Autocracy", "D) Plutocracy"], "ans": 0, "brief": "Democracy (Demo = people + cracy = rule) means government by the people[cite: 6]."},
+        {"num": 3, "module": "Module 1: Governance & Rule", "q": "A government by a few people is called —", "options": ["A) Oligarchy", "B) Anarchy", "C) Plutocracy", "D) Democracy"], "ans": 0, "brief": "Oligarchy means rule or government by a small group of people[cite: 6]."},
+        {"num": 4, "module": "Module 1: Governance & Rule", "q": "Absence of government or law and order in a state is —", "options": ["A) Anarchy", "B) Oligarchy", "C) Plutocracy", "D) Gerontocracy"], "ans": 0, "brief": "Anarchy ('arājakatā') means absence of rule or government[cite: 6]."},
+        {"num": 5, "module": "Module 1: Governance & Rule", "q": "Rule by elderly people is called —", "options": ["A) Gerontocracy", "B) Democracy", "C) Theocracy", "D) Autocracy"], "ans": 0, "brief": "Gerontocracy means rule by elderly people ('experience leads, youth follows')[cite: 6]."},
+        {"num": 6, "module": "Module 1: Governance & Rule", "q": "Rule by religious leaders or priests is called —", "options": ["A) Theocracy", "B) Plutocracy", "C) Kratocracy", "D) Oligarchy"], "ans": 0, "brief": "Theocracy (Theo = religion/God + cracy = rule) means rule by religious leaders[cite: 6]."},
+        {"num": 7, "module": "Module 1: Governance & Rule", "q": "Rule by strong and powerful people is called — [Q.41 Option]", "options": ["A) Kratocracy", "B) Plutocracy", "C) Theocracy", "D) Democracy"], "ans": 0, "brief": "Kratocracy denotes government by those who are strong enough to seize power through force[cite: 6]."},
+        {"num": 8, "module": "Module 1: Governance & Rule", "q": "Having unlimited power is — [Q.54]", "options": ["A) Omnipotent", "B) Omnipresent", "C) Omniscient", "D) Omnibus"], "ans": 0, "brief": "Omnipotent (Omni = all + potent = power) means having unlimited power; Omnipresent = present everywhere; Omniscient = knowing everything[cite: 6]."},
+        {"num": 9, "module": "Module 1: Governance & Rule", "q": "A period of discontinuity or 'gap' in a government or organization — [Q.70]", "options": ["A) Interregnum", "B) Chronicle", "C) Metamorphosis", "D) Aberration"], "ans": 0, "brief": "Interregnum means a period of discontinuity or gap in a government/organization (synonyms: hiatus, fissure, lacuna)[cite: 6]."},
+        {"num": 10, "module": "Module 1: Governance & Rule", "q": "A supporter of complete state control and classless society is — [Q.66]", "options": ["A) Communist", "B) Socialist", "C) Capitalism", "D) Fascist"], "ans": 0, "brief": "A Communist supports complete state ownership of resources and a classless society; a Socialist supports social equity; Fascist supports autocratic dictatorship[cite: 6]."},
+        {"num": 11, "module": "Module 1: Governance & Rule", "q": "Which term refers to a person who supports a dictatorship or autocratic rule? [Q.66 Option]", "options": ["A) Fascist", "B) Communist", "C) Socialist", "D) Democrat"], "ans": 0, "brief": "A Fascist is one who supports dictatorship or autocratic, right-wing authoritarian governance[cite: 6]."},
+        {"num": 12, "module": "Module 1: Governance & Rule", "q": "An imaginary perfect place is — [Q.56]", "options": ["A) Utopia", "B) Dystopia", "C) Nirvana", "D) Babylon"], "ans": 0, "brief": "Utopia ('Rām Rājya') means an imaginary perfect world; Dystopia is an imaginary place of suffering; Nirvana is spiritual liberation[cite: 6]."},
+        {"num": 13, "module": "Module 1: Governance & Rule", "q": "An imaginary place of suffering or injustice is called — [Q.56 Option]", "options": ["A) Dystopia", "B) Utopia", "C) Nirvana", "D) Babylon"], "ans": 0, "brief": "Dystopia is an imaginary wretched place of suffering and tyranny, the exact opposite of Utopia[cite: 6]."},
+        {"num": 14, "module": "Module 1: Governance & Rule", "q": "An ancient city known for luxury and moral corruption is — [Q.56 Option]", "options": ["A) Babylon", "B) Utopia", "C) Dystopia", "D) Nirvana"], "ans": 0, "brief": "Babylon historically symbolizes a luxurious, morally corrupt ancient city[cite: 6]."},
+        {"num": 15, "module": "Module 1: Governance & Rule", "q": "A general pardon granted by a government to a group of political offenders is —", "options": ["A) Amnesty", "B) Exculpate", "C) Vindicate", "D) Exoneration"], "ans": 0, "brief": "Amnesty means an official pardon granted by government authorities (synonyms: exoneration, immunity, acquit)[cite: 6]."},
+        {"num": 16, "module": "Module 1: Governance & Rule", "q": "To give up a throne voluntarily is — [Q.90]", "options": ["A) Abdicate", "B) Acquiesce", "C) Placate", "D) Vindicate"], "ans": 0, "brief": "Abdicate means to renounce or give up a throne voluntarily (synonyms: abandon, renounce, relinquish)[cite: 6]."},
+        {"num": 17, "module": "Module 1: Governance & Rule", "q": "The right to vote in political elections is called — [Q.86]", "options": ["A) Suffrage", "B) Verbatim", "C) Acquittal", "D) Accord"], "ans": 0, "brief": "Suffrage means the right to vote in political elections; Verbatim = word for word; Acquittal = exoneration; Accord = agreement[cite: 6]."},
+        {"num": 18, "module": "Module 1: Governance & Rule", "q": "Protection or support provided by an authority is called — [Q.91]", "options": ["A) Aegis", "B) Credence", "C) Bonafide", "D) Malafide"], "ans": 0, "brief": "Aegis means protection, sponsorship, or support; Credence = belief/acceptance; Bonafide = genuine; Malafide = bad faith[cite: 6]."},
+        {"num": 19, "module": "Module 1: Governance & Rule", "q": "A person who is blamed for the wrongdoings of others is — [Q.84]", "options": ["A) Scapegoat", "B) Pilferage", "C) Vandal", "D) Sabotage"], "ans": 0, "brief": "Scapegoat ('balī kā bakrā') is a person who is blamed for the wrongdoings of others[cite: 6]."},
+        {"num": 20, "module": "Module 1: Governance & Rule", "q": "Deliberately destroying or damaging public or private property is — [Q.84 Option]", "options": ["A) Vandalism / Vandal", "B) Pilferage", "C) Scapegoat", "D) Sabotage"], "ans": 0, "brief": "A Vandal is someone who deliberately damages or destroys property[cite: 6]."},
+        {"num": 21, "module": "Module 1: Governance & Rule", "q": "Deliberately destroying an organization's property or operations to weaken it is — [Q.84 Option]", "options": ["A) Sabotage", "B) Pilferage", "C) Vandal", "D) Scapegoat"], "ans": 0, "brief": "Sabotage means destroying an organization or equipment to weaken them[cite: 6]."},
+        {"num": 22, "module": "Module 1: Governance & Rule", "q": "An official agreement or treaty between two nations is — [Q.86 Option]", "options": ["A) Accord", "B) Suffrage", "C) Verbatim", "D) Acquittal"], "ans": 0, "brief": "Accord means a formal agreement or harmony between parties/nations[cite: 6]."},
+        {"num": 23, "module": "Module 1: Governance & Rule", "q": "To accept something reluctantly but without protest is — [Q.90 Option]", "options": ["A) Acquiesce", "B) Abdicate", "C) Placate", "D) Vindicate"], "ans": 0, "brief": "Acquiesce ('quiet') means to accept or comply silently without protest[cite: 6]."},
+        {"num": 24, "module": "Module 1: Governance & Rule", "q": "To soothe or pacify someone who is angry is — [Q.90 Option]", "options": ["A) Placate", "B) Abdicate", "C) Acquiesce", "D) Vindicate"], "ans": 0, "brief": "Placate means to soothe, pacify, or calm someone down[cite: 6]."},
+        {"num": 25, "module": "Module 1: Governance & Rule", "q": "To clear someone of blame or suspicion is — [Q.90 Option]", "options": ["A) Vindicate", "B) Abdicate", "C) Acquiesce", "D) Placate"], "ans": 0, "brief": "Vindicate means to exonerate, absolve, or clear someone from guilt or suspicion[cite: 6]."},
+
+        // MODULE 2: KILLINGS, CRIMES & LEGAL TERMS (26-50)
+        {"num": 26, "module": "Module 2: Killings & Crime", "q": "Killing of one's wife is called — [Q.42]", "options": ["A) Uxoricide", "B) Mariticide", "C) Matricide", "D) Filicide"], "ans": 0, "brief": "Uxoricide means killing of one's wife; Mariticide = killing of husband; Matricide = killing of mother; Filicide = killing of son/daughter[cite: 6]."},
+        {"num": 27, "module": "Module 2: Killings & Crime", "q": "Killing of one's husband is called — [Q.42 Option]", "options": ["A) Mariticide", "B) Uxoricide", "C) Filicide", "D) Fratricide"], "ans": 0, "brief": "Mariticide refers to the killing of one's husband[cite: 6]."},
+        {"num": 28, "module": "Module 2: Killings & Crime", "q": "Killing of a king is called — [Q.43]", "options": ["A) Regicide", "B) Genocide", "C) Homicide", "D) Fratricide"], "ans": 0, "brief": "Regicide means killing of a king; Genocide = mass murder of a racial/cultural group; Homicide = killing of a human; Fratricide = killing of a brother[cite: 6]."},
+        {"num": 29, "module": "Module 2: Killings & Crime", "q": "Killing of one's brother is called — [Q.43 Option]", "options": ["A) Fratricide", "B) Sororicide", "C) Parricide", "D) Patricide"], "ans": 0, "brief": "Fratricide ('fraternity / bhāīchārā') is the killing of one's brother[cite: 6]."},
+        {"num": 30, "module": "Module 2: Killings & Crime", "q": "Killing of one's sister is called —", "options": ["A) Sororicide", "B) Fratricide", "C) Uxoricide", "D) Mariticide"], "ans": 0, "brief": "Sororicide means the killing of one's sister[cite: 6]."},
+        {"num": 31, "module": "Module 2: Killings & Crime", "q": "Killing of one's parents or a close relative is called —", "options": ["A) Parricide", "B) Patricide", "C) Matricide", "D) Filicide"], "ans": 0, "brief": "Parricide refers to the killing of parents or near relatives[cite: 6]."},
+        {"num": 32, "module": "Module 2: Killings & Crime", "q": "Killing of one's father is called —", "options": ["A) Patricide", "B) Matricide", "C) Parricide", "D) Regicide"], "ans": 0, "brief": "Patricide is the killing of one's father[cite: 6]."},
+        {"num": 33, "module": "Module 2: Killings & Crime", "q": "Killing of one's mother is called — [Q.42 Option]", "options": ["A) Matricide", "B) Patricide", "C) Parricide", "D) Mariticide"], "ans": 0, "brief": "Matricide refers to the killing of one's mother[cite: 6]."},
+        {"num": 34, "module": "Module 2: Killings & Crime", "q": "Killing of birds is called —", "options": ["A) Avicide", "B) Homicide", "C) Suicide", "D) Regicide"], "ans": 0, "brief": "Avicide (Aviation = birds) means the killing of birds[cite: 6]."},
+        {"num": 35, "module": "Module 2: Killings & Crime", "q": "Killing of a human being by another human being is called — [Q.43 Option]", "options": ["A) Homicide", "B) Suicide", "C) Genocide", "D) Regicide"], "ans": 0, "brief": "Homicide is the general term for the killing of one human by another[cite: 6]."},
+        {"num": 36, "module": "Module 2: Killings & Crime", "q": "The deliberate killing of a large group of people of a particular nation or ethnic group is — [Q.43 Option]", "options": ["A) Genocide", "B) Homicide", "C) Regicide", "D) Parricide"], "ans": 0, "brief": "Genocide means mass murder or destruction of a national, racial, or ethnic group[cite: 6]."},
+        {"num": 37, "module": "Module 2: Killings & Crime", "q": "Killing of one's own son or daughter is called — [Q.42 Option]", "options": ["A) Filicide", "B) Uxoricide", "C) Mariticide", "D) Fratricide"], "ans": 0, "brief": "Filicide is the act of a parent killing their own son or daughter[cite: 6]."},
+        {"num": 38, "module": "Module 2: Killings & Crime", "q": "An unstoppable desire or madness for stealing is —", "options": ["A) Kleptomania", "B) Burglary", "C) Larceny", "D) Pilferage"], "ans": 0, "brief": "Kleptomania is an obsessive, uncontrollable mental impulse to steal items[cite: 6]."},
+        {"num": 39, "module": "Module 2: Killings & Crime", "q": "Theft of personal property is called —", "options": ["A) Larceny / Burglary", "B) Kleptomania", "C) Pilferage", "D) Embezzlement"], "ans": 0, "brief": "Larceny and Burglary are legal terms denoting theft of personal property[cite: 6]."},
+        {"num": 40, "module": "Module 2: Killings & Crime", "q": "Stealing things of small value or in small quantities is —", "options": ["A) Pilferage", "B) Larceny", "C) Kleptomania", "D) Robbery"], "ans": 0, "brief": "Pilferage means petty stealing or stealing small quantities over time[cite: 6]."},
+        {"num": 41, "module": "Module 2: Killings & Crime", "q": "To erase completely or destroy the surface of something is — [Q.82]", "options": ["A) Efface", "B) Embezzlement", "C) Ransom", "D) Burglar"], "ans": 0, "brief": "Efface means to erase completely, deface, destroy, or eliminate; Embezzlement = financial fraud/misappropriation; Ransom = money demanded for release[cite: 6]."},
+        {"num": 42, "module": "Module 2: Killings & Crime", "q": "Misappropriation or fraud of money placed in one's trust is — [Q.82 Option]", "options": ["A) Embezzlement", "B) Efface", "C) Ransom", "D) Larceny"], "ans": 0, "brief": "Embezzlement ('gaban karnā / ghoṭālā karnā') is the fraudulent misappropriation of funds[cite: 6]."},
+        {"num": 43, "module": "Module 2: Killings & Crime", "q": "Money demanded for the release of a captive is — [Q.82 Option]", "options": ["A) Ransom", "B) Embezzlement", "C) Alimony", "D) Bribe"], "ans": 0, "brief": "Ransom ('firautī / paisoṁ kā dāvā') is money paid or demanded for the release of a prisoner[cite: 6]."},
+        {"num": 44, "module": "Module 2: Killings & Crime", "q": "To free someone from blame, guilt, or criminal charges is —", "options": ["A) Exculpate", "B) Inculpate", "C) Indict", "D) Arraign"], "ans": 0, "brief": "Exculpate (ex = remove + culp = blame) means to clear from guilt or blame (synonyms: vindicate, exonerate, absolve, acquit)[cite: 6]."},
+        {"num": 45, "module": "Module 2: Killings & Crime", "q": "To accuse or blame someone of a crime is —", "options": ["A) Inculpate / Indict", "B) Exculpate", "C) Exonerate", "D) Absolve"], "ans": 0, "brief": "Inculpate or Indict means to accuse, blame, or charge someone with a crime[cite: 6]."},
+        {"num": 46, "module": "Module 2: Killings & Crime", "q": "A prolonged, bitter quarrel or blood feud between families is —", "options": ["A) Vendetta", "B) Dual", "C) Duel", "D) Excursion"], "ans": 0, "brief": "Vendetta is a bitter feud or retaliatory conflict between families; Duel = fight between two people; Dual = double[cite: 6]."},
+        {"num": 47, "module": "Module 2: Killings & Crime", "q": "A formal combat with weapons between two persons is a —", "options": ["A) Duel", "B) Dual", "C) Vendetta", "D) Cortege"], "ans": 0, "brief": "A Duel is a prearranged combat between two individuals (note spelling: Dual means double)[cite: 6]."},
+        {"num": 48, "module": "Module 2: Killings & Crime", "q": "A partner or helper in crime is called — [Q.67 Option]", "options": ["A) Accomplice", "B) Adversary", "C) Partisan", "D) Caravan"], "ans": 0, "brief": "An Accomplice is a partner who helps another commit a crime (felony)[cite: 6]."},
+        {"num": 49, "module": "Module 2: Killings & Crime", "q": "A serious crime such as murder or arson is called a —", "options": ["A) Felony", "B) Misdemeanor", "C) Alibi", "D) Aberration"], "ans": 0, "brief": "Felony is the legal term noted for a serious crime[cite: 6]."},
+        {"num": 50, "module": "Module 2: Killings & Crime", "q": "An official exoneration or release from a criminal charge by a verdict of not guilty is — [Q.86 Option]", "options": ["A) Acquittal", "B) Suffrage", "C) Verbatim", "D) Accord"], "ans": 0, "brief": "Acquittal means exoneration or legal clearing of criminal charges in court[cite: 6]."},
+
+        // MODULE 3: PHOBIAS, MANIAS & PSYCHOLOGICAL CONDITIONS (51-75)
+        {"num": 51, "module": "Module 3: Phobias & Manias", "q": "Fear of public speaking is called — [Q.44]", "options": ["A) Glossophobia", "B) Entomophobia", "C) Ophidiophobia", "D) Acrophobia"], "ans": 0, "brief": "Glossophobia is fear of public speaking; Entomophobia = fear of insects; Ophidiophobia = fear of snakes; Acrophobia = fear of heights[cite: 6]."},
+        {"num": 52, "module": "Module 3: Phobias & Manias", "q": "Fear of heights is called — [Q.44 Option]", "options": ["A) Acrophobia", "B) Glossophobia", "C) Thanatophobia", "D) Claustrophobia"], "ans": 0, "brief": "Acrophobia is an extreme or irrational fear of heights[cite: 6]."},
+        {"num": 53, "module": "Module 3: Phobias & Manias", "q": "Fear of insects is called — [Q.44 Option]", "options": ["A) Entomophobia", "B) Ophidiophobia", "C) Glossophobia", "D) Xenophobia"], "ans": 0, "brief": "Entomophobia (Entomo = insects) is an irrational fear of insects[cite: 6]."},
+        {"num": 54, "module": "Module 3: Phobias & Manias", "q": "Fear of snakes is called — [Q.44 Option]", "options": ["A) Ophidiophobia", "B) Entomophobia", "C) Acrophobia", "D) Thanatophobia"], "ans": 0, "brief": "Ophidiophobia is the specific phobia or fear of snakes[cite: 6]."},
+        {"num": 55, "module": "Module 3: Phobias & Manias", "q": "Fear or hatred of foreigners or strangers is called — [Q.45]", "options": ["A) Xenophobia", "B) Bigot", "C) Chauvinist", "D) Misanthrope"], "ans": 0, "brief": "Xenophobia (Xeno = stranger + phobia = fear) is fear or hatred of foreigners; Bigot = intolerant extremist; Chauvinist = aggressive superiority[cite: 6]."},
+        {"num": 56, "module": "Module 3: Phobias & Manias", "q": "One who loves or is fond of foreigners and foreign cultures is —", "options": ["A) Xenophile", "B) Xenophobic", "C) Anglophile", "D) Bibliophile"], "ans": 0, "brief": "Xenophile means one who loves or is attracted to foreigners and foreign things[cite: 6]."},
+        {"num": 57, "module": "Module 3: Phobias & Manias", "q": "One who loves English language, customs, or culture is called an —", "options": ["A) Anglophile", "B) Xenophile", "C) Heliophile", "D) Selenophile"], "ans": 0, "brief": "Anglophile refers to a person who admires England and English culture[cite: 6]."},
+        {"num": 58, "module": "Module 3: Phobias & Manias", "q": "Fear of dying or death is called —", "options": ["A) Thanatophobia", "B) Claustrophobia", "C) Acrophobia", "D) Hydrophobia"], "ans": 0, "brief": "Thanatophobia (Thanatos = death) is the extreme fear of dying or death[cite: 6]."},
+        {"num": 59, "module": "Module 3: Phobias & Manias", "q": "Fear of enclosed or confined spaces is called —", "options": ["A) Claustrophobia", "B) Thanatophobia", "C) Acrophobia", "D) Xenophobia"], "ans": 0, "brief": "Claustrophobia is the fear of enclosed or tight spaces ('this ceiling will fall and I might die')[cite: 6]."},
+        {"num": 60, "module": "Module 3: Phobias & Manias", "q": "A person who imagines himself ill or has abnormal anxiety about his health is a — [Q.63]", "options": ["A) Hypochondriac", "B) Psychopath", "C) Narcissist", "D) Sadist"], "ans": 0, "brief": "Hypochondriac is a person who is abnormally anxious about their health or imagines themselves ill[cite: 6]."},
+        {"num": 61, "module": "Module 3: Phobias & Manias", "q": "A person with a severe personality disorder characterized by anti-social behavior is a — [Q.63 Option]", "options": ["A) Psychopath", "B) Narcissist", "C) Sadist", "D) Hypochondriac"], "ans": 0, "brief": "Psychopath denotes an individual with a severe personality disorder and lack of empathy[cite: 6]."},
+        {"num": 62, "module": "Module 3: Phobias & Manias", "q": "A person who is excessively obsessed with himself and his appearance is a — [Q.63 Option]", "options": ["A) Narcissist", "B) Sadist", "C) Psychopath", "D) Hypochondriac"], "ans": 0, "brief": "Narcissist is someone who is excessively self-centered and obsessed with themselves[cite: 6]."},
+        {"num": 63, "module": "Module 3: Phobias & Manias", "q": "A person who finds pleasure in causing pain or suffering to others is a — [Q.63 Option]", "options": ["A) Sadist", "B) Narcissist", "C) Psychopath", "D) Hypochondriac"], "ans": 0, "brief": "Sadist refers to a person who derives pleasure from inflicting pain on others[cite: 6]."},
+        {"num": 64, "module": "Module 3: Phobias & Manias", "q": "An obsession with power, greatness, or grandiosity is — [Q.74]", "options": ["A) Megalomania", "B) Ambivert", "C) Idiosyncrasy", "D) Ennui"], "ans": 0, "brief": "Megalomania is an obsessive madness or delusion of power and greatness[cite: 6]."},
+        {"num": 65, "module": "Module 3: Phobias & Manias", "q": "A person having both introverted and extroverted characteristics is an — [Q.74 Option]", "options": ["A) Ambivert", "B) Megalomaniac", "C) Altruist", "D) Egoist"], "ans": 0, "brief": "Ambivert is a person who balances both introverted and extroverted personality traits[cite: 6]."},
+        {"num": 66, "module": "Module 3: Phobias & Manias", "q": "A peculiar or whimsical behavioral habit of an individual is called an — [Q.74 Option]", "options": ["A) Idiosyncrasy", "B) Ennui", "C) Aberration", "D) Maxim"], "ans": 0, "brief": "Idiosyncrasy (Idea + sync) means an eccentric, whimsical, or unpredictable personal habit[cite: 6]."},
+        {"num": 67, "module": "Module 3: Phobias & Manias", "q": "Lack of sleep or chronic inability to sleep is — [Q.95]", "options": ["A) Insomnia", "B) Interdict", "C) Somniferous", "D) Soporific"], "ans": 0, "brief": "Insomnia is the condition of chronic lack of sleep; Interdict = ban/prohibit; Somniferous/Soporific = sedative/sleep-inducing[cite: 6]."},
+        {"num": 68, "module": "Module 3: Phobias & Manias", "q": "A drug or substance that induces sleep is called — [Q.95 Option]", "options": ["A) Soporific / Somniferous", "B) Insomnia", "C) Interdict", "D) Alacrity"], "ans": 0, "brief": "Soporific or Somniferous means a sedative substance that induces sleep[cite: 6]."},
+        {"num": 69, "module": "Module 3: Phobias & Manias", "q": "One who walks in sleep is called a — [Q.96 Option]", "options": ["A) Somnambulist", "B) Somniloquist", "C) Ventriloquist", "D) Extempore"], "ans": 0, "brief": "Somnambulist (Somn = sleep + ambulate = walk) is a sleepwalker[cite: 6]."},
+        {"num": 70, "module": "Module 3: Phobias & Manias", "q": "One who talks in sleep is called — [Q.96]", "options": ["A) Somniloquist", "B) Somnambulist", "C) Ventriloquist", "D) Extempore"], "ans": 0, "brief": "Somniloquist (Somn = sleep + loq = speak) is a person who talks in sleep[cite: 6]."},
+        {"num": 71, "module": "Module 3: Phobias & Manias", "q": "An entertainer who can speak without moving his lips is a — [Q.96 Option]", "options": ["A) Ventriloquist", "B) Somniloquist", "C) Somnambulist", "D) Demagogue"], "ans": 0, "brief": "Ventriloquist is a performer who projects their voice without lip movement[cite: 6]."},
+        {"num": 72, "module": "Module 3: Phobias & Manias", "q": "A lover of books is called a —", "options": ["A) Bibliophile", "B) Heliophile", "C) Selenophile", "D) Dendrophile"], "ans": 0, "brief": "Bibliophile (Biblio = book + phile = love) is a person who loves and collects books[cite: 6]."},
+        {"num": 73, "module": "Module 3: Phobias & Manias", "q": "A lover of the sun is called a — [Q.49 Option]", "options": ["A) Heliophile", "B) Selenophile", "C) Dendrophile", "D) Bibliophile"], "ans": 0, "brief": "Heliophile (Helio = sun) refers to a person who loves the sun[cite: 6]."},
+        {"num": 74, "module": "Module 3: Phobias & Manias", "q": "A lover of the moon is called — [Q.49]", "options": ["A) Selenophile", "B) Heliophile", "C) Bibliophile", "D) Dendrophile"], "ans": 0, "brief": "Selenophile (Selene = moon) is a person who loves the moon[cite: 6]."},
+        {"num": 75, "module": "Module 3: Phobias & Manias", "q": "One who loves trees and forests is called a — [Q.49 Option]", "options": ["A) Dendrophile", "B) Selenophile", "C) Heliophile", "D) Bibliophile"], "ans": 0, "brief": "Dendrophile (Dendro = tree) refers to a person who loves trees and forests[cite: 6]."},
+
+        // MODULE 4: SPEECH, COMMUNICATION & LANGUAGE (76-100)
+        {"num": 76, "module": "Module 4: Speech & Language", "q": "A speech delivered without preparation is called —", "options": ["A) Extempore / Impromptu", "B) Soliloquy", "C) Harangue", "D) Rhetoric"], "ans": 0, "brief": "Extempore, Impromptu, or Ad-lib means a speech or performance delivered without prior preparation[cite: 6]."},
+        {"num": 77, "module": "Module 4: Speech & Language", "q": "An introductory section preceding the main narrative of a story is — [Q.52]", "options": ["A) Prologue", "B) Soliloquy", "C) Bibliography", "D) Pseudonym"], "ans": 0, "brief": "Prologue is an introductory section of a literary work; Soliloquy = speech to oneself; Bibliography = list of books; Pseudonym = fake name[cite: 6]."},
+        {"num": 78, "module": "Module 4: Speech & Language", "q": "A speech by a character spoken to oneself on stage is a — [Q.52 Option]", "options": ["A) Soliloquy / Monologue", "B) Prologue", "C) Epilogue", "D) Colloquy"], "ans": 0, "brief": "Soliloquy or Monologue is a speech spoken by a character expressing internal thoughts to oneself[cite: 6]."},
+        {"num": 79, "module": "Module 4: Speech & Language", "q": "A list of books or written works cited or consulted is a — [Q.52 Option]", "options": ["A) Bibliography", "B) Lexicon", "C) Prologue", "D) Etymology"], "ans": 0, "brief": "Bibliography is a systematic list of books or sources referred to in a work[cite: 6]."},
+        {"num": 80, "module": "Module 4: Speech & Language", "q": "A fictitious or fake name used by an author is a — [Q.52 Option]", "options": ["A) Pseudonym", "B) Prologue", "C) Soliloquy", "D) Maxim"], "ans": 0, "brief": "Pseudonym ('fake name') is a fictitious name assumed by a writer[cite: 6]."},
+        {"num": 81, "module": "Module 4: Speech & Language", "q": "Speech or writing intended to be effective and influence people is — [Q.53]", "options": ["A) Rhetoric", "B) Obloquy", "C) Colloquial", "D) Harangue"], "ans": 0, "brief": "Rhetoric is persuasive speaking or writing; Obloquy = defamatory speech; Colloquial = informal speech; Harangue = aggressive speech[cite: 6]."},
+        {"num": 82, "module": "Module 4: Speech & Language", "q": "A lengthy, aggressive, and critical speech is called a — [Q.53 Option]", "options": ["A) Harangue", "B) Rhetoric", "C) Colloquial", "D) Obloquy"], "ans": 0, "brief": "Harangue is a long, forceful, and critical public speech[cite: 6]."},
+        {"num": 83, "module": "Module 4: Speech & Language", "q": "Language used in informal, everyday conversation is — [Q.53 Option]", "options": ["A) Colloquial / Colloquy", "B) Rhetoric", "C) Obloquy", "D) Jargon"], "ans": 0, "brief": "Colloquial denotes informal, conversational language (Colloquy = formal dialogue)[cite: 6]."},
+        {"num": 84, "module": "Module 4: Speech & Language", "q": "To speak ill of someone or defame them publicly is — [Q.53 Option]", "options": ["A) Obloquy", "B) Rhetoric", "C) Colloquial", "D) Eloquent"], "ans": 0, "brief": "Obloquy (Ob = against + loq = speak) means strong public criticism or verbal abuse[cite: 6]."},
+        {"num": 85, "module": "Module 4: Speech & Language", "q": "A political leader who seeks support by appealing to popular desires and prejudices rather than rational argument is a — [Q.80 Option]", "options": ["A) Demagogue", "B) Pedagogue", "C) Rhetoric", "D) Arbitrator"], "ans": 0, "brief": "A Demagogue is an orator who appeals to public passions and prejudices rather than reason[cite: 6]."},
+        {"num": 86, "module": "Module 4: Speech & Language", "q": "One who speaks articulately, fluently, and expressively is —", "options": ["A) Eloquent / Loquacious / Verbose", "B) Obloquy", "C) Taciturn", "D) Reticent"], "ans": 0, "brief": "Eloquent means speaking articulately; Loquacious/Verbose refers to talkative speech[cite: 6]."},
+        {"num": 87, "module": "Module 4: Speech & Language", "q": "The vocabulary or dictionary of a particular language or subject is called —", "options": ["A) Lexicon", "B) Syntax", "C) Semantics", "D) Etymology"], "ans": 0, "brief": "Lexicon refers to the vocabulary or word stock of a language[cite: 6]."},
+        {"num": 88, "module": "Module 4: Speech & Language", "q": "One who compiles a dictionary is called a — [Q.50 Option]", "options": ["A) Lexicographer", "B) Philatelist", "C) Curator", "D) Cartographer"], "ans": 0, "brief": "A Lexicographer is a linguist who compiles and edits dictionaries[cite: 6]."},
+        {"num": 89, "module": "Module 4: Speech & Language", "q": "The study of the origin and historical development of words is called —", "options": ["A) Etymology", "B) Semantics", "C) Syntax", "D) Philology"], "ans": 0, "brief": "Etymology is the scientific study of the origin and evolution of word meanings[cite: 6]."},
+        {"num": 90, "module": "Module 4: Speech & Language", "q": "The study of meaning in language and words is called —", "options": ["A) Semantics", "B) Syntax", "C) Etymology", "D) Morphology"], "ans": 0, "brief": "Semantics is the branch of linguistics concerned with meaning[cite: 6]."},
+        {"num": 91, "module": "Module 4: Speech & Language", "q": "The arrangement of words and phrases to create well-formed sentences is called —", "options": ["A) Syntax", "B) Semantics", "C) Etymology", "D) Lexicon"], "ans": 0, "brief": "Syntax is the grammatical arrangement of words in a sentence[cite: 6]."},
+        {"num": 92, "module": "Module 4: Speech & Language", "q": "A concluding speech or section at the end of a book or play is an —", "options": ["A) Epilogue", "B) Prologue", "C) Preface", "D) Foreword"], "ans": 0, "brief": "Epilogue ('words given at the last') is the concluding section of a literary work[cite: 6]."},
+        {"num": 93, "module": "Module 4: Speech & Language", "q": "An introductory remark or preface at the beginning of a book is a —", "options": ["A) Foreword / Preface / Preamble", "B) Epilogue", "C) Soliloquy", "D) Elegy"], "ans": 0, "brief": "Foreword, Preface, or Preamble denotes the introductory words of a text[cite: 6]."},
+        {"num": 94, "module": "Module 4: Speech & Language", "q": "Using roundabout, indirect, or wordy language instead of speaking directly is called —", "options": ["A) Circumlocution", "B) Colloquial", "C) Rhetoric", "D) Verbatim"], "ans": 0, "brief": "Circumlocution (Circum = circle + loq = speak) means beating around the bush with extra words[cite: 6]."},
+        {"num": 95, "module": "Module 4: Speech & Language", "q": "Word-for-word or exactly as spoken/written is — [Q.86 Option]", "options": ["A) Verbatim", "B) Suffrage", "C) Rhetoric", "D) Circumlocution"], "ans": 0, "brief": "Verbatim means exact narration word for word[cite: 6]."},
+        {"num": 96, "module": "Module 4: Speech & Language", "q": "Specialized terminology or slang used by a particular profession or group is called —", "options": ["A) Jargon / Slang", "B) Colloquial", "C) Maxim", "D) Rhetoric"], "ans": 0, "brief": "Jargon refers to specialized technical language or slang of a profession[cite: 6]."},
+        {"num": 97, "module": "Module 4: Speech & Language", "q": "A person who speaks multiple languages fluently is a —", "options": ["A) Polyglot / Linguist", "B) Virtuoso", "C) Philistine", "D) Connoisseur"], "ans": 0, "brief": "Polyglot or Linguist is a person who knows and speaks multiple languages[cite: 6]."},
+        {"num": 98, "module": "Module 4: Speech & Language", "q": "A short, pithy statement expressing a general truth or rule of conduct is a — [Q.40]", "options": ["A) Maxim / Precept / Proverb", "B) Epigram", "C) Anecdote", "D) Ballad"], "ans": 0, "brief": "Maxim, Precept, or Proverb is a short saying expressing a general rule of conduct[cite: 6]."},
+        {"num": 99, "module": "Module 4: Speech & Language", "q": "A self-evident truth that requires no proof is an — [Q.87 Option]", "options": ["A) Axiom / Truism", "B) Accolade", "C) Acronym", "D) Maxim"], "ans": 0, "brief": "Axiom or Truism denotes an universally accepted, self-evident truth[cite: 6]."},
+        {"num": 100, "module": "Module 4: Speech & Language", "q": "An abbreviation formed from the initial letters of other words and pronounced as a word is an — [Q.87 Option]", "options": ["A) Acronym", "B) Axiom", "C) Accolade", "D) Verbatim"], "ans": 0, "brief": "Acronym (e.g., NASA, ISRO) is an abbreviation pronounced as a word[cite: 6]."},
+
+        // MODULE 5: SCIENCES, MEDICAL & BIOLOGICAL STUDIES (101-125)
+        {"num": 101, "module": "Module 5: Sciences & Studies", "q": "Study of reptiles and amphibians is called — [Q.46]", "options": ["A) Herpetology", "B) Ichthyology", "C) Ornithology", "D) Entomology"], "ans": 0, "brief": "Herpetology ('sarp / reptile') is the study of reptiles; Ichthyology = fishes; Ornithology = birds; Entomology = insects[cite: 6]."},
+        {"num": 102, "module": "Module 5: Sciences & Studies", "q": "Study of fishes is called — [Q.46 Option]", "options": ["A) Ichthyology", "B) Herpetology", "C) Ornithology", "D) Entomology"], "ans": 0, "brief": "Ichthyology is the branch of zoology dealing with fishes[cite: 6]."},
+        {"num": 103, "module": "Module 5: Sciences & Studies", "q": "Study of birds is called — [Q.46 Option]", "options": ["A) Ornithology", "B) Ichthyology", "C) Herpetology", "D) Entomology"], "ans": 0, "brief": "Ornithology is the scientific study of birds[cite: 6]."},
+        {"num": 104, "module": "Module 5: Sciences & Studies", "q": "Study of insects is called — [Q.46 Option]", "options": ["A) Entomology", "B) Ornithology", "C) Etymology", "D) Herpetology"], "ans": 0, "brief": "Entomology is the study of insects (do not confuse with Etymology = study of words)[cite: 6]."},
+        {"num": 105, "module": "Module 5: Sciences & Studies", "q": "Study of eyes and eye diseases is called — [Q.47]", "options": ["A) Ophthalmology", "B) Nephrology", "C) Oncology", "D) Osteology"], "ans": 0, "brief": "Ophthalmology is the study of eyes; Nephrology = kidneys; Oncology = cancer; Osteology = bones[cite: 6]."},
+        {"num": 106, "module": "Module 5: Sciences & Studies", "q": "Study of kidneys is called — [Q.47 Option]", "options": ["A) Nephrology", "B) Ophthalmology", "C) Oncology", "D) Osteology"], "ans": 0, "brief": "Nephrology is the medical specialty dealing with kidney care[cite: 6]."},
+        {"num": 107, "module": "Module 5: Sciences & Studies", "q": "Study and treatment of cancer and tumors is called — [Q.47 Option]", "options": ["A) Oncology", "B) Nephrology", "C) Osteology", "D) Ophthalmology"], "ans": 0, "brief": "Oncology is the branch of medicine dedicated to cancer diagnosis and treatment[cite: 6]."},
+        {"num": 108, "module": "Module 5: Sciences & Studies", "q": "Study of bones is called — [Q.47 Option]", "options": ["A) Osteology", "B) Oncology", "C) Nephrology", "D) Pathology"], "ans": 0, "brief": "Osteology is the scientific study of bones and skeletal systems[cite: 6]."},
+        {"num": 109, "module": "Module 5: Sciences & Studies", "q": "Study of form and structure of organisms is called — [Q.48]", "options": ["A) Morphology", "B) Philosophy", "C) Philology", "D) Pathology"], "ans": 0, "brief": "Morphology (Morph = form/shape) is the study of form and structure; Philosophy = knowledge/literature; Philology = dead languages; Pathology = diseases[cite: 6]."},
+        {"num": 110, "module": "Module 5: Sciences & Studies", "q": "Study of fundamental nature of knowledge, reality, and existence is — [Q.48 Option]", "options": ["A) Philosophy", "B) Philology", "C) Morphology", "D) Cosmology"], "ans": 0, "brief": "Philosophy is the study of knowledge, reality, and wisdom[cite: 6]."},
+        {"num": 111, "module": "Module 5: Sciences & Studies", "q": "Study of dead languages and historical literary texts is — [Q.48 Option]", "options": ["A) Philology", "B) Philosophy", "C) Morphology", "D) Pathology"], "ans": 0, "brief": "Philology is the study of language history and historical literary texts[cite: 6]."},
+        {"num": 112, "module": "Module 5: Sciences & Studies", "q": "Study of causes and effects of diseases is called — [Q.48 Option]", "options": ["A) Pathology", "B) Morphology", "C) Osteology", "D) Oncology"], "ans": 0, "brief": "Pathology is the medical science of disease causes and effects[cite: 6]."},
+        {"num": 113, "module": "Module 5: Sciences & Studies", "q": "Study of ancient life through fossils is called —", "options": ["A) Paleontology", "B) Archaeology", "C) Anthropology", "D) Petrology"], "ans": 0, "brief": "Paleontology is the study of ancient life through fossils (like dinosaurs)[cite: 6]."},
+        {"num": 114, "module": "Module 5: Sciences & Studies", "q": "Study of human history and prehistory through excavation of sites and artifacts is —", "options": ["A) Archaeology", "B) Paleontology", "C) Anthropology", "D) Cosmology"], "ans": 0, "brief": "Archaeology is the study of human history through material remains and excavations[cite: 6]."},
+        {"num": 115, "module": "Module 5: Sciences & Studies", "q": "Study of rocks and petroleum/fossil fuels is called —", "options": ["A) Petrology / Petroleum study", "B) Paleontology", "C) Cosmology", "D) Cytology"], "ans": 0, "brief": "Petrology is the study of rocks and fossil fuels[cite: 6]."},
+        {"num": 116, "module": "Module 5: Sciences & Studies", "q": "Study of the origin and structure of the universe is called —", "options": ["A) Cosmology", "B) Cytology", "C) Anthropology", "D) Paleontology"], "ans": 0, "brief": "Cosmology (Cosmos = universe) is the study of the universe[cite: 6]."},
+        {"num": 117, "module": "Module 5: Sciences & Studies", "q": "Study of cells is called —", "options": ["A) Cytology", "B) Cosmology", "C) Morphology", "D) Pathology"], "ans": 0, "brief": "Cytology is the scientific study of cell biology[cite: 6]."},
+        {"num": 118, "module": "Module 5: Sciences & Studies", "q": "Study of human evolution, societies, and culture is called —", "options": ["A) Anthropology", "B) Demography", "C) Sociology", "D) Archaeology"], "ans": 0, "brief": "Anthropology is the study of human evolution and culture[cite: 6]."},
+        {"num": 119, "module": "Module 5: Sciences & Studies", "q": "Study of human population statistics and trends is called — [Q.51 Option]", "options": ["A) Demography", "B) Anthropology", "C) Epidemiology", "D) Cytology"], "ans": 0, "brief": "Demography is the statistical study of human populations[cite: 6]."},
+        {"num": 120, "module": "Module 5: Sciences & Studies", "q": "A doctor who specializes in the medical care of children is a — [Q.80 Option]", "options": ["A) Paediatrician", "B) Pedagogue", "C) Demagogue", "D) Ophthalmologist"], "ans": 0, "brief": "A Paediatrician is a medical doctor specializing in children's health[cite: 6]."},
+        {"num": 121, "module": "Module 5: Sciences & Studies", "q": "Examination of a dead body to determine the cause of death is an — [Q.88]", "options": ["A) Autopsy", "B) Biopsy", "C) Taxidermy", "D) Convalescence"], "ans": 0, "brief": "Autopsy is the post-mortem examination of a dead body; Biopsy = tissue exam of living body; Taxidermy = preserving animal skins; Convalescence = recovery from illness[cite: 6]."},
+        {"num": 122, "module": "Module 5: Sciences & Studies", "q": "Examination of tissue removed from a living body to discover disease is a — [Q.88 Option]", "options": ["A) Biopsy", "B) Autopsy", "C) Taxidermy", "D) Convalescence"], "ans": 0, "brief": "Biopsy is the examination of living tissue removed for diagnosis[cite: 6]."},
+        {"num": 123, "module": "Module 5: Sciences & Studies", "q": "The art of preparing, stuffing, and mounting the skins of dead animals is — [Q.88 Option]", "options": ["A) Taxidermy", "B) Autopsy", "C) Biopsy", "D) Morphology"], "ans": 0, "brief": "Taxidermy is the art of preserving and mounting dead animal skins[cite: 6]."},
+        {"num": 124, "module": "Module 5: Sciences & Studies", "q": "Gradual recovery of health and strength after illness is called — [Q.88 Option]", "options": ["A) Convalescence", "B) Autopsy", "C) Biopsy", "D) Taxidermy"], "ans": 0, "brief": "Convalescence means the period of recovery after an illness or medical treatment[cite: 6]."},
+        {"num": 125, "module": "Module 5: Sciences & Studies", "q": "A disease or tumor that is NOT harmful or life-threatening is called — [Q.101]", "options": ["A) Benign", "B) Malignant", "C) Malevolent", "D) Malice"], "ans": 0, "brief": "Benign means non-cancerous/not harmful; Malignant = cancerous/life-threatening; Malevolent/Malice = evil intent[cite: 6]."},
+
+        // MODULE 6: LITERATURE, POETRY, DRAMA & FIGURES OF SPEECH (126-150)
+        {"num": 126, "module": "Module 6: Literature & Poetry", "q": "A poem or song narrating a story in short stanzas is a — [Q.57 Option]", "options": ["A) Ballad", "B) Parable", "C) Anecdote", "D) Elegy"], "ans": 0, "brief": "A Ballad ('bālak / lāḍ') is a narrative poem or song telling a story[cite: 6]."},
+        {"num": 127, "module": "Module 6: Literature & Poetry", "q": "A short, interesting, or amusing story about a real incident or person is an — [Q.57 Option]", "options": ["A) Anecdote", "B) Parable", "C) Ballad", "D) Allegory"], "ans": 0, "brief": "An Anecdote is an interesting real-life biographical story[cite: 6]."},
+        {"num": 128, "module": "Module 6: Literature & Poetry", "q": "A story with a moral or spiritual lesson is called a — [Q.57]", "options": ["A) Parable", "B) Ballad", "C) Anecdote", "D) Plagiarism"], "ans": 0, "brief": "A Parable is a simple story used to illustrate a moral or spiritual lesson[cite: 6]."},
+        {"num": 129, "module": "Module 6: Literature & Poetry", "q": "The practice of taking someone else's work or ideas and passing them off as one's own is — [Q.57 Option]", "options": ["A) Plagiarism", "B) Parable", "C) Ballad", "D) Anecdote"], "ans": 0, "brief": "Plagiarism is literary theft of another author's ideas or words[cite: 6]."},
+        {"num": 130, "module": "Module 6: Literature & Poetry", "q": "A sorrowful or mournful poem written for a deceased person is an — [Q.59 Option]", "options": ["A) Elegy", "B) Eulogy", "C) Epitaph", "D) Epigraph"], "ans": 0, "brief": "An Elegy is a sorrowful poem lamenting someone's death[cite: 6]."},
+        {"num": 131, "module": "Module 6: Literature & Poetry", "q": "A speech or piece of writing that praises someone highly, especially after death — [Q.59 Option]", "options": ["A) Eulogy", "B) Elegy", "C) Epitaph", "D) Epigraph"], "ans": 0, "brief": "Eulogy (Eu = good/well + logy = praise) is formal praise of a deceased person[cite: 6]."},
+        {"num": 132, "module": "Module 6: Literature & Poetry", "q": "Words written on a tombstone in memory of the deceased are called — [Q.59]", "options": ["A) Epitaph", "B) Epigraph", "C) Eulogy", "D) Elegy"], "ans": 0, "brief": "Epitaph refers to the inscription written on a tombstone[cite: 6]."},
+        {"num": 133, "module": "Module 6: Literature & Poetry", "q": "A title, adjective, or descriptive tag used to characterize a person is an —", "options": ["A) Epithet", "B) Epitaph", "C) Epigram", "D) Epigraph"], "ans": 0, "brief": "Epithet is a descriptive title or tag used to admire or characterize someone[cite: 6]."},
+        {"num": 134, "module": "Module 6: Literature & Poetry", "q": "A short, witty, and clever poem or saying is an — [Q.58 Option]", "options": ["A) Epigram", "B) Epitaph", "C) Elegy", "D) Alliteration"], "ans": 0, "brief": "Epigram is a short, witty, and ingenious saying or poem[cite: 6]."},
+        {"num": 135, "module": "Module 6: Literature & Poetry", "q": "A story, poem, or picture that can be interpreted to reveal a hidden moral or political meaning — [Q.58 Option]", "options": ["A) Allegory", "B) Alliteration", "C) Pun", "D) Epigram"], "ans": 0, "brief": "Allegory is a narrative work carrying a deeper hidden symbolic meaning[cite: 6]."},
+        {"num": 136, "module": "Module 6: Literature & Poetry", "q": "Repetition of initial consonant sounds in neighboring words is — [Q.58]", "options": ["A) Alliteration", "B) Pun", "C) Allegory", "D) Epigram"], "ans": 0, "brief": "Alliteration is the poetic repetition of initial consonant sounds[cite: 6]."},
+        {"num": 137, "module": "Module 6: Literature & Poetry", "q": "A humorous play on words using words that sound similar but have different meanings is a — [Q.58 Option]", "options": ["A) Pun", "B) Alliteration", "C) Allegory", "D) Simile"], "ans": 0, "brief": "A Pun is a clever play on words for humorous effect[cite: 6]."},
+        {"num": 138, "module": "Module 6: Literature & Poetry", "q": "An exaggerated statement not meant to be taken literally is a —", "options": ["A) Hyperbole", "B) Metaphor", "C) Simile", "D) Oxymoron"], "ans": 0, "brief": "Hyperbole represents poetic exaggeration ('I have a million things to do!')[cite: 6]."},
+        {"num": 139, "module": "Module 6: Literature & Poetry", "q": "A figure of speech in which contradictory terms appear in conjunction is an —", "options": ["A) Oxymoron", "B) Hyperbole", "C) Personification", "D) Simile"], "ans": 0, "brief": "Oxymoron combines contradictory words (e.g., deafening silence)[cite: 6]."},
+        {"num": 140, "module": "Module 6: Literature & Poetry", "q": "Attributing human characteristics to non-human objects or abstract ideas is —", "options": ["A) Personification", "B) Metaphor", "C) Simile", "D) Oxymoron"], "ans": 0, "brief": "Personification ('mānavīkaraṇa') gives human traits to non-human things[cite: 6]."},
+        {"num": 141, "module": "Module 6: Literature & Poetry", "q": "A comparison between two unlike things using 'like' or 'as' is a —", "options": ["A) Simile", "B) Metaphor", "C) Hyperbole", "D) Allegory"], "ans": 0, "brief": "Simile compares two things using 'like' or 'as'; Metaphor compares directly without them[cite: 6]."},
+        {"num": 142, "module": "Module 6: Literature & Poetry", "q": "A short descriptive literary sketch, scene, or episode is a — [Q.55 Option]", "options": ["A) Vignette", "B) Animosity", "C) Animate", "D) Unanimous"], "ans": 0, "brief": "A Vignette is a brief, evocative descriptive scene or literary sketch[cite: 6]."},
+        {"num": 143, "module": "Module 6: Literature & Poetry", "q": "A slow, mournful funeral song or lament is called a — [Q.60]", "options": ["A) Dirge", "B) Wreath", "C) Cortege", "D) Knell"], "ans": 0, "brief": "Dirge is a slow funeral song; Wreath = ring of flowers; Cortege = funeral procession; Knell = funeral bell sound[cite: 6]."},
+        {"num": 144, "module": "Module 6: Literature & Poetry", "q": "A ring or arrangement of flowers placed on a grave or memorial is a — [Q.60 Option]", "options": ["A) Wreath", "B) Dirge", "C) Cortege", "D) Knell"], "ans": 0, "brief": "A Wreath is a decorative ring of flowers placed on a tomb or memorial[cite: 6]."},
+        {"num": 145, "module": "Module 6: Literature & Poetry", "q": "A solemn procession, especially for a funeral, is a — [Q.60 Option]", "options": ["A) Cortege", "B) Dirge", "C) Wreath", "D) Knell"], "ans": 0, "brief": "A Cortege is a solemn funeral procession[cite: 6]."},
+        {"num": 146, "module": "Module 6: Literature & Poetry", "q": "The sound of a bell rung solemnly after someone's death or at a funeral is a — [Q.60 Option]", "options": ["A) Knell", "B) Dirge", "C) Wreath", "D) Cortege"], "ans": 0, "brief": "Knell is the solemn tolling sound of a funeral bell[cite: 6]."},
+        {"num": 147, "module": "Module 6: Literature & Poetry", "q": "A 14-line poem with a specific rhyme scheme is called a —", "options": ["A) Sonnet", "B) Ballad", "C) Elegy", "D) Epigram"], "ans": 0, "brief": "A Sonnet is a classic 14-line lyric poem[cite: 6]."},
+        {"num": 148, "module": "Module 6: Literature & Poetry", "q": "A person who is highly skilled in music, art, or literature is a — [Q.50 Option]", "options": ["A) Virtuoso / Maestro / Aficionado", "B) Philatelist", "C) Lexicographer", "D) Curator"], "ans": 0, "brief": "Virtuoso, Maestro, or Aficionado denotes a master artist or musician[cite: 6]."},
+        {"num": 149, "module": "Module 6: Literature & Poetry", "q": "An expert judge in matters of taste, food, art, or fine cuisine is a — [Q.62 Option]", "options": ["A) Connoisseur / Gourmet", "B) Glutton", "C) Epicure", "D) Philistine"], "ans": 0, "brief": "Connoisseur or Gourmet is an expert judge of fine taste and cuisine[cite: 6]."},
+        {"num": 150, "module": "Module 6: Literature & Poetry", "q": "A person who is hostile or indifferent to culture, arts, and literature is a —", "options": ["A) Philistine", "B) Virtuoso", "C) Connoisseur", "D) Bibliophile"], "ans": 0, "brief": "A Philistine is a person who dislikes or is indifferent to artistic and cultural values[cite: 6]."},
+
+        // MODULE 7: PERSONALITY, CHARACTER & TRAITS (151-175)
+        {"num": 151, "module": "Module 7: Personality & Character", "q": "One who selflessly helps others without looking for personal gain is an —", "options": ["A) Altruist / Benevolent / Good Samaritan / Philanthropist", "B) Malevolent", "C) Misanthrope", "D) Egoist"], "ans": 0, "brief": "Altruist, Benevolent (Bene = good), Good Samaritan, and Philanthropist refer to selfless helpers of mankind[cite: 6]."},
+        {"num": 152, "module": "Module 7: Personality & Character", "q": "A person who hates mankind is called a — [Q.45 Option]", "options": ["A) Misanthrope / Misanthropist", "B) Philanthropist", "C) Altruist", "D) Benevolent"], "ans": 0, "brief": "Misanthrope (Mis/miso = hate + anthrope = mankind) is a hater of humanity[cite: 6]."},
+        {"num": 153, "module": "Module 7: Personality & Character", "q": "One who easily believes or trusts others without suspicion is — [Q.69]", "options": ["A) Credulous / Gullible / Naive / Ingenuous", "B) Sceptic / Incredulous", "C) Cynosure", "D) Astute"], "ans": 0, "brief": "Credulous (Cred = belief) or Gullible refers to a person who trusts others too easily[cite: 6]."},
+        {"num": 154, "module": "Module 7: Personality & Character", "q": "Unwilling or unable to believe something; skeptical is — [Q.69 Option]", "options": ["A) Incredulous / Sceptic", "B) Credulous", "C) Gullible", "D) Naive"], "ans": 0, "brief": "Incredulous or Sceptic means unwilling to believe or doubtful[cite: 6]."},
+        {"num": 155, "module": "Module 7: Personality & Character", "q": "A person who is the center of attention or admiration is a — [Q.69 Option]", "options": ["A) Cynosure", "B) Sceptic", "C) Naive", "D) Credulous"], "ans": 0, "brief": "Cynosure means a focal point of attraction or admiration (e.g., bride/groom)[cite: 6]."},
+        {"num": 156, "module": "Module 7: Personality & Character", "q": "Tireless and untiring in effort is called — [Q.64]", "options": ["A) Indefatigable", "B) Ineffable", "C) Indelible", "D) Impregnable"], "ans": 0, "brief": "Indefatigable ('thakān rahit') means incapable of being tired out; Ineffable = inexpressible; Indelible = unerasable; Impregnable = unconquerable[cite: 6]."},
+        {"num": 157, "module": "Module 7: Personality & Character", "q": "Too great or beautiful to be expressed in words is — [Q.64 Option]", "options": ["A) Ineffable", "B) Indefatigable", "C) Indelible", "D) Impregnable"], "ans": 0, "brief": "Ineffable means beyond expression in words[cite: 6]."},
+        {"num": 158, "module": "Module 7: Personality & Character", "q": "Impossible to erase, remove, or forget is — [Q.64 Option]", "options": ["A) Indelible", "B) Ineffable", "C) Indefatigable", "D) Impregnable"], "ans": 0, "brief": "Indelible means permanent or impossible to remove/erase[cite: 6]."},
+        {"num": 159, "module": "Module 7: Personality & Character", "q": "Unable to be captured, broken into, or defeated is — [Q.64 Option]", "options": ["A) Impregnable / Invincible", "B) Indelible", "C) Ineffable", "D) Indefatigable"], "ans": 0, "brief": "Impregnable or Invincible ('ajeya') means impossible to conquer or defeat[cite: 6]."},
+        {"num": 160, "module": "Module 7: Personality & Character", "q": "Having mixed or conflicting feelings about someone or something is —", "options": ["A) Ambivalent", "B) Unanimous", "C) Animosity", "D) Astute"], "ans": 0, "brief": "Ambivalent means holding mixed or opposing emotions simultaneously[cite: 6]."},
+        {"num": 161, "module": "Module 7: Personality & Character", "q": "An unconventional artist or writer who lives an off-beat, non-conformist life is a — [Q.61 Option]", "options": ["A) Bohemian / Maverick / Iconoclast", "B) Cosmopolitan", "C) Panacea", "D) Avant-Garde"], "ans": 0, "brief": "Bohemian, Maverick, or Iconoclast denotes an unconventional, off-beat individual[cite: 6]."},
+        {"num": 162, "module": "Module 7: Personality & Character", "q": "A person who is familiar with and at ease in many different countries and cultures is — [Q.61 Option]", "options": ["A) Cosmopolitan", "B) Bohemian", "C) Avant-Garde", "D) Parochial"], "ans": 0, "brief": "Cosmopolitan refers to a global citizen comfortable across diverse cultures[cite: 6]."},
+        {"num": 163, "module": "Module 7: Personality & Character", "q": "New, experimental, and innovative ideas or people in art and literature are — [Q.61 Option]", "options": ["A) Avant-Garde", "B) Bohemian", "C) Cosmopolitan", "D) Archaic"], "ans": 0, "brief": "Avant-Garde denotes experimental and cutting-edge innovation[cite: 6]."},
+        {"num": 164, "module": "Module 7: Personality & Character", "q": "One who eats too much; a greedy eater is a — [Q.62 Option]", "options": ["A) Glutton / Voracious / Ravenous / Rapacious", "B) Epicure", "C) Gourmet", "D) Connoisseur"], "ans": 0, "brief": "Glutton, Voracious ('bhukkaḍ'), Ravenous, and Rapacious describe a greedy eater[cite: 6]."},
+        {"num": 165, "module": "Module 7: Personality & Character", "q": "A person who is skillful with both hands is — [Q.68]", "options": ["A) Ambidextrous", "B) Adept", "C) Adroit", "D) Acumen"], "ans": 0, "brief": "Ambidextrous means able to use both left and right hands equally well[cite: 6]."},
+        {"num": 166, "module": "Module 7: Personality & Character", "q": "Highly skilled or expert in a particular task is — [Q.68 Option]", "options": ["A) Adept / Adroit", "B) Ambidextrous", "C) Naive", "D) Novice"], "ans": 0, "brief": "Adept and Adroit mean highly skilled, expert, and dexterous[cite: 6]."},
+        {"num": 167, "module": "Module 7: Personality & Character", "q": "Sharpness and quickness in business or judgment is called — [Q.68 Option]", "options": ["A) Acumen", "B) Ambidextrous", "C) Adroit", "D) Adept"], "ans": 0, "brief": "Acumen represents sharp practical intelligence and discernment[cite: 6]."},
+        {"num": 168, "module": "Module 7: Personality & Character", "q": "A person who brings bad luck is called a — [Q.98]", "options": ["A) Jinx", "B) Proletariat", "C) Prototype", "D) Arsenal"], "ans": 0, "brief": "Jinx is a person or thing that brings bad luck; Proletariat = working-class people; Prototype = sample/first model; Arsenal = weapon store[cite: 6]."},
+        {"num": 169, "module": "Module 7: Personality & Character", "q": "Working-class people regarded collectively are called the — [Q.98 Option]", "options": ["A) Proletariat", "B) Jinx", "C) Prototype", "D) Bourgeoisie"], "ans": 0, "brief": "Proletariat refers to working-class laboring people[cite: 6]."},
+        {"num": 170, "module": "Module 7: Personality & Character", "q": "A person who is stubbornly intolerant of any creed, belief, or opinion that differs from his own is a — [Q.45 Option]", "options": ["A) Bigot / Extremist / Radical", "B) Xenophobia", "C) Misanthrope", "D) Altruist"], "ans": 0, "brief": "Bigot describes an intolerant extremist who prejudicedly attacks other groups[cite: 6]."},
+        {"num": 171, "module": "Module 7: Personality & Character", "q": "An attitude of aggressive superiority, especially men over women, is — [Q.45 Option]", "options": ["A) Chauvinism / Male Chauvinist", "B) Bigot", "C) Xenophobia", "D) Misanthrope"], "ans": 0, "brief": "Chauvinist denotes prejudiced belief in one's superiority, such as male chauvinism[cite: 6]."},
+        {"num": 172, "module": "Module 7: Personality & Character", "q": "One who is habitually cheerful and optimistic about the future is —", "options": ["A) Sanguine / Optimistic", "B) Pessimistic / Cynic", "C) Sadist", "D) Misanthrope"], "ans": 0, "brief": "Sanguine means cheerfully optimistic and positive[cite: 6]."},
+        {"num": 173, "module": "Module 7: Personality & Character", "q": "One who habitually expects the worst outcome is —", "options": ["A) Pessimistic / Cynic", "B) Sanguine", "C) Altruist", "D) Polyglot"], "ans": 0, "brief": "Pessimistic or Cynic describes a person who always expects negative outcomes[cite: 6]."},
+        {"num": 174, "module": "Module 7: Personality & Character", "q": "Ability to maintain calm and composure during difficult times is —", "options": ["A) Sangfroid", "B) Sanguine", "C) Cynic", "D) Trepid"], "ans": 0, "brief": "Sangfroid denotes admirable coolness and composure under stress[cite: 6]."},
+        {"num": 175, "module": "Module 7: Personality & Character", "q": "One who seems interested in a subject, especially art, but does not really know much about it is a — [Q.100]", "options": ["A) Dilettante", "B) Scurrilous", "C) Sojourn", "D) Souvenir"], "ans": 0, "brief": "Dilettante is an amateur dabbler in art without serious knowledge; Scurrilous = abusive; Sojourn = temporary stay; Souvenir = memento[cite: 6]."},
+
+        // MODULE 8: RELIGION, BELIEF, SACREDNESS & IDEOLOGY (176-200)
+        {"num": 176, "module": "Module 8: Religion & Belief", "q": "Belief in many gods is called — [Q.71]", "options": ["A) Polytheism", "B) Euphemism", "C) Pantheism", "D) Atheism"], "ans": 0, "brief": "Polytheism (Poly = many + theism = God) is belief in multiple gods; Euphemism = mild word for harsh; Pantheism = God is everywhere; Atheism = no belief in God[cite: 6]."},
+        {"num": 177, "module": "Module 8: Religion & Belief", "q": "Belief that God is present in all natural things and everywhere is — [Q.71 Option]", "options": ["A) Pantheism / Pantheist", "B) Polytheism", "C) Atheism", "D) Theocracy"], "ans": 0, "brief": "Pantheism (Pan = everywhere + theism = God) sees God present throughout nature[cite: 6]."},
+        {"num": 178, "module": "Module 8: Religion & Belief", "q": "One who believes in the existence of God is a —", "options": ["A) Theist", "B) Atheist", "C) Agnostic", "D) Heretic"], "ans": 0, "brief": "A Theist believes in the existence of God[cite: 6]."},
+        {"num": 179, "module": "Module 8: Religion & Belief", "q": "One who does not believe in the existence of God is an — [Q.71 Option]", "options": ["A) Atheist", "B) Theist", "C) Agnostic", "D) Polytheist"], "ans": 0, "brief": "An Atheist denies the existence of God[cite: 6]."},
+        {"num": 180, "module": "Module 8: Religion & Belief", "q": "One who believes that the existence of God is unknown or unknowable is an — [Q.78]", "options": ["A) Agnostic", "B) Theist", "C) Heretic", "D) Apostate"], "ans": 0, "brief": "Agnostic believes God's existence cannot be known; Heretic = religious dissenter; Apostate = one who abandons faith[cite: 6]."},
+        {"num": 181, "module": "Module 8: Religion & Belief", "q": "One who opposes or holds beliefs contrary to orthodox religious doctrine is a — [Q.78 Option]", "options": ["A) Heretic / Heresy", "B) Agnostic", "C) Apostate", "D) Secular"], "ans": 0, "brief": "Heretic (noun) and Heresy (act) refer to dissenting against orthodox religious beliefs[cite: 6]."},
+        {"num": 182, "module": "Module 8: Religion & Belief", "q": "One who abandons his religious faith or political belief is an — [Q.78 Option]", "options": ["A) Apostate", "B) Heretic", "C) Agnostic", "D) Bigot"], "ans": 0, "brief": "Apostate is a person who renounces or abandons their faith[cite: 6]."},
+        {"num": 183, "module": "Module 8: Religion & Belief", "q": "Holiness or sacredness of something is called — [Q.79]", "options": ["A) Sanctity", "B) Heresy", "C) Secular", "D) Venerable"], "ans": 0, "brief": "Sanctity means holiness and inviolability; Secular = non-religious; Venerable = worthy of deep respect[cite: 6]."},
+        {"num": 184, "module": "Module 8: Religion & Belief", "q": "Disrespectful treatment or violation of something sacred is —", "options": ["A) Profane / Sacrilege / Blasphemy", "B) Sanctity", "C) Venerable", "D) Secular"], "ans": 0, "brief": "Profane, Sacrilege, and Blasphemy denote disrespect toward sacred or religious things[cite: 6]."},
+        {"num": 185, "module": "Module 8: Religion & Belief", "q": "Commanding deep respect because of great age, wisdom, or holiness is — [Q.79 Option]", "options": ["A) Venerable / Reverential / Deferential", "B) Profane", "C) Heresy", "D) Secular"], "ans": 0, "brief": "Venerable, Reverential, and Deferential mean worthy of profound respect[cite: 6]."},
+        {"num": 186, "module": "Module 8: Religion & Belief", "q": "A person who renounces worldly pleasures to lead a simple, austere, and disciplined life is an — [Q.72]", "options": ["A) Ascetic / Austere / Stoic", "B) Hedonist", "C) Epicure", "D) Connoisseur"], "ans": 0, "brief": "Ascetic ('sādhū'), Austere, and Stoic denote a simple, self-denying lifestyle[cite: 6]."},
+        {"num": 187, "module": "Module 8: Religion & Belief", "q": "One who lives alone in seclusion away from society is a — [Q.73]", "options": ["A) Hermit / Recluse", "B) Nomad", "C) Novice", "D) Lachrymose"], "ans": 0, "brief": "Hermit or Recluse is a person who lives in solitude away from society; Nomad = wanderer; Novice = beginner; Lachrymose = tearful[cite: 6]."},
+        {"num": 188, "module": "Module 8: Religion & Belief", "q": "One who foretells the future or speaks by divine inspiration is a — [Q.85]", "options": ["A) Prophet / Oracle / Clairvoyant / Augur", "B) Recluse", "C) Zealot", "D) Iconoclast"], "ans": 0, "brief": "Prophet, Oracle, Clairvoyant (clear-seeing), and Augur denote foretelling the future; Zealot = fanatic[cite: 6]."},
+        {"num": 189, "module": "Module 8: Religion & Belief", "q": "A fanatical, uncompromising enthusiast for a religious or political cause is a — [Q.85 Option]", "options": ["A) Zealot", "B) Prophet", "C) Recluse", "D) Maverick"], "ans": 0, "brief": "A Zealot ('utsāhī') is an uncompromising fanatic[cite: 6]."},
+        {"num": 190, "module": "Module 8: Religion & Belief", "q": "A blessing or prayer asking for divine protection at the end of a service is a — [Q.94 Option]", "options": ["A) Benediction", "B) Benefactor", "C) Interdict", "D) Blasphemy"], "ans": 0, "brief": "Benediction (Bene = good + dict = speak) is a religious blessing[cite: 6]."},
+        {"num": 191, "module": "Module 8: Religion & Belief", "q": "One who gives financial or other help to a person or institution is a — [Q.94]", "options": ["A) Benefactor", "B) Benediction", "C) Interdict", "D) Malefactor"], "ans": 0, "brief": "Benefactor (Bene = good + factor = doer) is a helper or patron[cite: 6]."},
+        {"num": 192, "module": "Module 8: Religion & Belief", "q": "A remedy or cure for all diseases and difficulties is a — [Q.61 Option]", "options": ["A) Panacea", "B) Avant-Garde", "C) Cosmopolitan", "D) Bohemian"], "ans": 0, "brief": "Panacea ('rāmbāṇ īlāj') is a universal remedy for all ills[cite: 6]."},
+        {"num": 193, "module": "Module 8: Religion & Belief", "q": "The use of a mild, polite word in place of a harsh or unpleasant one is — [Q.71 Option]", "options": ["A) Euphemism", "B) Polytheism", "C) Hyperbole", "D) Oxymoron"], "ans": 0, "brief": "Euphemism substitutes a pleasant term for an unpleasant reality[cite: 6]."},
+        {"num": 194, "module": "Module 8: Religion & Belief", "q": "Not connected with religious or spiritual matters is — [Q.79 Option]", "options": ["A) Secular", "B) Sacred", "C) Sanctity", "D) Venerable"], "ans": 0, "brief": "Secular refers to worldly affairs unrelated to religion[cite: 6]."},
+        {"num": 195, "module": "Module 8: Religion & Belief", "q": "A person who leads a wandering life with no permanent home is a — [Q.65 Option]", "options": ["A) Nomad / Vagrant / Peripatetic", "B) Hermit", "C) Recluse", "D) Resident"], "ans": 0, "brief": "Nomad, Vagrant, and Peripatetic describe wanderers without permanent homes[cite: 6]."},
+
+        // MODULE 9: MARRIAGE, FAMILY, RELATIONSHIPS & SOCIETY (196-220)
+        {"num": 196, "module": "Module 9: Marriage & Family", "q": "A system in which a woman has more than one husband is — [Q.76]", "options": ["A) Polyandry", "B) Polygamy", "C) Monogamy", "D) Misogamy"], "ans": 0, "brief": "Polyandry means multiple husbands; Polygamy = multiple spouses; Monogamy = single marriage; Misogamy = hate marriage[cite: 6]."},
+        {"num": 197, "module": "Module 9: Marriage & Family", "q": "The practice or custom of having more than one wife or husband at the same time is —", "options": ["A) Polygamy", "B) Polyandry", "C) Monogamy", "D) Misogamy"], "ans": 0, "brief": "Polygamy (Poly = many + gamy = marriage) means multiple marriages[cite: 6]."},
+        {"num": 198, "module": "Module 9: Marriage & Family", "q": "The practice of being married to only one person at a time is —", "options": ["A) Monogamy", "B) Polygamy", "C) Polyandry", "D) Bigamy"], "ans": 0, "brief": "Monogamy (Mono = one + gamy = marriage) means single marriage[cite: 6]."},
+        {"num": 199, "module": "Module 9: Marriage & Family", "q": "One who hates the institution of marriage is a — [Q.76 Option]", "options": ["A) Misogamist", "B) Polyandrist", "C) Misanthrope", "D) Spinster"], "ans": 0, "brief": "Misogamist (Mis = hate + gamy = marriage) is a person who hates marriage[cite: 6]."},
+        {"num": 200, "module": "Module 9: Marriage & Family", "q": "An unmarried woman, typically an older woman beyond the conventional age of marriage, is a — [Q.76 Option]", "options": ["A) Spinster", "B) Misogamist", "C) Polyandrist", "D) Matron"], "ans": 0, "brief": "Spinster is the term for an older unmarried woman[cite: 6]."},
+        {"num": 201, "module": "Module 9: Marriage & Family", "q": "A legal allowance paid to a spouse after divorce or separation is called — [Q.76 Option]", "options": ["A) Alimony", "B) Patrimony", "C) Matrimony", "D) Ransom"], "ans": 0, "brief": "Alimony is financial support paid to a spouse after separation/divorce[cite: 6]."},
+        {"num": 202, "module": "Module 9: Marriage & Family", "q": "An agreement made between a couple before marriage regarding property division is —", "options": ["A) Antenuptial / Prenuptial agreement", "B) Alimony", "C) Matrimony", "D) Patrimony"], "ans": 0, "brief": "Antenuptial or Prenuptial agreement is made before marriage regarding assets[cite: 6]."},
+        {"num": 203, "module": "Module 9: Marriage & Family", "q": "A child of extraordinary intellectual or artistic talent is a — [Q.75 Option]", "options": ["A) Prodigy", "B) Prodigal", "C) Novice", "D) Pedagogue"], "ans": 0, "brief": "Prodigy denotes a child of genius talent (do not confuse with Prodigal = wasteful)[cite: 6]."},
+        {"num": 204, "module": "Module 9: Marriage & Family", "q": "One who spends money extravagantly and wastefully is —", "options": ["A) Prodigal / Spendthrift / Extravagant", "B) Prodigy", "C) Miser", "D) Usurer"], "ans": 0, "brief": "Prodigal, Spendthrift, and Extravagant describe a wasteful spender[cite: 6]."},
+        {"num": 205, "module": "Module 9: Marriage & Family", "q": "One who lends money at an unreasonably high rate of interest is a — [Q.81 Option]", "options": ["A) Usurer", "B) Miser", "C) Spendthrift", "D) Benefactor"], "ans": 0, "brief": "A Usurer lends money at excessively high interest rates[cite: 6]."},
+        {"num": 206, "module": "Module 9: Marriage & Family", "q": "Extreme greed for wealth or material gain is — [Q.81]", "options": ["A) Avarice / Rapaciousness / Cupidity", "B) Callous", "C) Altruism", "D) Benevolence"], "ans": 0, "brief": "Avarice, Rapacious, and Cupidity denote extreme greed for wealth; Callous = cruel/insensitive[cite: 6]."},
+        {"num": 207, "module": "Module 9: Marriage & Family", "q": "Cruel, insensitive, and showing no empathy for others is — [Q.81 Option]", "options": ["A) Callous", "B) Avarice", "C) Benevolent", "D) Astute"], "ans": 0, "brief": "Callous ('klesh / cruel') means emotionally hardened and insensitive[cite: 6]."},
+        {"num": 208, "module": "Module 9: Marriage & Family", "q": "The ability to understand and share the feelings of another is — [Q.97]", "options": ["A) Empathy", "B) Sympathy", "C) Effeminate", "D) Eavesdropper"], "ans": 0, "brief": "Empathy is feeling what another feels; Sympathy = feeling pity; Effeminate = unmanly feminine traits; Eavesdropper = secret listener[cite: 6]."},
+        {"num": 209, "module": "Module 9: Marriage & Family", "q": "Feeling pity and sorrow for someone else's misfortune is — [Q.97 Option]", "options": ["A) Sympathy", "B) Empathy", "C) Apathy", "D) Antipathy"], "ans": 0, "brief": "Sympathy means feeling pity or compassion for another's distress[cite: 6]."},
+        {"num": 210, "module": "Module 9: Marriage & Family", "q": "A man having traits, habits, or tastes considered typical of a woman is — [Q.97 Option]", "options": ["A) Effeminate", "B) Empathy", "C) Ambidextrous", "D) Stoic"], "ans": 0, "brief": "Effeminate describes a man displaying feminine qualities[cite: 6]."},
+        {"num": 211, "module": "Module 9: Marriage & Family", "q": "A person who is new to or inexperienced in a job or situation is a — [Q.69 Option]", "options": ["A) Novice / Tyro / Rookie / Naive / Greenhorn", "B) Veteran", "C) Adept", "D) Maestro"], "ans": 0, "brief": "Novice, Tyro, Rookie, Naive, and Greenhorn denote beginners[cite: 6]."},
+        {"num": 212, "module": "Module 9: Marriage & Family", "q": "An experienced and seasoned person who has served long in a profession is a —", "options": ["A) Veteran", "B) Novice", "C) Tyro", "D) Apprentice"], "ans": 0, "brief": "A Veteran is an experienced, long-serving expert[cite: 6]."},
+        {"num": 213, "module": "Module 9: Marriage & Family", "q": "One who is learning a trade from a skilled employer is an — [Q.80 Option]", "options": ["A) Apprentice", "B) Veteran", "C) Pedagogue", "D) Demagogue"], "ans": 0, "brief": "An Apprentice is a trainee learning under a master craftsman[cite: 6]."},
+        {"num": 214, "module": "Module 9: Marriage & Family", "q": "An extensive group of islands is called an — [Q.99]", "options": ["A) Archipelago", "B) Antenatal", "C) Antenuptial", "D) Anteroom"], "ans": 0, "brief": "Archipelago is a cluster of islands; Antenatal = before birth; Antenuptial = before marriage; Anteroom = waiting room[cite: 6]."},
+        {"num": 215, "module": "Module 9: Marriage & Family", "q": "Relating to the medical care of a woman before the birth of her child is — [Q.99 Option]", "options": ["A) Antenatal", "B) Antenuptial", "C) Anteroom", "D) Archipelago"], "ans": 0, "brief": "Antenatal (Ante = before + natal = birth) means before birth[cite: 6]."},
+        {"num": 216, "module": "Module 9: Marriage & Family", "q": "A small waiting room leading into a larger principal room is an — [Q.99 Option]", "options": ["A) Anteroom / Ante-room", "B) Antenatal", "C) Archipelago", "D) Sanctuary"], "ans": 0, "brief": "Anteroom is an entrance waiting room leading into a larger room[cite: 6]."},
+        {"num": 217, "module": "Module 9: Marriage & Family", "q": "A person who walks on foot is called a — [Q.83]", "options": ["A) Pedestrian", "B) Navigator", "C) Acrobat", "D) Chauffeur"], "ans": 0, "brief": "Pedestrian (Ped = foot) is a walker; Navigator = ship pilot; Acrobat = gymnast; Chauffeur = hired car driver[cite: 6]."},
+        {"num": 218, "module": "Module 9: Marriage & Family", "q": "A person employed to drive a private or hired car is a — [Q.83 Option]", "options": ["A) Chauffeur", "B) Navigator", "C) Pedestrian", "D) Jockey"], "ans": 0, "brief": "A Chauffeur is a professional hired car driver[cite: 6]."},
+        {"num": 219, "module": "Module 9: Marriage & Family", "q": "A professional rider who rides horses in races is a —", "options": ["A) Jockey", "B) Equestrian", "C) Chauffeur", "D) Cavalry"], "ans": 0, "brief": "A Jockey is a professional horse race rider; Equestrian = horse lover/rider; Cavalry = mounted soldiers[cite: 6]."},
+        {"num": 220, "module": "Module 9: Marriage & Family", "q": "A soldier who fights mounted on horseback is part of the —", "options": ["A) Cavalry", "B) Infantry", "C) Artillery", "D) Pedestrian"], "ans": 0, "brief": "Cavalry denotes horse-mounted military troops[cite: 6]."},
+
+        // MODULE 10: GENERAL VOCABULARY, ROOT WORDS & GROUP TERMS (221-250)
+        {"num": 221, "module": "Module 10: General Vocab & Roots", "q": "What is the dwelling place of a horse called? [Q.92]", "options": ["A) Stable", "B) Aviary", "C) Apiary / Hive", "D) Kennel"], "ans": 0, "brief": "Stable ('astabal') is for horses; Aviary = birds; Apiary/Hive = bees; Kennel = dogs[cite: 6]."},
+        {"num": 222, "module": "Module 10: General Vocab & Roots", "q": "A place where birds are kept is called an — [Q.92 Option]", "options": ["A) Aviary", "B) Apiary", "C) Kennel", "D) Stable"], "ans": 0, "brief": "Aviary (Aviation = birds) is a large enclosure for keeping birds[cite: 6]."},
+        {"num": 223, "module": "Module 10: General Vocab & Roots", "q": "A place where bees are kept is called an — [Q.92 Option]", "options": ["A) Apiary / Hive", "B) Aviary", "C) Kennel", "D) Stable"], "ans": 0, "brief": "Apiary or Hive is where honeybees are kept[cite: 6]."},
+        {"num": 224, "module": "Module 10: General Vocab & Roots", "q": "A shelter or dwelling place for dogs is called a — [Q.92 Option]", "options": ["A) Kennel", "B) Stable", "C) Aviary", "D) Apiary"], "ans": 0, "brief": "A Kennel is a shelter for dogs[cite: 6]."},
+        {"num": 225, "module": "Module 10: General Vocab & Roots", "q": "A group of fish is called a — [Q.93]", "options": ["A) School / Shoal", "B) Pack", "C) Colony", "D) Murder"], "ans": 0, "brief": "School or Shoal is a group of fish; Pack = wolves/hounds; Colony = ants; Murder = crows[cite: 6]."},
+        {"num": 226, "module": "Module 10: General Vocab & Roots", "q": "A group of crows is called a — [Q.93 Option]", "options": ["A) Murder", "B) School", "C) Colony", "D) Pack"], "ans": 0, "brief": "A Murder is the collective noun for a flock of crows[cite: 6]."},
+        {"num": 227, "module": "Module 10: General Vocab & Roots", "q": "A group of ants is called a — [Q.93 Option]", "options": ["A) Colony", "B) Pack", "C) School", "D) Murder"], "ans": 0, "brief": "A Colony is a group of ants[cite: 6]."},
+        {"num": 228, "module": "Module 10: General Vocab & Roots", "q": "A group of wolves or hounds is called a — [Q.93 Option]", "options": ["A) Pack", "B) School", "C) Colony", "D) Murder"], "ans": 0, "brief": "A Pack refers to a group of wolves or hunting dogs[cite: 6]."},
+        {"num": 229, "module": "Module 10: General Vocab & Roots", "q": "Easily seen, recognized, or felt; tangible is — [Q.77]", "options": ["A) Palpable", "B) Juxtapose", "C) Derelict", "D) Opulent"], "ans": 0, "brief": "Palpable means easily noticed or felt; Juxtapose = side-by-side comparison; Derelict = abandoned/negligent; Opulent = lavish/wealthy[cite: 6]."},
+        {"num": 230, "module": "Module 10: General Vocab & Roots", "q": "To place two things side-by-side for comparison or contrast is to — [Q.77 Option]", "options": ["A) Juxtapose", "B) Palpable", "C) Derelict", "D) Efface"], "ans": 0, "brief": "Juxtapose means placing items together to highlight contrast[cite: 6]."},
+        {"num": 231, "module": "Module 10: General Vocab & Roots", "q": "In a poor, neglected, or ruined condition is — [Q.77 Option]", "options": ["A) Derelict", "B) Opulent", "C) Palpable", "D) Plethora"], "ans": 0, "brief": "Derelict means dilapidated and abandoned through neglect[cite: 6]."},
+        {"num": 232, "module": "Module 10: General Vocab & Roots", "q": "Ostentatiously rich, lavish, and luxurious is — [Q.77 Option]", "options": ["A) Opulent / Plethora / Myriad", "B) Derelict", "C) Impecunious", "D) Insolvent"], "ans": 0, "brief": "Opulent, Plethora, and Myriad denote lavish abundance[cite: 6]."},
+        {"num": 233, "module": "Module 10: General Vocab & Roots", "q": "Having little or no money; penniless is — [Q.64/Obituaries Context]", "options": ["A) Impecunious / Pauper / Destitute / Bankrupt / Insolvent", "B) Opulent", "C) Plutocrat", "D) Benefactor"], "ans": 0, "brief": "Impecunious, Pauper, Destitute, and Insolvent mean penniless and poor[cite: 6]."},
+        {"num": 234, "module": "Module 10: General Vocab & Roots", "q": "Unable to pay one's debts; bankrupt is —", "options": ["A) Insolvent / Bankrupt", "B) Impecunious", "C) Opulent", "D) Benefactor"], "ans": 0, "brief": "Insolvent means legally unable to pay financial debts[cite: 6]."},
+        {"num": 235, "module": "Module 10: General Vocab & Roots", "q": "A person who runs away from justice or the law is a —", "options": ["A) Fugitive", "B) Emigrant", "C) Exile", "D) Nomad"], "ans": 0, "brief": "Fugitive ('bhagoḍā') is a person fleeing from legal arrest[cite: 6]."},
+        {"num": 236, "module": "Module 10: General Vocab & Roots", "q": "A temporary stay at a place during a journey is a — [Q.100 Option]", "options": ["A) Sojourn", "B) Itinerary", "C) Excursion", "D) Souvenir"], "ans": 0, "brief": "Sojourn means a temporary stay at a place[cite: 6]."},
+        {"num": 237, "module": "Module 10: General Vocab & Roots", "q": "A planned route or schedule of a journey is an —", "options": ["A) Itinerary", "B) Sojourn", "C) Excursion", "D) Caravan"], "ans": 0, "brief": "Itinerary is a detailed travel schedule or route plan[cite: 6]."},
+        {"num": 238, "module": "Module 10: General Vocab & Roots", "q": "A short pleasure trip or outing is an —", "options": ["A) Excursion", "B) Incursion", "C) Sojourn", "D) Itinerary"], "ans": 0, "brief": "Excursion is a brief pleasure outing (Incursion = hostile invasion)[cite: 6]."},
+        {"num": 239, "module": "Module 10: General Vocab & Roots", "q": "A hostile invasion or attack into a territory is an —", "options": ["A) Incursion / Invasion", "B) Excursion", "C) Sojourn", "D) Expatriate"], "ans": 0, "brief": "Incursion denotes a sudden hostile military raid[cite: 6]."},
+        {"num": 240, "module": "Module 10: General Vocab & Roots", "q": "A thing kept as a reminder or memento of a person, place, or event is a — [Q.100 Option]", "options": ["A) Souvenir", "B) Accolade", "C) Axiom", "D) Sojourn"], "ans": 0, "brief": "Souvenir is a memento kept to remember a place or occasion[cite: 6]."},
+        {"num": 241, "module": "Module 10: General Vocab & Roots", "q": "An expression of praise, special honor, or award is an — [Q.87]", "options": ["A) Accolade", "B) Acronym", "C) Axiom", "D) Truism"], "ans": 0, "brief": "Accolade means special honor, award, or praise[cite: 6]."},
+        {"num": 242, "module": "Module 10: General Vocab & Roots", "q": "Making abusive, insulting, or defamatory statements is — [Q.100 Option]", "options": ["A) Scurrilous / Scathing / Vilifying", "B) Eloquent", "C) Benign", "D) Deferential"], "ans": 0, "brief": "Scurrilous, Scathing, and Vilifying mean spreading abusive insults[cite: 6]."},
+        {"num": 243, "module": "Module 10: General Vocab & Roots", "q": "Huge, enormous, or gigantic in size is —", "options": ["A) Enormous / Mammoth / Juggernaut / Leviathan / Prodigious", "B) Miniscule", "C) Prosaic", "D) Quotidian"], "ans": 0, "brief": "Enormous, Mammoth, Juggernaut, Leviathan, and Prodigious denote massive scale[cite: 6]."},
+        {"num": 244, "module": "Module 10: General Vocab & Roots", "q": "Commonplace, uninspired, boring, or routine is —", "options": ["A) Prosaic / Quotidian / Mundane / Hackneyed / Humdrum / Platitude", "B) Avant-Garde", "C) Exotic", "D) Prodigious"], "ans": 0, "brief": "Prosaic, Quotidian, Mundane, Hackneyed, and Humdrum describe dull routine[cite: 6]."},
+        {"num": 245, "module": "Module 10: General Vocab & Roots", "q": "A person appointed by two disputing parties to settle their differences is an —", "options": ["A) Arbitrator / Mediator", "B) Accomplice", "C) Adversary", "D) Partisan"], "ans": 0, "brief": "Arbitrator or Mediator is an impartial judge chosen to settle disputes[cite: 6]."},
+        {"num": 246, "module": "Module 10: General Vocab & Roots", "q": "A person who lives outside their native country is an —", "options": ["A) Expatriate", "B) Immigrant", "C) Emigrant", "D) Nomad"], "ans": 0, "brief": "Expatriate ('Ex-pat') is a person residing in a foreign country[cite: 6]."},
+        {"num": 247, "module": "Module 10: General Vocab & Roots", "q": "A stupid, foolish, or incompetent person is a —", "options": ["A) Nincompoop / Dunce / Imbecile / Obtuse", "B) Astute", "C) Acumen", "D) Prodigy"], "ans": 0, "brief": "Nincompoop, Dunce, Imbecile, and Obtuse describe foolish incompetence[cite: 6]."},
+        {"num": 248, "module": "Module 10: General Vocab & Roots", "q": "Evoking a keen sense of sadness, regret, or painful old memories is —", "options": ["A) Poignant / Reminiscence / Nostalgia", "B) Sanguine", "C) Hedonistic", "D) Alacrity"], "ans": 0, "brief": "Poignant, Reminiscence, and Nostalgia evoke tender, sorrowful memories[cite: 6]."},
+        {"num": 249, "module": "Module 10: General Vocab & Roots", "q": "Brisk and cheerful readiness or eagerness is —", "options": ["A) Alacrity", "B) Ennui", "C) Lethargy", "D) Torpor"], "ans": 0, "brief": "Alacrity means quick, eager, and cheerful readiness[cite: 6]."},
+        {"num": 250, "module": "Module 10: General Vocab & Roots", "q": "A storehouse where weapons and military ammunition are kept is an — [Q.98 Option]", "options": ["A) Arsenal", "B) Proletariat", "C) Prototype", "D) Aviary"], "ans": 0, "brief": "An Arsenal is an armory where weapons and ammunition are stored[cite: 6]."}
+    ];
+
+    let activeQuestions = [];
+    let currentScore = 0;
+    let wrongCount = 0;
+    let answeredCount = 0;
+    let activeFilter = 'All';
+    let searchQuery = '';
+    let showAllActive = false;
+    let statusFilter = 'all';
+    let questionStatus = {};
+
+    function shuffleArray(array) {
+        const arr = [...array];
+        for (let i = arr.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [arr[i], arr[j]] = [arr[j], arr[i]];
+        }
+        return arr;
+    }
+
+    function initializeAndShuffleQuiz() {
+        const prepared = originalQuestionsData.map(q => {
+            const cleanOptions = q.options.map(opt => opt.replace(/^[A-D]\)\s*/, ''));
+            const correctAnswerText = cleanOptions[q.ans];
+            const shuffledCleanOptions = shuffleArray(cleanOptions);
+            const newCorrectIdx = shuffledCleanOptions.indexOf(correctAnswerText);
+            const relabeledOptions = shuffledCleanOptions.map((opt, i) => {
+                return String.fromCharCode(65 + i) + ') ' + opt;
+            });
+            return {
+                ...q,
+                options: relabeledOptions,
+                ans: newCorrectIdx
+            };
+        });
+        activeQuestions = shuffleArray(prepared);
+        questionStatus = {};
+        currentScore = 0;
+        wrongCount = 0;
+        answeredCount = 0;
+        statusFilter = 'all';
+        document.querySelectorAll('.stat-item').forEach(el => el.classList.remove('active-filter'));
+        updateStats();
+    }
+
+    function applyFilters() {
+        searchQuery = document.getElementById('search-input').value.toLowerCase().trim();
+        renderQuiz();
+    }
+
+    function filterByStatus(status) {
+        if (statusFilter === status) {
+            statusFilter = 'all';
+            document.querySelectorAll('.stat-item').forEach(el => el.classList.remove('active-filter'));
+        } else {
+            statusFilter = status;
+            document.querySelectorAll('.stat-item').forEach(el => el.classList.remove('active-filter'));
+            if (status === 'correct') {
+                document.getElementById('correctStat').classList.add('active-filter');
+            } else if (status === 'wrong') {
+                document.getElementById('wrongStat').classList.add('active-filter');
+            } else if (status === 'left') {
+                document.getElementById('leftStat').classList.add('active-filter');
+            }
+        }
+        renderQuiz();
+    }
+
+    function renderQuiz() {
+        const container = document.getElementById('quiz-container');
+        container.innerHTML = '';
+        let displayCount = 0;
+        let seqNum = 1;
+
+        const isQidSearch = searchQuery && /^\d+$/.test(searchQuery);
+        const qidNumber = isQidSearch ? parseInt(searchQuery) : null;
+
+        activeQuestions.forEach((q) => {
+            if (activeFilter !== 'All') {
+                const qModuleMatch = q.module.match(/Module (\d+)/);
+                const qModuleNum = qModuleMatch ? qModuleMatch[1] : null;
+                const filterMatch = activeFilter.match(/Module (\d+)/);
+                const filterModuleNum = filterMatch ? filterMatch[1] : null;
+                
+                if (qModuleNum && filterModuleNum) {
+                    if (qModuleNum !== filterModuleNum) return;
+                } else {
+                    if (!q.module.startsWith(activeFilter + ':')) return;
+                }
+            }
+            
+            if (statusFilter !== 'all') {
+                const status = questionStatus[q.num];
+                if (statusFilter === 'correct' && status !== 'correct') return;
+                if (statusFilter === 'wrong' && status !== 'wrong') return;
+                if (statusFilter === 'left' && status !== undefined) return;
+            }
+            
+            if (searchQuery) {
+                if (isQidSearch) {
+                    if (q.num !== qidNumber) return;
+                } else {
+                    const match = q.q.toLowerCase().includes(searchQuery) ||
+                                  q.module.toLowerCase().includes(searchQuery) ||
+                                  q.brief.toLowerCase().includes(searchQuery) ||
+                                  q.options.some(o => o.toLowerCase().includes(searchQuery));
+                    if (!match) return;
+                }
+            }
+            
+            displayCount++;
+            const card = document.createElement('div');
+            card.className = 'question-card';
+            card.id = `card-${q.num}`;
+            
+            const savedNote = localStorage.getItem(`oneword_sub_note_QID_${q.num}`) || '';
+            const savedNoteHtml = savedNote ? `
+                <div class="saved-note-banner" id="saved-display-${q.num}">
+                    <strong>📌 Saved Note:</strong> ${savedNote}
+                </div>` : `<div id="saved-display-${q.num}"></div>`;
+            
+            const status = questionStatus[q.num];
+            let statusBadge = '';
+            if (status === 'correct') {
+                statusBadge = `<span class="q-status-badge status-correct">✅ Correct</span>`;
+            } else if (status === 'wrong') {
+                statusBadge = `<span class="q-status-badge status-wrong">❌ Wrong</span>`;
+            } else {
+                statusBadge = `<span class="q-status-badge status-unanswered">⏳ Unanswered</span>`;
+            }
+            
+            card.innerHTML = `
+                <div class="q-header">
+                    <div class="q-badges-left">
+                        <span class="q-num-badge">Question #${seqNum++}</span>
+                        <span class="qid-badge">QID:- ${q.num}</span>
+                        ${statusBadge}
+                    </div>
+                    <span class="q-mod-badge">${q.module}</span>
+                </div>
+                <div class="q-text">${q.q}</div>
+                <div class="options-grid" id="opts-${q.num}">
+                    ${q.options.map((optText, optIdx) => `
+                        <button class="opt-btn" onclick="checkAnswer(${q.num}, ${optIdx}, ${q.ans})">
+                            <span>${optText}</span>
+                        </button>
+                    `).join('')}
+                </div>
+                <div class="feedback-box" id="feedback-${q.num}">
+                    ${showAllActive && !questionStatus[q.num] ? `
+                        <div class="feedback-title">✓ Correct Answer: ${q.options[q.ans]}</div>
+                        <div><strong>Root Word / Etymology Trick:</strong> ${q.brief}</div>
+                        ${savedNoteHtml}
+                        <div class="notes-section">
+                            <button class="notes-btn" onclick="toggleNoteEditor(${q.num})">Add / Edit Notes & Points</button>
+                            <div class="note-editor" id="editor-${q.num}">
+                                <textarea class="notes-area" id="textarea-${q.num}" rows="3" placeholder="Add your notes/points here...">${savedNote}</textarea>
+                                <button class="save-note-btn" onclick="saveNote(${q.num})">Save Note Locally</button>
+                            </div>
+                        </div>
+                    ` : ''}
+                </div>
+            `;
+            container.appendChild(card);
+
+            if (questionStatus[q.num]) {
+                const optsContainer = document.getElementById(`opts-${q.num}`);
+                if (optsContainer) {
+                    const buttons = optsContainer.querySelectorAll('.opt-btn');
+                    buttons.forEach((btn, idx) => {
+                        btn.classList.add('disabled');
+                        if (idx === q.ans) {
+                            btn.classList.add('correct');
+                        }
+                        if (q._selectedIdx !== undefined && idx === q._selectedIdx && idx !== q.ans) {
+                            btn.classList.add('wrong');
+                        }
+                    });
+                }
+                const feedback = document.getElementById(`feedback-${q.num}`);
+                if (feedback) {
+                    const isCorrect = questionStatus[q.num] === 'correct';
+                    feedback.className = `feedback-box show-${isCorrect ? 'correct' : 'wrong'}`;
+                    const savedNoteDisplay = localStorage.getItem(`oneword_sub_note_QID_${q.num}`) || '';
+                    const savedNoteHtmlDisplay = savedNoteDisplay ? `
+                        <div class="saved-note-banner" id="saved-display-${q.num}">
+                            <strong>📌 Saved Note:</strong> ${savedNoteDisplay}
+                        </div>` : `<div id="saved-display-${q.num}"></div>`;
+                    
+                    if (isCorrect) {
+                        feedback.innerHTML = `
+                            <div class="feedback-title">✓ Correct Answer!</div>
+                            <div><strong>Root Word / Etymology Trick:</strong> ${q.brief}</div>
+                            ${savedNoteHtmlDisplay}
+                            <div class="notes-section">
+                                <button class="notes-btn" onclick="toggleNoteEditor(${q.num})">Add / Edit Notes & Points</button>
+                                <div class="note-editor" id="editor-${q.num}">
+                                    <textarea class="notes-area" id="textarea-${q.num}" rows="3" placeholder="Add your notes/points here...">${savedNoteDisplay}</textarea>
+                                    <button class="save-note-btn" onclick="saveNote(${q.num})">Save Note Locally</button>
+                                </div>
+                            </div>
+                        `;
+                    } else {
+                        feedback.innerHTML = `
+                            <div class="feedback-title">✗ Wrong Answer — The Correct Answer is: ${q.options[q.ans]}</div>
+                            <div><strong>Root Word / Etymology Trick:</strong> ${q.brief}</div>
+                            ${savedNoteHtmlDisplay}
+                            <div class="notes-section">
+                                <button class="notes-btn" onclick="toggleNoteEditor(${q.num})">Add / Edit Notes & Points</button>
+                                <div class="note-editor" id="editor-${q.num}">
+                                    <textarea class="notes-area" id="textarea-${q.num}" rows="3" placeholder="Add your notes/points here...">${savedNoteDisplay}</textarea>
+                                    <button class="save-note-btn" onclick="saveNote(${q.num})">Save Note Locally</button>
+                                </div>
+                            </div>
+                        `;
+                    }
+                }
+            }
+
+            if (showAllActive && !questionStatus[q.num]) {
+                const optsContainer = document.getElementById(`opts-${q.num}`);
+                if (optsContainer) {
+                    const buttons = optsContainer.querySelectorAll('.opt-btn');
+                    buttons.forEach((btn, idx) => {
+                        btn.classList.add('disabled');
+                        if (idx === q.ans) {
+                            btn.classList.add('correct');
+                        }
+                    });
+                }
+                const feedback = document.getElementById(`feedback-${q.num}`);
+                if (feedback) {
+                    feedback.className = 'feedback-box show-correct';
+                    const savedNoteDisplay = localStorage.getItem(`oneword_sub_note_QID_${q.num}`) || '';
+                    const savedNoteHtmlDisplay = savedNoteDisplay ? `
+                        <div class="saved-note-banner" id="saved-display-${q.num}">
+                            <strong>📌 Saved Note:</strong> ${savedNoteDisplay}
+                        </div>` : `<div id="saved-display-${q.num}"></div>`;
+                    
+                    if (!feedback.innerHTML) {
+                        feedback.innerHTML = `
+                            <div class="feedback-title">✓ Correct Answer: ${q.options[q.ans]}</div>
+                            <div><strong>Root Word / Etymology Trick:</strong> ${q.brief}</div>
+                            ${savedNoteHtmlDisplay}
+                            <div class="notes-section">
+                                <button class="notes-btn" onclick="toggleNoteEditor(${q.num})">Add / Edit Notes & Points</button>
+                                <div class="note-editor" id="editor-${q.num}">
+                                    <textarea class="notes-area" id="textarea-${q.num}" rows="3" placeholder="Add your notes/points here...">${savedNoteDisplay}</textarea>
+                                    <button class="save-note-btn" onclick="saveNote(${q.num})">Save Note Locally</button>
+                                </div>
+                            </div>
+                        `;
+                    }
+                }
+            }
+        });
+
+        if (displayCount === 0) {
+            let message = 'No One-Word Substitution MCQs matched your search.';
+            if (isQidSearch) {
+                message = `No question found with QID ${qidNumber}. Please check the QID and try again.`;
+            } else if (statusFilter === 'correct' && currentScore === 0) {
+                message = 'No correct answers yet. Keep practicing! 🎯';
+            } else if (statusFilter === 'wrong' && wrongCount === 0) {
+                message = 'No wrong answers yet! Great job! 🎉';
+            } else if (statusFilter === 'left') {
+                if (answeredCount === activeQuestions.length) {
+                    message = '🎉 All questions have been answered! No questions left to attempt.';
+                } else {
+                    message = `📝 You have ${activeQuestions.length - answeredCount} questions left to attempt. Start answering!`;
+                }
+            }
+            container.innerHTML = `<div class="no-results">${message}</div>`;
+        }
+
+        updateStats();
+    }
+
+    function checkAnswer(qNum, selectedIdx, correctIdx) {
+        if (showAllActive) return;
+        if (questionStatus[qNum]) return;
+        
+        const optsContainer = document.getElementById(`opts-${qNum}`);
+        const buttons = optsContainer.querySelectorAll('.opt-btn');
+        const feedback = document.getElementById(`feedback-${qNum}`);
+        
+        if (buttons[0].classList.contains('disabled')) {
+            return;
+        }
+        
+        const qObj = activeQuestions.find(item => item.num === qNum);
+        qObj._selectedIdx = selectedIdx;
+        
+        buttons.forEach((btn, idx) => {
+            btn.classList.add('disabled');
+            if (idx === correctIdx) {
+                btn.classList.add('correct');
+            }
+        });
+        
+        const savedNote = localStorage.getItem(`oneword_sub_note_QID_${qNum}`) || '';
+        const savedNoteHtml = savedNote ? `
+            <div class="saved-note-banner" id="saved-display-${qNum}">
+                <strong>📌 Saved Note:</strong> ${savedNote}
+            </div>` : `<div id="saved-display-${qNum}"></div>`;
+        
+        const isCorrect = selectedIdx === correctIdx;
+        if (isCorrect) {
+            currentScore++;
+            questionStatus[qNum] = 'correct';
+            buttons[selectedIdx].classList.add('correct');
+            feedback.className = 'feedback-box show-correct';
+            feedback.innerHTML = `
+                <div class="feedback-title">✓ Correct Answer!</div>
+                <div><strong>Root Word / Etymology Trick:</strong> ${qObj.brief}</div>
+                ${savedNoteHtml}
+                <div class="notes-section">
+                    <button class="notes-btn" onclick="toggleNoteEditor(${qNum})">Add / Edit Notes & Points</button>
+                    <div class="note-editor" id="editor-${qNum}">
+                        <textarea class="notes-area" id="textarea-${qNum}" rows="3" placeholder="Add your notes/points here...">${savedNote}</textarea>
+                        <button class="save-note-btn" onclick="saveNote(${qNum})">Save Note Locally</button>
+                    </div>
+                </div>
+            `;
+        } else {
+            wrongCount++;
+            questionStatus[qNum] = 'wrong';
+            buttons[selectedIdx].classList.add('wrong');
+            const correctOptText = qObj.options[correctIdx];
+            feedback.className = 'feedback-box show-wrong';
+            feedback.innerHTML = `
+                <div class="feedback-title">✗ Wrong Answer — The Correct Answer is: ${correctOptText}</div>
+                <div><strong>Root Word / Etymology Trick:</strong> ${qObj.brief}</div>
+                ${savedNoteHtml}
+                <div class="notes-section">
+                    <button class="notes-btn" onclick="toggleNoteEditor(${qNum})">Add / Edit Notes & Points</button>
+                    <div class="note-editor" id="editor-${qNum}">
+                        <textarea class="notes-area" id="textarea-${qNum}" rows="3" placeholder="Add your notes/points here...">${savedNote}</textarea>
+                        <button class="save-note-btn" onclick="saveNote(${qNum})">Save Note Locally</button>
+                    </div>
+                </div>
+            `;
+        }
+        answeredCount++;
+        
+        const badgeContainer = document.querySelector(`#card-${qNum} .q-badges-left`);
+        if (badgeContainer) {
+            const oldBadge = badgeContainer.querySelector('.q-status-badge');
+            let newBadgeHtml = '';
+            if (isCorrect) {
+                newBadgeHtml = `<span class="q-status-badge status-correct">✅ Correct</span>`;
+            } else {
+                newBadgeHtml = `<span class="q-status-badge status-wrong">❌ Wrong</span>`;
+            }
+            if (oldBadge) {
+                oldBadge.outerHTML = newBadgeHtml;
+            } else {
+                badgeContainer.innerHTML += newBadgeHtml;
+            }
+        }
+        
+        updateStats();
+        
+        if (statusFilter !== 'all') {
+            renderQuiz();
+        }
+    }
+
+    function toggleNoteEditor(qNum) {
+        const editor = document.getElementById(`editor-${qNum}`);
+        if (editor.style.display === 'block') {
+            editor.style.display = 'none';
+        } else {
+            editor.style.display = 'block';
+        }
+    }
+
+    function saveNote(qNum) {
+        const textarea = document.getElementById(`textarea-${qNum}`);
+        const noteText = textarea.value.trim();
+        const storageKey = `oneword_sub_note_QID_${qNum}`;
+        
+        if (noteText) {
+            localStorage.setItem(storageKey, noteText);
+        } else {
+            localStorage.removeItem(storageKey);
+        }
+
+        const displayContainer = document.getElementById(`saved-display-${qNum}`);
+        if (noteText) {
+            displayContainer.className = 'saved-note-banner';
+            displayContainer.innerHTML = `<strong>📌 Saved Note:</strong> ${noteText}`;
+        } else {
+            displayContainer.className = '';
+            displayContainer.innerHTML = '';
+        }
+        document.getElementById(`editor-${qNum}`).style.display = 'none';
+    }
+
+    function updateStats() {
+        const totalQuestions = activeQuestions.length;
+        const leftToAttempt = totalQuestions - answeredCount;
+        
+        document.getElementById('correct-count').textContent = currentScore;
+        document.getElementById('wrong-count').textContent = wrongCount;
+        document.getElementById('left-count').textContent = leftToAttempt;
+        
+        const pct = answeredCount > 0 ? Math.round((currentScore / answeredCount) * 100) : 0;
+        document.getElementById('pct-display').textContent = pct + '%';
+    }
+
+    function filterQuestions(modPrefix) {
+        activeFilter = modPrefix;
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.classList.remove('active');
+            if (btn.getAttribute('data-filter') === modPrefix) {
+                btn.classList.add('active');
+            }
+        });
+        renderQuiz();
+    }
+
+    function resetQuiz() {
+        if (showAllActive) {
+            showAllActive = false;
+            const btn = document.getElementById('showAllBtn');
+            btn.classList.remove('show-all-active');
+            btn.textContent = '👁️ Show All Answers (Study Mode)';
+        }
+        currentScore = 0;
+        wrongCount = 0;
+        answeredCount = 0;
+        questionStatus = {};
+        statusFilter = 'all';
+        document.querySelectorAll('.stat-item').forEach(el => el.classList.remove('active-filter'));
+        updateStats();
+        renderQuiz();
+    }
+
+    function toggleShowAll() {
+        const btn = document.getElementById('showAllBtn');
+        showAllActive = !showAllActive;
+        
+        if (showAllActive) {
+            btn.classList.add('show-all-active');
+            btn.textContent = '🔴 Hide All Answers';
+        } else {
+            btn.classList.remove('show-all-active');
+            btn.textContent = '👁️ Show All Answers (Study Mode)';
+        }
+        renderQuiz();
+    }
+
+    // Initialize
+    initializeAndShuffleQuiz();
+    renderQuiz();
+</script>
+</body>
+</html>

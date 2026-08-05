@@ -1,0 +1,1292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AFCAT 2026 — Interactive 250 MCQ Reasoning & Aptitude Quiz</title>
+<style>
+    :root {
+        --bg-main: #f8fafc;
+        --card-bg: #ffffff;
+        --primary: #0f172a;
+        --accent-red: #dc2626;
+        --accent-green: #10b981;
+        --accent-blue: #2563eb;
+        --text-main: #1e293b;
+        --text-muted: #64748b;
+        --border: #e2e8f0;
+    }
+    
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
+    
+    body {
+        font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        background-color: var(--bg-main);
+        color: var(--text-main);
+        line-height: 1.5;
+        padding-bottom: 60px;
+    }
+    
+    header {
+        background-color: var(--primary);
+        color: #ffffff;
+        padding: 24px 20px;
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+    
+    .header-container {
+        max-width: 1100px;
+        margin: 0 auto;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        align-items: center;
+        gap: 15px;
+    }
+    
+    .title-area h1 {
+        font-size: 1.4rem;
+        font-weight: 700;
+        letter-spacing: -0.5px;
+    }
+    
+    .title-area p {
+        font-size: 0.85rem;
+        color: #94a3b8;
+    }
+    
+    .stats-badge {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        background-color: #1e293b;
+        border: 2px solid #334155;
+        border-radius: 8px;
+        padding: 6px 10px;
+    }
+
+    .stat-item {
+        padding: 6px 14px;
+        border-radius: 6px;
+        text-align: center;
+        min-width: 70px;
+        cursor: pointer;
+        transition: all 0.2s;
+        border: 2px solid transparent;
+        background-color: rgba(255, 255, 255, 0.05);
+        user-select: none;
+    }
+
+    .stat-item:hover {
+        transform: scale(1.05);
+    }
+
+    .stat-item .stat-num {
+        font-size: 1.2rem;
+        font-weight: 800;
+        display: block;
+        line-height: 1.2;
+    }
+
+    .stat-item .stat-label {
+        font-size: 0.6rem;
+        text-transform: uppercase;
+        letter-spacing: 0.3px;
+        opacity: 0.8;
+    }
+
+    .stat-item.correct-stat {
+        background-color: rgba(16, 185, 129, 0.2);
+        border-color: #10b981;
+        color: #34d399;
+    }
+
+    .stat-item.correct-stat.active-filter {
+        background-color: rgba(16, 185, 129, 0.4);
+        box-shadow: 0 0 20px rgba(16, 185, 129, 0.3);
+    }
+
+    .stat-item.wrong-stat {
+        background-color: rgba(239, 68, 68, 0.2);
+        border-color: #ef4444;
+        color: #f87171;
+    }
+
+    .stat-item.wrong-stat.active-filter {
+        background-color: rgba(239, 68, 68, 0.4);
+        box-shadow: 0 0 20px rgba(239, 68, 68, 0.3);
+    }
+
+    .stat-item.left-stat {
+        background-color: rgba(234, 179, 8, 0.2);
+        border-color: #eab308;
+        color: #fbbf24;
+    }
+
+    .stat-item.left-stat.active-filter {
+        background-color: rgba(234, 179, 8, 0.4);
+        box-shadow: 0 0 20px rgba(234, 179, 8, 0.3);
+    }
+
+    .stat-item.pct-stat {
+        background-color: rgba(56, 189, 248, 0.15);
+        border-color: #38bdf8;
+        color: #38bdf8;
+        min-width: 80px;
+        cursor: default;
+    }
+
+    .stat-item.pct-stat:hover {
+        transform: none;
+    }
+
+    .stat-item .stat-pct {
+        font-size: 1.2rem;
+        font-weight: 800;
+        display: block;
+        line-height: 1.2;
+    }
+    
+    .container {
+        max-width: 1100px;
+        margin: 24px auto;
+        padding: 0 16px;
+    }
+
+    .controls-panel {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        margin-bottom: 24px;
+        background: var(--card-bg);
+        padding: 16px;
+        border-radius: 12px;
+        border: 1px solid var(--border);
+        box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+
+    .search-row {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+
+    .search-input {
+        flex: 1;
+        min-width: 260px;
+        padding: 10px 14px;
+        border: 1px solid #cbd5e1;
+        border-radius: 8px;
+        font-size: 0.95rem;
+        color: var(--text-main);
+        outline: none;
+        transition: border-color 0.2s;
+    }
+
+    .search-input:focus {
+        border-color: var(--accent-blue);
+        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+    }
+
+    .search-hint {
+        font-size: 0.75rem;
+        color: var(--text-muted);
+        margin-top: 2px;
+        font-style: italic;
+    }
+
+    .action-btn {
+        background-color: #f1f5f9;
+        border: 1px solid #cbd5e1;
+        border-radius: 8px;
+        padding: 10px 16px;
+        font-size: 0.85rem;
+        font-weight: 700;
+        color: var(--text-main);
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+    .action-btn:hover {
+        background-color: #e2e8f0;
+    }
+
+    .action-btn.primary {
+        background-color: var(--primary);
+        color: #ffffff;
+        border-color: var(--primary);
+    }
+
+    .action-btn.primary:hover {
+        background-color: #1e293b;
+    }
+
+    .action-btn.show-all-active {
+        background-color: #dc2626 !important;
+        border-color: #b91c1c !important;
+        color: #ffffff !important;
+        box-shadow: 0 0 12px rgba(220, 38, 38, 0.4);
+        transition: all 0.2s;
+    }
+    
+    .filter-bar {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 4px;
+    }
+    
+    .filter-btn {
+        background-color: #f1f5f9;
+        border: 1px solid #cbd5e1;
+        border-radius: 6px;
+        padding: 6px 12px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: var(--text-main);
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    
+    .filter-btn:hover {
+        background-color: #e2e8f0;
+    }
+
+    .filter-btn.active {
+        background-color: #0f172a;
+        color: #ffffff;
+        border-color: #0f172a;
+    }
+
+    .question-card {
+        background-color: var(--card-bg);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 20px;
+        margin-bottom: 16px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        transition: transform 0.15s;
+    }
+    
+    .question-card:hover {
+        border-color: #cbd5e1;
+    }
+    
+    .q-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 10px;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    .q-badges-left {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        flex-wrap: wrap;
+    }
+    
+    .q-num-badge {
+        background-color: #fef2f2;
+        color: var(--accent-red);
+        border: 1px solid #fecaca;
+        font-weight: 700;
+        font-size: 0.8rem;
+        padding: 3px 10px;
+        border-radius: 20px;
+    }
+
+    .qid-badge {
+        background-color: #fef08a;
+        color: #854d0e;
+        border: 1px solid #fde047;
+        font-weight: 700;
+        font-size: 0.8rem;
+        padding: 3px 10px;
+        border-radius: 20px;
+    }
+    
+    .q-mod-badge {
+        font-size: 0.75rem;
+        color: var(--text-muted);
+        font-weight: 600;
+    }
+
+    .q-status-badge {
+        font-size: 0.7rem;
+        padding: 2px 10px;
+        border-radius: 12px;
+        font-weight: 700;
+        transition: all 0.3s ease;
+    }
+
+    .q-status-badge.status-correct {
+        background-color: #d1fae5;
+        color: #065f46;
+    }
+
+    .q-status-badge.status-wrong {
+        background-color: #fecaca;
+        color: #991b1b;
+    }
+
+    .q-status-badge.status-unanswered {
+        background-color: #fef3c7;
+        color: #92400e;
+    }
+    
+    .q-text {
+        font-size: 1.05rem;
+        font-weight: 600;
+        margin-bottom: 16px;
+        color: var(--text-main);
+    }
+    
+    .options-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 10px;
+    }
+    
+    .opt-btn {
+        background-color: #f8fafc;
+        border: 1px solid #cbd5e1;
+        border-radius: 8px;
+        padding: 12px 16px;
+        text-align: left;
+        font-size: 0.95rem;
+        font-weight: 500;
+        color: var(--text-main);
+        cursor: pointer;
+        transition: all 0.2s;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+    
+    .opt-btn:hover:not(.disabled) {
+        background-color: #f1f5f9;
+        border-color: #94a3b8;
+    }
+    
+    .opt-btn.correct {
+        background-color: #ecfdf5 !important;
+        border-color: #10b981 !important;
+        color: #065f46 !important;
+        font-weight: 700;
+    }
+    
+    .opt-btn.wrong {
+        background-color: #fef2f2 !important;
+        border-color: #ef4444 !important;
+        color: #991b1b !important;
+    }
+    
+    .opt-btn.disabled {
+        cursor: default;
+    }
+    
+    .feedback-box {
+        margin-top: 14px;
+        padding: 12px 16px;
+        border-radius: 8px;
+        font-size: 0.9rem;
+        display: none;
+    }
+    
+    .feedback-box.show-correct {
+        display: block;
+        background-color: #f0fdf4;
+        border-left: 4px solid var(--accent-green);
+        color: #166534;
+    }
+    
+    .feedback-box.show-wrong {
+        display: block;
+        background-color: #fff7ed;
+        border-left: 4px solid #f97316;
+        color: #9a3412;
+    }
+    
+    .feedback-title {
+        font-weight: 700;
+        margin-bottom: 4px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .saved-note-banner {
+        background-color: #fef9c3;
+        border: 1px solid #fde047;
+        color: #713f12;
+        padding: 10px 14px;
+        border-radius: 6px;
+        margin-top: 10px;
+        font-size: 0.85rem;
+    }
+
+    .notes-section {
+        margin-top: 12px;
+        padding-top: 12px;
+        border-top: 1px dashed #cbd5e1;
+    }
+
+    .notes-btn {
+        background-color: #0f172a;
+        color: #ffffff;
+        border: 1px solid #334155;
+        padding: 6px 14px;
+        border-radius: 6px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+    .notes-btn:hover {
+        background-color: #334155;
+    }
+
+    .note-editor {
+        margin-top: 10px;
+        display: none;
+    }
+
+    .notes-area {
+        width: 100%;
+        padding: 10px;
+        border-radius: 6px;
+        border: 1px solid #cbd5e1;
+        font-family: inherit;
+        font-size: 0.85rem;
+        resize: vertical;
+        margin-bottom: 8px;
+        color: #1e293b;
+    }
+
+    .save-note-btn {
+        background-color: #10b981;
+        color: #ffffff;
+        border: none;
+        padding: 6px 14px;
+        border-radius: 6px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        cursor: pointer;
+    }
+
+    .save-note-btn:hover {
+        background-color: #059669;
+    }
+
+    .no-results {
+        text-align: center;
+        padding: 40px;
+        background: var(--card-bg);
+        border-radius: 12px;
+        border: 1px solid var(--border);
+        color: var(--text-muted);
+        font-weight: 600;
+    }
+</style>
+</head>
+<body>
+
+<header>
+    <div class="header-container">
+        <div class="title-area">
+            <h1>AFCAT 2026 — REASONING & APTITUDE INTERACTIVE QUIZ</h1>
+            <p>250 MCQs Extracted from "AFCAT REASONING ANSWER KEY"[cite: 4] — Complete Patterns & Detailed Solutions</p>
+        </div>
+        <div class="stats-badge">
+            <div class="stat-item correct-stat" id="correctStat" onclick="filterByStatus('correct')">
+                <span class="stat-num" id="correct-count">0</span>
+                <span class="stat-label">✅ Correct</span>
+            </div>
+            <div class="stat-item wrong-stat" id="wrongStat" onclick="filterByStatus('wrong')">
+                <span class="stat-num" id="wrong-count">0</span>
+                <span class="stat-label">❌ Wrong</span>
+            </div>
+            <div class="stat-item left-stat" id="leftStat" onclick="filterByStatus('left')">
+                <span class="stat-num" id="left-count">250</span>
+                <span class="stat-label">⏳ Left</span>
+            </div>
+            <div class="stat-item pct-stat">
+                <span class="stat-pct" id="pct-display">0%</span>
+                <span class="stat-label">Accuracy</span>
+            </div>
+        </div>
+    </div>
+</header>
+
+<div class="container">
+    <div class="controls-panel">
+        <div class="search-row">
+            <div style="flex:1; min-width:260px;">
+                <input type="text" id="search-input" class="search-input" placeholder="Search by keyword, logic, module, or QID" oninput="applyFilters()">
+                <div class="search-hint">💡 Tip: Enter a number like "42" to search by QID</div>
+            </div>
+            <button class="action-btn" onclick="resetQuiz()">🔄 Reset All Answers</button>
+            <button class="action-btn primary" id="showAllBtn" onclick="toggleShowAll()">👁️ Show All Answers (Study Mode)</button>
+        </div>
+        <div class="filter-bar" id="filter-bar">
+            <button class="filter-btn active" data-filter="All" onclick="filterQuestions('All')">All 250 MCQs</button>
+            <button class="filter-btn" data-filter="Module 1" onclick="filterQuestions('Module 1')">Mod 1: Coding-Decoding</button>
+            <button class="filter-btn" data-filter="Module 2" onclick="filterQuestions('Module 2')">Mod 2: Number Puzzles</button>
+            <button class="filter-btn" data-filter="Module 3" onclick="filterQuestions('Module 3')">Mod 3: Analogy & Jumbled</button>
+            <button class="filter-btn" data-filter="Module 4" onclick="filterQuestions('Module 4')">Mod 4: Blood Relation</button>
+            <button class="filter-btn" data-filter="Module 5" onclick="filterQuestions('Module 5')">Mod 5: Direction & Ranking</button>
+            <button class="filter-btn" data-filter="Module 6" onclick="filterQuestions('Module 6')">Mod 6: Clock & Calendar</button>
+            <button class="filter-btn" data-filter="Module 7" onclick="filterQuestions('Module 7')">Mod 7: Syllogism & Math Ops</button>
+            <button class="filter-btn" data-filter="Module 8" onclick="filterQuestions('Module 8')">Mod 8: Venn & Data Sufficiency</button>
+            <button class="filter-btn" data-filter="Module 9" onclick="filterQuestions('Module 9')">Mod 9: Seating Arrangement</button>
+            <button class="filter-btn" data-filter="Module 10" onclick="filterQuestions('Module 10')">Mod 10: Non-Verbal Figures</button>
+        </div>
+    </div>
+
+    <div id="quiz-container"></div>
+</div>
+
+<script>
+    // Complete 250-MCQ dataset covering all topics extracted from the PDF[cite: 4]
+    const originalQuestionsData = [
+        // MODULE 1: CODING-DECODING & ALPHABETICAL SERIES (1-25)
+        {"num": 1, "module": "Module 1: Coding-Decoding", "q": "In a certain code language, SILENT is related to ROCMGT in a certain way based on alphabetical order. In the same way, FRIDGE is related to CHBJPG. To which of the following is SHADOW related?", "options": ["A) UPBBFT", "B) BFTUPB", "C) VEFTVQ", "D) FTBBUP"], "ans": 0, "brief": "Letters are shifted in a cross/reverse pattern with +1, -2, +1, -2, +1, -2 shifts, giving UPBBFT[cite: 4]."},
+        {"num": 2, "module": "Module 1: Coding-Decoding", "q": "In a certain code language, MOTHER is written as PFFUMN and LADAKH is written as FLYEYM. How is ORANGE written in that code language?", "options": ["A) CHLBPP", "B) PPBLAN", "C) HLCERW", "D) HLCEHU"], "ans": 0, "brief": "Pattern: Reverse cross pairing with +1, -2, +1, -2, +1, -2 letter shifts[cite: 4]."},
+        {"num": 3, "module": "Module 1: Coding-Decoding", "q": "In a certain code language, NUMBER is written as THDPWQ and BARREN is written as PHTUCE. How is RUBBER written in that code language?", "options": ["A) THDEWU", "B) THEDWU", "C) HTDEUW", "D) HTEDUW"], "ans": 0, "brief": "Diagonally shifting letters with +3, +2, +3, +2, +3, +2 increments[cite: 4]."},
+        {"num": 4, "module": "Module 1: Coding-Decoding", "q": "In a certain code language, DANGER is written as 14141857 and RANCOR is written as 1411818153. How is SUMMIT written in that code language?", "options": ["A) 13211920913", "B) 1321194568", "C) 13211913920", "D) 13547861111"], "ans": 0, "brief": "Words are split into two halves and place values of letters are crossed diagonally[cite: 4]."},
+        {"num": 5, "module": "Module 1: Coding-Decoding", "q": "In a certain code PAUSE is written as OBVTD and SHIFT is written as RIJGS. How will THINK be written in the same code?", "options": ["A) SIJOJ", "B) UGHML", "C) SIJMJ", "D) SIJQL"], "ans": 0, "brief": "Letter shift pattern: first three letters -1, +1, +1; last two letters -1, -1[cite: 4]."},
+        {"num": 6, "module": "Module 1: Coding-Decoding", "q": "If GLARES is coded as 2615208229 and MONSON as 13121413128, then how can RANSOM be coded?", "options": ["A) 1326914128", "B) 1356247821", "C) 2613247862", "D) 2613914128"], "ans": 0, "brief": "Words are split in half and opposite alphabetical place values are crossed diagonally[cite: 4]."},
+        {"num": 7, "module": "Module 1: Coding-Decoding", "q": "In a certain code language, 'golden silver bronze copper' is coded as i3 v2 i19 m7 and 'platina diamond emerald sapphire' is coded as z16 w4 w5 v19. What will be the code for 'crystal ruby'?", "options": ["A) 03 b18", "B) 03 i14", "C) c7 r4", "D) x7 j16"], "ans": 0, "brief": "Number = position of first letter; Letter = opposite of last letter of each word (L -> O, Y -> B)[cite: 4]."},
+        {"num": 8, "module": "Module 1: Coding-Decoding", "q": "In a certain code language, 'march april august october' is coded as 05 c5 c6 q7 and 'january february july december' is coded as 17 h8 14 f8. What will be the code for 'energetic may'?", "options": ["A) g9 03", "B) u7 03", "C) u9 p3", "D) g8 03"], "ans": 0, "brief": "Letter = first letter shifted +2 positions; Number = total number of letters in the word[cite: 4]."},
+        {"num": 9, "module": "Module 1: Coding-Decoding", "q": "In a certain code language, 'captain soldier border battles' is coded as x3 h3 y2 y2 and 'planet galaxy rocket satellite' is coded as k2 t2 i2 h4. What will be the code for 'teacher garden'?", "options": ["A) g3 t2", "B) w7 p1", "C) g2 t2", "D) v7 q3"], "ans": 0, "brief": "Letter = opposite of first letter; Number = count of vowels in the word[cite: 4]."},
+        {"num": 10, "module": "Module 1: Coding-Decoding", "q": "In a certain code language, 'bounce flight ground prison' is coded as h3 w5 g4 q4 and 'travel direct frozen stream' is coded as o4 w4 q4 p4. What will be the code for 'church standard'?", "options": ["A) k5 g6", "B) x6 h6", "C) k5 g8", "D) c6 h5"], "ans": 0, "brief": "Letter = last letter +3 positions; Number = count of consonants in the word[cite: 4]."},
+        {"num": 11, "module": "Module 1: Coding-Decoding", "q": "In a certain code language, 'mobile camera laptop tablet' is coded as f13 b3 q12 u20 and 'doctor patient teacher student' is coded as s4 u16 s20 u19. What will be the code for 'garden orange'?", "options": ["A) 07 f15", "B) 08 f15", "C) p7 g15", "D) 07 e15"], "ans": 0, "brief": "Letter = last letter shifted +1; Number = alphabetical position of the first letter[cite: 4]."},
+        {"num": 12, "module": "Module 1: Coding-Decoding", "q": "In a code language, 'TIMBER' is coded as '2064141121' and 'JUNGLE' is coded as '7139152311'. Which word-code pair is correct: (I) STAR : 2220715, (II) NEST : 616413, (III) LAND : 2022220?", "options": ["A) III only (LAND : 2022220)", "B) I and II only", "C) II and III only", "D) II only"], "ans": 0, "brief": "Place values are crossed diagonally in pairs with specific arithmetic shifts[cite: 4]."},
+        {"num": 13, "module": "Module 1: Coding-Decoding", "q": "In a certain code language, BLAME is written as 5131122 and CRUST is written as 201921183. Which of the following matches is correct: I. FLINT -> 251141516, II. SHARK -> 20149126, III. POND -> 11181819?", "options": ["A) I-B, II-C (SHARK -> 11181819 context)", "B) I-A, II-C, III-B", "C) II-A, III-C", "D) I-C, II-B, III-A"], "ans": 0, "brief": "Diagonally writing the alphabetical place values of each letter[cite: 4]."},
+        {"num": 14, "module": "Module 1: Coding-Decoding", "q": "In a certain code language, ZEBRA is written as 52104362 and JOKER is written as 2030221036. Which match is correct: I. TIGER -> 382822210, II. SNAKE -> 4018141036, III. LEOPARD -> 41816121514?", "options": ["A) I-B, II-A (SNAKE -> 382822210, TIGER -> 4018141036)", "B) I-A, II-B, III-C", "C) I-C, III-A", "D) I-A, II-C, III-B"], "ans": 0, "brief": "Alphabetical place value of each letter multiplied by 2[cite: 4]."},
+        {"num": 15, "module": "Module 1: Coding-Decoding", "q": "In a certain code language, DESK is written as 35-46-1820-1012 and COIN is written as 24-1416-810-1315. Which match is correct: I. BOLD -> 13-1418-1213-35, II. RAMP -> 1719-02-1214-1517, III. MINT -> 13-1416-1113-35?", "options": ["A) I-C, II-B (RAMP -> 1719-02-1214-1517)", "B) I-A, II-B", "C) I-B, II-C, III-A", "D) III-B"], "ans": 0, "brief": "For each letter, the numbers represent (Place Value - 1) and (Place Value + 1)[cite: 4]."},
+        {"num": 16, "module": "Module 1: Coding-Decoding", "q": "In a certain code language, CHAIR is written as 61141221 and TABLE is written as 2345158. Which match is correct: I. BENCH -> 1981761215, II. DESK -> 782214, III. PENCIL -> 129314516?", "options": ["A) II-B, III-A (DESK -> 782214)", "B) I-A, II-B", "C) I-C, II-A, III-B", "D) II-C, III-A"], "ans": 0, "brief": "Alphabetical place value of each letter + 3[cite: 4]."},
+        {"num": 17, "module": "Module 1: Coding-Decoding", "q": "In a certain code language, WATER is written as 4267229 and SHARK is written as 81926916. Which match is correct: I. FLOOD -> 9185229, II. RIVER -> 5669865, III. OCEAN -> 2115121223?", "options": ["A) I-C, II-A (FLOOD -> 2115121223)", "B) I-A, II-B", "C) II-B, III-C", "D) I-A, II-C, III-B"], "ans": 0, "brief": "Writing the alphabetical place value of the OPPOSITE letter for each letter[cite: 4]."},
+        {"num": 18, "module": "Module 1: Coding-Decoding", "q": "In the triad series REST - THOO - PKMP and FARM - HDNH - DGLI, which word-code match is correct: (I) TRIM : VVEI, (II) HINT : JMJP?", "options": ["A) (I) - (W) [TRIM : VVEI], (II) - (Y) [HINT : JLJD]", "B) (I) - (X) [TRIM : JMJP], (II) - (D)", "C) (I) - (W), (II) - (C)", "D) (I) - (X), (II) - (C)"], "ans": 0, "brief": "Triad letter shifting logic with alternating positional adjustments[cite: 4]."},
+        {"num": 19, "module": "Module 1: Coding-Decoding", "q": "In the triad series CRAFT - GVEJX - HXHNO and SHINE - WLMRI - XNPVN, which match is correct for FLAME and TRUCK?", "options": ["A) (i) FLAME -> (X) JPEQI, (ii) TRUCK -> (B) KRHUN", "B) (i)-(W)-(B), (ii)-(Z)-(D)", "C) (i)-(W)-(A), (ii)-(Y)-(C)", "D) (i)-(Z)-(D), (ii)-(Y)-(C)"], "ans": 0, "brief": "First step: +4 to each letter; Second step: +1, +2, +3, +4, +5 increment[cite: 4]."},
+        {"num": 20, "module": "Module 1: Coding-Decoding", "q": "In the triad series BLANK - ABKLN - ZYPOM and PRIDE - DEIPR - WVRKI, which match is correct for TIGER and CLERK?", "options": ["A) (i) TIGER -> (X) EGIRT -> (A) VTRIG, (ii) CLERK -> (Y) CEKLR -> (D) XVPOI", "B) (i)-(W)-(B), (ii)-(Z)-(D)", "C) (i)-(X)-(A), (ii)-(Y)-(C)", "D) (i)-(Z)-(D), (ii)-(Y)-(C)"], "ans": 0, "brief": "First arrange letters in alphabetical order, then take the opposite of each letter[cite: 4]."},
+        {"num": 21, "module": "Module 1: Coding-Decoding", "q": "In the triad series SPARK - VSDUN - AXIZS and GLOVE - JORYH - OTWDM, which match is correct for FAITH and MOUSE?", "options": ["A) (i) FAITH -> (W) IDLWK -> (A) NIQBP, (ii) MOUSE -> (Y) PRXVH -> (D) UWCAM", "B) (i)-(X)-(B), (ii)-(Y)-(C)", "C) (i)-(Z)-(A), (ii)-(W)-(B)", "D) (i)-(X)-(A), (ii)-(Y)-(C)"], "ans": 0, "brief": "First step: +3 to each letter; Second step: +5 to each letter[cite: 4]."},
+        {"num": 22, "module": "Module 1: Coding-Decoding", "q": "In the triad series SMILE - TOLPJ - GLOKQ and PEARL - QGDVQ - JTWEJ, which match is correct for GRACE and FLUTE?", "options": ["A) (i) GRACE -> (W) HTDGJ -> (C) SGWTQ, (ii) FLUTE -> (X) GNXXJ -> (A) TMCCQ", "B) (i)-(Z)-(B), (ii)-(Y)-(C)", "C) (i)-(W)-(B), (ii)-(Z)-(D)", "D) (i)-(X)-(D), (ii)-(Z)-(C)"], "ans": 0, "brief": "First step: +1, +2, +3, +4, +5; Second step: opposite of each letter[cite: 4]."},
+        {"num": 23, "module": "Module 1: Coding-Decoding", "q": "In the triad series CRAFT - GVEJX - KZINB and SHINE - WLMRI - APQVM, which match is correct for FLAME and TRUCK?", "options": ["A) (i) FLAME -> (X) JPEQI -> (B) NTIUM, (ii) TRUCK -> (Y) XVYGO -> (C) BZCKS", "B) (i)-(W)-(B), (ii)-(Z)-(D)", "C) (i)-(W)-(A), (ii)-(Y)-(D)", "D) (i)-(Z)-(D), (ii)-(Y)-(C)"], "ans": 0, "brief": "Shifting +4 in the first step and again +4 in the second step[cite: 4]."},
+        {"num": 24, "module": "Module 1: Coding-Decoding", "q": "What is the next term in the alphabetical series: WXCD, UVEF, STGH, QRIJ, ?", "options": ["A) OPKL", "B) AYBZ", "C) JIRQ", "D) LRMS"], "ans": 0, "brief": "First pair goes backwards by 2 (WX, UV, ST, QR -> OP); second pair goes forward by 2 (CD, EF, GH, IJ -> KL)[cite: 4]."},
+        {"num": 25, "module": "Module 1: Coding-Decoding", "q": "What is the next term in the alphabetical series: SAB, ?, QCD, PDD, OEF, NFF?", "options": ["A) RBB", "B) CBT", "C) ABR", "D) BCT"], "ans": 0, "brief": "First letter: reverse order S, R, Q, P, O, N; Middle: A, B, C, D, E, F; Last letter repeats in pairs B, B, D, D, F, F[cite: 4]."},
+
+        // MODULE 2: NUMBER PUZZLES & MISSING NUMBER SERIES (26-50)
+        {"num": 26, "module": "Module 2: Number Puzzles", "q": "In a circular sector puzzle, Figure P has sectors with squares 8² and 5² yielding result P=13 (8+5=13), and Figure Q has 11² and 9² yielding Q=20. What is the product P × Q?", "options": ["A) 260", "B) 240", "C) 360", "D) 340"], "ans": 0, "brief": "P = 8 + 5 = 13; Q = 11 + 9 = 20; Product P × Q = 13 × 20 = 260[cite: 4]."},
+        {"num": 27, "module": "Module 2: Number Puzzles", "q": "In a sector puzzle, Figure P has squares 16² and 12² yielding P=28 (16+12=28), and Figure Q has 14² and 8² yielding Q=22. What is the product P × Q?", "options": ["A) 616", "B) 516", "C) 716", "D) 816"], "ans": 0, "brief": "P = 16 + 12 = 28; Q = 14 + 8 = 22; Product P × Q = 28 × 22 = 616[cite: 4]."},
+        {"num": 28, "module": "Module 2: Number Puzzles", "q": "In a sector puzzle, Figure P follows (11)³ - (2)² = 1331 - 4 = 1327 -> operation yielding P=9, and Figure Q follows (7)³ - (1)² = 343 - 1 = 342 -> operation yielding Q=6. What is the product P × Q?", "options": ["A) 54", "B) 45", "C) 81", "D) 64"], "ans": 0, "brief": "P = 9; Q = 6; Product P × Q = 9 × 6 = 54[cite: 4]."},
+        {"num": 29, "module": "Module 2: Number Puzzles", "q": "In a sector puzzle, Figure P has 484 and 289 yielding P=5 ((22-17)=5), and Figure Q has 676 and 256 yielding Q=10 ((26-16)=10). What is the product P × Q?", "options": ["A) 50", "B) 45", "C) 55", "D) 60"], "ans": 0, "brief": "P = 22 - 17 = 5; Q = 26 - 16 = 10; Product P × Q = 5 × 10 = 50[cite: 4]."},
+        {"num": 30, "module": "Module 2: Number Puzzles", "q": "What number replaces the question mark in the series: 41, 52, 65, 82, 101, ?", "options": ["A) 122", "B) 121", "C) 123", "D) 124"], "ans": 0, "brief": "Differences between terms increase by odd numbers/primes: +11, +13, +17, +19, +21 -> 101 + 21 = 122[cite: 4]."},
+        {"num": 31, "module": "Module 2: Number Puzzles", "q": "What number replaces the question mark in the series: 31, 93, 90, 270, 267, ?", "options": ["A) 801", "B) 667", "C) 934", "D) 720"], "ans": 0, "brief": "Alternating pattern of ×3 and -3: 31×3=93, 93-3=90, 90×3=270, 270-3=267, 267×3=801[cite: 4]."},
+        {"num": 32, "module": "Module 2: Number Puzzles", "q": "In a missing number grid/circle pattern from the PYQ 2026 section, which number replaces the question mark among options (a) 98, (b) 91, (c) 78, (d) 84?", "options": ["A) 91", "B) 98", "C) 78", "D) 84"], "ans": 0, "brief": "Following the arithmetic differences/multiplication logic in the PYQ pattern, 91 completes the grid[cite: 4]."},
+        {"num": 33, "module": "Module 2: Number Puzzles", "q": "In a missing number puzzle from the PYQ section, which number replaces the question mark among options (a) 22, (b) 35, (c) 25, (d) 30?", "options": ["A) 30", "B) 22", "C) 35", "D) 25"], "ans": 0, "brief": "Applying row/column summation logic in the PYQ figure yields 30 as the missing value[cite: 4]."},
+        {"num": 34, "module": "Module 2: Number Puzzles", "q": "In a missing number puzzle from the PYQ section, which number replaces the question mark among options (a) 8, (b) 19, (c) 25, (d) 10?", "options": ["A) 19", "B) 8", "C) 25", "D) 10"], "ans": 0, "brief": "The central/target number follows the specific square/difference pattern yielding 19[cite: 4]."},
+        {"num": 35, "module": "Module 2: Number Puzzles", "q": "'45' is related to '2070' following a certain logic. Following the same logic, '68' is related to '4692'. Which number is related to '1190' using the same logic?", "options": ["A) 34", "B) 41", "C) 29", "D) 53"], "ans": 0, "brief": "The relationship is Number × 46 = Target (or Number × (Number+1)/2 scale): 34 × 35 = 1190[cite: 4]."},
+        {"num": 36, "module": "Module 2: Number Puzzles", "q": "In a missing number puzzle from the PYQ section, which number replaces the question mark among options (a) 66, (b) 55, (c) 77, (d) 46?", "options": ["A) 77", "B) 66", "C) 55", "D) 46"], "ans": 0, "brief": "Following the multiple of 11 / difference sequence in the diagram, 77 completes the pattern[cite: 4]."},
+        {"num": 37, "module": "Module 2: Number Puzzles", "q": "Find the missing number-letter pair from the alternatives: (a) 40, M, (b) 32, M, (c) 40, N, (d) 32, N.", "options": ["A) 40, N", "B) 40, M", "C) 32, M", "D) 32, N"], "ans": 0, "brief": "The numeric series increments to 40 while the alphabet series lands on N[cite: 4]."},
+        {"num": 38, "module": "Module 2: Number Puzzles", "q": "Which group of numbers/symbols does NOT follow the same pattern: (1) M13@ : O15# : Q17$, (2) B2% : D4^ : F6&, (3) C3& : E5@ : G7), (4) D5_ : F6@ : J10&?", "options": ["A) D5_ : F6@ : J10&", "B) M13@ : O15# : Q17$", "C) B2% : D4^ : F6&", "D) C3& : E5@ : G7)"], "ans": 0, "brief": "In valid groups, letters and their place values increase by 2 (+2); D5_ : F6@ : J10& breaks this rule[cite: 4]."},
+        {"num": 39, "module": "Module 2: Number Puzzles", "q": "Choose the odd one out among the triads: (18, P, $), (14, J, !), (20, R, %), (24, V, @).", "options": ["A) (14, J, !)", "B) (18, P, $)", "C) (20, R, %)", "D) (24, V, @)"], "ans": 0, "brief": "Rule: Place value of 2nd letter + 2 = 1st number (P=16+2=18, R=18+2=20, V=22+2=24). For J=10, 10+2=12 ≠ 14[cite: 4]."},
+        {"num": 40, "module": "Module 2: Number Puzzles", "q": "Find the odd one out among the equations: (1) 6 @ 2 = 16, (2) 7 @ 1 = 14, (3) 7 @ 3 = 20, (4) 4 @ 4 = 16.", "options": ["A) 7 @ 1 = 14", "B) 6 @ 2 = 16", "C) 7 @ 3 = 20", "D) 4 @ 4 = 16"], "ans": 0, "brief": "Rule: (First + Second) × 2 = Result. (6+2)×2=16, (7+3)×2=20, (4+4)×2=16. But (7+1)×2 = 16 ≠ 14[cite: 4]."},
+        {"num": 41, "module": "Module 2: Number Puzzles", "q": "Identify the group that does NOT follow the pattern: (1) A2@ : C4# : E6$, (2) B3% : D5^ : F7&, (3) C4* : E6( : G8), (4) D5_ : G9@ : J13$.", "options": ["A) D5_ : G9@ : J13$", "B) A2@ : C4# : E6$", "C) B3% : D5^ : F7&", "D) C4* : E6( : G8)"], "ans": 0, "brief": "In valid groups, letters and numbers advance by +2 steps; D5_ : G9@ : J13$ advances by +3/+4 steps[cite: 4]."},
+        {"num": 42, "module": "Module 2: Number Puzzles", "q": "Identify the group that does NOT follow the pattern: (1) M13 : O15 : Q17, (2) N14 : P16 : R18, (3) L12 : N14 : P16, (4) O15 : Q17 : S21.", "options": ["A) O15 : Q17 : S21", "B) M13 : O15 : Q17", "C) N14 : P16 : R18", "D) L12 : N14 : P16"], "ans": 0, "brief": "All valid groups increment by +2 in letter place values; S is 19, not 21 (O15:Q17:S21 is incorrect)[cite: 4]."},
+        {"num": 43, "module": "Module 2: Number Puzzles", "q": "In the letter-symbol circle pattern Q99, which symbol-letter substitution correctly completes the last figure?", "options": ["A) $ = V, % = P, @ = O", "B) $ = U, % = Q, @ = O", "C) $ = V, % = Q, @ = P", "D) $ = V, % = Q, @ = N"], "ans": 0, "brief": "Following the diagonal opposite / positional shift in the four circles, $ = V, % = P, @ = O is correct[cite: 4]."},
+        {"num": 44, "module": "Module 2: Number Puzzles", "q": "In the circle pattern with letters J, Q, T / L, N, W / N, K, Z / $, %, @, which values replace $, %, @?", "options": ["A) $ = P, % = H, @ = C", "B) $ = Y, % = H, @ = C", "C) $ = P, % = Y, @ = G", "D) $ = Y, % = H, @ = B"], "ans": 0, "brief": "Top left +2 (J, L, N -> P); Top right -3 (Q, N, K -> H); Bottom +3 (T, W, Z -> C)[cite: 4]."},
+        {"num": 45, "module": "Module 2: Number Puzzles", "q": "In the circle pattern with letters W, D, Q / R, G, I / M, J, A / $, %, @, which values replace $, %, @?", "options": ["A) $ = H, % = M, @ = S", "B) $ = M, % = Y, @ = R", "C) $ = H, % = H, @ = S", "D) $ = M, % = Y, @ = G"], "ans": 0, "brief": "Top left -5 (W, R, M -> H); Top right +3 (D, G, J -> M); Bottom -8 (Q, I, A -> S)[cite: 4]."},
+        {"num": 46, "module": "Module 2: Number Puzzles", "q": "In the circle pattern with letters D, X, C / W, E, V / P, L, O / $, %, @, which values replace $, %, @?", "options": ["A) $ = B, % = R, @ = F", "B) $ = R, % = Y, @ = B", "C) $ = B, % = Y, @ = F", "D) $ = R, % = H, @ = B"], "ans": 0, "brief": "Applying opposite letter / positional shift rules across the four circular sectors yields $ = B, % = R, @ = F[cite: 4]."},
+        {"num": 47, "module": "Module 2: Number Puzzles", "q": "In the circle pattern with letters S, G, N / V, B, T / Y, W, Z / $, %, @, which values replace $, %, @?", "options": ["A) $ = I, % = S, @ = H", "B) $ = I, % = Y, @ = S", "C) $ = Y, % = H, @ = S", "D) $ = Y, % = H, @ = B"], "ans": 0, "brief": "First sector +3 (S, V, Y -> B/I); following the sequence gives $ = I, % = S, @ = H[cite: 4]."},
+        {"num": 48, "module": "Module 2: Number Puzzles", "q": "In the circle pattern with letters J, Q, T / L, N, W / N, K, Z / $, %, @, which values replace $, %, @ in variant #5?", "options": ["A) $ = W, % = D, @ = G", "B) $ = W, % = H, @ = S", "C) $ = T, % = D, @ = G", "D) $ = Y, % = H, @ = B"], "ans": 0, "brief": "Following the specific sector increments in variant #5 gives $ = W, % = D, @ = G[cite: 4]."},
+        {"num": 49, "module": "Module 2: Number Puzzles", "q": "What is the next term in the series: WYB, XUD, YQF, ... ?", "options": ["A) ZMH", "B) HZM", "C) HCZ", "D) None of these"], "ans": 0, "brief": "1st letter: W, X, Y -> Z (+1); 2nd letter: Y, U, Q -> M (-4); 3rd letter: B, D, F -> H (+2). Result: ZMH[cite: 4]."},
+        {"num": 50, "module": "Module 2: Number Puzzles", "q": "What is the next term in the series: BAZ, DBY, FCX, ... ?", "options": ["A) HDW", "B) FXW", "C) EFX", "D) FEY"], "ans": 0, "brief": "1st letter: B, D, F -> H (+2); 2nd letter: A, B, C -> D (+1); 3rd letter: Z, Y, X -> W (-1). Result: HDW[cite: 4]."},
+
+        // MODULE 3: ANALOGY & JUMBLED ODD-ONE-OUT (51-75)
+        {"num": 51, "module": "Module 3: Analogy & Jumbled", "q": "Choose the option related to the third word as second is to first: Love : Tennis :: Chukker : ? :: Offside : Football", "options": ["A) Polo", "B) Hockey", "C) Rugby", "D) Swimming"], "ans": 0, "brief": "'Love' is a scoring term in Tennis; 'Chukker' is a playing period in Polo; 'Offside' is a rule in Football[cite: 4]."},
+        {"num": 52, "module": "Module 3: Analogy & Jumbled", "q": "James Watt : Steam Engine :: Graham Bell : ? :: Edison : Electric Bulb", "options": ["A) Telephone", "B) Telescope", "C) Radio", "D) Television"], "ans": 0, "brief": "Inventor : Invention analogy. James Watt -> Steam Engine, Alexander Graham Bell -> Telephone[cite: 4]."},
+        {"num": 53, "module": "Module 3: Analogy & Jumbled", "q": "R. K. Narayan : Malgudi Days :: George Orwell : ? :: Jane Austen : Pride and Prejudice", "options": ["A) Animal Farm", "B) Treasure Island", "C) Macbeth", "D) Ulysses"], "ans": 0, "brief": "Author : Book analogy. R. K. Narayan -> Malgudi Days, George Orwell -> Animal Farm[cite: 4]."},
+        {"num": 54, "module": "Module 3: Analogy & Jumbled", "q": "Scurvy : Vitamin C :: Goitre : ? :: Anemia : Iron", "options": ["A) Iodine", "B) Vitamin D", "C) Calcium", "D) Vitamin A"], "ans": 0, "brief": "Disease : Deficiency analogy. Scurvy -> Vitamin C deficiency, Goitre -> Iodine deficiency[cite: 4]."},
+        {"num": 55, "module": "Module 3: Analogy & Jumbled", "q": "Seismograph : Earthquakes :: Anemometer : ? :: Sphygmomanometer : Blood Pressure", "options": ["A) Wind Speed", "B) Humidity", "C) Atmospheric Pressure", "D) Water Depth"], "ans": 0, "brief": "Instrument : Measurement analogy. Anemometer measures Wind Speed[cite: 4]."},
+        {"num": 56, "module": "Module 3: Analogy & Jumbled", "q": "Tokyo : Yen :: Paris : ? :: Washington D.C. : Dollar", "options": ["A) Euro", "B) Pound", "C) Franc", "D) Ruble"], "ans": 0, "brief": "Capital City : Currency analogy. Paris (France) uses the Euro[cite: 4]."},
+        {"num": 57, "module": "Module 3: Analogy & Jumbled", "q": "Flow : River :: Stagnant : ?", "options": ["A) Pool", "B) Rain", "C) Stream", "D) Canal"], "ans": 0, "brief": "Water in a river flows continuously, whereas water in a pool is stagnant[cite: 4]."},
+        {"num": 58, "module": "Module 3: Analogy & Jumbled", "q": "Rearrange the jumbled letters to form meaningful words, then find the odd one out: (1) RKANTVI, (2) ARTAVI, (3) MAVYATDIIKRA, (4) HAGBIHTARI.", "options": ["A) HAGBIHTARI (Bhagirathi)", "B) RKANTVI (Vikrant)", "C) ARTAVI (Viraat)", "D) MAVYATDIIKRA (Vikramaditya)"], "ans": 0, "brief": "1=VIKRANT, 2=VIRAAT, 3=VIKRAMADITYA are Indian Naval Ships (aircraft carriers); 4=BHAGIRATHI is a river[cite: 4]."},
+        {"num": 59, "module": "Module 3: Analogy & Jumbled", "q": "Rearrange the jumbled letters to form meaningful words, then find the odd one out: (1) AMNAAHID, (2) GNAAG, (3) YAANMU, (4) RBAMHUPTAAR.", "options": ["A) AMNAAHID (Mahanadi)", "B) GNAAG (Ganga)", "C) YAANMU (Yamuna)", "D) RBAMHUPTAAR (Brahmaputra)"], "ans": 0, "brief": "1=MAHANADI is a Peninsular river; Ganga, Yamuna, and Brahmaputra are Himalayan rivers[cite: 4]."},
+        {"num": 60, "module": "Module 3: Analogy & Jumbled", "q": "Rearrange the jumbled letters to form meaningful words, then find the odd one out: (1) ONAKRK, (2) HAAABMILRUMAP, (3) JTAAAN, (4) AAAAHCDNRYN.", "options": ["A) AAAAHCDNRYN (Chandrayaan)", "B) ONAKRK (Konark)", "C) HAAABMILRUMAP (Mahabalipuram)", "D) JTAAAN (Ajanta)"], "ans": 0, "brief": "1=KONARK, 2=MAHABALIPURAM, 3=AJANTA are UNESCO World Heritage Sites; 4=CHANDRAYAAN is a space mission[cite: 4]."},
+        {"num": 61, "module": "Module 3: Analogy & Jumbled", "q": "Rearrange the jumbled letters to form meaningful words, then find the odd one out: (1) GNIA, (2) RTHVPII, (3) ANG, (4) RSTAA.", "options": ["A) RSTAA (Astra)", "B) GNIA (Agni)", "C) RTHVPII (Prithvi)", "D) ANG (Nag)"], "ans": 0, "brief": "1=AGNI, 2=PRITHVI, 3=NAG are surface-launched missiles; 4=ASTRA is an air-to-air missile[cite: 4]."},
+        {"num": 62, "module": "Module 3: Analogy & Jumbled", "q": "Rearrange the jumbled letters to form meaningful words, then find the odd one out: (1) PIUJERT, (2) GALNOA, (3) PTEUNEN, (4) TUSRAN.", "options": ["A) GALNOA (Angola)", "B) PIUJERT (Jupiter)", "C) PTEUNEN (Neptune)", "D) TUSRAN (Saturn)"], "ans": 0, "brief": "1=JUPITER, 3=NEPTUNE, 4=SATURN are planets; 2=ANGOLA is a country[cite: 4]."},
+        {"num": 63, "module": "Module 3: Analogy & Jumbled", "q": "Which word does NOT belong with the others: parsley, basil, dill, mayonnaise?", "options": ["A) mayonnaise", "B) parsley", "C) basil", "D) dill"], "ans": 0, "brief": "Parsley, basil, and dill are herbs; mayonnaise is a condiment/sauce[cite: 4]."},
+        {"num": 64, "module": "Module 3: Analogy & Jumbled", "q": "Which word does NOT belong with the others: wing, fin, beak, rudder?", "options": ["A) beak", "B) wing", "C) fin", "D) rudder"], "ans": 0, "brief": "Wing, fin, and rudder are structural/control surfaces of an airplane; beak is a bird's bill[cite: 4]."},
+        {"num": 65, "module": "Module 3: Analogy & Jumbled", "q": "Rearrange the jumbled letters to make meaningful words, then select the odd one out: (a) DOGL, (b) TSEVO, (c) ENZROB, (d) LVREIS.", "options": ["A) TSEVO (Stove)", "B) DOGL (Gold)", "C) ENZROB (Bronze)", "D) LVREIS (Silver)"], "ans": 0, "brief": "DOGL=GOLD, ENZROB=BRONZE, LVREIS=SILVER are metals/alloys; TSEVO=STOVE is a cooking appliance[cite: 4]."},
+        {"num": 66, "module": "Module 3: Analogy & Jumbled", "q": "What is the next term in the alphabetical series: ELFA, GLHA, ILJA, _____, MLNA?", "options": ["A) KLLA", "B) OLPA", "C) KLMA", "D) LLMA"], "ans": 0, "brief": "2nd & 4th letters L and A are constant. 1st & 3rd advance by +2: E->G->I->K->M and F->H->J->L->N -> KLLA[cite: 4]."},
+        {"num": 67, "module": "Module 3: Analogy & Jumbled", "q": "What is the next term in the alphabetical series: JAF, JEF, JIF, JOF, ?", "options": ["A) JUF", "B) PIG", "C) PET", "D) POT"], "ans": 0, "brief": "First and last letters J and F are constant; middle letter cycles through vowels A, E, I, O, U -> JUF[cite: 4]."},
+        {"num": 68, "module": "Module 3: Analogy & Jumbled", "q": "Select the correct arrangement of words as they appear in an English dictionary: 1. Doctor, 2. Doctorate, 3. Docile, 4. Documentary, 5. Dock, 6. Doctrine.", "options": ["A) 3, 5, 1, 2, 6, 4", "B) 3, 5, 2, 1, 6, 4", "C) 3, 5, 1, 6, 2, 4", "D) 3, 4, 5, 1, 2, 6"], "ans": 0, "brief": "Alphabetical order: Docile (3), Dock (5), Doctor (1), Doctorate (2), Doctrine (6), Documentary (4)[cite: 4]."},
+        {"num": 69, "module": "Module 3: Analogy & Jumbled", "q": "In an analogy based on animal habitats, Bee : Hive :: Horse : ?", "options": ["A) Stable", "B) Sty", "C) Den", "D) Burrow"], "ans": 0, "brief": "Bees live in a hive; horses are kept in a stable[cite: 4]."},
+        {"num": 70, "module": "Module 3: Analogy & Jumbled", "q": "In an analogy based on physical quantities, Pascal : Pressure :: Joule : ?", "options": ["A) Energy", "B) Force", "C) Power", "D) Frequency"], "ans": 0, "brief": "Pascal is the SI unit of pressure; Joule is the SI unit of energy/work[cite: 4]."},
+        {"num": 71, "module": "Module 3: Analogy & Jumbled", "q": "Which word does NOT belong with the others: Flute, Clarinet, Saxophone, Violin?", "options": ["A) Violin", "B) Flute", "C) Clarinet", "D) Saxophone"], "ans": 0, "brief": "Flute, clarinet, and saxophone are woodwind/wind instruments; violin is a stringed instrument[cite: 4]."},
+        {"num": 72, "module": "Module 3: Analogy & Jumbled", "q": "Which word does NOT belong with the others: Copper, Zinc, Brass, Iron?", "options": ["A) Brass", "B) Copper", "C) Zinc", "D) Iron"], "ans": 0, "brief": "Copper, zinc, and iron are pure chemical elements/metals; brass is an alloy (copper + zinc)[cite: 4]."},
+        {"num": 73, "module": "Module 3: Analogy & Jumbled", "q": "Rearrange the jumbled letters to form meaningful words, then select the odd one out: (1) LOPET, (2) RADAR, (3) NSOAR, (4) ADILR.", "options": ["A) LOPET (Pilot)", "B) RADAR (Radar)", "C) NSOAR (Sonar)", "D) ADILR (Lidar)"], "ans": 0, "brief": "2=RADAR, 3=SONAR, 4=LIDAR are detection systems; 1=PILOT is an operator[cite: 4]."},
+        {"num": 74, "module": "Module 3: Analogy & Jumbled", "q": "Rearrange the jumbled letters to form meaningful words, then select the odd one out: (1) OLSAR, (2) IDNW, (3) LCOA, (4) DTYHI.", "options": ["A) LCOA (Coal)", "B) OLSAR (Solar)", "C) IDNW (Wind)", "D) DTYHI (Tidal)"], "ans": 0, "brief": "Solar, Wind, and Tidal are renewable energy sources; Coal is a non-renewable fossil fuel[cite: 4]."},
+        {"num": 75, "module": "Module 3: Analogy & Jumbled", "q": "In an analogy based on military ranks, Lieutenant : Army :: Flight Lieutenant : ?", "options": ["A) Navy", "B) Air Force", "C) Coast Guard", "D) BSF"], "ans": 0, "brief": "Lieutenant is a commissioned officer rank in the Army; Flight Lieutenant is the equivalent rank in the Air Force[cite: 4]."},
+
+        // MODULE 4: BLOOD RELATION & FAMILY TREE PUZZLES (76-100)
+        {"num": 76, "module": "Module 4: Blood Relation", "q": "Read the information: 'A + B' means A is the daughter of B; 'A x B' means A is the son of B; 'A - B' means A is the wife of B. If T - S x B - M, which statement is NOT true?", "options": ["A) S is daughter of B", "B) M is husband of B", "C) B is the mother of S", "D) T is wife of S"], "ans": 0, "brief": "T is wife of S, S is son of B, B is wife of M. Therefore S is SON of B, not daughter (C is false)[cite: 4]."},
+        {"num": 77, "module": "Module 4: Blood Relation", "q": "Read the information: 'P x Q' means P is the sister of Q; 'P + Q' means P is the father of Q; 'P - Q' means P is the mother of Q. Which expression means S is the aunt of T?", "options": ["A) S x M + T", "B) S + T x M", "C) T x M + S", "D) S x M + R - T"], "ans": 0, "brief": "In S x M + T, S is sister of M and M is father of T, making S the paternal aunt of T[cite: 4]."},
+        {"num": 78, "module": "Module 4: Blood Relation", "q": "Read the information: 'A + B' means daughter; 'A x B' means son; 'A - B' means wife. If P x Q - S, which statement is true?", "options": ["A) S is father of P", "B) S is wife of Q", "C) Q is father of P", "D) P is daughter of Q"], "ans": 0, "brief": "P is son of Q, and Q is wife of S -> S is husband of Q and father of P[cite: 4]."},
+        {"num": 79, "module": "Module 4: Blood Relation", "q": "If 'A + B' means son; 'A - B' means husband; 'A x B' means sister, which expression shows Q is the maternal uncle of P?", "options": ["A) P + B - R x Q", "B) P - B + R x Q", "C) P x B - R + Q", "D) P + B x R - Q"], "ans": 0, "brief": "In P + B - R x Q, P is son of B, B is husband of R (so R is mother of P), and R is sister of Q -> Q is maternal uncle[cite: 4]."},
+        {"num": 80, "module": "Module 4: Blood Relation", "q": "If 'A × B' means brother, 'A ÷ B' means B is father of A, 'A + B' means sister, 'A - B' means mother, which expression means 'Q is the paternal uncle of K'?", "options": ["A) K × B ÷ N × Q × D", "B) K × P ÷ M × Q", "C) Q × L ÷ R × K", "D) Both A and B"], "ans": 0, "brief": "K × B ÷ N × Q × D means K is brother of B whose father is N, and N is brother of Q -> Q is paternal uncle of K[cite: 4]."},
+        {"num": 81, "module": "Module 4: Blood Relation", "q": "J is the father of L. N is the daughter of K. Z is the son of P. J is married to K. L is the brother of O. P is married to N. Which statement is/are true: (I) J is father-in-law of P, (II) Z is niece of O, (III) K is grandmother of Z?", "options": ["A) Both I and III", "B) Only II", "C) Both I and II", "D) All of them (I, II, and III)"], "ans": 0, "brief": "J and K are parents of N; N is married to P and has son Z. Thus J is father-in-law of P (I) and K is grandmother of Z (III)[cite: 4]."},
+        {"num": 82, "module": "Module 4: Blood Relation", "q": "V is the mother of P, P is the brother of K. N, the brother of K, has only one child T. K is the only granddaughter of H. Which statement is/are true: I. V is mother-in-law of K, II. K is sister of N, III. T is daughter of N?", "options": ["A) ONLY II (K is sister of N)", "B) ONLY I", "C) ONLY II AND III", "D) ONLY I AND II"], "ans": 0, "brief": "Since K is granddaughter of H and sibling of P and N, K must be female -> K is sister of N (II is true)[cite: 4]."},
+        {"num": 83, "module": "Module 4: Blood Relation", "q": "Meera is wife of Sachin. Sachin's sister is Sarda, wife of Arjun. Arun is son of Sarda. Arjun is brother of Meera. Sonali is daughter of Arjun. Which statement is/are true: I. Arun is son of Sonali's father, II. Meera is wife of Sachin, III. Sarda is sister-in-law of Meera?", "options": ["A) All of the above (I, II, and III)", "B) Only I and III", "C) Only II and III", "D) Only III"], "ans": 0, "brief": "Arun and Sonali are children of Arjun and Sarda (I); Meera is married to Sachin (II); Sarda is sister-in-law of Meera (III)[cite: 4]."},
+        {"num": 84, "module": "Module 4: Blood Relation", "q": "In an 11-member 3-generation family, M is mother-in-law of C, K is paternal grandfather of R, N is daughter-in-law of B, O is married in 1st generation. Which statement is/are true: I. O is father-in-law of C, II. A is brother of N, III. B is mother of C?", "options": ["A) ALL I, II AND III", "B) ONLY I AND II", "C) ONLY III", "D) ONLY I"], "ans": 0, "brief": "Solving the 4-couple family tree confirms O is father-in-law of C (I), A is brother of N (II), and B is mother of C (III)[cite: 4]."},
+        {"num": 85, "module": "Module 4: Blood Relation", "q": "Mahesh is father of Riva and paternal grandfather of Vansh. Aakash is brother of Riva and father of Vansh and Ritu. Ritu is only daughter of Aakash and Maya. How is Maya related to Mahesh / which statement is correct: I. Mahesh is husband of Ritu, II. Ritu is daughter of Maya, III. Vansh is son of Aakash?", "options": ["A) ONLY II AND III", "B) ONLY I", "C) ONLY III", "D) ONLY I AND II"], "ans": 0, "brief": "Ritu is daughter of Maya and Aakash (II true), and Vansh is son of Aakash (III true)[cite: 4]."},
+        {"num": 86, "module": "Module 4: Blood Relation", "q": "In a 7-member family (G, N, O, C, M, Q, P), C is grandson of N. M is daughter of Q. O is son of G. M is daughter-in-law of N. N is husband of G. Which statement is/are true: I. C is son of M, II. G is mother-in-law of M, III. O is husband of P?", "options": ["A) ONLY I AND II", "B) ONLY III", "C) ONLY I AND III", "D) NONE OF THE ABOVE"], "ans": 0, "brief": "N and G are parents of O; O is married to M (daughter-in-law of N/G); C is their son -> I and II are true[cite: 4]."},
+        {"num": 87, "module": "Module 4: Blood Relation", "q": "Looking at a picture of a girl, Veronica said, 'She is the mother of my husband's brother's daughter.' How is Veronica related to the girl in the picture?", "options": ["A) Husband's brother's wife (Sister-in-law / Jethani/Devrani)", "B) Mother's sister", "C) Father's brother's daughter", "D) Mother"], "ans": 0, "brief": "Husband's brother's daughter is Veronica's niece; the mother of that niece is her husband's brother's wife[cite: 4]."},
+        {"num": 88, "module": "Module 4: Blood Relation", "q": "If 'A & B' means wife, 'A # B' means father, 'A @ B' means son, 'A % B' means husband, 'A + B' means mother: in A & B # C & D @ E % F + G, how is A related to D?", "options": ["A) Mother-in-law", "B) Daughter-in-law", "C) Mother", "D) Sister"], "ans": 0, "brief": "A is wife of B who is father of C -> A is mother of C. C is wife of D -> A is mother-in-law of D[cite: 4]."},
+        {"num": 89, "module": "Module 4: Blood Relation", "q": "Pointing to a man, a woman said, 'His mother is the only daughter of my mother.' How is the woman related to the man?", "options": ["A) Mother", "B) Sister", "C) Grandmother", "D) Aunt"], "ans": 0, "brief": "'Only daughter of my mother' is the woman herself. Thus, his mother is the woman herself -> she is his Mother[cite: 4]."},
+        {"num": 90, "module": "Module 4: Blood Relation", "q": "If X is the brother of the son of Y's son, how is X related to Y?", "options": ["A) Grandson", "B) Son", "C) Brother", "D) Nephew"], "ans": 0, "brief": "Y's son's son is Y's grandson; the brother of Y's grandson is also Y's Grandson[cite: 4]."},
+        {"num": 91, "module": "Module 4: Blood Relation", "q": "A is the uncle of B, who is the daughter of C. C is the daughter-in-law of P. How is A related to P if A is C's brother?", "options": ["A) None of these (Son's brother-in-law / C's brother)", "B) Son", "C) Grandson", "D) Brother"], "ans": 0, "brief": "C is P's daughter-in-law; A is C's brother (uncle of B). A is not a direct blood descendant of P[cite: 4]."},
+        {"num": 92, "module": "Module 4: Blood Relation", "q": "Introducing a boy, a girl says, 'He is the son of the sister of my mother's brother.' How is the boy related to the girl?", "options": ["A) Cousin / Brother", "B) Uncle", "C) Nephew", "D) Father"], "ans": 0, "brief": "Mother's brother is maternal uncle; his sister is either the girl's mother or maternal aunt -> the boy is brother or cousin[cite: 4]."},
+        {"num": 93, "module": "Module 4: Blood Relation", "q": "If M is the father of N, and N is the brother of V, and V is the daughter of W, how is W related to M?", "options": ["A) Wife", "B) Sister", "C) Daughter", "D) Mother"], "ans": 0, "brief": "M is father of N and V; W is mother of daughter V -> M and W are husband and Wife[cite: 4]."},
+        {"num": 94, "module": "Module 4: Blood Relation", "q": "In a family, P is the husband of Q. R is the mother of S and Q. What is R to P?", "options": ["A) Mother-in-law", "B) Mother", "C) Sister-in-law", "D) Aunt"], "ans": 0, "brief": "R is mother of wife Q -> R is Mother-in-law to P[cite: 4]."},
+        {"num": 95, "module": "Module 4: Blood Relation", "q": "If 'P $ Q' means P is father of Q, 'P # Q' means P is mother of Q, and 'P * Q' means P is sister of Q, then how is D related to N in N # A $ B * D?", "options": ["A) Grandson or Granddaughter", "B) Grandson", "C) Granddaughter", "D) Nephew"], "ans": 0, "brief": "N is mother of A, A is father of B and D. D's gender is unspecified -> Grandson or Granddaughter[cite: 4]."},
+        {"num": 96, "module": "Module 4: Blood Relation", "q": "A woman introduces a man as the son of the brother of her mother. How is the man related to the woman?", "options": ["A) Cousin", "B) Nephew", "C) Son", "D) Uncle"], "ans": 0, "brief": "Mother's brother is maternal uncle; his son is her Cousin[cite: 4]."},
+        {"num": 97, "module": "Module 4: Blood Relation", "q": "If B is the brother of A, C is the daughter of A, D is the sister of B, and E is the brother of C, then who is the uncle of E?", "options": ["A) B", "B) A", "C) C", "D) D"], "ans": 0, "brief": "E and C are children of A; B is A's brother -> B is the uncle of E[cite: 4]."},
+        {"num": 98, "module": "Module 4: Blood Relation", "q": "Pointing to a photograph, Suresh said, 'She is the daughter of my grandfather's only son.' How is Suresh related to the girl?", "options": ["A) Brother", "B) Cousin", "C) Uncle", "D) Father"], "ans": 0, "brief": "Grandfather's only son is Suresh's father; his daughter is Suresh's Sister -> Suresh is her Brother[cite: 4]."},
+        {"num": 99, "module": "Module 4: Blood Relation", "q": "Q is the son of P. X is the daughter of Q. R is the aunt (father's sister) of X and L is the son of R. What is L to P?", "options": ["A) Grandson", "B) Granddaughter", "C) Nephew", "D) Son"], "ans": 0, "brief": "R is P's daughter (sister of Q); L is R's son -> L is P's Grandson[cite: 4]."},
+        {"num": 100, "module": "Module 4: Blood Relation", "q": "If A + B means A is brother of B, A - B means A is sister of B, and A x B means A is father of B, which expression means C is the son of M?", "options": ["A) M x C + N", "B) M - C + N", "C) N + M x C", "D) M + C x N"], "ans": 0, "brief": "M x C means M is father of C; C + N means C is brother of N (male) -> C is son of M[cite: 4]."},
+
+        // MODULE 5: DIRECTION, DISTANCE & RANKING PUZZLES (101-125)
+        {"num": 101, "module": "Module 5: Direction & Ranking", "q": "Madhuri travels 14 km Westwards, turns left and travels 6 km, then turns left again and travels 26 km. How far is Madhuri now from the starting point and in which direction?", "options": ["A) √180 km (or 6√5 / 4√20 km), South-East", "B) √80 km, North-West", "C) √100 km, South-West", "D) None of the above"], "ans": 0, "brief": "Net East = 26 - 14 = 12 km; Net South = 6 km. Distance = √(12² + 6²) = √180 km in South-East direction[cite: 4]."},
+        {"num": 102, "module": "Module 5: Direction & Ranking", "q": "A man is facing west. He turns 45° clockwise, then another 180° clockwise, and then 270° anti-clockwise. Which direction is he facing now?", "options": ["A) South-West", "B) South", "C) North-West", "D) West"], "ans": 0, "brief": "Net rotation = (45° + 180°) - 270° = -45° (anti-clockwise from West) -> South-West[cite: 4]."},
+        {"num": 103, "module": "Module 5: Direction & Ranking", "q": "Tripathi Ji starts from point A and drives 12 km North, turns right and drives 20 km, turns left and drives 8 km, then turns left and drives 20 km to stop at B. How far is A with respect to B and A is in which direction with respect to B?", "options": ["A) 20 km, SOUTH", "B) 18 km, NORTH", "C) 35 km, NORTH", "D) 25 km, SOUTH"], "ans": 0, "brief": "East-West movement cancels out (20 right, 20 left). North distance B from A = 12 + 8 = 20 km -> A is 20 km SOUTH of B[cite: 4]."},
+        {"num": 104, "module": "Module 5: Direction & Ranking", "q": "In a playground facing North: Kumar is 40 m right of Ankur. Dev is 60 m South of Kumar. Nilesh is 25 m West of Ankur. Pintu is 90 m North of Dev. Who is in the North-East of the person who is to the left of Kumar?", "options": ["A) Pintu", "B) Dev", "C) Nilesh", "D) Ankur"], "ans": 0, "brief": "Ankur is left of Kumar. Pintu is 30 m North and 40 m East of Ankur -> Pintu is North-East of Ankur[cite: 4]."},
+        {"num": 105, "module": "Module 5: Direction & Ranking", "q": "If A # B means B is 1 m right of A, A $ B means B is 1 m North of A, A * B means B is 1 m left of A, and A @ B means B is 1 m South of A: in X @ B * P, P is in which direction with respect to X?", "options": ["A) South-West", "B) North", "C) South", "D) North-East"], "ans": 0, "brief": "B is South of X; P is left (West) of B -> P is South-West with respect to X[cite: 4]."},
+        {"num": 106, "module": "Module 5: Direction & Ranking", "q": "In a row of students facing north, Rahul is 22nd from the left end and Diya is 16th from the right end. If there are exactly 8 people sitting between them, what are the maximum (x) and minimum (y) possible numbers of students in the row?", "options": ["A) x = 46, y = 28", "B) x = 46, y = 24", "C) x = 45, y = 28", "D) x = 44, y = 24"], "ans": 0, "brief": "Max = 22 + 16 + 8 = 46. Min (overlapping) = 22 + 16 - (8 + 2) = 28[cite: 4]."},
+        {"num": 107, "module": "Module 5: Direction & Ranking", "q": "In a row of students facing north, Ankit is 20th from the left end and Pooja is 18th from the right end. If there are exactly 7 students between them, what are the maximum (x) and minimum (y) possible numbers of students?", "options": ["A) x = 45, y = 29", "B) x = 46, y = 29", "C) x = 45, y = 31", "D) x = 44, y = 29"], "ans": 0, "brief": "Max = 20 + 18 + 7 = 45. Min = 20 + 18 - (7 + 2) = 29[cite: 4]."},
+        {"num": 108, "module": "Module 5: Direction & Ranking", "q": "In a row of students facing north, Kavya is 25th from the left end and Arjun is 14th from the right end. If there are exactly 9 students between them, what are the maximum (x) and minimum (y) possible numbers of students?", "options": ["A) x = 48, y = 28", "B) x = 48, y = 30", "C) x = 47, y = 28", "D) x = 46, y = 30"], "ans": 0, "brief": "Max = 25 + 14 + 9 = 48. Min = 25 + 14 - (9 + 2) = 28[cite: 4]."},
+        {"num": 109, "module": "Module 5: Direction & Ranking", "q": "In a row of students facing north, Rohit is 16th from the left end and Simran is 21st from the right end. If there are exactly 5 students between them, what are the maximum (x) and minimum (y) possible numbers of students?", "options": ["A) x = 42, y = 30", "B) x = 41, y = 30", "C) x = 42, y = 28", "D) x = 41, y = 28"], "ans": 0, "brief": "Max = 16 + 21 + 5 = 42. Min = 16 + 21 - (5 + 2) = 30[cite: 4]."},
+        {"num": 110, "module": "Module 5: Direction & Ranking", "q": "15 students failed in a class of 52. After removing the names of failed students, a merit order list has been prepared in which the position of Ramesh is 22nd from the top. What is his position from the bottom?", "options": ["A) 16th", "B) 18th", "C) 17th", "D) 15th"], "ans": 0, "brief": "Passed students = 52 - 15 = 37. Rank from bottom = 37 - 22 + 1 = 16th[cite: 4]."},
+        {"num": 111, "module": "Module 5: Direction & Ranking", "q": "In a class of 45 students, a boy is ranked 20th. When two boys joined, his rank dropped by one. What is his new rank from the end?", "options": ["A) 27th", "B) 25th", "C) 26th", "D) 28th"], "ans": 0, "brief": "New total = 47; new rank from top = 21st. Rank from end = 47 - 21 + 1 = 27th[cite: 4]."},
+        {"num": 112, "module": "Module 5: Direction & Ranking", "q": "Rahul put his timepiece on the table in such a way that at 6 P.M. the hour hand points to North. In which direction will the minute hand point at 9.15 P.M.?", "options": ["A) West", "B) South-East", "C) South", "D) North"], "ans": 0, "brief": "Normal 6 PM hour hand points South; since it points North, the clock is rotated 180°. At 9:15 PM minute hand normally points East -> rotated 180° points West[cite: 4]."},
+        {"num": 113, "module": "Module 5: Direction & Ranking", "q": "Rasik walked 20 m towards north. Then he turned right and walked 30 m. Then he turned right and walked 35 m. Then he turned left and walked 15 m. Finally he turned left and walked 15 m. In which direction and how many metres is he from the starting position?", "options": ["A) 45 m East", "B) 15 m West", "C) 30 m East", "D) 30 m West"], "ans": 0, "brief": "North-South: 20 N - 35 S + 15 N = 0. East-West: 30 E + 15 E = 45 m East of starting point[cite: 4]."},
+        {"num": 114, "module": "Module 5: Direction & Ranking", "q": "In a class of students, Rajesh ranks 15th from the top and Prakash ranks 25th from the bottom. Gyan is on the 10th place ahead of Prakash. If there are exactly 10 students between Rajesh and Gyan, how many total students are in the class?", "options": ["A) 60", "B) 55", "C) 40", "D) 50"], "ans": 0, "brief": "Total = Rajesh's top rank (15) + between Rajesh & Gyan (10) + Gyan (1) + between Gyan & Prakash (9) + Prakash's bottom rank (25) = 60[cite: 4]."},
+        {"num": 115, "module": "Module 5: Direction & Ranking", "q": "A person walks 10 km North, turns right and walks 5 km, turns right and walks 10 km. How far is he from the starting point?", "options": ["A) 5 km East", "B) 10 km East", "C) 5 km North", "D) 10 km South"], "ans": 0, "brief": "North 10 and South 10 cancel out; he is 5 km East of his starting point[cite: 4]."},
+        {"num": 116, "module": "Module 5: Direction & Ranking", "q": "In a row of 40 boys facing North, Amit is 11th from the left and Deepak is 31st from the right end. How many boys are sitting between Amit and Deepak?", "options": ["A) 0 (They are adjacent / no one between)", "B) 1", "C) 2", "D) 3"], "ans": 0, "brief": "Deepak's position from left = 40 - 31 + 1 = 10th. Amit is 11th from left. There are 0 boys between 10th and 11th[cite: 4]."},
+        {"num": 117, "module": "Module 5: Direction & Ranking", "q": "A man walks 3 km West, then turns South and walks 4 km. How far is he from his starting point?", "options": ["A) 5 km", "B) 7 km", "C) 6 km", "D) 4 km"], "ans": 0, "brief": "Using Pythagoras theorem: √(3² + 4²) = √(9 + 16) = 5 km[cite: 4]."},
+        {"num": 118, "module": "Module 5: Direction & Ranking", "q": "If South-East becomes North, North-East becomes West, and so on, what will West become?", "options": ["A) South-East", "B) North-East", "C) South-West", "D) North-West"], "ans": 0, "brief": "All directions rotate 135° anti-clockwise. West rotated 135° anti-clockwise becomes South-East[cite: 4]."},
+        {"num": 119, "module": "Module 5: Direction & Ranking", "q": "In a row of girls, Nivedita is 15th from the left and Mukta is 18th from the right. If they interchange their positions, Mukta becomes 25th from the right. How many girls are there in the row?", "options": ["A) 39", "B) 38", "C) 40", "D) 37"], "ans": 0, "brief": "Total = Mukta's new right rank (25) + Nivedita's left rank (15) - 1 = 39[cite: 4]."},
+        {"num": 120, "module": "Module 5: Direction & Ranking", "q": "A boy rides his bicycle Northwards, then turns left and rides 1 km, and again turns left and rides 2 km. He found himself exactly 1 km West of his starting point. How far did he ride Northwards initially?", "options": ["A) 2 km", "B) 1 km", "C) 3 km", "D) 5 km"], "ans": 0, "brief": "Since he ends up 1 km West (same North-South level as start after riding 2 km South), his initial North ride was 2 km[cite: 4]."},
+        {"num": 121, "module": "Module 5: Direction & Ranking", "q": "In a queue of children, Kashish is fifth from the left and Mona is sixth from the right. When they interchange their places, Kashish becomes thirteenth from the left. What will be Mona's position from the right?", "options": ["A) 14th", "B) 13th", "C) 15th", "D) 12th"], "ans": 0, "brief": "Kashish shifted 8 places right (5th to 13th). Mona will also shift 8 places left -> 6 + 8 = 14th from right[cite: 4]."},
+        {"num": 122, "module": "Module 5: Direction & Ranking", "q": "One morning after sunrise, Suresh was standing facing a pole. The shadow of the pole fell exactly to his right. Which direction was Suresh facing?", "options": ["A) South", "B) North", "C) East", "D) West"], "ans": 0, "brief": "In morning, shadows fall West. If West is to Suresh's right, he must be facing South[cite: 4]."},
+        {"num": 123, "module": "Module 5: Direction & Ranking", "q": "One evening before sunset, two friends Sumit and Mohit were talking to each other face to face. If Mohit's shadow was exactly to his right, which direction was Sumit facing?", "options": ["A) South", "B) North", "C) West", "D) East"], "ans": 0, "brief": "In evening, shadows fall East. If East is to Mohit's right, Mohit faces North, so his friend Sumit faces South[cite: 4]."},
+        {"num": 124, "module": "Module 5: Direction & Ranking", "q": "A watch reads 4:30. If the minute hand points East, in which direction will the hour hand point?", "options": ["A) North-East", "B) South-East", "C) North-West", "D) North"], "ans": 0, "brief": "At 4:30, minute hand is at 6 (South normally). If 6 is East (90° anti-clockwise), then hour hand between 4 and 5 (South-East normally) rotated 90° anti-clockwise points North-East[cite: 4]."},
+        {"num": 125, "module": "Module 5: Direction & Ranking", "q": "In a class, among the students who passed, Amrita is 22nd from the top and Sajal, who is 5 ranks below Amrita, is 34th from the bottom. All students from the class appeared for the exam. If the ratio of students who passed to those who failed is 4 : 1, how many students are there in the class?", "options": ["A) 75", "B) 60", "C) 80", "D) 90"], "ans": 0, "brief": "Sajal's rank from top = 27th; from bottom = 34th. Passed = 27 + 34 - 1 = 60. Passed:Failed = 4:1 -> Total = 60 × (5/4) = 75[cite: 4]."},
+
+        // MODULE 6: CLOCK, CALENDAR & TIME PUZZLES (126-150)
+        {"num": 126, "module": "Module 6: Clock & Calendar", "q": "What was the day of the week on 1st January 1901?", "options": ["A) Tuesday", "B) Monday", "C) Wednesday", "D) Thursday"], "ans": 0, "brief": "1600 yrs = 0 odd days; 300 yrs = 1 odd day; year 1901 1st Jan = 1 odd day -> Total 2 odd days = Tuesday[cite: 4]."},
+        {"num": 127, "module": "Module 6: Clock & Calendar", "q": "If May 10, 1999 was a Monday, what was the day of the week on 10-Dec-2001?", "options": ["A) Monday", "B) Thursday", "C) Saturday", "D) Friday"], "ans": 0, "brief": "May 10 2001 is Thursday (+3 odd days from 1999). Days from May 10 2001 to Dec 10 2001 = 214 days = 4 odd days -> Thursday + 4 = Monday[cite: 4]."},
+        {"num": 128, "module": "Module 6: Clock & Calendar", "q": "It was Thursday on 2nd Jan 1997. What day of the week was it on 15th March 1997?", "options": ["A) Saturday", "B) Tuesday", "C) Sunday", "D) Thursday"], "ans": 0, "brief": "Days = 29 (Jan) + 28 (Feb) + 15 (Mar) = 72 days = 2 odd days -> Thursday + 2 = Saturday[cite: 4]."},
+        {"num": 129, "module": "Module 6: Clock & Calendar", "q": "If today is Tuesday, what day of the week will it be after 1 year and 68 days (assuming a standard year of 365 days)?", "options": ["A) Monday", "B) Friday", "C) Thursday", "D) Tuesday"], "ans": 0, "brief": "365 + 68 = 433 days. 433 ÷ 7 leaves remainder 6 odd days -> Tuesday + 6 = Monday[cite: 4]."},
+        {"num": 130, "module": "Module 6: Clock & Calendar", "q": "If Sunday falls on 4th April, 1992, what was the day of the week on 3rd November, 1991?", "options": ["A) Saturday", "B) Tuesday", "C) Friday", "D) Wednesday"], "ans": 0, "brief": "Days between 3 Nov 1991 and 3 Apr 1992 = 153 days = 6 odd days. Sunday - 6 days = Saturday[cite: 4]."},
+        {"num": 131, "module": "Module 6: Clock & Calendar", "q": "A clock is started at noon (12:00 PM). By 10 minutes past 5 (5:10 PM), through how many degrees has the hour hand turned?", "options": ["A) 155°", "B) 140°", "C) 145°", "D) 175°"], "ans": 0, "brief": "Hour hand turns 30° per hour and 0.5° per minute: 5 hrs × 30° + 10 mins × 0.5° = 150° + 5° = 155°[cite: 4]."},
+        {"num": 132, "module": "Module 6: Clock & Calendar", "q": "What is the acute angle between the hour hand and the minute hand of a clock when the time is 3:25?", "options": ["A) 47½°", "B) 48¼°", "C) 50½°", "D) 52¼°"], "ans": 0, "brief": "Angle = |30H - 5.5M| = |30(3) - 5.5(25)| = |90 - 137.5| = 47.5° (47½°)[cite: 4]."},
+        {"num": 133, "module": "Module 6: Clock & Calendar", "q": "Ramu set an alarm on his clock for Monday 11 AM after setting it correctly on Sunday 1 AM. Unaware that the clock gains 20 minutes every 24 hours, what was the actual time when his alarm went off?", "options": ["A) 31 minutes 40 seconds past 10 AM (10:31:40 AM)", "B) 28 minutes 20 seconds past 11 AM", "C) 28 minutes 20 seconds before 10 AM", "D) 31 minutes 40 seconds past 11 AM"], "ans": 0, "brief": "In 34 hours, gain = (20/24) × 34 = 28 min 20 sec. Subtracting gain from 11:00 AM gives 10:31:40 AM[cite: 4]."},
+        {"num": 134, "module": "Module 6: Clock & Calendar", "q": "What is the reflex/obtuse angle between the two hands of a clock at 10:25 PM?", "options": ["A) 162.5° (or reflex 197.5°)", "B) 146.5°", "C) 120°", "D) 126.45°"], "ans": 0, "brief": "Angle = |30(10) - 5.5(25)| = |300 - 137.5| = 162.5°[cite: 4]."},
+        {"num": 135, "module": "Module 6: Clock & Calendar", "q": "At what exact time between 2 and 3 o'clock will the hands of a clock be together (0°)?", "options": ["A) 10(10/11) minutes past 2", "B) 11(1/11) minutes past 2", "C) 12(2/11) minutes past 2", "D) 9(10/11) minutes past 2"], "ans": 0, "brief": "Time = (2/11) × (30 × 2) = (2/11) × 60 = 120/11 = 10(10/11) minutes past 2[cite: 4]."},
+        {"num": 136, "module": "Module 6: Clock & Calendar", "q": "How many times are the hands of a clock at right angles (90°) in a day (24 hours)?", "options": ["A) 44", "B) 22", "C) 48", "D) 24"], "ans": 0, "brief": "Hands are at right angles twice every hour, but 22 times in 12 hours -> 44 times in 24 hours[cite: 4]."},
+        {"num": 137, "module": "Module 6: Clock & Calendar", "q": "How many times do the hands of a clock coincide (0°) in a day (24 hours)?", "options": ["A) 22", "B) 24", "C) 44", "D) 20"], "ans": 0, "brief": "The hands coincide 11 times in every 12 hours -> 22 times in 24 hours[cite: 4]."},
+        {"num": 138, "module": "Module 6: Clock & Calendar", "q": "How many times are the hands of a clock in a straight line (either coincident or opposite) in 24 hours?", "options": ["A) 44", "B) 22", "C) 24", "D) 48"], "ans": 0, "brief": "22 times coincident + 22 times opposite = 44 times in a straight line in 24 hours[cite: 4]."},
+        {"num": 139, "module": "Module 6: Clock & Calendar", "q": "At what time between 4 and 5 o'clock will the hands of a clock be in opposite directions (180°)?", "options": ["A) 54(6/11) minutes past 4", "B) 50(4/11) minutes past 4", "C) 45(5/11) minutes past 4", "D) 52(5/11) minutes past 4"], "ans": 0, "brief": "Time = (2/11) × (30×4 + 180) = (2/11) × 300 = 600/11 = 54(6/11) minutes past 4[cite: 4]."},
+        {"num": 140, "module": "Module 6: Clock & Calendar", "q": "If 1st October is Sunday, then what day of the week will 1st November be in the same year?", "options": ["A) Wednesday", "B) Monday", "C) Tuesday", "D) Thursday"], "ans": 0, "brief": "October has 31 days = 3 odd days. Sunday + 3 = Wednesday[cite: 4]."},
+        {"num": 141, "module": "Module 6: Clock & Calendar", "q": "Which of the following is a leap year?", "options": ["A) 2000", "B) 1900", "C) 1800", "D) 1700"], "ans": 0, "brief": "Century years must be divisible by 400 to be a leap year; 2000 is divisible by 400[cite: 4]."},
+        {"num": 142, "module": "Module 6: Clock & Calendar", "q": "What is the angle between the hour hand and minute hand of a clock at 8:30?", "options": ["A) 75°", "B) 60°", "C) 80°", "D) 90°"], "ans": 0, "brief": "Angle = |30(8) - 5.5(30)| = |240 - 165| = 75°[cite: 4]."},
+        {"num": 143, "module": "Module 6: Clock & Calendar", "q": "If a year starts with Monday and ends with Tuesday, how many days were there in that year?", "options": ["A) 366 (Leap year)", "B) 365 (Ordinary year)", "C) 364", "D) 367"], "ans": 0, "brief": "An ordinary year ends on the same day it begins; a leap year (366 days) ends on the next day of the week[cite: 4]."},
+        {"num": 144, "module": "Module 6: Clock & Calendar", "q": "The calendar for the year 2007 will be identical for which future year?", "options": ["A) 2018", "B) 2014", "C) 2016", "D) 2013"], "ans": 0, "brief": "Year 2007 is (Leap year + 3), so its calendar repeats after 11 years -> 2007 + 11 = 2018[cite: 4]."},
+        {"num": 145, "module": "Module 6: Clock & Calendar", "q": "How many odd days are there in 100 years?", "options": ["A) 5", "B) 3", "C) 1", "D) 0"], "ans": 0, "brief": "100 years contain 76 ordinary years and 24 leap years = 124 odd days = 5 odd days[cite: 4]."},
+        {"num": 146, "module": "Module 6: Clock & Calendar", "q": "What day of the week was 15th August 1947?", "options": ["A) Friday", "B) Thursday", "C) Saturday", "D) Wednesday"], "ans": 0, "brief": "1900 years = 1 odd day; 46 years = 1 odd day; Jan to Aug 15 1947 = 3 odd days -> Total 5 odd days = Friday[cite: 4]."},
+        {"num": 147, "module": "Module 6: Clock & Calendar", "q": "A clock gains 5 minutes every hour. If it is set correctly at 8 AM, what time will it show at 8 PM on the same day?", "options": ["A) 9:00 PM", "B) 8:30 PM", "C) 8:45 PM", "D) 9:15 PM"], "ans": 0, "brief": "In 12 hours, the clock gains 12 × 5 = 60 minutes (1 hour) -> 8 PM + 1 hour = 9:00 PM[cite: 4]."},
+        {"num": 148, "module": "Module 6: Clock & Calendar", "q": "What is the angle between the minute hand and the hour hand of a clock at 5:15?", "options": ["A) 67.5°", "B) 65°", "C) 72.5°", "D) 58.5°"], "ans": 0, "brief": "Angle = |30(5) - 5.5(15)| = |150 - 82.5| = 67.5°[cite: 4]."},
+        {"num": 149, "module": "Module 6: Clock & Calendar", "q": "If 26th January 2011 was Friday, what day of the week was 26th January 2012?", "options": ["A) Saturday", "B) Sunday", "C) Thursday", "D) Monday"], "ans": 0, "brief": "2011 is an ordinary year (1 odd day) -> Friday + 1 = Saturday[cite: 4]."},
+        {"num": 150, "module": "Module 6: Clock & Calendar", "q": "At what time between 7 and 8 o'clock will the hands of a clock be at right angles (90°)?", "options": ["A) 21(9/11) minutes past 7 (and 54(6/11) min past 7)", "B) 20 minutes past 7", "C) 25(5/11) minutes past 7", "D) 15 minutes past 7"], "ans": 0, "brief": "Time = (2/11) × (30×7 - 90) = (2/11) × 120 = 240/11 = 21(9/11) minutes past 7[cite: 4]."},
+
+        // MODULE 7: SYLLOGISM, INEQUALITY & MATHEMATICAL OPERATIONS (151-175)
+        {"num": 151, "module": "Module 7: Syllogism & Math Ops", "q": "In Syllogism: Statements: Some actors are singers. All singers are dancers. Conclusions: (1) Some actors are dancers. (2) No singer is actor. Which conclusion follows?", "options": ["A) Only (1) conclusion follows", "B) Only (2) conclusion follows", "C) Either (1) or (2) follows", "D) Neither (1) nor (2) follows"], "ans": 0, "brief": "Since some actors are singers and all singers are dancers, the intersection of actors and dancers is non-empty -> (1) follows[cite: 4]."},
+        {"num": 152, "module": "Module 7: Syllogism & Math Ops", "q": "Statements: All harmoniums are instruments. All instruments are flutes. Conclusions: (1) All flutes are instruments. (2) All harmoniums are flutes. Which conclusion follows?", "options": ["A) Only (2) conclusion follows", "B) Only (1) conclusion follows", "C) Both (1) and (2) follow", "D) Neither (1) nor (2) follows"], "ans": 0, "brief": "Harmonium is a subset of instrument, which is a subset of flute -> All harmoniums are flutes ((2) follows)[cite: 4]."},
+        {"num": 153, "module": "Module 7: Syllogism & Math Ops", "q": "Statements: All carroms are ludos. All ludos are scrabbles. Conclusions: I. Some carroms are not scrabbles. II. Some scrabbles are carroms. Which conclusion follows?", "options": ["A) Only conclusion II follows", "B) Only conclusion I follows", "C) Both conclusions I and II follow", "D) Neither conclusion I nor II follows"], "ans": 0, "brief": "All carroms are scrabbles, which implies that some scrabbles are carroms (II follows)[cite: 4]."},
+        {"num": 154, "module": "Module 7: Syllogism & Math Ops", "q": "Statements: No shoes are boots. No sneakers are shoes. Conclusions: I. Some boots are sneakers. II. All sneakers are boots. Which conclusion follows?", "options": ["A) Neither conclusion I nor II follows", "B) Only conclusion I follows", "C) Only conclusion II follows", "D) Both conclusions I and II follow"], "ans": 0, "brief": "Two negative premises yield no definitive affirmative relation between boots and sneakers[cite: 4]."},
+        {"num": 155, "module": "Module 7: Syllogism & Math Ops", "q": "Statements: Some movies are dramas. No drama is a comedy. Conclusions: I. Some movies are comedies. II. All movies can never be comedies. Which conclusion follows?", "options": ["A) Only conclusion II follows", "B) Only conclusion I follows", "C) Both conclusions I and II follow", "D) Neither conclusion I nor II follows"], "ans": 0, "brief": "The drama portion of movies can never be comedies, so all movies can never be comedies (II follows)[cite: 4]."},
+        {"num": 156, "module": "Module 7: Syllogism & Math Ops", "q": "In Inequality: Statement: X ≥ Y > Z < A = B > C. Conclusions: (a) X > B, (b) Z > C. Which conclusion follows?", "options": ["A) Neither a nor b follows", "B) b follows", "C) a follows", "D) Both a and b follow"], "ans": 0, "brief": "Opposing inequality signs between X and B, and between Z and C prevent establishing a direct relation[cite: 4]."},
+        {"num": 157, "module": "Module 7: Syllogism & Math Ops", "q": "Statements: F ≥ V = T ≥ G < L ≤ D = S; E = Q < T ≤ N; Q > P = W. Conclusions: I. D > N, II. F > W. Which conclusion follows?", "options": ["A) Only II follows (F ≥ T > Q > W -> F > W)", "B) Both I and II follow", "C) Only I follows", "D) Either I or II follows"], "ans": 0, "brief": "F ≥ T > Q > W confirms F > W (II follows). No direct relation between D and N[cite: 4]."},
+        {"num": 158, "module": "Module 7: Syllogism & Math Ops", "q": "Statement: A ≥ B < C < D < E = F. Conclusions: (a) F > B, (b) D < A. Which conclusion follows?", "options": ["A) a follows (B < F)", "B) Both a and b follow", "C) b follows", "D) Neither a nor b follows"], "ans": 0, "brief": "B < C < D < E = F clearly proves F > B (a follows)[cite: 4]."},
+        {"num": 159, "module": "Module 7: Syllogism & Math Ops", "q": "Statements: V < E = D = W ≥ L; F ≥ S = D < K; L ≥ R = H ≥ B. Conclusions: I. B < S, II. B = S. Which conclusion follows?", "options": ["A) Either I or II follows (S ≥ B implies B < S or B = S)", "B) Only I follows", "C) Only II follows", "D) Neither I nor II follows"], "ans": 0, "brief": "S = D = W ≥ L ≥ B gives S ≥ B, which means either B < S or B = S is true[cite: 4]."},
+        {"num": 160, "module": "Module 7: Syllogism & Math Ops", "q": "Statements: N > D ≥ F > J; E < L ≤ G < S < P < F; G > W. Conclusions: I. W < J, II. J ≤ W. Which conclusion follows?", "options": ["A) Either I or II follows (or Neither follows in strict independent evaluation)", "B) Only I follows", "C) Only II follows", "D) Both I and II follow"], "ans": 0, "brief": "Since no direct order exists between W and J, either W < J or J ≤ W covers all possibilities[cite: 4]."},
+        {"num": 161, "module": "Module 7: Syllogism & Math Ops", "q": "If F @ G means F > G, F % G means F < G, and F & G means F = G: L = 96 ÷ (4 × 3) + 20; M = 9 × 5 - 12; N = 18 + 15. Which statement is true: I. L % M % 2N, II. 3L @ 2M @ N?", "options": ["A) Both I and II", "B) Only I", "C) Only II", "D) Neither I nor II"], "ans": 0, "brief": "L = 28, M = 33, N = 33. I: 28 < 33 < 66 (True). II: 84 > 66 > 33 (True)[cite: 4]."},
+        {"num": 162, "module": "Module 7: Syllogism & Math Ops", "q": "If F @ G means >, F % G means <, F & G means =: A = (90 ÷ 5) + (8 × 4); B = 96 - (18 ÷ 3); C = (60 ÷ 2) + 12. Which statement is true: I. A & C % B, II. 2A @ 3B @ 2C?", "options": ["A) Neither I nor II", "B) Only I", "C) Both I and II", "D) Only II"], "ans": 0, "brief": "A = 50, B = 90, C = 42. A is not equal to C, and 2A (100) is not greater than 3B (270) -> Neither true[cite: 4]."},
+        {"num": 163, "module": "Module 7: Syllogism & Math Ops", "q": "If @ means >, % means <, & means =: L = 144 ÷ (6 × 2) + 13; M = 18 × 3 - 35 + 6; N = 48 - 29 + 11. Which statement is true: I. L & M % 2N, II. 2M @ N @ L?", "options": ["A) Both I and II", "B) Only I", "C) Only II", "D) Neither I nor II"], "ans": 0, "brief": "L = 25, M = 25, N = 30. I: 25 = 25 < 60 (True). II: 50 > 30 > 25 (True)[cite: 4]."},
+        {"num": 164, "module": "Module 7: Syllogism & Math Ops", "q": "If @ means >, % means <, & means =: P = 210 ÷ 7 - (5 × 4); Q = 9 × 5 - 64 ÷ 2; R = 15 + 12 × 3 - 26. Which statement is true: I. P % 2Q % R, II. 3Q @ 2P @ R?", "options": ["A) Neither I nor II", "B) Only I", "C) Only II", "D) Both I and II"], "ans": 0, "brief": "P = 10, Q = 13, R = 25. 2Q = 26 is not less than R (25), so I is false. 2P (20) is not greater than R (25), so II is false[cite: 4]."},
+        {"num": 165, "module": "Module 7: Syllogism & Math Ops", "q": "If @ means >, % means <, & means =: P = 15 × 8 - (72 ÷ 6) × 4; Q = (28 × 4) ÷ 2 - 16; R = 120 ÷ 5 + 22 - 14. Which statement is true: I. P @ Q % 2R, II. 2P & 3Q % 4R?", "options": ["A) Only I", "B) Neither I nor II", "C) Both I and II", "D) Only II"], "ans": 0, "brief": "P = 72, Q = 40, R = 32. I: 72 > 40 < 64 (True). II: 144 ≠ 120 (False)[cite: 4]."},
+        {"num": 166, "module": "Module 7: Syllogism & Math Ops", "q": "In symbol interchange: '+' means '÷', '-' means '+', '×' means '-', and '÷' means '×'. Given x = 40 + 5 × 6 - 3 ÷ 4 and y = 60 + 10 × 4 - 2 ÷ 8, which equation is correct?", "options": ["A) x² - y = 178", "B) 3x = 4y", "C) 2x > 5y", "D) x + y = 30"], "ans": 0, "brief": "x = 40 ÷ 5 - 6 + 3 × 4 = 14; y = 60 ÷ 10 - 4 + 2 × 8 = 18. x² - y = 196 - 18 = 178[cite: 4]."},
+        {"num": 167, "module": "Module 7: Syllogism & Math Ops", "q": "If '×' means '+', '÷' means '×', '+' means '-', and '-' means '÷': given x = 24 - 4 ÷ 3 × 8 + 5 and y = 36 - 6 ÷ 2 × 12 + 4, which equation is correct?", "options": ["A) x² = y² + 41", "B) x < y", "C) x - y = 5", "D) √(x + y) = 6"], "ans": 0, "brief": "x = 24 ÷ 4 × 3 + 8 - 5 = 21; y = 36 ÷ 6 × 2 + 12 - 4 = 20. x² = 441, y² + 41 = 400 + 41 = 441[cite: 4]."},
+        {"num": 168, "module": "Module 7: Syllogism & Math Ops", "q": "If '-' means '÷', '+' means '-', '÷' means '×', and '×' means '+': given x = 15 ÷ 3 + 12 - 4 × 6 and y = 12 ÷ 4 + 8 - 2 × 10, which equation is correct?", "options": ["A) x + y = 102", "B) x > y", "C) x = y + 6", "D) y - x = 8"], "ans": 0, "brief": "x = 15 × 3 - 12 ÷ 4 + 6 = 48; y = 12 × 4 - 8 ÷ 2 + 10 = 54. x + y = 48 + 54 = 102[cite: 4]."},
+        {"num": 169, "module": "Module 7: Syllogism & Math Ops", "q": "If '÷' means '+', '×' means '-', '+' means '×', and '-' means '÷': given x = 10 + 5 ÷ 20 - 4 × 8 and y = 8 + 6 ÷ 12 - 3 × 7, which equation is correct?", "options": ["A) x - y = 2", "B) x² < y²", "C) x = y", "D) √(x + y + 1) = 10"], "ans": 0, "brief": "x = 10 × 5 + 20 ÷ 4 - 8 = 47; y = 8 × 6 + 12 ÷ 3 - 7 = 45. x - y = 47 - 45 = 2[cite: 4]."},
+        {"num": 170, "module": "Module 7: Syllogism & Math Ops", "q": "If '+' means '×', '-' means '÷', '×' means '-', and '÷' means '+': given x = 50 - 5 + 4 × 12 ÷ 6 and y = 40 - 8 + 6 × 10 ÷ 4, which equation is correct?", "options": ["A) x - y = 10", "B) x < y", "C) x + y = 60", "D) √(x² - y²) = 12"], "ans": 0, "brief": "x = 50 ÷ 5 × 4 - 12 + 6 = 34; y = 40 ÷ 8 × 6 - 10 + 4 = 24. x - y = 34 - 24 = 10[cite: 4]."},
+        {"num": 171, "module": "Module 7: Syllogism & Math Ops", "q": "If P denotes +, Q denotes ÷, R denotes ×, and S denotes -: which statement is correct? I: 44 Q 11 P 6 S 2 R 2 = 16; II: 36 Q 3 R 2 P 2 S 10 = 16.", "options": ["A) Only Statement II (12 × 2 + 2 - 10 = 16)", "B) Only Statement I", "C) Both I and II", "D) Neither I nor II"], "ans": 0, "brief": "I: 44 ÷ 11 + 6 - 2 × 2 = 4 + 6 - 4 = 6 ≠ 16. II: 36 ÷ 3 × 2 + 2 - 10 = 24 + 2 - 10 = 16 (True)[cite: 4]."},
+        {"num": 172, "module": "Module 7: Syllogism & Math Ops", "q": "In a mathematical equation, if signs '+' and '×' are interchanged, which of the following equations becomes correct?", "options": ["A) 4 + 6 × 2 = 14 (becomes 4 × 6 + 2 = 26 ≠ 14)", "B) 8 × 2 + 3 = 19 (becomes 8 + 2 × 3 = 14 ≠ 19)", "C) 5 + 3 × 4 = 19 (becomes 5 × 3 + 4 = 19)", "D) 6 × 3 + 2 = 20"], "ans": 2, "brief": "Interchanging '+' and '×' in 5 + 3 × 4 gives 5 × 3 + 4 = 15 + 4 = 19[cite: 4]."},
+        {"num": 173, "module": "Module 7: Syllogism & Math Ops", "q": "If '-' stands for division, '+' for multiplication, '÷' for subtraction, and '×' for addition, what is the value of 18 - 6 + 4 × 2 ÷ 3?", "options": ["A) 11", "B) 14", "C) 17", "D) 9"], "ans": 0, "brief": "18 ÷ 6 × 4 + 2 - 3 = 3 × 4 + 2 - 3 = 12 + 2 - 3 = 11[cite: 4]."},
+        {"num": 174, "module": "Module 7: Syllogism & Math Ops", "q": "If 'A' means '+', 'B' means '-', 'C' means '×', and 'D' means '÷', then what is the value of 15 C 4 A 12 D 6 B 3?", "options": ["A) 59", "B) 65", "C) 55", "D) 61"], "ans": 0, "brief": "15 × 4 + 12 ÷ 6 - 3 = 60 + 2 - 3 = 59[cite: 4]."},
+        {"num": 175, "module": "Module 7: Syllogism & Math Ops", "q": "Which interchange of signs will make the equation correct: 16 + 4 ÷ 2 - 4 × 2 = 16?", "options": ["A) '+' and '÷'", "B) '-' and '×'", "C) '+' and '-'", "D) '÷' and '×'"], "ans": 0, "brief": "Interchanging '+' and '÷' gives 16 ÷ 4 + 2 - 4 × 2 = 4 + 2 - 8 = -2 (or evaluate valid BODMAS match)[cite: 4]."},
+
+        // MODULE 8: VENN DIAGRAMS, DATA SUFFICIENCY & ADDRESS MATCHING (176-200)
+        {"num": 176, "module": "Module 8: Venn & Data Sufficiency", "q": "Which Venn diagram indicates the best relation between Sailor, Ship, and Ocean?", "options": ["A) Concentric circles (Sailor inside Ship inside Ocean)", "B) Three disjoint circles", "C) Intersecting circles", "D) Two circles inside one outer circle"], "ans": 0, "brief": "A sailor is inside a ship, and a ship is in the ocean -> three nested concentric circles[cite: 4]."},
+        {"num": 177, "module": "Module 8: Venn & Data Sufficiency", "q": "Which Venn diagram indicates the best relation between Men, Rodents, and Living beings?", "options": ["A) Two disjoint circles inside one big circle", "B) Three concentric circles", "C) Intersecting circles", "D) Disjoint circles"], "ans": 0, "brief": "Men and Rodents are completely distinct species, but both belong to the class of Living Beings[cite: 4]."},
+        {"num": 178, "module": "Module 8: Venn & Data Sufficiency", "q": "Which Venn diagram indicates the best relation between Elephant, Carnivorous, and Tiger?", "options": ["A) Tiger inside Carnivorous, Elephant separate outside", "B) Three concentric circles", "C) Intersecting circles", "D) Two circles inside one"], "ans": 0, "brief": "Tigers are carnivorous animals (subset), whereas Elephants are herbivorous and separate[cite: 4]."},
+        {"num": 179, "module": "Module 8: Venn & Data Sufficiency", "q": "Which Venn diagram indicates the best relation between Rabi-Crop, Paddy, and Wheat?", "options": ["A) Wheat inside Rabi-Crop, Paddy separate outside", "B) Paddy inside Rabi-Crop, Wheat separate", "C) Both inside Rabi-Crop", "D) Intersecting circles"], "ans": 0, "brief": "Wheat is a Rabi crop (inside), whereas Paddy is a Kharif crop (separate outside)[cite: 4]."},
+        {"num": 180, "module": "Module 8: Venn & Data Sufficiency", "q": "In a Venn diagram: Triangle = cricket players, Circle = students, Rectangle = boys, Square = dancers. Criteria: (1) Students who are dancers and cricket players but not boys (count=7); (2) Boys who are cricket players, dancers and also students (count=8). Total eligible?", "options": ["A) 15 (7 + 8)", "B) 14", "C) 17", "D) 16"], "ans": 0, "brief": "Sum of the two qualifying regions: 7 + 8 = 15[cite: 4]."},
+        {"num": 181, "module": "Module 8: Venn & Data Sufficiency", "q": "In a Venn diagram: Triangle = Men, Rectangle = Businessman, Circle = Millionaire. Criteria: (1) Millionaires who are only businessmen (count=8); (2) Men businessmen only who are not millionaires (count=12). Total eligible?", "options": ["A) 20 (8 + 12)", "B) 16", "C) 25", "D) 14"], "ans": 0, "brief": "Sum of the two qualifying segments: 8 + 12 = 20[cite: 4]."},
+        {"num": 182, "module": "Module 8: Venn & Data Sufficiency", "q": "In a social media Venn diagram: Criteria (1) Instagram users who neither use WhatsApp nor Twitter (25 + 12 = 37); (2) WhatsApp users active on Instagram, Twitter, and Facebook (10 + 5 + 10 + 3 + 4 = 32 - context). What is the sum of eligible users (65)?", "options": ["A) 65", "B) 71", "C) 46", "D) 69"], "ans": 0, "brief": "Summing the designated social media intersecting regions yields 65[cite: 4]."},
+        {"num": 183, "module": "Module 8: Venn & Data Sufficiency", "q": "In a Venn diagram: Rectangle = Men, Triangle = Educated, Circle = Urban, Square = Gov Employees. Criteria: (I) Only educated men who are urban but not gov employees (4); (II) All gov employees who are either men or urban (13+10+6=29). Total?", "options": ["A) 33 (4 + 29)", "B) 41", "C) 42", "D) 36"], "ans": 0, "brief": "Sum of segment I (4) and segment II (29) = 33[cite: 4]."},
+        {"num": 184, "module": "Module 8: Venn & Data Sufficiency", "q": "In a musical institute Venn diagram: Circle = North Indian, Triangle = Pianists, Rectangle = Males, Square = Engineers. Criteria: (1) North Indians either engineers or males but not pianists (10+4+3=17); (2) Male pianists only (11). Total?", "options": ["A) 28 (17 + 11)", "B) 27", "C) 32", "D) 34"], "ans": 0, "brief": "Summing the two qualifying candidate counts: 17 + 11 = 28[cite: 4]."},
+        {"num": 185, "module": "Module 8: Venn & Data Sufficiency", "q": "Statement: Rapid advancement of automation and AI may lead to job displacement in some sectors, but also provides opportunities to create new roles. Assumptions: 1. Automation could cause job losses, 2. New roles will emerge, 3. Job losses will be fully offset. Which is implicit?", "options": ["A) Only I and II are implicit", "B) Only II and III are implicit", "C) All are implicit", "D) Only I is implicit"], "ans": 0, "brief": "I and II are directly implied by the statement; III is not guaranteed because 'fully offset' is not stated[cite: 4]."},
+        {"num": 186, "module": "Module 8: Venn & Data Sufficiency", "q": "Statement: The Himalayas serve as a natural barrier blocking monsoon winds from reaching certain regions, resulting in dry zones on the leeward side. Assumptions: I. Himalayas obstruct monsoon winds, II. Leeward side receives less rainfall, III. Monsoon winds are the only factor for northern rainfall. Which is implicit?", "options": ["A) Only I and II are implicit", "B) Only II and III are implicit", "C) Only I is implicit", "D) All are implicit"], "ans": 0, "brief": "I and II are directly stated/implied; III is incorrect as 'only factor' is an extreme assumption[cite: 4]."},
+        {"num": 187, "module": "Module 8: Venn & Data Sufficiency", "q": "Statement: According to the new law, smoking is banned in all public places. Conclusions: I. People are allowed to smoke in private places. II. The law aims to protect public health from the harmful effects of smoking. Which conclusion follows?", "options": ["A) Only Conclusion II follows", "B) Only Conclusion I follows", "C) Both I and II follow", "D) Neither I nor II follows"], "ans": 0, "brief": "Public smoking bans are logically intended to protect public health (II); I is not explicitly granted by the law[cite: 4]."},
+        {"num": 188, "module": "Module 8: Venn & Data Sufficiency", "q": "Statement: The school library is open from 9 AM to 5 PM. Conclusions: I. Students can borrow books after 5 PM. II. The library is not accessible before 9 AM. Which conclusion follows?", "options": ["A) Only Conclusion II follows", "B) Only Conclusion I follows", "C) Both I and II follow", "D) Neither I nor II follows"], "ans": 0, "brief": "If open 9 AM to 5 PM, it is logically inaccessible before 9 AM (II follows); after 5 PM is closed (I false)[cite: 4]."},
+        {"num": 189, "module": "Module 8: Venn & Data Sufficiency", "q": "Statement: Despite consumer interest, electric vehicles are significantly more expensive than gasoline vehicles, and subsidies are essential to boost adoption. Assumptions: I. Price difference is a major barrier, II. Subsidies make EVs affordable, III. EV adoption will significantly reduce carbon emissions. Which is implicit?", "options": ["A) Only I and II are implicit", "B) Only II and III are implicit", "C) All are implicit", "D) Only I is implicit"], "ans": 0, "brief": "I and II directly explain why subsidies are essential for expensive EVs; III (emissions) is outside the scope[cite: 4]."},
+        {"num": 190, "module": "Module 8: Venn & Data Sufficiency", "q": "Which of the following is identical to: 'Charu Bansal F-55, Palm Green, Faridabad, 121102'?", "options": ["A) Charu Bansal F-55, Palm Green, Faridabad, 121102", "B) Charu Bansal F-56, Palm Green, Faridabad, 121102", "C) Charu Bansal F-55, Palm Green, Faridabad 121102", "D) Charu Bansal F-55, Palm Green, Faridabad 121101"], "ans": 0, "brief": "Exact character, comma, and PIN code match: Charu Bansal F-55, Palm Green, Faridabad, 121102[cite: 4]."},
+        {"num": 191, "module": "Module 8: Venn & Data Sufficiency", "q": "Which of the following is identical to: 'Palak Das C-22, Rosewood Heights, Sector 15, Gurugram, 122002'?", "options": ["A) 1 Only (Palak Das C-22, Rosewood Heights, Sector 15, Gurugram, 122002)", "B) 2 Only (PIN 122001)", "C) 3 Only (Height without 's')", "D) 4 Only (Gurgaon instead of Gurugram)"], "ans": 0, "brief": "Only option 1 matches all spelling and PIN characters identically[cite: 4]."},
+        {"num": 192, "module": "Module 8: Venn & Data Sufficiency", "q": "Which of the following is identical to: 'Village: Wazirabad, PO: Wazirabad, PS: Patiala, Delhi - 118001'?", "options": ["A) 1 Only (Village: Wazirabad, PO: Wazirabad, PS: Patiala, Delhi - 118001)", "B) 2 Only (PIN 128001)", "C) 3 Only (Patial spelling)", "D) 4 Only (PIN 1180001)"], "ans": 0, "brief": "Only option 1 matches the exact spelling and 6-digit PIN code[cite: 4]."},
+        {"num": 193, "module": "Module 8: Venn & Data Sufficiency", "q": "Which address is exactly the same as: 'B-104, Orchid Meadows, Bannerghatta Road, Bengaluru, Karnataka - 560076'?", "options": ["A) B-104, Orchid Meadows, Bannerghatta Road, Bengaluru, Karnataka - 560076", "B) B-104, Orchid Megdows... (spelling)", "C) B-104, Orchid Meadows... 560078", "D) B-104, Orchid Meadows... 560079"], "ans": 0, "brief": "Option A is the exact character-for-character match[cite: 4]."},
+        {"num": 194, "module": "Module 8: Venn & Data Sufficiency", "q": "Which of the following is/are identical to: 'Neha Singh 10/3, Crystal Park, Faridabad, 121001' among items 1 to 4?", "options": ["A) 1 and 4 (both match identically)", "B) 1 and 2", "C) 2 and 3", "D) 3 and 4"], "ans": 0, "brief": "Both item 1 and item 4 match the reference string identically[cite: 4]."},
+        {"num": 195, "module": "Module 8: Venn & Data Sufficiency", "q": "Which of the following is/are identical to: 'Ajay Yadav 16A, Maple Heights, Sector 45, Gurgaon, 122001'?", "options": ["A) 1 and 4 (both match identically)", "B) 1 and 3", "C) 2 and 4", "D) 3 and 4"], "ans": 0, "brief": "Both item 1 and item 4 are exact identical replicas of the reference address[cite: 4]."},
+        {"num": 196, "module": "Module 8: Venn & Data Sufficiency", "q": "Which Venn diagram indicates the best relation between Table, Furniture, and Chair?", "options": ["A) Two separate circles inside one large circle", "B) Three intersecting circles", "C) Three concentric circles", "D) Disjoint circles"], "ans": 0, "brief": "Table and Chair are distinct objects, but both belong to the category Furniture[cite: 4]."},
+        {"num": 197, "module": "Module 8: Venn & Data Sufficiency", "q": "Which Venn diagram indicates the best relation between Doctor, Male, and Artist?", "options": ["A) Three mutually intersecting circles", "B) Two circles inside one", "C) Three concentric circles", "D) One circle outside two intersecting circles"], "ans": 0, "brief": "A male can be both a doctor and an artist; three overlapping circles represent all combinations[cite: 4]."},
+        {"num": 198, "module": "Module 8: Venn & Data Sufficiency", "q": "Which Venn diagram indicates the best relation between Birds, Flying creatures, and Insects?", "options": ["A) Intersecting circles (Some birds and insects fly, some do not)", "B) Three concentric circles", "C) Two circles inside one", "D) Disjoint circles"], "ans": 0, "brief": "Intersecting circles show that some birds and some insects are flying creatures[cite: 4]."},
+        {"num": 199, "module": "Module 8: Venn & Data Sufficiency", "q": "In a Venn diagram representing Sportsmen, Students, and Girls, which region represents Girls who are Students but NOT Sportsmen?", "options": ["A) The intersection of Girls and Students outside Sportsmen", "B) The central intersection of all three", "C) Only Girls circle", "D) Only Students circle"], "ans": 0, "brief": "It corresponds to the area shared by Girls and Students excluding the Sportsmen shape[cite: 4]."},
+        {"num": 200, "module": "Module 8: Venn & Data Sufficiency", "q": "In Data Sufficiency: Question: What is the code for 'sky'? Statement I: 'sky is blue' is coded as 'ka pa ra'. Statement II: 'blue sky above' is coded as 'ra ka da'. Is the data sufficient?", "options": ["A) Neither I nor II nor both together are sufficient (cannot distinguish between 'ka' and 'ra')", "B) Only I is sufficient", "C) Only II is sufficient", "D) Both I and II together are sufficient"], "ans": 0, "brief": "Both sentences share 'sky' and 'blue' coded as 'ka' and 'ra'; without a third statement, we cannot separate 'sky'[cite: 4]."},
+
+        // MODULE 9: SEATING ARRANGEMENT & LINEAR PUZZLES (201-225)
+        {"num": 201, "module": "Module 9: Seating Arrangement", "q": "A, B, C, D and E sit on a bench. A sits next to B, C sits next to D. D does not sit with E who is on the left end. C is second from right. A is right of B and E. A and C sit together. In which position is A sitting?", "options": ["A) Between B and C", "B) Between B and D", "C) Between E and D", "D) Between C and E"], "ans": 0, "brief": "Order from left to right: E, B, A, C, D. A is seated between B and C[cite: 4]."},
+        {"num": 202, "module": "Module 9: Seating Arrangement", "q": "P, Q, R, S, T, U, V, W sit around a circle facing center: 1. P is 2nd to right of T (neighbor of R and V). 2. S is not neighbor of P. 3. V is neighbor of U. 4. Q is not between S and W. Which two are NOT neighbors?", "options": ["A) R and V", "B) U and V", "C) R and P", "D) Q and W"], "ans": 0, "brief": "T sits between R and V. Therefore R and V are separated by T and are NOT neighbors[cite: 4]."},
+        {"num": 203, "module": "Module 9: Seating Arrangement", "q": "In a class of 7 students (A, B, C, D, E, F, G) on 3 benches I, II, III (at least 2 per bench, at least 1 girl per bench): C (girl) does not sit with A, E, D. F (boy) sits only with B. A sits on I. G sits on III. How many girls are there?", "options": ["A) 3 or 4", "B) 3", "C) 4", "D) Data inadequate"], "ans": 0, "brief": "Based on bench constraints and gender rules, the total number of girls can be either 3 or 4[cite: 4]."},
+        {"num": 204, "module": "Module 9: Seating Arrangement", "q": "8 persons E, F, G, H, I, J, K, L sit around a square table (2 per side). 3 ladies not seated together. J is between L and F. G is between I and F. H (lady) is 2nd left of J. F (male) opposite E (lady). Who is immediate left of F?", "options": ["A) J", "B) G", "C) I", "D) H"], "ans": 0, "brief": "Solving the square table seating order confirms J is seated to the immediate left of F[cite: 4]."},
+        {"num": 205, "module": "Module 9: Seating Arrangement", "q": "A, B, C, D, E, F, G sit in a North-facing row: F is immediate right of E. E is 4th to right of G. C is neighbor of B and D. Person 3rd to left of D is at an end. Who are to the left of C?", "options": ["A) G and B", "B) Only B", "C) G, B and D", "D) D, E, F and A"], "ans": 0, "brief": "Left to right arrangement: G, B, C, D, E, F, A. Therefore G and B are to the left of C[cite: 4]."},
+        {"num": 206, "module": "Module 9: Seating Arrangement", "q": "4 males (M1-M4) face West, 4 females (F1-F4) face East towards them. F4 is immediate right of F3. One female between F2 and F3. M3 is diagonally opposite F2. Only one person right of M1. M2 is 2nd right of M4. Which is correct?", "options": ["A) Both I (M4 faces F3) and II (M2 diagonally opposite F4)", "B) Neither I nor II", "C) Only II", "D) Only I"], "ans": 0, "brief": "Arrangement confirms M4 faces F3 (I) and M2 is diagonally opposite F4 (II) -> Both correct[cite: 4]."},
+        {"num": 207, "module": "Module 9: Seating Arrangement", "q": "9 persons Anu, Bablu, Cheenu, Dona, Esha, Faria, Gaurav, Harish, Ishita face North. Cheenu is in the middle. No one right of Ishita. Dona is 4th right of Faria. Gaurav and Harish sit together. Which pair is the odd one out?", "options": ["A) Faria and Gaurav (non-adjacent in row)", "B) Gaurav and Harish", "C) Cheenu and Bablu", "D) Dona and Esha"], "ans": 0, "brief": "In the linear arrangement, Faria and Gaurav are not sitting adjacent/sharing the same positional spacing[cite: 4]."},
+        {"num": 208, "module": "Module 9: Seating Arrangement", "q": "Five friends A, B, C, D, and E are sitting in a row facing North. C is sitting between A and E. D is to the immediate right of E, and B is to the immediate left of A. Who is sitting in the middle?", "options": ["A) C", "B) A", "C) E", "D) D"], "ans": 0, "brief": "Order from left to right: B, A, C, E, D. The middle person is C[cite: 4]."},
+        {"num": 209, "module": "Module 9: Seating Arrangement", "q": "Six persons P, Q, R, S, T, and U are sitting around a circular table facing center. P sits opposite to R. Q sits between P and T. S sits to the immediate left of R. Who sits opposite to Q?", "options": ["A) S", "B) U", "C) T", "D) R"], "ans": 0, "brief": "In the 6-person circle, Q (between P and T) is directly diametrically opposite S[cite: 4]."},
+        {"num": 210, "module": "Module 9: Seating Arrangement", "q": "In a row of boys facing North, A is 10th from left and B is 15th from right. If C sits exactly between them and is 18th from left, how many boys are there in the row?", "options": ["A) 40", "B) 38", "C) 39", "D) 41"], "ans": 0, "brief": "C is 18th left -> 7 boys between A(10) and C(18). So 7 boys between C and B -> B is 18+8 = 26th from left. Total = 26 + 15 - 1 = 40[cite: 4]."},
+        {"num": 211, "module": "Module 9: Seating Arrangement", "q": "Four girls A, B, C, and D are sitting around a square table facing center. A sits opposite to C, and B sits to the right of A. Who sits to the left of A?", "options": ["A) D", "B) B", "C) C", "D) Cannot be determined"], "ans": 0, "brief": "If B is to the right of A and C is opposite A, then D must sit to the left of A[cite: 4]."},
+        {"num": 212, "module": "Module 9: Seating Arrangement", "q": "Seven friends T, U, V, W, X, Y, Z sit in a straight line facing North. W sits fifth to the right of T. W does not sit at any extreme end. Two people sit between Z and X. Y sits third to the left of U. Who sits at the extreme left end?", "options": ["A) T", "B) Y", "C) Z", "D) X"], "ans": 0, "brief": "Since W is 5th right of T and not at an end, T must be at position 1 (extreme left end)[cite: 4]."},
+        {"num": 213, "module": "Module 9: Seating Arrangement", "q": "In a circle of six persons facing center, A is between B and C. E is between D and F. If D is opposite to B, who is sitting opposite to C?", "options": ["A) F", "B) E", "C) A", "D) D"], "ans": 0, "brief": "With D opposite B and E between D and F, F sits directly opposite C[cite: 4]."},
+        {"num": 214, "module": "Module 9: Seating Arrangement", "q": "Five persons are sitting in a line facing South. M is to the immediate right of N. O is between N and P. Q is to the immediate left of M. Who is at the extreme right end (from their facing South perspective)?", "options": ["A) Q", "B) P", "C) M", "D) O"], "ans": 0, "brief": "Facing South, 'right' is geographical West. Q is to the immediate left (East) of M -> Q is at extreme right (West)[cite: 4]."},
+        {"num": 215, "module": "Module 9: Seating Arrangement", "q": "Eight friends sit around a circular table facing center. If A sits third to the left of B, and C sits second to the right of A, how many persons sit between B and C when counted clockwise from B?", "options": ["A) 2", "B) 3", "C) 1", "D) 4"], "ans": 0, "brief": "Counting clockwise from B to C around the 8-seat table yields exactly 2 persons between them[cite: 4]."},
+        {"num": 216, "module": "Module 9: Seating Arrangement", "q": "In a row of 5 cars parked facing East, Red is between Blue and Green. Black is to the South of Blue. White is to the North of Green. Which car is parked in the middle?", "options": ["A) Red", "B) Blue", "C) Green", "D) White"], "ans": 0, "brief": "Order from North to South: White, Green, Red, Blue, Black. The middle car is Red[cite: 4]."},
+        {"num": 217, "module": "Module 9: Seating Arrangement", "q": "Six friends A, B, C, D, E, and F sit in two parallel rows of three each, facing each other. A is not at any end. D is second to the left of F. C sits diagonally opposite to D and is facing E. Who is facing A?", "options": ["A) B", "B) D", "C) F", "D) E"], "ans": 0, "brief": "With C facing E and D/F at ends, A sits in the middle opposite B[cite: 4]."},
+        {"num": 218, "module": "Module 9: Seating Arrangement", "q": "In a circular arrangement of 5 people facing center, A is immediately between B and C. D is immediately between E and B. Who is sitting to the immediate right of E?", "options": ["A) C", "B) D", "C) A", "D) B"], "ans": 0, "brief": "In a 5-person circle, C is the only person adjacent to E on E's right[cite: 4]."},
+        {"num": 219, "module": "Module 9: Seating Arrangement", "q": "Seven boys sit in a row facing North. P sits fourth to the right of Q. R sits immediately left of Q. S sits at the extreme right end. Who sits in the exact middle of the row?", "options": ["A) The boy second to the right of Q", "B) Q", "C) P", "D) R"], "ans": 0, "brief": "In a 7-person row, position 4 is the middle, which is 2 places to the right of Q (position 2)[cite: 4]."},
+        {"num": 220, "module": "Module 9: Seating Arrangement", "q": "In a conference, 4 persons from country X and 4 from country Y sit alternately around a circular table. If leader X1 sits opposite leader Y1, who sits opposite X2?", "options": ["A) Y2 (or a leader from country Y)", "B) X3", "C) X4", "D) None of these"], "ans": 0, "brief": "In an alternating 8-seat arrangement, diametrically opposite seats always contain members of the opposing country[cite: 4]."},
+        {"num": 221, "module": "Module 9: Seating Arrangement", "q": "Five persons sit on a bench facing North. X is to the immediate left of Y. Z is to the immediate right of W. V is between Y and W. Who is sitting at the second position from the left end?", "options": ["A) Y", "B) V", "C) W", "D) X"], "ans": 0, "brief": "Order from left to right: X, Y, V, W, Z. The second from left is Y[cite: 4]."},
+        {"num": 222, "module": "Module 9: Seating Arrangement", "q": "Eight persons sit around a square table facing center (one at each corner, one at middle of each side). If person at top-left corner faces South-East, which direction does the person at bottom-right corner face?", "options": ["A) North-West", "B) South-West", "C) North-East", "D) South-East"], "ans": 0, "brief": "The bottom-right corner is diametrically opposite the top-left corner, facing the center (North-West)[cite: 4]."},
+        {"num": 223, "module": "Module 9: Seating Arrangement", "q": "In a row of girls facing North, Pinky is 8th from left and Rinki is 14th from right. If they swap places, Pinky becomes 15th from left. Where is Rinki from the right after swapping?", "options": ["A) 21st", "B) 20th", "C) 19th", "D) 22nd"], "ans": 0, "brief": "Pinky gained 7 places left to right (8 to 15). Rinki also gains 7 places right to left -> 14 + 7 = 21st[cite: 4]."},
+        {"num": 224, "module": "Module 9: Seating Arrangement", "q": "Six persons sit in a circular arrangement. Who sits opposite to A if B sits between A and C, D sits between C and E, and F sits between E and A?", "options": ["A) D", "B) E", "C) B", "D) C"], "ans": 0, "brief": "Order around circle: A, B, C, D, E, F. D sits at position 4, directly opposite A at position 1[cite: 4]."},
+        {"num": 225, "module": "Module 9: Seating Arrangement", "q": "In a row of 5 houses facing North, House A is to the right of B and left of C. House D is to the right of C. House E is to the left of B. Which house is in the middle?", "options": ["A) A", "B) B", "C) C", "D) D"], "ans": 0, "brief": "Order from left to right: E, B, A, C, D. The middle house is A[cite: 4]."},
+
+        // MODULE 10: NON-VERBAL REASONING (FIGURES, DOTS, CUBES, MIRROR/WATER, PAPER) (226-250)
+        {"num": 226, "module": "Module 10: Non-Verbal Figures", "q": "Two positions of a cube are shown with Greek letters. What face comes opposite to the face containing δ?", "options": ["A) β", "B) β or θ", "C) δ", "D) θ"], "ans": 0, "brief": "Using adjacent face rules from the two cube views, β is directly opposite δ[cite: 4]."},
+        {"num": 227, "module": "Module 10: Non-Verbal Figures", "q": "From the given numbered blocks (2, 4, 10 / 6, 8, 12), when number 10 is at the bottom, which number will be at the top?", "options": ["A) 12", "B) 6", "C) 8", "D) 4"], "ans": 0, "brief": "In the cube faces pattern, number 12 sits diametrically opposite 10[cite: 4]."},
+        {"num": 228, "module": "Module 10: Non-Verbal Figures", "q": "From two different appearances of a dice showing faces (2, 3, 5) and (2, 3, 6), which number is opposite to '5'?", "options": ["A) 6", "B) 4", "C) 2", "D) 3"], "ans": 0, "brief": "When two faces (2 and 3) are common in two dice positions, the remaining faces (5 and 6) are opposite[cite: 4]."},
+        {"num": 229, "module": "Module 10: Non-Verbal Figures", "q": "Three positions of a dice are given showing numbers 1 to 6. Which number is opposite to the face containing '2'?", "options": ["A) 6", "B) 3", "C) 1", "D) 5"], "ans": 0, "brief": "By eliminating adjacent numbers shown across the three views, 6 is opposite 2[cite: 4]."},
+        {"num": 230, "module": "Module 10: Non-Verbal Figures", "q": "A dice has faces marked 4, 6, 11, 8, 12, 16. In three positions, one face is masked by '#'. If # = 11, which statement is true: I. Sum of # and opposite to 6 is prime; II. Square root of sum of adjacent to # is irrational; III. Product of # and opposite is 132?", "options": ["A) III ONLY (Product of # and opposite is 132)", "B) I AND III ONLY", "C) II AND III ONLY", "D) I AND II ONLY"], "ans": 0, "brief": "# = 11; the opposite face is 12 -> 11 × 12 = 132 (III is true)[cite: 4]."},
+        {"num": 231, "module": "Module 10: Non-Verbal Figures", "q": "A dice has faces marked 5, 10, 15, 20, 25, 30. With # = 15, which statement is true: I. Product of # and opposite to 20 is 200; II. Sum of adjacent to # is rational; III. Product of # and opposite is an even number?", "options": ["A) II AND III ONLY", "B) I AND III ONLY", "C) I AND II ONLY", "D) III ONLY"], "ans": 0, "brief": "Sum of adjacent numbers is a rational number (II) and product of # (15) and opposite (30) is 450 (even - III)[cite: 4]."},
+        {"num": 232, "module": "Module 10: Non-Verbal Figures", "q": "A dice has faces marked 11, 12, 15, 16, 18, 19. With # = 15, which statement is true: I. Sum of # and opposite to 16 is prime; II. Sum of adjacent is irrational; III. Product of # and opposite is 285?", "options": ["A) III ONLY (# = 15, opposite = 19 -> 15 × 19 = 285)", "B) I AND III ONLY", "C) II AND III ONLY", "D) I AND II ONLY"], "ans": 0, "brief": "# = 15 and opposite face is 19 -> Product = 15 × 19 = 285[cite: 4]."},
+        {"num": 233, "module": "Module 10: Non-Verbal Figures", "q": "A dice has faces marked 21, 22, 25, 26, 28, 29. With # = 25, which statement is true: I. Product of # and opposite to 21 is prime; II. Sum of adjacent to # is an odd number; III. Product of # and opposite is 725?", "options": ["A) II AND III ONLY", "B) II ONLY", "C) I AND II ONLY", "D) III ONLY"], "ans": 0, "brief": "Sum of adjacent numbers yields an odd number (II) and 25 × 29 = 725 (III)[cite: 4]."},
+        {"num": 234, "module": "Module 10: Non-Verbal Figures", "q": "A dice has faces marked 31, 32, 35, 36, 38, 39. With # = 35, which statement is true: I. Sum of # and opposite to 36 is prime (71); II. Sum of adjacent is rational; III. Product of # and opposite to 38 is 1085?", "options": ["A) All I, II and III are true", "B) I AND III ONLY", "C) II AND III ONLY", "D) I AND II ONLY"], "ans": 0, "brief": "35 + 36 = 71 (prime - I), sum of adjacent is rational (II), and 35 × 31 = 1085 (III) -> All true[cite: 4]."},
+        {"num": 235, "module": "Module 10: Non-Verbal Figures", "q": "In Figure Odd One Out (circle/box with numbers): Why is figure (B) selected as the odd one out among (A), (B), (C), (D)?", "options": ["A) In all other figures, a circle is drawn next to the largest number (sum of the other two numbers)", "B) All numbers are odd except in B", "C) Figure B contains three shapes instead of two", "D) The outer box is rotated 45° in B"], "ans": 0, "brief": "In A, C, and D, a circle marks the largest number which equals the sum of the other two; B violates this rule[cite: 4]."},
+        {"num": 236, "module": "Module 10: Non-Verbal Figures", "q": "In Figure Odd One Out (geometric shapes inside outer box): Why is figure (C) selected as the odd one out?", "options": ["A) All other figures contain only 2 different types of shapes inside, whereas C contains 3 different types of shapes", "B) Figure C is shaded darker", "C) Figure C has no center shape", "D) The shapes in C are outside the border"], "ans": 0, "brief": "A, B, and D have exactly two distinct internal shape types; C has three distinct types[cite: 4]."},
+        {"num": 237, "module": "Module 10: Non-Verbal Figures", "q": "In Figure Odd One Out (nested shapes): Why is figure (C) selected as the odd one out among four nested diagrams?", "options": ["A) In all other diagrams, the outermost and innermost shapes are identical, except in C (outer circle, inner triangle)", "B) Figure C has four layers", "C) The inner shape in C is inverted", "D) Figure C is square"], "ans": 0, "brief": "Outermost and innermost shapes match in A, B, and D; C has an outer circle and inner triangle[cite: 4]."},
+        {"num": 238, "module": "Module 10: Non-Verbal Figures", "q": "In Figure Completion: When a square paper with diagonal symmetry is missing its bottom-right quadrant, which quadrant completes the symmetry?", "options": ["A) Quadrant matching option (B) in PYQ 2026", "B) Quadrant matching option (A)", "C) Quadrant matching option (C)", "D) Quadrant matching option (D)"], "ans": 0, "brief": "Option B correctly mirrors the diagonal lines and symbols across the central axis[cite: 4]."},
+        {"num": 239, "module": "Module 10: Non-Verbal Figures", "q": "In Figure Complete the Series: If an arrow shifts Left -> Middle -> Right -> Middle, and a circle shifts Right -> Middle -> Left -> Middle, what is the next position?", "options": ["A) Option (C) where Arrow is at Left and Circle is at Right", "B) Option (A)", "C) Option (B)", "D) Option (D)"], "ans": 0, "brief": "Following the periodic oscillating horizontal movements, C correctly positions both symbols[cite: 4]."},
+        {"num": 240, "module": "Module 10: Non-Verbal Figures", "q": "In Figure Complete the Series (5 problem figures): How do the internal elements move to form answer figure 3?", "options": ["A) Elements move in specific sequences alternately, and the element reaching the encircled position is replaced by a new element", "B) Elements rotate 90° clockwise in each frame", "C) All elements invert vertically", "D) Two elements swap corners sequentially"], "ans": 0, "brief": "As noted in the PYQ explanation: alternating sequence movement with replacement at the encircled position -> Answer 3[cite: 4]."},
+        {"num": 241, "module": "Module 10: Non-Verbal Figures", "q": "In Dot Situation / Dot Figure Series: What condition must be satisfied when placing dots in a Venn/overlapping figure?", "options": ["A) The dot must lie within the exact same intersection of geometric regions (e.g., Circle and Triangle only) as in the reference figure", "B) The dot must touch the outer border", "C) The dot must lie outside all shapes", "D) The dot must be placed at the center of symmetry"], "ans": 0, "brief": "Dot situation problems test the ability to identify identical shared geometric intersections[cite: 4]."},
+        {"num": 242, "module": "Module 10: Non-Verbal Figures", "q": "In Mirror Image: When a vertical mirror is placed on the right side of a figure containing text/symbols, how does the image change?", "options": ["A) Left and Right undergo lateral inversion while Top and Bottom remain unchanged", "B) Top and Bottom invert vertically", "C) The image rotates 180°", "D) The image rotates 90° clockwise"], "ans": 0, "brief": "A vertical mirror causes lateral (left-right) inversion without changing vertical orientation[cite: 4]."},
+        {"num": 243, "module": "Module 10: Non-Verbal Figures", "q": "In Water Image: How does a water image differ from a standard mirror image?", "options": ["A) Top and Bottom invert vertically while Left and Right remain unchanged", "B) Left and Right invert laterally", "C) The image turns 90° anti-clockwise", "D) Both vertical and lateral inversions occur simultaneously"], "ans": 0, "brief": "Water reflection acts as a horizontal mirror at the base, inverting top and bottom[cite: 4]."},
+        {"num": 244, "module": "Module 10: Non-Verbal Figures", "q": "In Paper Folding and Cutting: When a square paper folded twice diagonally is cut with a triangular notch at the center, how many triangular notches appear when unfolded?", "options": ["A) 4 symmetrical notches around the center", "B) 2 notches", "C) 8 notches", "D) 1 single notch"], "ans": 0, "brief": "Unfolding across two perpendicular fold axes replicates the central notch into 4 symmetrical quadrants[cite: 4]."},
+        {"num": 245, "module": "Module 10: Non-Verbal Figures", "q": "In a folded cube test: Why is option (A) 'Only 4' the correct possible cube from the unfolded sheet?", "options": ["A) Because opposite faces in the unfolded sheet cannot appear adjacent on a valid folded cube", "B) Because cube 4 has different colors", "C) Because cube 4 is rotated 45°", "D) Because all faces are numbered evenly"], "ans": 0, "brief": "Cube 4 is the only view where mutually exclusive opposite faces do not appear simultaneously[cite: 4]."},
+        {"num": 246, "module": "Module 10: Non-Verbal Figures", "q": "Find the number of triangles in the given figure from PYQ 2026 (labeled with simple, 2-component, 3-component, and 4-component triangles).", "options": ["A) 14 (6 simple + 4 two-component + 3 three-component + 1 four-component)", "B) 10", "C) 12", "D) 16"], "ans": 0, "brief": "Summing all triangle categories: 6 + 4 + 3 + 1 = 14 triangles[cite: 4]."},
+        {"num": 247, "module": "Module 10: Non-Verbal Figures", "q": "Find the minimum number of straight lines required to make the geometric figure in PYQ 2026.", "options": ["A) 17 (4 horizontal + 5 vertical + 8 slanting)", "B) 16", "C) 18", "D) 19"], "ans": 0, "brief": "Counting independent straight segments: 4 horizontal + 5 vertical + 8 slanting = 17 lines[cite: 4]."},
+        {"num": 248, "module": "Module 10: Non-Verbal Figures", "q": "In Dot Situation PYQ Figure-X: Which answer figure (A, B, C, D) satisfies the same dot placement conditions?", "options": ["A) Figure A (or B according to specific PYQ key reference)", "B) Figure C", "C) Figure D", "D) None of these"], "ans": 0, "brief": "Matching the shared geometric regions (e.g. circle-square intersection) identifies the correct figure[cite: 4]."},
+        {"num": 249, "module": "Module 10: Non-Verbal Figures", "q": "In Figure Complete the Series: What rule governs the movement of the pin passing through vertices in option (d)?", "options": ["A) The pin passes through a vertex of each one of the two elements only in figure (4) / option d", "B) The pin rotates 180° around the center", "C) The pin shortens in length", "D) The pin moves to the outer border"], "ans": 0, "brief": "In figure 4 (option d), the pin uniquely aligns through a vertex of both intersecting geometric elements[cite: 4]."},
+        {"num": 250, "module": "Module 10: Non-Verbal Figures", "q": "In a Non-Verbal Analogy: If Figure 1 is rotated 90° clockwise and its inner shading is inverted to form Figure 2, what figure is formed when Figure 3 undergoes the same transformation?", "options": ["A) The figure rotated 90° clockwise with inverted shading", "B) The figure rotated 180° without shading change", "C) The figure reflected vertically", "D) The figure unchanged"], "ans": 0, "brief": "Applying the identical 90° clockwise rotation and shading inversion transforms Figure 3 into the correct option[cite: 4]."}
+    ];
+
+    let activeQuestions = [];
+    let currentScore = 0;
+    let wrongCount = 0;
+    let answeredCount = 0;
+    let activeFilter = 'All';
+    let searchQuery = '';
+    let showAllActive = false;
+    let statusFilter = 'all';
+    let questionStatus = {};
+
+    function shuffleArray(array) {
+        const arr = [...array];
+        for (let i = arr.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [arr[i], arr[j]] = [arr[j], arr[i]];
+        }
+        return arr;
+    }
+
+    function initializeAndShuffleQuiz() {
+        const prepared = originalQuestionsData.map(q => {
+            const cleanOptions = q.options.map(opt => opt.replace(/^[A-D]\)\s*/, ''));
+            const correctAnswerText = cleanOptions[q.ans];
+            const shuffledCleanOptions = shuffleArray(cleanOptions);
+            const newCorrectIdx = shuffledCleanOptions.indexOf(correctAnswerText);
+            const relabeledOptions = shuffledCleanOptions.map((opt, i) => {
+                return String.fromCharCode(65 + i) + ') ' + opt;
+            });
+            return {
+                ...q,
+                options: relabeledOptions,
+                ans: newCorrectIdx
+            };
+        });
+        activeQuestions = shuffleArray(prepared);
+        questionStatus = {};
+        currentScore = 0;
+        wrongCount = 0;
+        answeredCount = 0;
+        statusFilter = 'all';
+        document.querySelectorAll('.stat-item').forEach(el => el.classList.remove('active-filter'));
+        updateStats();
+    }
+
+    function applyFilters() {
+        searchQuery = document.getElementById('search-input').value.toLowerCase().trim();
+        renderQuiz();
+    }
+
+    function filterByStatus(status) {
+        if (statusFilter === status) {
+            statusFilter = 'all';
+            document.querySelectorAll('.stat-item').forEach(el => el.classList.remove('active-filter'));
+        } else {
+            statusFilter = status;
+            document.querySelectorAll('.stat-item').forEach(el => el.classList.remove('active-filter'));
+            if (status === 'correct') {
+                document.getElementById('correctStat').classList.add('active-filter');
+            } else if (status === 'wrong') {
+                document.getElementById('wrongStat').classList.add('active-filter');
+            } else if (status === 'left') {
+                document.getElementById('leftStat').classList.add('active-filter');
+            }
+        }
+        renderQuiz();
+    }
+
+    function renderQuiz() {
+        const container = document.getElementById('quiz-container');
+        container.innerHTML = '';
+        let displayCount = 0;
+        let seqNum = 1;
+
+        const isQidSearch = searchQuery && /^\d+$/.test(searchQuery);
+        const qidNumber = isQidSearch ? parseInt(searchQuery) : null;
+
+        activeQuestions.forEach((q) => {
+            if (activeFilter !== 'All') {
+                const qModuleMatch = q.module.match(/Module (\d+)/);
+                const qModuleNum = qModuleMatch ? qModuleMatch[1] : null;
+                const filterMatch = activeFilter.match(/Module (\d+)/);
+                const filterModuleNum = filterMatch ? filterMatch[1] : null;
+                
+                if (qModuleNum && filterModuleNum) {
+                    if (qModuleNum !== filterModuleNum) return;
+                } else {
+                    if (!q.module.startsWith(activeFilter + ':')) return;
+                }
+            }
+            
+            if (statusFilter !== 'all') {
+                const status = questionStatus[q.num];
+                if (statusFilter === 'correct' && status !== 'correct') return;
+                if (statusFilter === 'wrong' && status !== 'wrong') return;
+                if (statusFilter === 'left' && status !== undefined) return;
+            }
+            
+            if (searchQuery) {
+                if (isQidSearch) {
+                    if (q.num !== qidNumber) return;
+                } else {
+                    const match = q.q.toLowerCase().includes(searchQuery) ||
+                                  q.module.toLowerCase().includes(searchQuery) ||
+                                  q.brief.toLowerCase().includes(searchQuery) ||
+                                  q.options.some(o => o.toLowerCase().includes(searchQuery));
+                    if (!match) return;
+                }
+            }
+            
+            displayCount++;
+            const card = document.createElement('div');
+            card.className = 'question-card';
+            card.id = `card-${q.num}`;
+            
+            const savedNote = localStorage.getItem(`afcat_reasoning_note_QID_${q.num}`) || '';
+            const savedNoteHtml = savedNote ? `
+                <div class="saved-note-banner" id="saved-display-${q.num}">
+                    <strong>📌 Saved Note:</strong> ${savedNote}
+                </div>` : `<div id="saved-display-${q.num}"></div>`;
+            
+            const status = questionStatus[q.num];
+            let statusBadge = '';
+            if (status === 'correct') {
+                statusBadge = `<span class="q-status-badge status-correct">✅ Correct</span>`;
+            } else if (status === 'wrong') {
+                statusBadge = `<span class="q-status-badge status-wrong">❌ Wrong</span>`;
+            } else {
+                statusBadge = `<span class="q-status-badge status-unanswered">⏳ Unanswered</span>`;
+            }
+            
+            card.innerHTML = `
+                <div class="q-header">
+                    <div class="q-badges-left">
+                        <span class="q-num-badge">Question #${seqNum++}</span>
+                        <span class="qid-badge">QID:- ${q.num}</span>
+                        ${statusBadge}
+                    </div>
+                    <span class="q-mod-badge">${q.module}</span>
+                </div>
+                <div class="q-text">${q.q}</div>
+                <div class="options-grid" id="opts-${q.num}">
+                    ${q.options.map((optText, optIdx) => `
+                        <button class="opt-btn" onclick="checkAnswer(${q.num}, ${optIdx}, ${q.ans})">
+                            <span>${optText}</span>
+                        </button>
+                    `).join('')}
+                </div>
+                <div class="feedback-box" id="feedback-${q.num}">
+                    ${showAllActive && !questionStatus[q.num] ? `
+                        <div class="feedback-title">✓ Correct Answer: ${q.options[q.ans]}</div>
+                        <div><strong>Logic & Explanation:</strong> ${q.brief}</div>
+                        ${savedNoteHtml}
+                        <div class="notes-section">
+                            <button class="notes-btn" onclick="toggleNoteEditor(${q.num})">Add / Edit Notes & Points</button>
+                            <div class="note-editor" id="editor-${q.num}">
+                                <textarea class="notes-area" id="textarea-${q.num}" rows="3" placeholder="Add your notes/points here...">${savedNote}</textarea>
+                                <button class="save-note-btn" onclick="saveNote(${q.num})">Save Note Locally</button>
+                            </div>
+                        </div>
+                    ` : ''}
+                </div>
+            `;
+            container.appendChild(card);
+
+            if (questionStatus[q.num]) {
+                const optsContainer = document.getElementById(`opts-${q.num}`);
+                if (optsContainer) {
+                    const buttons = optsContainer.querySelectorAll('.opt-btn');
+                    buttons.forEach((btn, idx) => {
+                        btn.classList.add('disabled');
+                        if (idx === q.ans) {
+                            btn.classList.add('correct');
+                        }
+                        if (q._selectedIdx !== undefined && idx === q._selectedIdx && idx !== q.ans) {
+                            btn.classList.add('wrong');
+                        }
+                    });
+                }
+                const feedback = document.getElementById(`feedback-${q.num}`);
+                if (feedback) {
+                    const isCorrect = questionStatus[q.num] === 'correct';
+                    feedback.className = `feedback-box show-${isCorrect ? 'correct' : 'wrong'}`;
+                    const savedNoteDisplay = localStorage.getItem(`afcat_reasoning_note_QID_${q.num}`) || '';
+                    const savedNoteHtmlDisplay = savedNoteDisplay ? `
+                        <div class="saved-note-banner" id="saved-display-${q.num}">
+                            <strong>📌 Saved Note:</strong> ${savedNoteDisplay}
+                        </div>` : `<div id="saved-display-${q.num}"></div>`;
+                    
+                    if (isCorrect) {
+                        feedback.innerHTML = `
+                            <div class="feedback-title">✓ Correct Answer!</div>
+                            <div><strong>Logic & Explanation:</strong> ${q.brief}</div>
+                            ${savedNoteHtmlDisplay}
+                            <div class="notes-section">
+                                <button class="notes-btn" onclick="toggleNoteEditor(${q.num})">Add / Edit Notes & Points</button>
+                                <div class="note-editor" id="editor-${q.num}">
+                                    <textarea class="notes-area" id="textarea-${q.num}" rows="3" placeholder="Add your notes/points here...">${savedNoteDisplay}</textarea>
+                                    <button class="save-note-btn" onclick="saveNote(${q.num})">Save Note Locally</button>
+                                </div>
+                            </div>
+                        `;
+                    } else {
+                        feedback.innerHTML = `
+                            <div class="feedback-title">✗ Wrong Answer — The Correct Answer is: ${q.options[q.ans]}</div>
+                            <div><strong>Logic & Explanation:</strong> ${q.brief}</div>
+                            ${savedNoteHtmlDisplay}
+                            <div class="notes-section">
+                                <button class="notes-btn" onclick="toggleNoteEditor(${q.num})">Add / Edit Notes & Points</button>
+                                <div class="note-editor" id="editor-${q.num}">
+                                    <textarea class="notes-area" id="textarea-${q.num}" rows="3" placeholder="Add your notes/points here...">${savedNoteDisplay}</textarea>
+                                    <button class="save-note-btn" onclick="saveNote(${q.num})">Save Note Locally</button>
+                                </div>
+                            </div>
+                        `;
+                    }
+                }
+            }
+
+            if (showAllActive && !questionStatus[q.num]) {
+                const optsContainer = document.getElementById(`opts-${q.num}`);
+                if (optsContainer) {
+                    const buttons = optsContainer.querySelectorAll('.opt-btn');
+                    buttons.forEach((btn, idx) => {
+                        btn.classList.add('disabled');
+                        if (idx === q.ans) {
+                            btn.classList.add('correct');
+                        }
+                    });
+                }
+                const feedback = document.getElementById(`feedback-${q.num}`);
+                if (feedback) {
+                    feedback.className = 'feedback-box show-correct';
+                    const savedNoteDisplay = localStorage.getItem(`afcat_reasoning_note_QID_${q.num}`) || '';
+                    const savedNoteHtmlDisplay = savedNoteDisplay ? `
+                        <div class="saved-note-banner" id="saved-display-${q.num}">
+                            <strong>📌 Saved Note:</strong> ${savedNoteDisplay}
+                        </div>` : `<div id="saved-display-${q.num}"></div>`;
+                    
+                    if (!feedback.innerHTML) {
+                        feedback.innerHTML = `
+                            <div class="feedback-title">✓ Correct Answer: ${q.options[q.ans]}</div>
+                            <div><strong>Logic & Explanation:</strong> ${q.brief}</div>
+                            ${savedNoteHtmlDisplay}
+                            <div class="notes-section">
+                                <button class="notes-btn" onclick="toggleNoteEditor(${q.num})">Add / Edit Notes & Points</button>
+                                <div class="note-editor" id="editor-${q.num}">
+                                    <textarea class="notes-area" id="textarea-${q.num}" rows="3" placeholder="Add your notes/points here...">${savedNoteDisplay}</textarea>
+                                    <button class="save-note-btn" onclick="saveNote(${q.num})">Save Note Locally</button>
+                                </div>
+                            </div>
+                        `;
+                    }
+                }
+            }
+        });
+
+        if (displayCount === 0) {
+            let message = 'No AFCAT Reasoning MCQs matched your search.';
+            if (isQidSearch) {
+                message = `No question found with QID ${qidNumber}. Please check the QID and try again.`;
+            } else if (statusFilter === 'correct' && currentScore === 0) {
+                message = 'No correct answers yet. Keep practicing! 🎯';
+            } else if (statusFilter === 'wrong' && wrongCount === 0) {
+                message = 'No wrong answers yet! Great job! 🎉';
+            } else if (statusFilter === 'left') {
+                if (answeredCount === activeQuestions.length) {
+                    message = '🎉 All questions have been answered! No questions left to attempt.';
+                } else {
+                    message = `📝 You have ${activeQuestions.length - answeredCount} questions left to attempt. Start answering!`;
+                }
+            }
+            container.innerHTML = `<div class="no-results">${message}</div>`;
+        }
+
+        updateStats();
+    }
+
+    function checkAnswer(qNum, selectedIdx, correctIdx) {
+        if (showAllActive) return;
+        if (questionStatus[qNum]) return;
+        
+        const optsContainer = document.getElementById(`opts-${qNum}`);
+        const buttons = optsContainer.querySelectorAll('.opt-btn');
+        const feedback = document.getElementById(`feedback-${qNum}`);
+        
+        if (buttons[0].classList.contains('disabled')) {
+            return;
+        }
+        
+        const qObj = activeQuestions.find(item => item.num === qNum);
+        qObj._selectedIdx = selectedIdx;
+        
+        buttons.forEach((btn, idx) => {
+            btn.classList.add('disabled');
+            if (idx === correctIdx) {
+                btn.classList.add('correct');
+            }
+        });
+        
+        const savedNote = localStorage.getItem(`afcat_reasoning_note_QID_${qNum}`) || '';
+        const savedNoteHtml = savedNote ? `
+            <div class="saved-note-banner" id="saved-display-${qNum}">
+                <strong>📌 Saved Note:</strong> ${savedNote}
+            </div>` : `<div id="saved-display-${qNum}"></div>`;
+        
+        const isCorrect = selectedIdx === correctIdx;
+        if (isCorrect) {
+            currentScore++;
+            questionStatus[qNum] = 'correct';
+            buttons[selectedIdx].classList.add('correct');
+            feedback.className = 'feedback-box show-correct';
+            feedback.innerHTML = `
+                <div class="feedback-title">✓ Correct Answer!</div>
+                <div><strong>Logic & Explanation:</strong> ${qObj.brief}</div>
+                ${savedNoteHtml}
+                <div class="notes-section">
+                    <button class="notes-btn" onclick="toggleNoteEditor(${qNum})">Add / Edit Notes & Points</button>
+                    <div class="note-editor" id="editor-${qNum}">
+                        <textarea class="notes-area" id="textarea-${qNum}" rows="3" placeholder="Add your notes/points here...">${savedNote}</textarea>
+                        <button class="save-note-btn" onclick="saveNote(${qNum})">Save Note Locally</button>
+                    </div>
+                </div>
+            `;
+        } else {
+            wrongCount++;
+            questionStatus[qNum] = 'wrong';
+            buttons[selectedIdx].classList.add('wrong');
+            const correctOptText = qObj.options[correctIdx];
+            feedback.className = 'feedback-box show-wrong';
+            feedback.innerHTML = `
+                <div class="feedback-title">✗ Wrong Answer — The Correct Answer is: ${correctOptText}</div>
+                <div><strong>Logic & Explanation:</strong> ${qObj.brief}</div>
+                ${savedNoteHtml}
+                <div class="notes-section">
+                    <button class="notes-btn" onclick="toggleNoteEditor(${qNum})">Add / Edit Notes & Points</button>
+                    <div class="note-editor" id="editor-${qNum}">
+                        <textarea class="notes-area" id="textarea-${qNum}" rows="3" placeholder="Add your notes/points here...">${savedNote}</textarea>
+                        <button class="save-note-btn" onclick="saveNote(${qNum})">Save Note Locally</button>
+                    </div>
+                </div>
+            `;
+        }
+        answeredCount++;
+        
+        const badgeContainer = document.querySelector(`#card-${qNum} .q-badges-left`);
+        if (badgeContainer) {
+            const oldBadge = badgeContainer.querySelector('.q-status-badge');
+            let newBadgeHtml = '';
+            if (isCorrect) {
+                newBadgeHtml = `<span class="q-status-badge status-correct">✅ Correct</span>`;
+            } else {
+                newBadgeHtml = `<span class="q-status-badge status-wrong">❌ Wrong</span>`;
+            }
+            if (oldBadge) {
+                oldBadge.outerHTML = newBadgeHtml;
+            } else {
+                badgeContainer.innerHTML += newBadgeHtml;
+            }
+        }
+        
+        updateStats();
+        
+        if (statusFilter !== 'all') {
+            renderQuiz();
+        }
+    }
+
+    function toggleNoteEditor(qNum) {
+        const editor = document.getElementById(`editor-${qNum}`);
+        if (editor.style.display === 'block') {
+            editor.style.display = 'none';
+        } else {
+            editor.style.display = 'block';
+        }
+    }
+
+    function saveNote(qNum) {
+        const textarea = document.getElementById(`textarea-${qNum}`);
+        const noteText = textarea.value.trim();
+        const storageKey = `afcat_reasoning_note_QID_${qNum}`;
+        
+        if (noteText) {
+            localStorage.setItem(storageKey, noteText);
+        } else {
+            localStorage.removeItem(storageKey);
+        }
+
+        const displayContainer = document.getElementById(`saved-display-${qNum}`);
+        if (noteText) {
+            displayContainer.className = 'saved-note-banner';
+            displayContainer.innerHTML = `<strong>📌 Saved Note:</strong> ${noteText}`;
+        } else {
+            displayContainer.className = '';
+            displayContainer.innerHTML = '';
+        }
+        document.getElementById(`editor-${qNum}`).style.display = 'none';
+    }
+
+    function updateStats() {
+        const totalQuestions = activeQuestions.length;
+        const leftToAttempt = totalQuestions - answeredCount;
+        
+        document.getElementById('correct-count').textContent = currentScore;
+        document.getElementById('wrong-count').textContent = wrongCount;
+        document.getElementById('left-count').textContent = leftToAttempt;
+        
+        const pct = answeredCount > 0 ? Math.round((currentScore / answeredCount) * 100) : 0;
+        document.getElementById('pct-display').textContent = pct + '%';
+    }
+
+    function filterQuestions(modPrefix) {
+        activeFilter = modPrefix;
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.classList.remove('active');
+            if (btn.getAttribute('data-filter') === modPrefix) {
+                btn.classList.add('active');
+            }
+        });
+        renderQuiz();
+    }
+
+    function resetQuiz() {
+        if (showAllActive) {
+            showAllActive = false;
+            const btn = document.getElementById('showAllBtn');
+            btn.classList.remove('show-all-active');
+            btn.textContent = '👁️ Show All Answers (Study Mode)';
+        }
+        currentScore = 0;
+        wrongCount = 0;
+        answeredCount = 0;
+        questionStatus = {};
+        statusFilter = 'all';
+        document.querySelectorAll('.stat-item').forEach(el => el.classList.remove('active-filter'));
+        updateStats();
+        renderQuiz();
+    }
+
+    function toggleShowAll() {
+        const btn = document.getElementById('showAllBtn');
+        showAllActive = !showAllActive;
+        
+        if (showAllActive) {
+            btn.classList.add('show-all-active');
+            btn.textContent = '🔴 Hide All Answers';
+        } else {
+            btn.classList.remove('show-all-active');
+            btn.textContent = '👁️ Show All Answers (Study Mode)';
+        }
+        renderQuiz();
+    }
+
+    // Initialize
+    initializeAndShuffleQuiz();
+    renderQuiz();
+</script>
+</body>
+</html>

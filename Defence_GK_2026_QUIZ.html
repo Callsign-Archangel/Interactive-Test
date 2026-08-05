@@ -1,0 +1,1292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Defence GK 2026 — Interactive 250 MCQ Self-Assessment Quiz</title>
+<style>
+    :root {
+        --bg-main: #f8fafc;
+        --card-bg: #ffffff;
+        --primary: #0f172a;
+        --accent-red: #dc2626;
+        --accent-green: #10b981;
+        --accent-blue: #2563eb;
+        --text-main: #1e293b;
+        --text-muted: #64748b;
+        --border: #e2e8f0;
+    }
+    
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
+    
+    body {
+        font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        background-color: var(--bg-main);
+        color: var(--text-main);
+        line-height: 1.5;
+        padding-bottom: 60px;
+    }
+    
+    header {
+        background-color: var(--primary);
+        color: #ffffff;
+        padding: 24px 20px;
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+    
+    .header-container {
+        max-width: 1100px;
+        margin: 0 auto;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        align-items: center;
+        gap: 15px;
+    }
+    
+    .title-area h1 {
+        font-size: 1.4rem;
+        font-weight: 700;
+        letter-spacing: -0.5px;
+    }
+    
+    .title-area p {
+        font-size: 0.85rem;
+        color: #94a3b8;
+    }
+    
+    .stats-badge {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        background-color: #1e293b;
+        border: 2px solid #334155;
+        border-radius: 8px;
+        padding: 6px 10px;
+    }
+
+    .stat-item {
+        padding: 6px 14px;
+        border-radius: 6px;
+        text-align: center;
+        min-width: 70px;
+        cursor: pointer;
+        transition: all 0.2s;
+        border: 2px solid transparent;
+        background-color: rgba(255, 255, 255, 0.05);
+        user-select: none;
+    }
+
+    .stat-item:hover {
+        transform: scale(1.05);
+    }
+
+    .stat-item .stat-num {
+        font-size: 1.2rem;
+        font-weight: 800;
+        display: block;
+        line-height: 1.2;
+    }
+
+    .stat-item .stat-label {
+        font-size: 0.6rem;
+        text-transform: uppercase;
+        letter-spacing: 0.3px;
+        opacity: 0.8;
+    }
+
+    .stat-item.correct-stat {
+        background-color: rgba(16, 185, 129, 0.2);
+        border-color: #10b981;
+        color: #34d399;
+    }
+
+    .stat-item.correct-stat.active-filter {
+        background-color: rgba(16, 185, 129, 0.4);
+        box-shadow: 0 0 20px rgba(16, 185, 129, 0.3);
+    }
+
+    .stat-item.wrong-stat {
+        background-color: rgba(239, 68, 68, 0.2);
+        border-color: #ef4444;
+        color: #f87171;
+    }
+
+    .stat-item.wrong-stat.active-filter {
+        background-color: rgba(239, 68, 68, 0.4);
+        box-shadow: 0 0 20px rgba(239, 68, 68, 0.3);
+    }
+
+    .stat-item.left-stat {
+        background-color: rgba(234, 179, 8, 0.2);
+        border-color: #eab308;
+        color: #fbbf24;
+    }
+
+    .stat-item.left-stat.active-filter {
+        background-color: rgba(234, 179, 8, 0.4);
+        box-shadow: 0 0 20px rgba(234, 179, 8, 0.3);
+    }
+
+    .stat-item.pct-stat {
+        background-color: rgba(56, 189, 248, 0.15);
+        border-color: #38bdf8;
+        color: #38bdf8;
+        min-width: 80px;
+        cursor: default;
+    }
+
+    .stat-item.pct-stat:hover {
+        transform: none;
+    }
+
+    .stat-item .stat-pct {
+        font-size: 1.2rem;
+        font-weight: 800;
+        display: block;
+        line-height: 1.2;
+    }
+    
+    .container {
+        max-width: 1100px;
+        margin: 24px auto;
+        padding: 0 16px;
+    }
+
+    .controls-panel {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        margin-bottom: 24px;
+        background: var(--card-bg);
+        padding: 16px;
+        border-radius: 12px;
+        border: 1px solid var(--border);
+        box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+
+    .search-row {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+
+    .search-input {
+        flex: 1;
+        min-width: 260px;
+        padding: 10px 14px;
+        border: 1px solid #cbd5e1;
+        border-radius: 8px;
+        font-size: 0.95rem;
+        color: var(--text-main);
+        outline: none;
+        transition: border-color 0.2s;
+    }
+
+    .search-input:focus {
+        border-color: var(--accent-blue);
+        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+    }
+
+    .search-hint {
+        font-size: 0.75rem;
+        color: var(--text-muted);
+        margin-top: 2px;
+        font-style: italic;
+    }
+
+    .action-btn {
+        background-color: #f1f5f9;
+        border: 1px solid #cbd5e1;
+        border-radius: 8px;
+        padding: 10px 16px;
+        font-size: 0.85rem;
+        font-weight: 700;
+        color: var(--text-main);
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+    .action-btn:hover {
+        background-color: #e2e8f0;
+    }
+
+    .action-btn.primary {
+        background-color: var(--primary);
+        color: #ffffff;
+        border-color: var(--primary);
+    }
+
+    .action-btn.primary:hover {
+        background-color: #1e293b;
+    }
+
+    .action-btn.show-all-active {
+        background-color: #dc2626 !important;
+        border-color: #b91c1c !important;
+        color: #ffffff !important;
+        box-shadow: 0 0 12px rgba(220, 38, 38, 0.4);
+        transition: all 0.2s;
+    }
+    
+    .filter-bar {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 4px;
+    }
+    
+    .filter-btn {
+        background-color: #f1f5f9;
+        border: 1px solid #cbd5e1;
+        border-radius: 6px;
+        padding: 6px 12px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: var(--text-main);
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    
+    .filter-btn:hover {
+        background-color: #e2e8f0;
+    }
+
+    .filter-btn.active {
+        background-color: #0f172a;
+        color: #ffffff;
+        border-color: #0f172a;
+    }
+
+    .question-card {
+        background-color: var(--card-bg);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 20px;
+        margin-bottom: 16px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        transition: transform 0.15s;
+    }
+    
+    .question-card:hover {
+        border-color: #cbd5e1;
+    }
+    
+    .q-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 10px;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    .q-badges-left {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        flex-wrap: wrap;
+    }
+    
+    .q-num-badge {
+        background-color: #fef2f2;
+        color: var(--accent-red);
+        border: 1px solid #fecaca;
+        font-weight: 700;
+        font-size: 0.8rem;
+        padding: 3px 10px;
+        border-radius: 20px;
+    }
+
+    .qid-badge {
+        background-color: #fef08a;
+        color: #854d0e;
+        border: 1px solid #fde047;
+        font-weight: 700;
+        font-size: 0.8rem;
+        padding: 3px 10px;
+        border-radius: 20px;
+    }
+    
+    .q-mod-badge {
+        font-size: 0.75rem;
+        color: var(--text-muted);
+        font-weight: 600;
+    }
+
+    .q-status-badge {
+        font-size: 0.7rem;
+        padding: 2px 10px;
+        border-radius: 12px;
+        font-weight: 700;
+        transition: all 0.3s ease;
+    }
+
+    .q-status-badge.status-correct {
+        background-color: #d1fae5;
+        color: #065f46;
+    }
+
+    .q-status-badge.status-wrong {
+        background-color: #fecaca;
+        color: #991b1b;
+    }
+
+    .q-status-badge.status-unanswered {
+        background-color: #fef3c7;
+        color: #92400e;
+    }
+    
+    .q-text {
+        font-size: 1.05rem;
+        font-weight: 600;
+        margin-bottom: 16px;
+        color: var(--text-main);
+    }
+    
+    .options-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 10px;
+    }
+    
+    .opt-btn {
+        background-color: #f8fafc;
+        border: 1px solid #cbd5e1;
+        border-radius: 8px;
+        padding: 12px 16px;
+        text-align: left;
+        font-size: 0.95rem;
+        font-weight: 500;
+        color: var(--text-main);
+        cursor: pointer;
+        transition: all 0.2s;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+    
+    .opt-btn:hover:not(.disabled) {
+        background-color: #f1f5f9;
+        border-color: #94a3b8;
+    }
+    
+    .opt-btn.correct {
+        background-color: #ecfdf5 !important;
+        border-color: #10b981 !important;
+        color: #065f46 !important;
+        font-weight: 700;
+    }
+    
+    .opt-btn.wrong {
+        background-color: #fef2f2 !important;
+        border-color: #ef4444 !important;
+        color: #991b1b !important;
+    }
+    
+    .opt-btn.disabled {
+        cursor: default;
+    }
+    
+    .feedback-box {
+        margin-top: 14px;
+        padding: 12px 16px;
+        border-radius: 8px;
+        font-size: 0.9rem;
+        display: none;
+    }
+    
+    .feedback-box.show-correct {
+        display: block;
+        background-color: #f0fdf4;
+        border-left: 4px solid var(--accent-green);
+        color: #166534;
+    }
+    
+    .feedback-box.show-wrong {
+        display: block;
+        background-color: #fff7ed;
+        border-left: 4px solid #f97316;
+        color: #9a3412;
+    }
+    
+    .feedback-title {
+        font-weight: 700;
+        margin-bottom: 4px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .saved-note-banner {
+        background-color: #fef9c3;
+        border: 1px solid #fde047;
+        color: #713f12;
+        padding: 10px 14px;
+        border-radius: 6px;
+        margin-top: 10px;
+        font-size: 0.85rem;
+    }
+
+    .notes-section {
+        margin-top: 12px;
+        padding-top: 12px;
+        border-top: 1px dashed #cbd5e1;
+    }
+
+    .notes-btn {
+        background-color: #0f172a;
+        color: #ffffff;
+        border: 1px solid #334155;
+        padding: 6px 14px;
+        border-radius: 6px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+    .notes-btn:hover {
+        background-color: #334155;
+    }
+
+    .note-editor {
+        margin-top: 10px;
+        display: none;
+    }
+
+    .notes-area {
+        width: 100%;
+        padding: 10px;
+        border-radius: 6px;
+        border: 1px solid #cbd5e1;
+        font-family: inherit;
+        font-size: 0.85rem;
+        resize: vertical;
+        margin-bottom: 8px;
+        color: #1e293b;
+    }
+
+    .save-note-btn {
+        background-color: #10b981;
+        color: #ffffff;
+        border: none;
+        padding: 6px 14px;
+        border-radius: 6px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        cursor: pointer;
+    }
+
+    .save-note-btn:hover {
+        background-color: #059669;
+    }
+
+    .no-results {
+        text-align: center;
+        padding: 40px;
+        background: var(--card-bg);
+        border-radius: 12px;
+        border: 1px solid var(--border);
+        color: var(--text-muted);
+        font-weight: 600;
+    }
+</style>
+</head>
+<body>
+
+<header>
+    <div class="header-container">
+        <div class="title-area">
+            <h1>DEFENCE GK 2026 — INTERACTIVE 250 MCQ SELF-ASSESSMENT QUIZ</h1>
+            <p>Complete 250-MCQ Practice Engine Extracted from "Defence GK 2026"[cite: 5] — Instant Scoring & Briefing Notes</p>
+        </div>
+        <div class="stats-badge">
+            <div class="stat-item correct-stat" id="correctStat" onclick="filterByStatus('correct')">
+                <span class="stat-num" id="correct-count">0</span>
+                <span class="stat-label">✅ Correct</span>
+            </div>
+            <div class="stat-item wrong-stat" id="wrongStat" onclick="filterByStatus('wrong')">
+                <span class="stat-num" id="wrong-count">0</span>
+                <span class="stat-label">❌ Wrong</span>
+            </div>
+            <div class="stat-item left-stat" id="leftStat" onclick="filterByStatus('left')">
+                <span class="stat-num" id="left-count">250</span>
+                <span class="stat-label">⏳ Left</span>
+            </div>
+            <div class="stat-item pct-stat">
+                <span class="stat-pct" id="pct-display">0%</span>
+                <span class="stat-label">Accuracy</span>
+            </div>
+        </div>
+    </div>
+</header>
+
+<div class="container">
+    <div class="controls-panel">
+        <div class="search-row">
+            <div style="flex:1; min-width:260px;">
+                <input type="text" id="search-input" class="search-input" placeholder="Search by keyword, module, or QID" oninput="applyFilters()">
+                <div class="search-hint">💡 Tip: Enter a number like "42" to search by QID</div>
+            </div>
+            <button class="action-btn" onclick="resetQuiz()">🔄 Reset All Answers</button>
+            <button class="action-btn primary" id="showAllBtn" onclick="toggleShowAll()">👁️ Show All Answers (Study Mode)</button>
+        </div>
+        <div class="filter-bar" id="filter-bar">
+            <button class="filter-btn active" data-filter="All" onclick="filterQuestions('All')">All 250 MCQs</button>
+            <button class="filter-btn" data-filter="Module 1" onclick="filterQuestions('Module 1')">Mod 1: Gallantry & Honours</button>
+            <button class="filter-btn" data-filter="Module 2" onclick="filterQuestions('Module 2')">Mod 2: Bilateral Exercises</button>
+            <button class="filter-btn" data-filter="Module 3" onclick="filterQuestions('Module 3')">Mod 3: Indian Navy & Ships</button>
+            <button class="filter-btn" data-filter="Module 4" onclick="filterQuestions('Module 4')">Mod 4: Missiles & DRDO</button>
+            <button class="filter-btn" data-filter="Module 5" onclick="filterQuestions('Module 5')">Mod 5: IAF & Aviation</button>
+            <button class="filter-btn" data-filter="Module 6" onclick="filterQuestions('Module 6')">Mod 6: Indian Army & Ranks</button>
+            <button class="filter-btn" data-filter="Module 7" onclick="filterQuestions('Module 7')">Mod 7: DPSUs & MoD Structure</button>
+            <button class="filter-btn" data-filter="Module 8" onclick="filterQuestions('Module 8')">Mod 8: Paramilitary & BRO</button>
+            <button class="filter-btn" data-filter="Module 9" onclick="filterQuestions('Module 9')">Mod 9: Military Operations</button>
+            <button class="filter-btn" data-filter="Module 10" onclick="filterQuestions('Module 10')">Mod 10: Dialogues & Budget</button>
+        </div>
+    </div>
+
+    <div id="quiz-container"></div>
+</div>
+
+<script>
+    // Complete 250-MCQ dataset covering all topics extracted from the PDF[cite: 5]
+    const originalQuestionsData = [
+        // MODULE 1: GALLANTRY AWARDS, HONOURS & MILITARY DECORATIONS (1-25)
+        {"num": 1, "module": "Module 1: Gallantry & Honours", "q": "Who was named the recipient of the 2025 United Nations Military Gender Advocate of the Year Award for her service in UNIFIL (Lebanon)?", "options": ["A) Major Abhilasha Barak", "B) Major Suman Gawani", "C) Major Radhika Sen", "D) Major Shanti Tigga"], "ans": 0, "brief": "Major Abhilasha Barak received the 2025 UN Military Gender Advocate of the Year Award for her outstanding peacekeeping service in Lebanon (UNIFIL)[cite: 5]."},
+        {"num": 2, "module": "Module 1: Gallantry & Honours", "q": "Who was the first Indian peacekeeper to receive the UN Military Gender Advocate of the Year Award in 2019?", "options": ["A) Major Suman Gawani", "B) Major Radhika Sen", "C) Major Abhilasha Barak", "D) Major Seema Rao"], "ans": 0, "brief": "Major Suman Gawani was the first Indian peacekeeper to receive the UN Military Gender Advocate of the Year Award in 2019[cite: 5]."},
+        {"num": 3, "module": "Module 1: Gallantry & Honours", "q": "Which Indian peacekeeper received the UN Military Gender Advocate of the Year Award in 2023?", "options": ["A) Major Radhika Sen", "B) Major Suman Gawani", "C) Major Abhilasha Barak", "D) Major Mitali Madhumita"], "ans": 0, "brief": "Major Radhika Sen received the UN Military Gender Advocate of the Year Award in 2023[cite: 5]."},
+        {"num": 4, "module": "Module 1: Gallantry & Honours", "q": "Which two Indian soldiers are scheduled to be posthumously awarded the United Nations Dag Hammarskjold Medal on May 29, 2026?", "options": ["A) Lance Havildar Harbhajan Singh and Naib Subedar Sujit Kumar Pradhan", "B) Subedar Major Yogendra Singh Yadav and Sanjay Kumar", "C) Havildar Hangpan Dada and CHM Piru Singh", "D) Naik Jadu Nath Singh and Subedar Bana Singh"], "ans": 0, "brief": "Lance Havildar Harbhajan Singh and Naib Subedar Sujit Kumar Pradhan were posthumously awarded the UN Dag Hammarskjold Medal[cite: 5]."},
+        {"num": 5, "module": "Module 1: Gallantry & Honours", "q": "When was the Param Vir Chakra (PVC), India's highest wartime military decoration, formally established?", "options": ["A) January 26, 1950", "B) August 15, 1947", "C) November 4, 1948", "D) January 26, 1952"], "ans": 0, "brief": "The Param Vir Chakra was established on January 26, 1950[cite: 5]."},
+        {"num": 6, "module": "Module 1: Gallantry & Honours", "q": "What material is the Param Vir Chakra medal made of, and what mythological symbol surrounds the national emblem on it?", "options": ["A) Bronze; four replicas of Indra's Vajra", "B) Silver; four replicas of Ashoka's Chakra", "C) Gold-gilt; four replicas of Shiva's Trishul", "D) Copper; four replicas of Vishnu's Sudarshana Chakra"], "ans": 0, "brief": "The medal is made of bronze and bears the national emblem surrounded by four replicas of Indra's Vajra[cite: 5]."},
+        {"num": 7, "module": "Module 1: Gallantry & Honours", "q": "Which is the second-highest wartime gallantry award in India for exceptional bravery in the face of the enemy?", "options": ["A) Maha Vir Chakra", "B) Kirti Chakra", "C) Vir Chakra", "D) Shaurya Chakra"], "ans": 0, "brief": "The Maha Vir Chakra is India's second-highest wartime gallantry award[cite: 5]."},
+        {"num": 8, "module": "Module 1: Gallantry & Honours", "q": "What is the third-highest wartime gallantry award for acts of courage during combat?", "options": ["A) Vir Chakra", "B) Shaurya Chakra", "C) Kirti Chakra", "D) Sena Medal"], "ans": 0, "brief": "The Vir Chakra is India's third-highest wartime gallantry award[cite: 5]."},
+        {"num": 9, "module": "Module 1: Gallantry & Honours", "q": "Which is India's highest peacetime gallantry award for bravery away from the battlefield, made of gold-gilt?", "options": ["A) Ashoka Chakra", "B) Param Vir Chakra", "C) Kirti Chakra", "D) Maha Vir Chakra"], "ans": 0, "brief": "The Ashoka Chakra is the highest peacetime gallantry award, made of gold-gilt[cite: 5]."},
+        {"num": 10, "module": "Module 1: Gallantry & Honours", "q": "Which medal represents the second-highest peacetime gallantry award for courageous actions not in war?", "options": ["A) Kirti Chakra", "B) Shaurya Chakra", "C) Vir Chakra", "D) Vayu Sena Medal"], "ans": 0, "brief": "The Kirti Chakra is the second-highest peacetime gallantry award[cite: 5]."},
+        {"num": 11, "module": "Module 1: Gallantry & Honours", "q": "Which is the third-highest peacetime gallantry award, frequently awarded for counter-terror or rescue operations?", "options": ["A) Shaurya Chakra", "B) Kirti Chakra", "C) Sena Medal", "D) Ashoka Chakra"], "ans": 0, "brief": "The Shaurya Chakra is the third-highest peacetime gallantry award[cite: 5]."},
+        {"num": 12, "module": "Module 1: Gallantry & Honours", "q": "In the AFCAT PYQ 2026 section, who among the following was awarded the Ashoka Chakra?", "options": ["A) Shubhanshu Shukla", "B) Arshdeep Singh", "C) Dilna K", "D) Aditya Shrikumar"], "ans": 0, "brief": "Shubhanshu Shukla was noted as being awarded the Ashoka Chakra[cite: 5]."},
+        {"num": 13, "module": "Module 1: Gallantry & Honours", "q": "In the AFCAT PYQ 2026 section, who was honored with the Kirti Chakra?", "options": ["A) Arshdeep Singh", "B) Shubhanshu Shukla", "C) Dilna K", "D) Aditya Shrikumar"], "ans": 0, "brief": "Arshdeep Singh was honored with the Kirti Chakra[cite: 5]."},
+        {"num": 14, "module": "Module 1: Gallantry & Honours", "q": "Who was awarded the Shaurya Chakra in the AFCAT PYQ 2026 gallantry review?", "options": ["A) Dilna K", "B) Arshdeep Singh", "C) Shubhanshu Shukla", "D) Aditya Shrikumar"], "ans": 0, "brief": "Dilna K received the Shaurya Chakra[cite: 5]."},
+        {"num": 15, "module": "Module 1: Gallantry & Honours", "q": "Which decoration was awarded to Aditya Shrikumar for acts of exceptional bravery in the field?", "options": ["A) Sena Medal (Gallantry)", "B) Shaurya Chakra", "C) Vir Chakra", "D) Kirti Chakra"], "ans": 0, "brief": "Aditya Shrikumar was awarded the Sena Medal (Gallantry)[cite: 5]."},
+        {"num": 16, "module": "Module 1: Gallantry & Honours", "q": "Who was the first person from Rajasthan to be honored with the Param Vir Chakra?", "options": ["A) Company Havildar Major Piru Singh Shekhawat", "B) Major Shaitan Singh", "C) Havildar Major Shaitan Singh", "D) Subedar Joginder Singh"], "ans": 0, "brief": "CHM Piru Singh Shekhawat was the first person from Rajasthan to be honored with the Param Vir Chakra[cite: 5]."},
+        {"num": 17, "module": "Module 1: Gallantry & Honours", "q": "Which Indian hero of Operation Vijay during the Kargil conflict was posthumously awarded the Param Vir Chakra?", "options": ["A) Captain Vikram Batra", "B) Major Somnath Sharma", "C) Captain Manoj Kumar Pandey", "D) Rifleman Sanjay Kumar"], "ans": 0, "brief": "Captain Vikram Batra was posthumously awarded the Param Vir Chakra for extraordinary bravery during Operation Vijay[cite: 5]."},
+        {"num": 18, "module": "Module 1: Gallantry & Honours", "q": "During which national celebration are the Param Vir Chakra, Ashoka Chakra, and Vir Chakra usually presented?", "options": ["A) Republic Day celebrations", "B) Independence Day celebrations", "C) Army Day parade", "D) Kargil Vijay Diwas"], "ans": 0, "brief": "India's highest military gallantry awards are usually presented during the Republic Day celebrations[cite: 5]."},
+        {"num": 19, "module": "Module 1: Gallantry & Honours", "q": "Who was the first individual from the Indian Air Force to be awarded India's highest gallantry award, the Param Vir Chakra?", "options": ["A) Flying Officer Nirmal Jit Singh Sekhon", "B) Squadron Leader Rakesh Sharma", "C) Wing Commander Abhinandan Varthaman", "D) Air Chief Marshal Arjan Singh"], "ans": 0, "brief": "Flying Officer Nirmal Jit Singh Sekhon was the first and only IAF officer awarded the Param Vir Chakra[cite: 5]."},
+        {"num": 20, "module": "Module 1: Gallantry & Honours", "q": "Which of the following is correct regarding the shape and design of the Param Vir Chakra?", "options": ["A) Circular in shape, made of bronze, with four replicas of Indra's Vajra around the national emblem", "B) Octagonal in shape, made of silver, with Ashoka Chakra at the centre", "C) Hexagonal in shape, made of gold, with a lotus emblem", "D) Circular in shape, made of silver, with a crossed-swords crest"], "ans": 0, "brief": "The Param Vir Chakra is circular, made of bronze, with four replicas of Indra's Vajra surrounding the national emblem[cite: 5]."},
+        {"num": 21, "module": "Module 1: Gallantry & Honours", "q": "Which Indian Army officer earned two prestigious academic honours during graduation at the US Army Command and General Staff College (CGSC) at Fort Leavenworth, Kansas?", "options": ["A) Major Prabhat Mishra", "B) Major Abhilasha Barak", "C) Colonel Ashutosh Sharma", "D) Captain Anshuman Singh"], "ans": 0, "brief": "Major Prabhat Mishra earned two prestigious academic honours at the US Army CGSC at Fort Leavenworth[cite: 5]."},
+        {"num": 22, "module": "Module 1: Gallantry & Honours", "q": "Who became the first woman officer in the history of the Indian Air Force to achieve the prestigious Category-A Qualified Flying Instructor (QFI) rating on May 18, 2026?", "options": ["A) Squadron Leader Saanya", "B) Flight Lieutenant Bhawana Kanth", "C) Squadron Leader Avani Chaturvedi", "D) Wing Commander Shaliza Dhami"], "ans": 0, "brief": "Squadron Leader Saanya became the first woman IAF officer to achieve the Category-A QFI rating[cite: 5]."},
+        {"num": 23, "module": "Module 1: Gallantry & Honours", "q": "What is the order of precedence of India's three peacetime gallantry decorations from highest to third-highest?", "options": ["A) Ashoka Chakra, Kirti Chakra, Shaurya Chakra", "B) Kirti Chakra, Ashoka Chakra, Shaurya Chakra", "C) Ashoka Chakra, Shaurya Chakra, Kirti Chakra", "D) Param Vir Chakra, Ashoka Chakra, Kirti Chakra"], "ans": 0, "brief": "The order of peacetime gallantry awards is: 1st Ashoka Chakra, 2nd Kirti Chakra, 3rd Shaurya Chakra[cite: 5]."},
+        {"num": 24, "module": "Module 1: Gallantry & Honours", "q": "What is the order of precedence of India's three wartime gallantry decorations from highest to third-highest?", "options": ["A) Param Vir Chakra, Maha Vir Chakra, Vir Chakra", "B) Param Vir Chakra, Vir Chakra, Maha Vir Chakra", "C) Maha Vir Chakra, Param Vir Chakra, Vir Chakra", "D) Param Vir Chakra, Ashoka Chakra, Maha Vir Chakra"], "ans": 0, "brief": "The order of wartime gallantry awards is: 1st Param Vir Chakra, 2nd Maha Vir Chakra, 3rd Vir Chakra[cite: 5]."},
+        {"num": 25, "module": "Module 1: Gallantry & Honours", "q": "Which Indian medal is awarded for gallantry or distinguished service specifically to personnel of the Indian Army in the field?", "options": ["A) Sena Medal", "B) Nao Sena Medal", "C) Vayu Sena Medal", "D) Sarvottam Yudh Seva Medal"], "ans": 0, "brief": "The Sena Medal is awarded to members of the Indian Army for exceptional bravery or service in the field[cite: 5]."},
+
+        // MODULE 2: BILATERAL, TRILATERAL & MULTILATERAL MILITARY EXERCISES (26-50)
+        {"num": 26, "module": "Module 2: Bilateral Exercises", "q": "Exercise Sea Dragon 2026 is a multinational anti-submarine warfare training exercise hosted by which country at Andersen Air Force Base in Guam?", "options": ["A) United States Navy", "B) Royal Australian Navy", "C) Japan Maritime Self-Defense Force", "D) Indian Navy"], "ans": 0, "brief": "Exercise Sea Dragon 2026 was hosted by the United States Navy at Andersen AFB in Guam with India, Australia, Japan, and New Zealand[cite: 5]."},
+        {"num": 27, "module": "Module 2: Bilateral Exercises", "q": "Where did the Indian Air Force conduct Exercise Vayushakti-26 to showcase rapid response and operational dominance?", "options": ["A) Pokhran Air to Ground Range, Jaisalmer", "B) Chandipur Integrated Test Range, Odisha", "C) Halwara Air Base, Punjab", "D) Kalaikunda Air Force Station, Punjab"], "ans": 0, "brief": "Exercise Vayushakti-26 was conducted by the IAF at Pokhran Air to Ground Range in Jaisalmer, Rajasthan[cite: 5]."},
+        {"num": 28, "module": "Module 2: Bilateral Exercises", "q": "Where was the first edition of Exercise Pragati (Partnership of Regional Armies for Growth and Transformation in the IOR), involving 11 friendly nations, held?", "options": ["A) Umroi, Meghalaya", "B) Chaubattia, Uttarakhand", "C) Bakloh, Himachal Pradesh", "D) Missamari, Assam"], "ans": 0, "brief": "The first edition of Exercise Pragati was conducted at Umroi, Meghalaya, from May 18-31, 2026[cite: 5]."},
+        {"num": 29, "module": "Module 2: Bilateral Exercises", "q": "Which Indian Army Command conducted Exercise Amogh Jwala at the Babina Field Firing Ranges in Uttar Pradesh from 6 to 18 March 2026?", "options": ["A) Southern Command", "B) Western Command", "C) Central Command", "D) Eastern Command"], "ans": 0, "brief": "Exercise Amogh Jwala was conducted by the Southern Command of the Indian Army at Babina Field Firing Ranges, UP[cite: 5]."},
+        {"num": 30, "module": "Module 2: Bilateral Exercises", "q": "Where did the Indian Navy hold the IONS Maritime Exercise (IMEX) Table Top Exercise (TTX) 2026 on March 27, 2026?", "options": ["A) Maritime Warfare Centre, Kochi", "B) Eastern Naval Command, Visakhapatnam", "C) Western Naval Command, Mumbai", "D) INS Mandovi, Goa"], "ans": 0, "brief": "IMEX TTX 2026 was held at the Maritime Warfare Centre in Kochi as India assumed the IONS Chairmanship for 2026-2028[cite: 5]."},
+        {"num": 31, "module": "Module 2: Bilateral Exercises", "q": "The 16th edition of the India-US Joint Special Forces Exercise VAJRA PRAHAR was conducted at which training school in Himachal Pradesh?", "options": ["A) Special Forces Training School, Bakloh", "B) Infantry School, Mhow", "C) High Altitude Warfare School, Gulmarg", "D) Counter Insurgency and Jungle Warfare School, Vairengte"], "ans": 0, "brief": "The 16th edition of Exercise VAJRA PRAHAR was conducted at the Special Forces Training School, Bakloh, HP[cite: 5]."},
+        {"num": 32, "module": "Module 2: Bilateral Exercises", "q": "Where was the 15th edition of Exercise VAJRA PRAHAR held in November 2024?", "options": ["A) Orchard Combat Training Centre in Idaho, USA", "B) Joint Base Lewis-McChord, Washington, USA", "C) Fort Bragg, Washington, USA", "D) Special Forces Training School, Bakloh, India"], "ans": 0, "brief": "The 15th edition of VAJRA PRAHAR was held at the Orchard Combat Training Centre in Idaho, USA, in November 2024[cite: 5]."},
+        {"num": 33, "module": "Module 2: Bilateral Exercises", "q": "In which city did Raksha Mantri Rajnath Singh hold interactions with visiting Navy Chiefs from nine ASEAN member states on the sidelines of the MILAN 2026 Naval exercise?", "options": ["A) Visakhapatnam, Andhra Pradesh", "B) Kochi, Kerala", "C) Port Blair, Andaman & Nicobar Islands", "D) Chennai, Tamil Nadu"], "ans": 0, "brief": "The interaction with ASEAN Navy Chiefs during MILAN 2026 took place in Visakhapatnam, Andhra Pradesh[cite: 5]."},
+        {"num": 34, "module": "Module 2: Bilateral Exercises", "q": "Which country is scheduled to host Exercise Pitch Black 2026, a major biennial multinational air combat exercise?", "options": ["A) Australia (Royal Australian Air Force)", "B) United States", "C) United Kingdom", "D) France"], "ans": 0, "brief": "Australia will host Exercise Pitch Black 2026, conducted biennially by the Royal Australian Air Force (RAAF)[cite: 5]."},
+        {"num": 35, "module": "Module 2: Bilateral Exercises", "q": "Where was the 7th edition of the joint military Exercise DUSTLIK between India and Uzbekistan held in April 2026?", "options": ["A) Gurumsaray Field Training Area, Uzbekistan", "B) Pithoragarh, Uttarakhand, India", "C) Yangiarik Training Range, Uzbekistan", "D) Umroi, Meghalaya, India"], "ans": 0, "brief": "The 7th edition of Exercise DUSTLIK was conducted at the Gurumsaray Field Training Area in Uzbekistan[cite: 5]."},
+        {"num": 36, "module": "Module 2: Bilateral Exercises", "q": "Where did the 7th edition of the annual joint military exercise DHARMA GUARDIAN between India and Japan take place?", "options": ["A) Chaubattia, Uttarakhand", "B) Belgaum, Karnataka", "C) Mahajan Field Firing Range, Rajasthan", "D) Camp Fuji, Japan"], "ans": 0, "brief": "The 7th edition of Exercise DHARMA GUARDIAN between India and Japan began at Chaubattia, Uttarakhand[cite: 5]."},
+        {"num": 37, "module": "Module 2: Bilateral Exercises", "q": "Which Indian Army contingent participated in the 7th edition of Exercise DHARMA GUARDIAN alongside Japan's 32nd Infantry Regiment?", "options": ["A) Ladakh Scouts", "B) Rajputana Rifles", "C) Gorkha Rifles", "D) Garhwal Rifles"], "ans": 0, "brief": "The Indian contingent in Exercise DHARMA GUARDIAN was represented by troops from the Ladakh Scouts[cite: 5]."},
+        {"num": 38, "module": "Module 2: Bilateral Exercises", "q": "Which country hosted the 4th edition of the joint Special Forces exercise Cyclone-IV at Anshas in April 2026?", "options": ["A) Egypt", "B) Oman", "C) United Arab Emirates", "D) Saudi Arabia"], "ans": 0, "brief": "Egypt hosted the 4th edition of Exercise Cyclone-IV at Anshas with Indian Army and Egyptian Special Forces[cite: 5]."},
+        {"num": 39, "module": "Module 2: Bilateral Exercises", "q": "Where did the 13th edition of the India-Kyrgyzstan Joint Special Forces Exercise KHANJAR commence?", "options": ["A) Missamari, Assam", "B) Bakloh, Himachal Pradesh", "C) Bishkek, Kyrgyzstan", "D) Umroi, Meghalaya"], "ans": 0, "brief": "The 13th edition of Exercise KHANJAR commenced in Missamari, Assam[cite: 5]."},
+        {"num": 40, "module": "Module 2: Bilateral Exercises", "q": "Where was the fourth edition of the bilateral diving exercise IN-SLN DIVEX 2026 between the Indian Navy and Sri Lankan Navy conducted?", "options": ["A) Colombo, Sri Lanka", "B) Trincomalee, Sri Lanka", "C) Kochi, India", "D) Visakhapatnam, India"], "ans": 0, "brief": "IN-SLN DIVEX 2026 was conducted in Colombo, Sri Lanka[cite: 5]."},
+        {"num": 41, "module": "Module 2: Bilateral Exercises", "q": "Which country hosted the 11th edition of the joint military exercise LAMITIYE-2026 with the Indian Armed Forces?", "options": ["A) Seychelles", "B) Mauritius", "C) Maldives", "D) Madagascar"], "ans": 0, "brief": "The 11th edition of Exercise LAMITIYE-2026 was conducted in Seychelles[cite: 5]."},
+        {"num": 42, "module": "Module 2: Bilateral Exercises", "q": "Which country is India's partner in the bilateral military exercise 'SURYA KIRAN'?", "options": ["A) Nepal", "B) Bhutan", "C) Sri Lanka", "D) Bangladesh"], "ans": 0, "brief": "SURYA KIRAN is a joint military exercise between India and Nepal[cite: 5]."},
+        {"num": 43, "module": "Module 2: Bilateral Exercises", "q": "Exercise 'Khaan Quest' is a major multinational peacekeeping exercise hosted annually by which country?", "options": ["A) Mongolia", "B) Kazakhstan", "C) Kyrgyzstan", "D) Uzbekistan"], "ans": 0, "brief": "Exercise Khaan Quest is a multinational peacekeeping exercise hosted by Mongolia[cite: 5]."},
+        {"num": 44, "module": "Module 2: Bilateral Exercises", "q": "Exercise 'Tiger Triumph' is a bilateral tri-service Humanitarian Assistance and Disaster Relief (HADR) exercise between India and which nation?", "options": ["A) United States", "B) United Kingdom", "C) Australia", "D) Japan"], "ans": 0, "brief": "Tiger Triumph is a bilateral tri-service exercise between India and the United States[cite: 5]."},
+        {"num": 45, "module": "Module 2: Bilateral Exercises", "q": "Which country is India's partner in the bilateral military exercise 'MITRA SHAKTI'?", "options": ["A) Sri Lanka", "B) Nepal", "C) Maldives", "D) Myanmar"], "ans": 0, "brief": "MITRA SHAKTI is a joint military exercise between India and Sri Lanka[cite: 5]."},
+        {"num": 46, "module": "Module 2: Bilateral Exercises", "q": "Exercise 'Samudra Lakshmana' is a bilateral maritime exercise between India and which Southeast Asian nation?", "options": ["A) Malaysia", "B) Indonesia", "C) Thailand", "D) Singapore"], "ans": 0, "brief": "Samudra Lakshmana is a bilateral maritime exercise between India and Malaysia[cite: 5]."},
+        {"num": 47, "module": "Module 2: Bilateral Exercises", "q": "Exercise 'Bold Kurukshetra' is a joint military exercise between the armies of India and which country?", "options": ["A) Singapore", "B) Oman", "C) Thailand", "D) France"], "ans": 0, "brief": "Bold Kurukshetra is a joint military exercise between India and Singapore[cite: 5]."},
+        {"num": 48, "module": "Module 2: Bilateral Exercises", "q": "Exercise 'Al Nagah' is a bilateral military exercise conducted between India and which Middle Eastern country?", "options": ["A) Oman", "B) United Arab Emirates", "C) Saudi Arabia", "D) Qatar"], "ans": 0, "brief": "Al Nagah is a joint military exercise between India and Oman[cite: 5]."},
+        {"num": 49, "module": "Module 2: Bilateral Exercises", "q": "Exercise 'Shakti' is a bilateral army exercise between India and which European nation?", "options": ["A) France", "B) United Kingdom", "C) Germany", "D) Italy"], "ans": 0, "brief": "Exercise Shakti is a bilateral military exercise between India and France[cite: 5]."},
+        {"num": 50, "module": "Module 2: Bilateral Exercises", "q": "Match List-I (Air Exercise) with List-II (Participating Countries): (A) Exercise Indradhanush, (B) Exercise Desert Knight, (C) Exercise Eastern Bridge, (D) Exercise Veer Guardian.", "options": ["A) A-III (UK), B-IV (France/UAE), C-II (Oman), D-I (Japan)", "B) A-IV, B-III, C-I, D-II", "C) A-I, B-IV, C-III, D-II", "D) A-III, B-II, C-IV, D-I"], "ans": 0, "brief": "Indradhanush = UK (III), Desert Knight = France/UAE (IV), Eastern Bridge = Oman (II), Veer Guardian = Japan (I)[cite: 5]."},
+
+        // MODULE 3: INDIAN NAVY – WARSHIPS, SUBMARINES & MARITIME DEPLOYMENTS (51-75)
+        {"num": 51, "module": "Module 3: Indian Navy & Ships", "q": "Which Indian Navy guided missile frigate arrived at Maputo, Mozambique, as part of its deployment in the South West Indian Ocean Region?", "options": ["A) INS Trikand", "B) INS Tarkash", "C) INS Shivalik", "D) INS Satpura"], "ans": 0, "brief": "INS Trikand arrived at Maputo, Mozambique, on March 26, 2026, during its South West Indian Ocean deployment[cite: 5]."},
+        {"num": 52, "module": "Module 3: Indian Navy & Ships", "q": "To which African nation did the Indian Navy hand over INSAS rifles and ammunition during the port call of INS Trikand at Mombasa?", "options": ["A) Kenya", "B) Tanzania", "C) Mozambique", "D) Seychelles"], "ans": 0, "brief": "Kenya received INSAS rifles and ammunition from the Indian Navy during INS Trikand's port call at Mombasa[cite: 5]."},
+        {"num": 53, "module": "Module 3: Indian Navy & Ships", "q": "Which Indian Navy offshore patrol vessel concluded a successful port call at Colombo, Sri Lanka, on 13 June 2026?", "options": ["A) INS Sharda", "B) INS Sumedha", "C) INS Saryu", "D) INS Sukanya"], "ans": 0, "brief": "INS Sharda departed Colombo on 13 June 2026 after a successful port call strengthening India-Sri Lanka ties[cite: 5]."},
+        {"num": 54, "module": "Module 3: Indian Navy & Ships", "q": "Which oceanographic research vessel of the Indian Navy arrived at Cam Ranh, Vietnam, on 05 May 2026?", "options": ["A) INS Sagardhwani", "B) INS Dhruv", "C) INS Anvesh", "D) INS Sarvekshak"], "ans": 0, "brief": "INS Sagardhwani arrived at Cam Ranh, Vietnam, marking a milestone in India-Vietnam scientific cooperation[cite: 5]."},
+        {"num": 55, "module": "Module 3: Indian Navy & Ships", "q": "Which Indian Navy ship arrived at Malé, Maldives, under the Indian Ocean Ship (IOS) SAGAR initiative to strengthen maritime ties?", "options": ["A) INS Sunayna", "B) INS Sumedha", "C) INS Shivalik", "D) INS Kiltan"], "ans": 0, "brief": "INS Sunayna arrived at Malé, Maldives, under the IOS SAGAR initiative aligned with the MAHASAGAR vision[cite: 5]."},
+        {"num": 56, "module": "Module 3: Indian Navy & Ships", "q": "Which Indian Navy sail training ship participated in the biennial 'Escale à Sète 2026' maritime festival in France celebrating the 400th anniversary of the French Navy?", "options": ["A) INS Sudarshini", "B) INS Tarangini", "C) INS Mhadei", "D) INS Kaundinya"], "ans": 0, "brief": "INS Sudarshini participated in Escale à Sète 2026 in France, celebrating the French Navy's 400th anniversary[cite: 5]."},
+        {"num": 57, "module": "Module 3: Indian Navy & Ships", "q": "In which sporting event did the rowing team of INS Sudarshini win a bronze medal during the 'Escale à Sète 2026' festival in France?", "options": ["A) Jeux Maritimes", "B) Coupe de Sète", "C) Regatta Mediterranea", "D) Marine Challenge Cup"], "ans": 0, "brief": "The INS Sudarshini rowing team secured a bronze medal at the Jeux Maritimes during Escale à Sète[cite: 5]."},
+        {"num": 58, "module": "Module 3: Indian Navy & Ships", "q": "Under which 22,000-nautical-mile expedition did INS Sudarshini complete port calls at Las Palmas (Canary Islands) and Valletta (Malta) in April 2026?", "options": ["A) Lokayan-26", "B) Sagar Parikrama-IV", "C) Samudra Yatra-26", "D) Maitri Yatra-26"], "ans": 0, "brief": "INS Sudarshini made port calls at Las Palmas and Valletta under its 22,000 NM Lokayan-26 expedition[cite: 5]."},
+        {"num": 59, "module": "Module 3: Indian Navy & Ships", "q": "Which two Indian Naval Ships concluded a port call at Port Victoria, Seychelles, on 29 June 2026 during Seychelles' National Day and Golden Jubilee celebrations?", "options": ["A) INS Tarkash and INS Ikshak", "B) INS Trikand and INS Kalpeni", "C) INS Shivalik and INS Kamorta", "D) INS Udaygiri and INS Kavaratti"], "ans": 0, "brief": "INS Tarkash and INS Ikshak visited Port Victoria for Seychelles' National Day and Golden Jubilee[cite: 5]."},
+        {"num": 60, "module": "Module 3: Indian Navy & Ships", "q": "Which two Indian Navy vessels concluded a port call in Vietnam as part of operational deployment in Southeast Asia?", "options": ["A) INS Udaygiri and INS Kavaratti", "B) INS Shivalik and INS Kamorta", "C) INS Kolkata and INS Chennai", "D) INS Vikrant and INS Visakhapatnam"], "ans": 0, "brief": "INS Udaygiri and INS Kavaratti concluded their port call in Vietnam during Southeast Asia deployment[cite: 5]."},
+        {"num": 61, "module": "Module 3: Indian Navy & Ships", "q": "Which Indian Navy stealth frigate visited Port Louis, Mauritius, on June 22, 2026, and trained the Mauritius National Coast Guard?", "options": ["A) INS Tarkash", "B) INS Trikand", "C) INS Talwar", "D) INS Teg"], "ans": 0, "brief": "INS Tarkash visited Port Louis, Mauritius, and conducted training for the Mauritius National Coast Guard[cite: 5]."},
+        {"num": 62, "module": "Module 3: Indian Navy & Ships", "q": "Which three indigenous naval vessels were launched by Prime Minister Narendra Modi at Syama Prasad Mookerjee Port in Kolkata?", "options": ["A) INS Agray, INS Dunagiri, and INS Sanshodhak", "B) INS Kiltan, INS Kamorta, and INS Kadmatt", "C) INS Nilgiri, INS Kavaratti, and INS Sandhayak", "D) INS Vikrant, INS Visakhapatnam, and INS Mormugao"], "ans": 0, "brief": "PM Modi launched INS Agray, INS Dunagiri, and INS Sanshodhak at Syama Prasad Mookerjee Port, Kolkata[cite: 5]."},
+        {"num": 63, "module": "Module 3: Indian Navy & Ships", "q": "Match the vessel with its role: (1) INS Agray, (2) INS Dunagiri, (3) INS Sanshodhak.", "options": ["A) 1-Anti-submarine warfare craft, 2-Advanced stealth frigate, 3-Hydrographic survey vessel", "B) 1-Advanced stealth frigate, 2-Hydrographic survey vessel, 3-ASW craft", "C) 1-Hydrographic survey vessel, 2-ASW craft, 3-Advanced stealth frigate", "D) 1-ASW craft, 2-Hydrographic survey vessel, 3-Advanced stealth frigate"], "ans": 0, "brief": "INS Agray is ASW, INS Dunagiri is an advanced stealth frigate, and INS Sanshodhak is a survey vessel[cite: 5]."},
+        {"num": 64, "module": "Module 3: Indian Navy & Ships", "q": "Which ship is the sixth Nilgiri-class stealth frigate (Yard 12654) under Project 17A, delivered to the Indian Navy on April 30, 2026, by Mazagon Dock Shipbuilders?", "options": ["A) INS Mahendragiri", "B) INS Taragiri", "C) INS Udaygiri", "D) INS Vindhyagiri"], "ans": 0, "brief": "Mahendragiri (Yard 12654) is the sixth Nilgiri-class Project 17A frigate delivered by MDL Mumbai[cite: 5]."},
+        {"num": 65, "module": "Module 3: Indian Navy & Ships", "q": "Where was INS Taragiri, the fifth Project 17A stealth frigate of the Indian Navy built by Mazagon Dock Shipbuilders, officially commissioned?", "options": ["A) Visakhapatnam", "B) Mumbai", "C) Kochi", "D) Port Blair"], "ans": 0, "brief": "Visakhapatnam is the location where INS Taragiri, the fifth Project 17A frigate, was officially commissioned[cite: 5]."},
+        {"num": 66, "module": "Module 3: Indian Navy & Ships", "q": "Which shipyard in Kolkata built INS Dunagiri under the Project 17A Nilgiri-class stealth frigate program?", "options": ["A) Garden Reach Shipbuilders & Engineers (GRSE)", "B) Mazagon Dock Shipbuilders Limited (MDL)", "C) Cochin Shipyard Limited (CSL)", "D) Hindustan Shipyard Limited (HSL)"], "ans": 0, "brief": "INS Dunagiri was built by Garden Reach Shipbuilders & Engineers (GRSE) in Kolkata[cite: 5]."},
+        {"num": 67, "module": "Module 3: Indian Navy & Ships", "q": "What is the name of India's third indigenous nuclear-powered ballistic missile submarine (SSBN) belonging to the Arihant-class under the ATV project?", "options": ["A) INS Aridhaman (S4)", "B) INS Arighat", "C) INS Arihant", "D) INS Chakra"], "ans": 0, "brief": "INS Aridhaman (S4) was commissioned as India's third indigenous Arihant-class SSBN under the ATV project[cite: 5]."},
+        {"num": 68, "module": "Module 3: Indian Navy & Ships", "q": "Where was INS Aridhaman, India's third indigenous nuclear-powered ballistic missile submarine, built?", "options": ["A) Ship Building Centre in Visakhapatnam", "B) Mazagon Dock Shipbuilders in Mumbai", "C) Cochin Shipyard Limited in Kochi", "D) Garden Reach Shipbuilders in Kolkata"], "ans": 0, "brief": "INS Aridhaman was built at the Ship Building Centre in Visakhapatnam under the ATV project[cite: 5]."},
+        {"num": 69, "module": "Module 3: Indian Navy & Ships", "q": "Which Diving Support and Submarine Rescue Vessel of the Indian Navy arrived in Colombo, Sri Lanka, on 21 April 2026 for IN-SLN DIVEX 2026?", "options": ["A) INS Nireekshak", "B) INS Sagardhwani", "C) INS Nistar", "D) INS Nipun"], "ans": 0, "brief": "INS Nireekshak arrived in Colombo on 21 April 2026 for the IN-SLN DIVEX 2026 diving exercise[cite: 5]."},
+        {"num": 70, "module": "Module 3: Indian Navy & Ships", "q": "Which shipyard built INS Malwan, the latest Anti-Submarine Warfare (ASW) Shallow Water Craft delivered to the Indian Navy with over 80% indigenous content?", "options": ["A) Cochin Shipyard Limited (CSL)", "B) Garden Reach Shipbuilders & Engineers (GRSE)", "C) Mazagon Dock Shipbuilders Limited (MDL)", "D) Goa Shipyard Limited (GSL)"], "ans": 0, "brief": "INS Malwan was built by Cochin Shipyard Limited (CSL) with over 80% indigenous content[cite: 5]."},
+        {"num": 71, "module": "Module 3: Indian Navy & Ships", "q": "Which Car Nicobar-class Waterjet Fast Attack Craft, commissioned in 2010 and built by GRSE, recently visited Gan, Maldives?", "options": ["A) INS Kalpeni", "B) INS Kirpan", "C) INS Kalpana", "D) INS Karuna"], "ans": 0, "brief": "INS Kalpeni is a Car Nicobar-class Waterjet FAC built by GRSE, commissioned in 2010, which visited Gan[cite: 5]."},
+        {"num": 72, "module": "Module 3: Indian Navy & Ships", "q": "Where was INS Anjadip, the third vessel of the ASW Shallow Water Craft (ASW-SWC) project built by GRSE, formally commissioned into the Eastern Naval Command?", "options": ["A) Chennai Port", "B) Visakhapatnam Port", "C) Paradip Port", "D) Tuticorin Port"], "ans": 0, "brief": "INS Anjadip was formally commissioned into the Eastern Naval Command at Chennai Port on 27 Feb 2026[cite: 5]."},
+        {"num": 73, "module": "Module 3: Indian Navy & Ships", "q": "What cutting-edge indigenous hull-mounted sonar system is packed into INS Anjadip for detecting enemy submarines as a 'Dolphin Hunter'?", "options": ["A) Hull-Mounted Sonar Abhay", "B) Hull-Mounted Sonar Ushus", "C) Hull-Mounted Sonar Humsa", "D) Hull-Mounted Sonar Mihir"], "ans": 0, "brief": "INS Anjadip is packed with the indigenous Hull-Mounted Sonar Abhay alongside lightweight torpedoes[cite: 5]."},
+        {"num": 74, "module": "Module 3: Indian Navy & Ships", "q": "What is 'Sanghmitra' (Yard 3039), launched at GRSE Kolkata on 20 May 2026 by Mrs Sarita Vatsayan?", "options": ["A) Next Generation Offshore Patrol Vessel (NGOPV)", "B) Anti-Submarine Warfare Shallow Water Craft", "C) Survey Vessel (Large)", "D) Diving Support Craft"], "ans": 0, "brief": "Sanghmitra (Yard 3039) is a Next Generation Offshore Patrol Vessel (NGOPV) launched at GRSE Kolkata[cite: 5]."},
+        {"num": 75, "module": "Module 3: Indian Navy & Ships", "q": "Which of the following lists correctly names all six Kalvari-class diesel-electric submarines built under Project 75?", "options": ["A) Kalvari, Khanderi, Karanj, Vela, Vagir, Vagsheer", "B) Nilgiri, Himgiri, Taragiri, Udaygiri, Dunagiri, Vindhyagiri", "C) Visakhapatnam, Mormugao, Imphal, Surat, Mysore, Bangalore", "D) Shivalik, Satpura, Sahyadri, Kamorta, Kadmatt, Kiltan"], "ans": 0, "brief": "Project 75 Kalvari-class submarines are: INS Kalvari, Khanderi, Karanj, Vela, Vagir, and Vagsheer[cite: 5]."},
+
+        // MODULE 4: MISSILE SYSTEMS, DRDO & STRATEGIC WEAPONRY (76-100)
+        {"num": 76, "module": "Module 4: Missiles & DRDO", "q": "Which indigenous air-to-surface anti-radiation and precision-strike missile was successfully flight-tested by DRDO and IAF from a Sukhoi-30MKI aircraft?", "options": ["A) Rudram-II", "B) Astra Mk-II", "C) Helina", "D) Sant"], "ans": 0, "brief": "Rudram-II is an indigenous air-to-surface missile successfully tested by DRDO and IAF from a Su-30MKI[cite: 5]."},
+        {"num": 77, "module": "Module 4: Missiles & DRDO", "q": "At which test range did DRDO successfully conduct the flight-test of the Pinaka Long Range Guided Rocket (LRGR) on July 08, 2026?", "options": ["A) Integrated Test Range (ITR), Chandipur, Odisha", "B) Pokhran Firing Range, Rajasthan", "C) Abdul Kalam Island, Odisha", "D) Sriharikota, Andhra Pradesh"], "ans": 0, "brief": "The Pinaka LRGR was tested at the Integrated Test Range (ITR), Chandipur, Odisha, on July 08, 2026[cite: 5]."},
+        {"num": 78, "module": "Module 4: Missiles & DRDO", "q": "What was the user-defined minimum range for which the Pinaka Long Range Guided Rocket (LRGR) was tested at Chandipur?", "options": ["A) 60 kms", "B) 40 kms", "C) 75 kms", "D) 90 kms"], "ans": 0, "brief": "The Pinaka LRGR was tested for a user-defined minimum range of 60 kms[cite: 5]."},
+        {"num": 79, "module": "Module 4: Missiles & DRDO", "q": "Which five missiles were developed under the Integrated Guided Missile Development Programme (IGMDP) initiated in 1983 and led by Dr. APJ Abdul Kalam?", "options": ["A) Prithvi, Agni, Trishul, Nag, Akash", "B) Prithvi, Agni, BrahMos, Astra, Nirbhay", "C) Agni, Trishul, Akash, Shaurya, Prahaar", "D) Prithvi, Nag, Helina, Sant, Barak"], "ans": 0, "brief": "The five IGMDP missiles (PATNA) are: Prithvi, Agni, Trishul, Nag, and Akash[cite: 5]."},
+        {"num": 80, "module": "Module 4: Missiles & DRDO", "q": "Under the IGMDP, what type of missile is 'Nag'?", "options": ["A) 3rd generation anti-tank guided missile", "B) Short-range surface-to-air missile", "C) Medium-range surface-to-air missile", "D) Short-range surface-to-surface ballistic missile"], "ans": 0, "brief": "Nag is a 3rd generation anti-tank guided missile developed under the IGMDP[cite: 5]."},
+        {"num": 81, "module": "Module 4: Missiles & DRDO", "q": "Which of the following correctly describes a Cruise Missile as compared to a Ballistic Missile?", "options": ["A) Unmanned, guided, jet-engine powered missile flying within Earth's atmosphere using aerodynamic lift", "B) Rocket-propelled missile exiting Earth's atmosphere and re-entering to hit targets", "C) Unguided rocket fired in salvos from multi-barrel launchers", "D) High-altitude missile designed exclusively for space interception"], "ans": 0, "brief": "Cruise missiles fly within Earth's atmosphere using aerodynamic lift and jet engines like airplanes[cite: 5]."},
+        {"num": 82, "module": "Module 4: Missiles & DRDO", "q": "Which of the following is an example of an indigenous hypersonic missile capable of travelling at speeds exceeding Mach 5?", "options": ["A) Shaurya", "B) Nirbhay", "C) Akash", "D) Trishul"], "ans": 0, "brief": "Shaurya is noted as an example of a hypersonic missile travelling at speeds exceeding Mach 5[cite: 5]."},
+        {"num": 83, "module": "Module 4: Missiles & DRDO", "q": "Which of the following correctly classifies 'Nirbhay' in terms of flight speed?", "options": ["A) Subsonic cruise missile (< Mach 1)", "B) Supersonic cruise missile (2-3 Mach)", "C) Hypersonic cruise missile (> Mach 5)", "D) Intercontinental ballistic missile"], "ans": 0, "brief": "Nirbhay is India's subsonic land-attack cruise missile travelling below Mach 1[cite: 5]."},
+        {"num": 84, "module": "Module 4: Missiles & DRDO", "q": "Which group of missiles consists entirely of Surface-to-Air Missiles (SAM)?", "options": ["A) Trishul, Akash, Barak", "B) Prithvi, Agni, Prahaar", "C) Astra, Python, MICA", "D) Rudram, Rampage, BrahMos"], "ans": 0, "brief": "Trishul, Akash, and Barak are Surface-to-Air Missiles (SAM)[cite: 5]."},
+        {"num": 85, "module": "Module 4: Missiles & DRDO", "q": "Which group of missiles consists entirely of Air-to-Air Missiles?", "options": ["A) Astra, Python, MICA", "B) Rudram, Rampage, BrahMos", "C) Helina, SAMHO, Nag", "D) Trishul, Akash, Barak"], "ans": 0, "brief": "Astra, Python, and MICA are Air-to-Air Missiles[cite: 5]."},
+        {"num": 86, "module": "Module 4: Missiles & DRDO", "q": "What is 'ASRAAM' (Advanced Short Range Air-to-Air Missile), which uses infrared heat-seeking technology?", "options": ["A) Fire-and-forget short-range air-to-air missile targeting enemy aircraft in flight", "B) Laser-guided anti-tank missile for attack helicopters", "C) Ship-launched anti-submarine torpedo system", "D) Ground-based radar interceptor missile"], "ans": 0, "brief": "ASRAAM is an infrared heat-seeking, fire-and-forget short-range air-to-air missile[cite: 5]."},
+        {"num": 87, "module": "Module 4: Missiles & DRDO", "q": "Which of the following is a helicopter-launched Anti-Tank Guided Missile (ATGM) developed by DRDO?", "options": ["A) Helina (Dhruvastra)", "B) Astra", "C) Rudram", "D) Prahaar"], "ans": 0, "brief": "Helina (Helicopter-launched Nag) / Dhruvastra is an ATGM launched from helicopters[cite: 5]."},
+        {"num": 88, "module": "Module 4: Missiles & DRDO", "q": "Which DRDO laboratory in Bengaluru is the Nodal Laboratory for the Long Range Land Attack Cruise Missile (LRLACM) project?", "options": ["A) Aeronautical Development Establishment (ADE)", "B) Electronics and Radar Development Establishment (LRDE)", "C) Defence Avionics Research Establishment (DARE)", "D) Gas Turbine Research Establishment (GTRE)"], "ans": 0, "brief": "ADE Bengaluru is the Nodal Laboratory for the LRLACM project[cite: 5]."},
+        {"num": 89, "module": "Module 4: Missiles & DRDO", "q": "Which indigenous airborne store successfully underwent four in-flight release trials by DRDO and the Indian Navy?", "options": ["A) Air Droppable Container (ADC-150)", "B) Sahayak-NG Air Droppable Pod", "C) Varuna Air Droppable Torpedo", "D) Samudra Air Droppable Mine"], "ans": 0, "brief": "DRDO and the Indian Navy successfully conducted four in-flight release trials of the Air Droppable Container (ADC-150)[cite: 5]."},
+        {"num": 90, "module": "Module 4: Missiles & DRDO", "q": "Where did DRDO successfully finish final configuration trials for the Unmanned Aerial Vehicle Launched Precision Guided Missile (ULPGM)-V3 in both Air-to-Ground and Air-to-Air modes?", "options": ["A) Kurnool, Andhra Pradesh", "B) Chandipur, Odisha", "C) Pokhran, Rajasthan", "D) Chitradurga, Karnataka"], "ans": 0, "brief": "ULPGM-V3 final configuration trials in air-to-ground and air-to-air modes were conducted at a test range near Kurnool, AP[cite: 5]."},
+        {"num": 91, "module": "Module 4: Missiles & DRDO", "q": "On May 08, 2026, India successfully flight-tested an Advanced Agni missile from Dr. APJ Abdul Kalam Island featuring which advanced warhead system?", "options": ["A) Multiple Independently Targeted Re-Entry Vehicle (MIRV) system", "B) Hypersonic Glide Vehicle (HGV) payload", "C) Electromagnetic Pulse (EMP) warhead", "D) Sub-munition dispensing cluster head"], "ans": 0, "brief": "India flight-tested an Advanced Agni missile with a Multiple Independently Targeted Re-Entry Vehicle (MIRV) system[cite: 5]."},
+        {"num": 92, "module": "Module 4: Missiles & DRDO", "q": "What is 'TARA' (Tactical Advanced Range Augmentation), which underwent its first flight trial from a Jaguar aircraft off Odisha's coast on May 7, 2026?", "options": ["A) India's first indigenous glide weapon system converting unguided warheads into precision-guided weapons", "B) An autonomous target acquisition radar for fighter jets", "C) A supersonic target drone used for air defence drills", "D) A ship-launched decoy system against torpedoes"], "ans": 0, "brief": "TARA is India's first indigenous glide weapon system converting unguided warheads into precision-guided weapons[cite: 5]."},
+        {"num": 93, "module": "Module 4: Missiles & DRDO", "q": "Which Intermediate Range Ballistic Missile was successfully test-fired from the Integrated Test Range, Chandipur, validating all operational parameters?", "options": ["A) Agni-3", "B) Agni-5", "C) Shaurya", "D) Prithvi-II"], "ans": 0, "brief": "Intermediate Range Ballistic Missile 'Agni-3' was successfully test-fired from ITR Chandipur[cite: 5]."},
+        {"num": 94, "module": "Module 4: Missiles & DRDO", "q": "DRDO conducted three successful flight trials of which man-portable missile system designed to intercept low-flying aircraft, helicopters, and drones?", "options": ["A) VSHORADS (Very Short Range Air Defence System)", "B) QRSAM (Quick Reaction Surface to Air Missile)", "C) MPATGM (Man-Portable Anti-Tank Guided Missile)", "D) Akash-NG"], "ans": 0, "brief": "DRDO conducted three successful flight trials of the VSHORADS man-portable air defence system from Chandipur[cite: 5]."},
+        {"num": 95, "module": "Module 4: Missiles & DRDO", "q": "On May 09, 2026, DRDO tested an Actively Cooled Full Scale Scramjet Combustor at Hyderabad, achieving over how many seconds of continuous engine runtime?", "options": ["A) 1,200 seconds", "B) 600 seconds", "C) 300 seconds", "D) 1,800 seconds"], "ans": 0, "brief": "The scramjet combustor test at Hyderabad achieved over 1,200 seconds of continuous engine runtime[cite: 5]."},
+        {"num": 96, "module": "Module 4: Missiles & DRDO", "q": "Which Pune-based defence manufacturing company successfully test-fired the 'Suryastra Universal Rocket Launcher' at ITR Chandipur, Odisha?", "options": ["A) Nibe Limited", "B) Solar Industries India", "C) Kalyani Strategic Systems", "D) Godrej Defence"], "ans": 0, "brief": "Nibe Limited, a Pune-based company, test-fired the Suryastra Universal Rocket Launcher at ITR Chandipur[cite: 5]."},
+        {"num": 97, "module": "Module 4: Missiles & DRDO", "q": "DRDO achieved a major milestone by handing over the Final Operational Clearance (FOC) certificate of which indigenous Airborne Early Warning and Control (AEW&C) system to the IAF?", "options": ["A) Netra", "B) Swathi", "C) Arudhra", "D) Rohini"], "ans": 0, "brief": "DRDO handed over the FOC certificate of the indigenous 'Netra' AEW&C system to the IAF[cite: 5]."},
+        {"num": 98, "module": "Module 4: Missiles & DRDO", "q": "The Ministry of Defence signed contracts worth Rs 858 crore for which Air Defence Missile System and depot-level inspection of P8I aircraft?", "options": ["A) Tunguska Air Defence Missile System", "B) Schilka Air Defence System", "C) Pechora Missile System", "D) Spyder Missile System"], "ans": 0, "brief": "MoD signed contracts worth Rs 858 crore for the Tunguska Air Defence Missile System and P8I inspection[cite: 5]."},
+        {"num": 99, "module": "Module 4: Missiles & DRDO", "q": "Which Israeli anti-tank guided missile is listed among India's ATGM arsenal in the PDF notes?", "options": ["A) Spike", "B) Javelin", "C) Kornet", "D) Milan-2T"], "ans": 0, "brief": "Spike is an Israeli-origin Anti-Tank Guided Missile (ATGM) in the Indian arsenal[cite: 5]."},
+        {"num": 100, "module": "Module 4: Missiles & DRDO", "q": "What is 'Rampage', mentioned under Air-to-Surface missiles in the PDF classification?", "options": ["A) Long-range air-to-surface precision strike missile", "B) Anti-submarine lightweight torpedo", "C) Short-range man-portable air defence rocket", "D) Ship-launched anti-ship cruise missile"], "ans": 0, "brief": "Rampage is classified as an Air-to-Surface precision strike missile[cite: 5]."},
+
+        // MODULE 5: INDIAN AIR FORCE – COMMANDS, AIRCRAFT & AVIATION (101-125)
+        {"num": 101, "module": "Module 5: IAF & Aviation", "q": "When was the Indian Air Force established, and from which religious text is its motto 'Touch the Sky with Glory' (Nabhaḥ Spr̥śaṁ Dīptam) taken?", "options": ["A) October 8, 1932; 11th chapter of the Bhagavad Gita", "B) August 15, 1947; Mundaka Upanishad", "C) January 26, 1950; Taittiriya Upanishad", "D) April 1, 1933; Rigveda"], "ans": 0, "brief": "IAF was established on October 8, 1932; its motto is taken from the 11th chapter of the Bhagavad Gita[cite: 5]."},
+        {"num": 102, "module": "Module 5: IAF & Aviation", "q": "Who is the current Chief of the Air Staff of the Indian Air Force?", "options": ["A) Air Chief Marshal Amar Preet Singh", "B) Air Chief Marshal VR Chaudhari", "C) Air Chief Marshal RKS Bhadauria", "D) Air Chief Marshal BS Dhanoa"], "ans": 0, "brief": "Air Chief Marshal Amar Preet Singh is the Chief of the Air Staff[cite: 5]."},
+        {"num": 103, "module": "Module 5: IAF & Aviation", "q": "Who is honored as the 'Father of the Indian Air Force'?", "options": ["A) Subroto Mukherjee", "B) Arjan Singh", "C) Aspy Engineer", "D) Jumbo Majumdar"], "ans": 0, "brief": "Air Marshal Subroto Mukherjee is celebrated as the Father of the Indian Air Force[cite: 5]."},
+        {"num": 104, "module": "Module 10: Dialogues & Budget", "q": "What is inscribed in golden Devanagari script beneath the Himalayan eagle on the New Indian Air Force Ensign?", "options": ["A) The IAF motto 'Nabhaḥ Spr̥śaṁ Dīptam' (नभः स्पृशं दीप्तम्)", "B) 'Satyameva Jayate' (सत्यमेव जयते)", "C) 'Bhāratīya Vāyusenā' (भारतीय वायुसेना)", "D) 'Vayam Rakshamah' (वयं रक्षामः)"], "ans": 0, "brief": "The IAF motto 'नभः स्पृशं दीप्तम्' is inscribed in golden Devanagari beneath the eagle on the new ensign[cite: 5]."},
+        {"num": 105, "module": "Module 5: IAF & Aviation", "q": "Where is the headquarters of the Western Air Command of the Indian Air Force located?", "options": ["A) New Delhi", "B) Chandigarh", "C) Ambala", "D) Adampur"], "ans": 0, "brief": "The Western Air Command is headquartered in New Delhi[cite: 5]."},
+        {"num": 106, "module": "Module 5: IAF & Aviation", "q": "Where is the headquarters of the Eastern Air Command of the Indian Air Force located?", "options": ["A) Shillong, Meghalaya", "B) Guwahati, Assam", "C) Jorhat, Assam", "D) Tezpur, Assam"], "ans": 0, "brief": "The Eastern Air Command is headquartered in Shillong, Meghalaya[cite: 5]."},
+        {"num": 107, "module": "Module 5: IAF & Aviation", "q": "Where is the Central Air Command of the Indian Air Force headquartered?", "options": ["A) Prayagraj, Uttar Pradesh", "B) Agra, Uttar Pradesh", "C) Bareilly, Uttar Pradesh", "D) Gwalior, Madhya Pradesh"], "ans": 0, "brief": "The Central Air Command is headquartered at Prayagraj (Allahabad), UP[cite: 5]."},
+        {"num": 108, "module": "Module 5: IAF & Aviation", "q": "Where is the South Western Air Command (SWAC) of the Indian Air Force headquartered?", "options": ["A) Gandhinagar, Gujarat", "B) Jodhpur, Rajasthan", "C) Jamnagar, Gujarat", "D) Pune, Maharashtra"], "ans": 0, "brief": "The South Western Air Command is headquartered in Gandhinagar, Gujarat[cite: 5]."},
+        {"num": 109, "module": "Module 5: IAF & Aviation", "q": "Where is the Training Command of the Indian Air Force headquartered?", "options": ["A) Bengaluru, Karnataka", "B) Belagavi, Karnataka", "C) Hyderabad, Telangana", "D) Coimbatore, Tamil Nadu"], "ans": 0, "brief": "The Training Command of the IAF is headquartered in Bengaluru, Karnataka[cite: 5]."},
+        {"num": 110, "module": "Module 5: IAF & Aviation", "q": "Where is the Southern Air Command of the Indian Air Force headquartered?", "options": ["A) Thiruvananthapuram, Kerala", "B) Sulur, Tamil Nadu", "C) Kochi, Kerala", "D) Thanjavur, Tamil Nadu"], "ans": 0, "brief": "The Southern Air Command is headquartered in Thiruvananthapuram, Kerala[cite: 5]."},
+        {"num": 111, "module": "Module 5: IAF & Aviation", "q": "Where is the Maintenance Command of the Indian Air Force headquartered?", "options": ["A) Nagpur, Maharashtra", "B) Kanpur, Uttar Pradesh", "C) Nashik, Maharashtra", "D) Ojhar, Maharashtra"], "ans": 0, "brief": "The Maintenance Command of the IAF is headquartered at Vayusena Nagar in Nagpur, Maharashtra[cite: 5]."},
+        {"num": 112, "module": "Module 5: IAF & Aviation", "q": "Where is the Flying Instructors School (FIS) of the Indian Air Force located?", "options": ["A) Tambaram, Tamil Nadu", "B) Dundigal, Telangana", "C) Yelahanka, Karnataka", "D) Bidar, Karnataka"], "ans": 0, "brief": "The Flying Instructors School (FIS) is located at Tambaram, Tamil Nadu[cite: 5]."},
+        {"num": 113, "module": "Module 5: IAF & Aviation", "q": "Where is the Paratroopers Training School (PTS) of the Indian Air Force located?", "options": ["A) Agra, Uttar Pradesh", "B) Hindon, Punjab", "C) Sarsawa, Uttar Pradesh", "D) Gorakhpur, Uttar Pradesh"], "ans": 0, "brief": "The Paratroopers Training School (PTS) is located at Agra, Uttar Pradesh[cite: 5]."},
+        {"num": 114, "module": "Module 5: IAF & Aviation", "q": "Where is the Air Force Academy (AFA), the premier training institute for IAF officer cadets, located?", "options": ["A) Dundigal, Telangana", "B) Yelahanka, Karnataka", "C) Begumpet, Telangana", "D) Hakimpet, Telangana"], "ans": 0, "brief": "The Air Force Academy is located at Dundigal, Telangana[cite: 5]."},
+        {"num": 115, "module": "Module 5: IAF & Aviation", "q": "Which iconic Indian Air Force formation aerobatic team marked its 30th Anniversary at Air Force Station Bidar on 26 May 2026?", "options": ["A) Suryakiran Aerobatic Team", "B) Sarang Helicopter Display Team", "C) Sagar Pawan Aerobatic Team", "D) Tejas Formation Team"], "ans": 0, "brief": "The Suryakiran Aerobatic Team marked its 30th Anniversary at Air Force Station Bidar on 26 May 2026[cite: 5]."},
+        {"num": 116, "module": "Module 5: IAF & Aviation", "q": "Which helicopter display team of the Indian Air Force participated in the Singapore Airshow 2026 flying ALH Dhruv helicopters?", "options": ["A) Sarang Helicopter Display Team", "B) Suryakiran Aerobatic Team", "C) Dhruv Formation Team", "D) Rudra Combat Team"], "ans": 0, "brief": "The Sarang Helicopter Display Team participated in the Singapore Airshow 2026 flying ALH Dhruv helicopters[cite: 5]."},
+        {"num": 117, "module": "Module 5: IAF & Aviation", "q": "How many Dassault Rafale twin-engine, multirole fighter aircraft are currently in service with the Indian Air Force?", "options": ["A) 36", "B) 24", "C) 18", "D) 40"], "ans": 0, "brief": "There are 36 Dassault Rafale fighter aircraft with the Indian Air Force[cite: 5]."},
+        {"num": 118, "module": "Module 5: IAF & Aviation", "q": "Which aircraft is an indigenous single-engine, 4.5 generation multirole combat aircraft manufactured by HAL for the IAF?", "options": ["A) HAL Tejas", "B) HAL Marut", "C) HAL Ajeet", "D) HAL HF-24"], "ans": 0, "brief": "HAL Tejas is an indigenous single-engine, 4.5 generation multirole combat aircraft[cite: 5]."},
+        {"num": 119, "module": "Module 5: IAF & Aviation", "q": "Which fighter aircraft of the Indian Air Force is a twin-engine, 4.5 generation multirole jet manufactured by Russia's Sukhoi along with HAL?", "options": ["A) Sukhoi Su-30MKI", "B) MiG-29 UPG", "C) Mirage 2000", "D) Dassault Rafale"], "ans": 0, "brief": "The Sukhoi Su-30MKI is a twin-engine 4.5 generation multirole fighter manufactured with HAL[cite: 5]."},
+        {"num": 120, "module": "Module 5: IAF & Aviation", "q": "How many Sukhoi Su-30MKI fighter jets of the Indian Air Force have been equipped with the air-launched BrahMos supersonic cruise missile?", "options": ["A) 40", "B) 20", "C) 36", "D) 50"], "ans": 0, "brief": "The IAF has equipped 40 Sukhoi Su-30MKI fighter jets with the air-launched BrahMos supersonic cruise missile[cite: 5]."},
+        {"num": 121, "module": "Module 5: IAF & Aviation", "q": "Which delta-wing multirole fighter jet of French origin in the IAF is manufactured by Dassault Aviation?", "options": ["A) Mirage 2000", "B) SEPECAT Jaguar", "C) Rafale", "D) Alpha Jet"], "ans": 0, "brief": "Mirage 2000 is a French-origin multirole delta-wing fighter jet by Dassault Aviation[cite: 5]."},
+        {"num": 122, "module": "Module 5: IAF & Aviation", "q": "From which country has the Indian Air Force decided to acquire nine retired SEPECAT Jaguar fighter aircraft to support its ageing Jaguar fleet?", "options": ["A) United Kingdom", "B) France", "C) Oman", "D) Ecuador"], "ans": 0, "brief": "The IAF decided to acquire nine retired SEPECAT Jaguar fighter aircraft from the United Kingdom[cite: 5]."},
+        {"num": 123, "module": "Module 5: IAF & Aviation", "q": "Which transport aircraft of the Indian Air Force is popularly known as 'Gajraj' and was used to transport sacred Buddha relics to Mongolia?", "options": ["A) Ilyushin Il-76", "B) Boeing C-17 Globemaster III", "C) C-130J Super Hercules", "D) Antonov An-32"], "ans": 0, "brief": "The Ilyushin Il-76 strategic airlift aircraft is popularly known as 'Gajraj'[cite: 5]."},
+        {"num": 124, "module": "Module 5: IAF & Aviation", "q": "Which private sector company is partnering with Airbus to manufacture C295 transport aircraft in Vadodara, Gujarat?", "options": ["A) Tata Advanced Systems Limited", "B) Mahindra Defence Systems", "C) Adani Defence & Aerospace", "D) Reliance Defence"], "ans": 0, "brief": "Tata Advanced Systems Limited is partnering with Airbus to manufacture C295 transport aircraft in Vadodara[cite: 5]."},
+        {"num": 125, "module": "Module 5: IAF & Aviation", "q": "On which expressway in Uttar Pradesh did the Indian Air Force activate an 'Emergency Landing Facility' (ELF) by day and night on 22 April 2026?", "options": ["A) Purvanchal Expressway (Sultanpur District)", "B) Agra-Lucknow Expressway", "C) Bundelkhand Expressway", "D) Yamuna Expressway"], "ans": 0, "brief": "The IAF activated an Emergency Landing Facility on the Purvanchal Expressway in Sultanpur District, UP[cite: 5]."},
+
+        // MODULE 6: INDIAN ARMY – COMMANDS, RANKS & TRAINING INSTITUTIONS (126-150)
+        {"num": 126, "module": "Module 6: Indian Army & Ranks", "q": "Where is the headquarters of the Eastern Command of the Indian Army located?", "options": ["A) Kolkata, West Bengal", "B) Guwahati, Assam", "C) Tezpur, Assam", "D) Siliguri, West Bengal"], "ans": 0, "brief": "The Eastern Command of the Indian Army is headquartered at Fort William in Kolkata[cite: 5]."},
+        {"num": 127, "module": "Module 6: Indian Army & Ranks", "q": "Where is the headquarters of the Southern Command of the Indian Army located?", "options": ["A) Pune, Maharashtra", "B) Secunderabad, Telangana", "C) Bengaluru, Karnataka", "D) Chennai, Tamil Nadu"], "ans": 0, "brief": "The Southern Command of the Indian Army is headquartered in Pune, Maharashtra[cite: 5]."},
+        {"num": 128, "module": "Module 6: Indian Army & Ranks", "q": "Where is the headquarters of the Central Command of the Indian Army located?", "options": ["A) Lucknow, Uttar Pradesh", "B) Jabalpur, Madhya Pradesh", "C) Meerut, Uttar Pradesh", "D) Danapur, Bihar"], "ans": 0, "brief": "The Central Command of the Indian Army is headquartered in Lucknow, Uttar Pradesh[cite: 5]."},
+        {"num": 129, "module": "Module 6: Indian Army & Ranks", "q": "Where is the headquarters of the Western Command of the Indian Army located?", "options": ["A) Chandimandir, Haryana", "B) Ambala, Haryana", "C) Jalandhar, Punjab", "D) Bathinda, Punjab"], "ans": 0, "brief": "The Western Command of the Indian Army is headquartered at Chandimandir, Haryana[cite: 5]."},
+        {"num": 130, "module": "Module 6: Indian Army & Ranks", "q": "Where is the headquarters of the Northern Command of the Indian Army located?", "options": ["A) Udhampur, Jammu & Kashmir", "B) Srinagar, Jammu & Kashmir", "C) Leh, Ladakh", "D) Nagrota, Jammu & Kashmir"], "ans": 0, "brief": "The Northern Command of the Indian Army is headquartered at Udhampur, J&K[cite: 5]."},
+        {"num": 131, "module": "Module 6: Indian Army & Ranks", "q": "Where is the Army Training Command (ARTRAC) of the Indian Army headquartered?", "options": ["A) Shimla, Himachal Pradesh", "B) Mhow, Madhya Pradesh", "C) Dehradun, Uttarakhand", "D) Wellington, Tamil Nadu"], "ans": 0, "brief": "The Army Training Command (ARTRAC) is headquartered at Shimla, Himachal Pradesh[cite: 5]."},
+        {"num": 132, "module": "Module 6: Indian Army & Ranks", "q": "Where is the South Western Command of the Indian Army headquartered?", "options": ["A) Jaipur, Rajasthan", "B) Bathinda, Punjab", "C) Hisar, Punjab", "D) Bikaner, Rajasthan"], "ans": 0, "brief": "The South Western Command of the Indian Army is headquartered in Jaipur, Rajasthan[cite: 5]."},
+        {"num": 133, "module": "Module 6: Indian Army & Ranks", "q": "Who was the first Indian Commander-in-Chief of the Indian Army, taking over from British General Sir Francis Butcher on 15 January 1949?", "options": ["A) General K. M. Cariappa", "B) Field Marshal Sam Manekshaw", "C) General Rajendrasinhji Jadeja", "D) General K. S. Thimayya"], "ans": 0, "brief": "General K.M. Cariappa became the first Indian Commander-in-Chief on 15 January 1949 (celebrated as Army Day)[cite: 5]."},
+        {"num": 134, "module": "Module 6: Indian Army & Ranks", "q": "Who was the first Indian Army officer to be promoted to the five-star rank of Field Marshal and led India during the 1971 Indo-Pak War?", "options": ["A) Field Marshal Sam Manekshaw", "B) Field Marshal K. M. Cariappa", "C) General S. H. F. J. Manekshaw", "D) General J. N. Chaudhuri"], "ans": 0, "brief": "Field Marshal Sam Manekshaw was the first Indian officer promoted to Field Marshal and led India in the 1971 war[cite: 5]."},
+        {"num": 135, "module": "Module 6: Indian Army & Ranks", "q": "Which rank in the Indian Navy is equivalent to the rank of Major General in the Indian Army?", "options": ["A) Rear Admiral", "B) Vice Admiral", "C) Commodore", "D) Captain"], "ans": 0, "brief": "A Rear Admiral in the Indian Navy is equivalent to a Major General in the Indian Army[cite: 5]."},
+        {"num": 136, "module": "Module 6: Indian Army & Ranks", "q": "Which rank in the Indian Air Force is equivalent to the rank of Brigadier in the Indian Army?", "options": ["A) Air Commodore", "B) Group Captain", "C) Air Vice Marshal", "D) Wing Commander"], "ans": 0, "brief": "An Air Commodore in the Indian Air Force is equivalent to a Brigadier in the Indian Army[cite: 5]."},
+        {"num": 137, "module": "Module 6: Indian Army & Ranks", "q": "Which rank in the Indian Navy is equivalent to the rank of Colonel in the Indian Army?", "options": ["A) Captain", "B) Commander", "C) Commodore", "D) Lieutenant Commander"], "ans": 0, "brief": "A Captain in the Indian Navy is equivalent to a Colonel in the Indian Army[cite: 5]."},
+        {"num": 138, "module": "Module 6: Indian Army & Ranks", "q": "Which rank in the Indian Air Force is equivalent to the rank of Lieutenant Colonel in the Indian Army?", "options": ["A) Wing Commander", "B) Group Captain", "C) Squadron Leader", "D) Flight Lieutenant"], "ans": 0, "brief": "A Wing Commander in the IAF is equivalent to a Lieutenant Colonel in the Indian Army[cite: 5]."},
+        {"num": 139, "module": "Module 6: Indian Army & Ranks", "q": "Which rank in the Indian Army is equivalent to a Squadron Leader in the Indian Air Force?", "options": ["A) Major", "B) Captain", "C) Lieutenant Colonel", "D) Lieutenant"], "ans": 0, "brief": "A Major in the Indian Army is equivalent to a Squadron Leader in the IAF[cite: 5]."},
+        {"num": 140, "module": "Module 6: Indian Army & Ranks", "q": "Which Junior Commissioned Officer (JCO) rank in the Indian Army is equivalent to a Subedar Major?", "options": ["A) Master Chief Petty Officer First Class (Navy) / Master Warrant Officer (IAF)", "B) Master Chief Petty Officer Second Class / Warrant Officer", "C) Chief Petty Officer / Junior Warrant Officer", "D) Petty Officer / Sergeant"], "ans": 0, "brief": "Subedar Major is equivalent to Master Chief Petty Officer First Class (Navy) and Master Warrant Officer (IAF)[cite: 5]."},
+        {"num": 141, "module": "Module 6: Indian Army & Ranks", "q": "Which Non-Commissioned Officer (NCO) rank in the Indian Army is equivalent to a Sergeant in the Indian Air Force?", "options": ["A) Havildar", "B) Naik", "C) Lance Naik", "D) Sepoy"], "ans": 0, "brief": "A Havildar in the Indian Army is equivalent to a Sergeant in the Indian Air Force[cite: 5]."},
+        {"num": 142, "module": "Module 6: Indian Army & Ranks", "q": "Where are the two premier campuses of the Infantry School of the Indian Army located?", "options": ["A) Mhow (Madhya Pradesh) and Belgaum (Karnataka)", "B) Deolali (Maharashtra) and Wellington (Tamil Nadu)", "C) Pune (Maharashtra) and Secunderabad (Telangana)", "D) Bareilly (Uttar Pradesh) and Vairengte (Mizoram)"], "ans": 0, "brief": "The Infantry School campuses are located in Mhow (MP) and Belgaum (Karnataka)[cite: 5]."},
+        {"num": 143, "module": "Module 6: Indian Army & Ranks", "q": "Where is the School of Artillery of the Indian Army located?", "options": ["A) Deolali, Maharashtra", "B) Ahmednagar, Maharashtra", "C) Gopalpur, Odisha", "D) Babina, Uttar Pradesh"], "ans": 0, "brief": "The School of Artillery is located at Deolali, Maharashtra[cite: 5]."},
+        {"num": 144, "module": "Module 6: Indian Army & Ranks", "q": "Where is the College of Military Engineering (CME) located?", "options": ["A) Pune, Maharashtra", "B) Secunderabad, Telangana", "C) Mhow, Madhya Pradesh", "D) Roorkee, Uttarakhand"], "ans": 0, "brief": "The College of Military Engineering (CME) is located in Pune, Maharashtra[cite: 5]."},
+        {"num": 145, "module": "Module 6: Indian Army & Ranks", "q": "Where is the Military College of Electronics and Mechanical Engineering (MCEME) located?", "options": ["A) Secunderabad, Telangana", "B) Pune, Maharashtra", "C) Vadodara, Gujarat", "D) Bengaluru, Karnataka"], "ans": 0, "brief": "MCEME is located in Secunderabad, Telangana[cite: 5]."},
+        {"num": 146, "module": "Module 6: Indian Army & Ranks", "q": "Where is the Defence Services Staff College (DSSC), a premier tri-service training institution, located?", "options": ["A) Wellington, Tamil Nadu", "B) Khadakwasla, Pune", "C) New Delhi", "D) Coonoor, Tamil Nadu"], "ans": 0, "brief": "The Defence Services Staff College (DSSC) is located at Wellington, Nilgiris, Tamil Nadu[cite: 5]."},
+        {"num": 147, "module": "Module 6: Indian Army & Ranks", "q": "Where is the High Altitude Warfare School (HAWS) of the Indian Army located?", "options": ["A) Gulmarg, Jammu & Kashmir", "B) Sonamarg, Jammu & Kashmir", "C) Leh, Ladakh", "D) Manali, Jammu & Kashmir"], "ans": 0, "brief": "The High Altitude Warfare School (HAWS) is located at Gulmarg, Jammu & Kashmir[cite: 5]."},
+        {"num": 148, "module": "Module 6: Indian Army & Ranks", "q": "Where is the Military College of Telecommunication Engineering (MCTE) located?", "options": ["A) Mhow, Madhya Pradesh", "B) Jabalpur, Madhya Pradesh", "C) Secunderabad, Telangana", "D) Bengaluru, Karnataka"], "ans": 0, "brief": "The Military College of Telecommunication Engineering (MCTE) is located in Mhow, MP[cite: 5]."},
+        {"num": 149, "module": "Module 6: Indian Army & Ranks", "q": "Where is the Army War College (formerly College of Combat) located?", "options": ["A) Mhow, Madhya Pradesh", "B) Pune, Maharashtra", "C) Dehradun, Uttarakhand", "D) Shimla, Himachal Pradesh"], "ans": 0, "brief": "The Army War College / College of Combat is located in Mhow, Madhya Pradesh[cite: 5]."},
+        {"num": 150, "module": "Module 6: Indian Army & Ranks", "q": "Where is the EME School of the Indian Army located?", "options": ["A) Vadodara, Gujarat", "B) Secunderabad, Telangana", "C) Pune, Maharashtra", "D) Bhopal, Madhya Pradesh"], "ans": 0, "brief": "The EME School is located in Vadodara, Gujarat[cite: 5]."},
+
+        // MODULE 7: DEFENCE PSUs, MOD STRUCTURE & INTELLIGENCE AGENCIES (151-175)
+        {"num": 151, "module": "Module 7: DPSUs & MoD Structure", "q": "When was Bharat Dynamics Limited (BDL) established, and where is its headquarters located?", "options": ["A) 1970; Hyderabad, Telangana", "B) 1954; Bengaluru, Karnataka", "C) 1964; Bengaluru, Karnataka", "D) 1973; Hyderabad, Telangana"], "ans": 0, "brief": "Bharat Dynamics Limited (BDL) was established in 1970 and is headquartered in Hyderabad, Telangana[cite: 5]."},
+        {"num": 152, "module": "Module 7: DPSUs & MoD Structure", "q": "When was Bharat Electronics Limited (BEL) established, and where is its headquarters located?", "options": ["A) 1954; Bengaluru, Karnataka", "B) 1964; Bengaluru, Karnataka", "C) 1970; Hyderabad, Telangana", "D) 1960; Kolkata, West Bengal"], "ans": 0, "brief": "Bharat Electronics Limited (BEL) was established in 1954 and is headquartered in Bengaluru, Karnataka[cite: 5]."},
+        {"num": 153, "module": "Module 7: DPSUs & MoD Structure", "q": "When was Bharat Earth Movers Limited (BEML) established, and where is its headquarters located?", "options": ["A) 1964; Bengaluru, Karnataka", "B) 1954; Bengaluru, Karnataka", "C) 1970; Hyderabad, Telangana", "D) 1973; Hyderabad, Telangana"], "ans": 0, "brief": "Bharat Earth Movers Limited (BEML) was established in 1964 and is headquartered in Bengaluru, Karnataka[cite: 5]."},
+        {"num": 154, "module": "Module 7: DPSUs & MoD Structure", "q": "Where is the headquarters of Garden Reach Shipbuilders & Engineers Ltd. (GRSE), established in 1960?", "options": ["A) Kolkata, West Bengal", "B) Mumbai, Maharashtra", "C) Vasco da Gama, Goa", "D) Visakhapatnam, Andhra Pradesh"], "ans": 0, "brief": "GRSE was established in 1960 and is headquartered in Kolkata, West Bengal[cite: 5]."},
+        {"num": 155, "module": "Module 7: DPSUs & MoD Structure", "q": "When was Goa Shipyard Limited (GSL) established?", "options": ["A) 1967", "B) 1960", "C) 1934", "D) 1970"], "ans": 0, "brief": "Goa Shipyard Limited (GSL) was established in 1967[cite: 5]."},
+        {"num": 156, "module": "Module 7: DPSUs & MoD Structure", "q": "When was Mazagon Dock Shipbuilders Limited (MDL), headquartered in Mumbai, originally established?", "options": ["A) 1934 (nationalised/incorporated as DPSU 1960)", "B) 1954", "C) 1967", "D) 1970"], "ans": 0, "brief": "Mazagon Dock Shipbuilders Limited (MDL) was established in 1934 in Mumbai[cite: 5]."},
+        {"num": 157, "module": "Module 7: DPSUs & MoD Structure", "q": "When was Mishra Dhatu Nigam Limited (MIDHANI) established, and where is it headquartered?", "options": ["A) 1973; Hyderabad, Telangana", "B) 1970; Hyderabad, Telangana", "C) 1964; Bengaluru, Karnataka", "D) 1960; Kolkata, West Bengal"], "ans": 0, "brief": "MIDHANI was established in 1973 and is headquartered in Hyderabad, Telangana[cite: 5]."},
+        {"num": 158, "module": "Module 7: DPSUs & MoD Structure", "q": "Where is Vignyan Industries Limited (VIL), a subsidiary of BEML, located?", "options": ["A) Tarikere, Chikmagalur (Karnataka)", "B) Bhadravati, Karnataka", "C) Hosur, Haryana", "D) KGF, Tamil Nadu"], "ans": 0, "brief": "Vignyan Industries Limited (VIL) is located in Tarikere, Chikmagalur district, Karnataka[cite: 5]."},
+        {"num": 159, "module": "Module 7: DPSUs & MoD Structure", "q": "How many administrative departments function under the Ministry of Defence (MoD), Government of India?", "options": ["A) 5", "B) 4", "C) 6", "D) 3"], "ans": 0, "brief": "The Ministry of Defence comprises 5 departments: DoD, DDP, DESW, DDR&D, and DMA[cite: 5]."},
+        {"num": 160, "module": "Module 7: DPSUs & MoD Structure", "q": "Which department under the Ministry of Defence is headed by the Chief of Defence Staff (CDS) as its Secretary?", "options": ["A) Department of Military Affairs (DMA)", "B) Department of Defence (DoD)", "C) Department of Defence Production (DDP)", "D) Department of Ex-Servicemen Welfare (DESW)"], "ans": 0, "brief": "The Department of Military Affairs (DMA) is headed by the Chief of Defence Staff (CDS)[cite: 5]."},
+        {"num": 161, "module": "Module 7: DPSUs & MoD Structure", "q": "Which department under the Ministry of Defence oversees the Defence Research and Development Organisation (DRDO)?", "options": ["A) Department of Defence Research and Development (DDR&D)", "B) Department of Defence Production (DDP)", "C) Department of Military Affairs (DMA)", "D) Department of Defence (DoD)"], "ans": 0, "brief": "DRDO functions under the Department of Defence Research and Development (DDR&D)[cite: 5]."},
+        {"num": 162, "module": "Module 7: DPSUs & MoD Structure", "q": "What is the primary external intelligence agency of India?", "options": ["A) Research and Analysis Wing (RAW)", "B) Intelligence Bureau (IB)", "C) National Technical Research Organisation (NTRO)", "D) Defence Intelligence Agency (DIA)"], "ans": 0, "brief": "RAW (Research and Analysis Wing) is India's primary external intelligence agency[cite: 5]."},
+        {"num": 163, "module": "Module 7: DPSUs & MoD Structure", "q": "Which intelligence agency is the premier military intelligence service of Pakistan?", "options": ["A) Inter-Services Intelligence (ISI)", "B) Military Intelligence (MI)", "C) Federal Investigation Agency (FIA)", "D) Intelligence Bureau (IB)"], "ans": 0, "brief": "ISI (Inter-Services Intelligence) is Pakistan's premier intelligence agency[cite: 5]."},
+        {"num": 164, "module": "Module 7: DPSUs & MoD Structure", "q": "What is 'MI6' (Secret Intelligence Service), listed among global intelligence agencies?", "options": ["A) The foreign intelligence service of the United Kingdom", "B) The domestic security service of the United Kingdom (MI5)", "C) The military intelligence unit of the United States", "D) The signals intelligence agency of Australia"], "ans": 0, "brief": "MI6 (Secret Intelligence Service) is the foreign intelligence agency of the United Kingdom[cite: 5]."},
+        {"num": 165, "module": "Module 7: DPSUs & MoD Structure", "q": "What is the primary civilian foreign intelligence service of the United States federal government?", "options": ["A) Central Intelligence Agency (CIA)", "B) Federal Bureau of Investigation (FBI)", "C) National Security Agency (NSA)", "D) Defense Intelligence Agency (DIA)"], "ans": 0, "brief": "The Central Intelligence Agency (CIA) is the primary foreign intelligence agency of the USA[cite: 5]."},
+        {"num": 166, "module": "Module 7: DPSUs & MoD Structure", "q": "Which agency was the main security and intelligence agency of the Soviet Union from 1954 to 1991?", "options": ["A) KGB (Komitet Gosudarstvennoy Bezopasnosti)", "B) FSB", "C) SVR", "D) GRU"], "ans": 0, "brief": "The KGB was the primary intelligence and security agency of the Soviet Union[cite: 5]."},
+        {"num": 167, "module": "Module 7: DPSUs & MoD Structure", "q": "What is 'Mossad', mentioned among global intelligence agencies?", "options": ["A) The national intelligence agency of Israel", "B) The external security service of France (DGSE)", "C) The foreign intelligence service of Germany", "D) The military intelligence agency of Turkey"], "ans": 0, "brief": "Mossad is the national intelligence agency of Israel[cite: 5]."},
+        {"num": 168, "module": "Module 7: DPSUs & MoD Structure", "q": "Which department of the Ministry of Defence is responsible for welfare, pension, and resettlement of veterans?", "options": ["A) Department of Ex-Servicemen Welfare (DESW)", "B) Department of Defence (DoD)", "C) Department of Defence Production (DDP)", "D) Department of Military Affairs (DMA)"], "ans": 0, "brief": "The Department of Ex-Servicemen Welfare (DESW) looks after veteran welfare and pensions[cite: 5]."},
+        {"num": 169, "module": "Module 7: DPSUs & MoD Structure", "q": "Which department of the Ministry of Defence oversees ordnance factories, defence production units, and DPSUs?", "options": ["A) Department of Defence Production (DDP)", "B) Department of Defence (DoD)", "C) Department of Military Affairs (DMA)", "D) Department of Defence Research & Development (DDR&D)"], "ans": 0, "brief": "The Department of Defence Production (DDP) oversees defence manufacturing and DPSUs[cite: 5]."},
+        {"num": 170, "module": "Module 7: DPSUs & MoD Structure", "q": "With which company did the Ministry of Defence sign a contract for 12 sets of 1.25 MW Marine Gas Turbine Generators for the Indian Navy at Rs 425 crore?", "options": ["A) Bharat Forge Limited, Pune", "B) L&T Defence, Hazira", "C) Walchandnagar Industries", "D) Kirloskar Brothers Limited"], "ans": 0, "brief": "MoD signed a contract with Bharat Forge Limited, Pune, for 12 Marine Gas Turbine Generators[cite: 5]."},
+        {"num": 171, "module": "Module 7: DPSUs & MoD Structure", "q": "Which company signed an agreement with the Naval Science & Technological Laboratory (NSTL) for transfer of technology related to the LM2500 Gas Turbine Infrared Suppression System?", "options": ["A) BHEL (Bharat Heavy Electricals Limited)", "B) HAL (Hindustan Aeronautics Limited)", "C) BEL (Bharat Electronics Limited)", "D) BEML (Bharat Earth Movers Limited)"], "ans": 0, "brief": "BHEL signed a ToT agreement with NSTL for the LM2500 Gas Turbine Infrared Suppression System[cite: 5]."},
+        {"num": 172, "module": "Module 7: DPSUs & MoD Structure", "q": "Where did DRDO's Vehicles Research & Development Establishment (VRDE) unveil Advanced Armoured Platforms (Tracked and Wheeled) on April 25, 2026?", "options": ["A) Ahilyanagar, Maharashtra", "B) Avadi, Maharashtra", "C) Jabalpur, Madhya Pradesh", "D) Medak, Telangana"], "ans": 0, "brief": "VRDE unveiled Advanced Armoured Platforms at its laboratory premises in Ahilyanagar, Maharashtra[cite: 5]."},
+        {"num": 173, "module": "Module 7: DPSUs & MoD Structure", "q": "Which Indian engineering conglomerate partnered with France-based Exail to provide an Advanced Unmanned Mine Counter-Measure (MCM) Suite for the Indian Navy?", "options": ["A) Larsen & Toubro (L&T)", "B) Tata Advanced Systems Limited (TASL)", "C) Mahindra Defence Systems", "D) Kalyani Strategic Systems"], "ans": 0, "brief": "L&T partnered with Exail (France) to provide an Advanced Unmanned MCM Suite for 12 MCM vessels[cite: 5]."},
+        {"num": 174, "module": "Module 7: DPSUs & MoD Structure", "q": "At which location in Uttar Pradesh has Raksha Mantri Rajnath Singh approved a 250 MW Solar Power Project with Battery Energy Storage utilizing 850 acres of vacant defence land?", "options": ["A) Sitapur, Uttar Pradesh", "B) Kanpur, Uttar Pradesh", "C) Jhansi, Uttar Pradesh", "D) Meerut, Uttar Pradesh"], "ans": 0, "brief": "A 250 MW Solar Power Project with Battery Storage was approved on vacant defence land in Sitapur, UP[cite: 5]."},
+        {"num": 175, "module": "Module 7: DPSUs & MoD Structure", "q": "What is 'SMART' (Swachhata Monitoring & Automated Reporting Tool), introduced by the Delhi Cantonment Board?", "options": ["A) A digital solution to improve sanitation and civic service monitoring in cantonment areas", "B) An AI drone surveillance network for ammunition depots", "C) An automated traffic management system for military convoys", "D) A smart card system for canteen store departments"], "ans": 0, "brief": "SMART was introduced by the Delhi Cantonment Board for sanitation and civic service monitoring[cite: 5]."},
+
+        // MODULE 8: PARAMILITARY FORCES, COAST GUARD, BRO & MOTTOS (176-200)
+        {"num": 176, "module": "Module 8: Paramilitary & BRO", "q": "What is the motto of the Assam Rifles, India's oldest paramilitary force established in 1835?", "options": ["A) Friends of the Hill People", "B) Valour, Steadfastness and Commitment", "C) Service and Loyalty", "D) Protection and Security"], "ans": 0, "brief": "The motto of the Assam Rifles is 'Friends of the Hill People'[cite: 5]."},
+        {"num": 177, "module": "Module 8: Paramilitary & BRO", "q": "What is the motto of the Home Guard, established in 1946?", "options": ["A) Nishkam Seva (Selfless Service)", "B) Service with a Smile", "C) Unity and Discipline", "D) We Protect"], "ans": 0, "brief": "The motto of the Home Guard is 'Nishkam Seva'[cite: 5]."},
+        {"num": 178, "module": "Module 8: Paramilitary & BRO", "q": "When was the Indo-Tibetan Border Police (ITBP) established, and what is its motto?", "options": ["A) 24 October 1962; Shaurya, Dridhata, Karmanishtha (Valour, Steadfastness, Commitment)", "B) 1 December 1965; Jeevan Paryant Kartavya", "C) 10 March 1969; Protection and Security", "D) 16 October 1984; Sarvatra Sarvottam Suraksha"], "ans": 0, "brief": "ITBP was established on 24 Oct 1962; its motto is 'Valour, Steadfastness, Commitment'[cite: 5]."},
+        {"num": 179, "module": "Module 8: Paramilitary & BRO", "q": "What is the motto of the National Cadet Corps (NCC), established on 15 July 1948?", "options": ["A) Unity and Discipline", "B) Service and Loyalty", "C) Valour and Wisdom", "D) Duty, Honour, Country"], "ans": 0, "brief": "The motto of the NCC is 'Unity and Discipline'[cite: 5]."},
+        {"num": 180, "module": "Module 8: Paramilitary & BRO", "q": "What is the motto of the Central Industrial Security Force (CISF), established on 10 March 1969?", "options": ["A) Protection and Security", "B) Saving Lives and Beyond", "C) Always Alert", "D) Service Before Self"], "ans": 0, "brief": "The motto of the CISF is 'Protection and Security'[cite: 5]."},
+        {"num": 181, "module": "Module 8: Paramilitary & BRO", "q": "What is the motto of the Military Nursing Service (MNS), established on 1 October 1926?", "options": ["A) Service with a Smile", "B) Care and Compassion", "C) Healing Hands, Brave Hearts", "D) Service Beyond Self"], "ans": 0, "brief": "The motto of the Military Nursing Service (MNS) is 'Service with a Smile'[cite: 5]."},
+        {"num": 182, "module": "Module 8: Paramilitary & BRO", "q": "What is the motto of the National Disaster Response Force (NDRF), established in 2006?", "options": ["A) Saving Lives and Beyond (Aapda Seva Sadaiv Sarvopari)", "B) Protection and Security", "C) Service and Loyalty", "D) We Protect"], "ans": 0, "brief": "The motto of the NDRF is 'Saving Lives and Beyond'[cite: 5]."},
+        {"num": 183, "module": "Module 8: Paramilitary & BRO", "q": "What is the motto of the Indian Coast Guard, established on 1 February 1977?", "options": ["A) Vayam Rakshamah (We Protect)", "B) Sham No Varunah", "C) Nabhaḥ Spr̥śaṁ Dīptam", "D) Service and Loyalty"], "ans": 0, "brief": "The motto of the Indian Coast Guard is 'Vayam Rakshamah' (We Protect)[cite: 5]."},
+        {"num": 184, "module": "Module 8: Paramilitary & BRO", "q": "What is the motto of the Border Security Force (BSF), established on 1 December 1965?", "options": ["A) Jeevan Paryant Kartavya (Duty Unto Death)", "B) Valour, Steadfastness, Commitment", "C) Sarvatra Sarvottam Suraksha", "D) Service and Loyalty"], "ans": 0, "brief": "The motto of the BSF is 'Jeevan Paryant Kartavya'[cite: 5]."},
+        {"num": 185, "module": "Module 8: Paramilitary & BRO", "q": "What is the motto of the Central Reserve Police Force (CRPF), established on 27 July 1939?", "options": ["A) Service and Loyalty (Seva Aur Nishtha)", "B) Unity and Discipline", "C) Protection and Security", "D) Valour and Wisdom"], "ans": 0, "brief": "The motto of the CRPF is 'Service and Loyalty'[cite: 5]."},
+        {"num": 186, "module": "Module 8: Paramilitary & BRO", "q": "What is the motto of the Territorial Army, established on 9 October 1949?", "options": ["A) Savdhani Va Shoorta (Vigilance and Valour)", "B) Service Before Self", "C) Duty, Honour, Country", "D) Always Ready"], "ans": 0, "brief": "The motto of the Territorial Army is 'Savdhani Va Shoorta'[cite: 5]."},
+        {"num": 187, "module": "Module 8: Paramilitary & BRO", "q": "What is the motto of the National Security Guard (NSG), established on 16 October 1984?", "options": ["A) Sarvatra Sarvottam Suraksha (Omnipresent Omnipotent Security)", "B) Swift and Sure", "C) Valour and Victory", "D) Protection and Security"], "ans": 0, "brief": "The motto of the NSG is 'Sarvatra Sarvottam Suraksha'[cite: 5]."},
+        {"num": 188, "module": "Module 8: Paramilitary & BRO", "q": "Where did Project DANTAK of the Border Roads Organisation (BRO) celebrate its 66th Raising Day on April 24, 2026?", "options": ["A) Thimphu, Bhutan", "B) Kathmandu, Nepal", "C) Tawang, Arunachal Pradesh", "D) Leh, Ladakh"], "ans": 0, "brief": "Project DANTAK celebrated its 66th Raising Day in Thimphu, Bhutan[cite: 5]."},
+        {"num": 189, "module": "Module 8: Paramilitary & BRO", "q": "Where did the Border Roads Organisation celebrate the 37th Raising Day of Project UDAYAK on June 1, 2026?", "options": ["A) Doomdooma, Assam", "B) Tezpur, Assam", "C) Itanagar, Arunachal Pradesh", "D) Dimapur, Nagaland"], "ans": 0, "brief": "Project UDAYAK celebrated its 37th Raising Day in Doomdooma, Assam[cite: 5]."},
+        {"num": 190, "module": "Module 8: Paramilitary & BRO", "q": "How many kilometers of roads are overseen by Project UDAYAK (established in 1987) in Arunachal Pradesh and Assam along the LAC and Indo-Myanmar border?", "options": ["A) Over 1,457 km", "B) Over 800 km", "C) Over 2,100 km", "D) Over 500 km"], "ans": 0, "brief": "Project UDAYAK oversees over 1,457 km of strategic roads in Arunachal Pradesh and Assam[cite: 5]."},
+        {"num": 191, "module": "Module 8: Paramilitary & BRO", "q": "Where did Project CHETAK of the Border Roads Organisation celebrate its 47th Raising Day on April 4, 2026?", "options": ["A) Bikaner, Rajasthan", "B) Jaisalmer, Rajasthan", "C) Barmer, Rajasthan", "D) Jodhpur, Rajasthan"], "ans": 0, "brief": "Project Chetak celebrated its 47th Raising Day in Bikaner, Rajasthan[cite: 5]."},
+        {"num": 192, "module": "Module 8: Paramilitary & BRO", "q": "Where did Project BRAHMANK of the Border Roads Organisation celebrate its 16th Raising Day on June 29, 2026?", "options": ["A) Ranaghat, Arunachal Pradesh", "B) Tawang, Arunachal Pradesh", "C) Pasighat, Arunachal Pradesh", "D) Ziro, Arunachal Pradesh"], "ans": 0, "brief": "Project BRAHMANK celebrated its 16th Raising Day at Ranaghat, Arunachal Pradesh[cite: 5]."},
+        {"num": 193, "module": "Module 8: Paramilitary & BRO", "q": "Which 400 ft Bailey Suspension Bridge on the Chungthang-Lachen axis in North Sikkim, restored by the BRO, was inaugurated by Raksha Rajya Mantri Sanjay Seth?", "options": ["A) Taram Chu Bridge", "B) Teesta Chu Bridge", "C) Rangit Bridge", "D) Lachen Chu Bridge"], "ans": 0, "brief": "The 400 ft Bailey Suspension Taram Chu Bridge on the Chungthang-Lachen axis was restored by BRO[cite: 5]."},
+        {"num": 194, "module": "Module 8: Paramilitary & BRO", "q": "Which is India's first indigenously designed Pollution Control Vessel (with >60% indigenous content) built by Goa Shipyard Limited for the Indian Coast Guard?", "options": ["A) ICGS Samudra Pratap", "B) ICGS Samudra Prahari", "C) ICGS Samudra Pavak", "D) ICGS Samudra Sentinel"], "ans": 0, "brief": "ICGS Samudra Pratap is India's first indigenously designed pollution control vessel built by GSL[cite: 5]."},
+        {"num": 195, "module": "Module 8: Paramilitary & BRO", "q": "What is the name of the new-generation Fast Patrol Vessel (4th in the Adamya-class) commissioned by the Indian Coast Guard at Goa Shipyard on June 27, 2026?", "options": ["A) ICGS Akshay", "B) ICGS Adamya", "C) ICGS Abhinav", "D) ICGS Amrit"], "ans": 0, "brief": "ICGS Akshay is the new-generation FPV (4th in Adamya-class) commissioned at GSL[cite: 5]."},
+        {"num": 196, "module": "Module 8: Paramilitary & BRO", "q": "In which city did the keel-laying ceremony for the fourth of six Next Generation Offshore Patrol Vessels (OPVs) built by MDL for the Indian Coast Guard take place in 2026?", "options": ["A) Mumbai", "B) Kolkata", "C) Goa", "D) Chennai"], "ans": 0, "brief": "The keel-laying ceremony for the 4th NGOPV by MDL for the Coast Guard took place in Mumbai[cite: 5]."},
+        {"num": 197, "module": "Module 8: Paramilitary & BRO", "q": "Which force completed its first-ever all-women international Mount Everest expedition on May 21, 2026, with a 14-member team reaching the summit via the South Col Route?", "options": ["A) Indo-Tibetan Border Police (ITBP)", "B) Border Security Force (BSF)", "C) Sashastra Seema Bal (SSB)", "D) Central Reserve Police Force (CRPF)"], "ans": 0, "brief": "The ITBP completed its first-ever all-women international Mount Everest expedition via the South Col Route[cite: 5]."},
+        {"num": 198, "module": "Module 8: Paramilitary & BRO", "q": "What was the name of the community radio station launched in a border village of Sikkim by the Indian Army's Trishakti Corps?", "options": ["A) Sikkim Sundari", "B) Radio Trishakti", "C) Border Vani", "D) Him Vani"], "ans": 0, "brief": "'Sikkim Sundari' is the community radio station launched by the Trishakti Corps in a border village[cite: 5]."},
+        {"num": 199, "module": "Module 8: Paramilitary & BRO", "q": "With which forest department did the Indian Army sign an MoU to strengthen wildlife conservation efforts in fragile high-altitude ecosystems?", "options": ["A) Ladakh Forest Department", "B) Sikkim Forest Department", "C) Arunachal Pradesh Forest Department", "D) Himachal Pradesh Forest Department"], "ans": 0, "brief": "The Indian Army signed an MoU with the Ladakh Forest Department for high-altitude wildlife conservation[cite: 5]."},
+        {"num": 200, "module": "Module 8: Paramilitary & BRO", "q": "Where is the Indian National Defence University (INDU) proposed to be established?", "options": ["A) Gurgaon (Gurugram), Haryana", "B) Khadakwasla, Maharashtra", "C) Wellington, Tamil Nadu", "D) Dehradun, Uttarakhand"], "ans": 0, "brief": "The Indian National Defence University (INDU) is proposed to be located in Gurgaon, Haryana[cite: 5]."},
+
+        // MODULE 9: FAMOUS MILITARY OPERATIONS & HADR MISSIONS (201-225)
+        {"num": 201, "module": "Module 9: Military Operations", "q": "What was 'Operation Polo', conducted by the Indian Armed Forces in September 1948?", "options": ["A) Police action to integrate the Princely State of Hyderabad into the Indian Union", "B) Liberation of Goa, Daman, and Diu from Portuguese rule", "C) Integration of Junagadh into India", "D) Military defense of Jammu & Kashmir against raiders"], "ans": 0, "brief": "Operation Polo (1948) was the military/police action to integrate Hyderabad into the Indian Union[cite: 5]."},
+        {"num": 202, "module": "Module 9: Military Operations", "q": "What was the code name of India's first peaceful nuclear test conducted at Pokhran on 18 May 1974?", "options": ["A) Operation Smiling Buddha (Pokhran-I)", "B) Operation Shakti", "C) Operation Brasstacks", "D) Operation Parakram"], "ans": 0, "brief": "Operation Smiling Buddha was the code name for India's first nuclear test in Pokhran in 1974[cite: 5]."},
+        {"num": 203, "module": "Module 9: Military Operations", "q": "Which Indian Army operation was launched on 13 April 1984 to secure the heights of the Siachen Glacier in Ladakh?", "options": ["A) Operation Meghdoot", "B) Operation Rajiv", "C) Operation Safed Sagar", "D) Operation Blue Star"], "ans": 0, "brief": "Operation Meghdoot was launched on 13 April 1984 to capture the Siachen Glacier[cite: 5]."},
+        {"num": 204, "module": "Module 9: Military Operations", "q": "What was 'Operation Pawan', conducted by the Indian Peace Keeping Force (IPKF) in late 1987?", "options": ["A) Operation to take control of Jaffna from the LTTE in Sri Lanka", "B) Evacuation of Indian citizens from Kuwait", "C) Counter-insurgency operation in Mizoram", "D) Naval blockade of Karachi harbour"], "ans": 0, "brief": "Operation Pawan (1987) was conducted by the IPKF to disarm the LTTE and capture Jaffna in Sri Lanka[cite: 5]."},
+        {"num": 205, "module": "Module 9: Military Operations", "q": "Which Indian military operation in November 1988 successfully thwarted a mercenary coup attempt against President Maumoon Abdul Gayoom in the Maldives?", "options": ["A) Operation Cactus", "B) Operation Neer", "C) Operation Sanjeevani", "D) Operation Sukoon"], "ans": 0, "brief": "Operation Cactus (1988) was executed by Indian paratroopers and navy to foil a coup in the Maldives[cite: 5]."},
+        {"num": 206, "module": "Module 9: Military Operations", "q": "What was the code name of the series of five nuclear tests conducted by India at Pokhran in May 1998?", "options": ["A) Operation Shakti (Pokhran-II)", "B) Operation Smiling Buddha", "C) Operation Vijay", "D) Operation Ashwamedh"], "ans": 0, "brief": "Operation Shakti was the code name for the five nuclear tests conducted at Pokhran in May 1998[cite: 5]."},
+        {"num": 207, "module": "Module 9: Military Operations", "q": "What was 'Operation Talwar', executed during the 1999 Kargil War?", "options": ["A) Indian Navy's naval blockade and deployment in the North Arabian Sea", "B) Indian Army's ground assault on Tiger Hill", "C) Indian Air Force's precision bombing of enemy bunkers", "D) Artillery bombardment of Tololing heights"], "ans": 0, "brief": "Operation Talwar was the Indian Navy's aggressive deployment in the North Arabian Sea during the Kargil War[cite: 5]."},
+        {"num": 208, "module": "Module 9: Military Operations", "q": "What was the code name of the Indian Air Force air strikes conducted in support of the Indian Army during the 1999 Kargil War?", "options": ["A) Operation Safed Sagar", "B) Operation Bandar", "C) Operation Cactus", "D) Operation Meghdoot"], "ans": 0, "brief": "Operation Safed Sagar was the IAF air campaign during the 1999 Kargil War[cite: 5]."},
+        {"num": 209, "module": "Module 9: Military Operations", "q": "Which humanitarian operation was launched by India in December 2014 to supply fresh drinking water to the Maldives after a fire at the Malé water treatment plant?", "options": ["A) Operation Neer", "B) Operation Sanjeevani", "C) Operation Samudra Setu", "D) Operation Rahat"], "ans": 0, "brief": "Operation Neer (2014) supplied drinking water to the Maldives via IAF transport aircraft and naval ships[cite: 5]."},
+        {"num": 210, "module": "Module 9: Military Operations", "q": "What was 'Operation Sanjeevani', executed by the Indian Air Force in April 2020?", "options": ["A) Airlift of 6.2 tonnes of essential medicines and hospital consumables to the Maldives during COVID-19", "B) Evacuation of Indian students from Wuhan, Ukraine", "C) Delivery of oxygen tankers from Singapore during the second COVID wave", "D) Rescue of flood victims in Kerala"], "ans": 0, "brief": "Operation Sanjeevani (2020) airlifted essential medicines to the Maldives using a C-130J aircraft[cite: 5]."},
+        {"num": 211, "module": "Module 9: Military Operations", "q": "Which evacuation operation was launched by the Government of India in 2022 to rescue Indian citizens and students stranded during the Russia-Ukraine war?", "options": ["A) Operation Ganga", "B) Operation Devi Shakti", "C) Operation Ajay", "D) Operation Kaveri"], "ans": 0, "brief": "Operation Ganga (2022) evacuated Indian nationals stranded in Ukraine during the conflict[cite: 5]."},
+        {"num": 212, "module": "Module 9: Military Operations", "q": "What was 'Operation Dost', launched by India in February 2023?", "options": ["A) Search and rescue assistance and medical relief sent to Turkey and Syria after a devastating earthquake", "B) Food aid dispatched to Afghanistan after drought", "C) Evacuation of Indians from earthquake-hit Nepal", "D) Naval HADR mission to Madagascar after cyclone"], "ans": 0, "brief": "Operation Dost (2023) provided HADR assistance to Turkey and Syria following a major earthquake[cite: 5]."},
+        {"num": 213, "module": "Module 9: Military Operations", "q": "Which operation was launched by India in April 2023 to evacuate Indian citizens and foreign nationals from crisis-hit Sudan?", "options": ["A) Operation Kaveri", "B) Operation Ajay", "C) Operation Sukoon", "D) Operation Sankalp"], "ans": 0, "brief": "Operation Kaveri (2023) evacuated Indian nationals from conflict-torn Sudan using naval ships and C-130J aircraft[cite: 5]."},
+        {"num": 214, "module": "Module 9: Military Operations", "q": "What was 'Operation Samudra Setu', launched by the Indian Navy in May 2020?", "options": ["A) Repatriation of Indian citizens stranded overseas during the COVID-19 pandemic", "B) Anti-piracy patrol in the Gulf of Aden", "C) Joint hydrographic survey of the Indian Ocean", "D) Submarine rescue drill with allied navies"], "ans": 0, "brief": "Operation Samudra Setu (2020) repatriated Indian citizens stranded overseas during COVID-19[cite: 5]."},
+        {"num": 215, "module": "Module 9: Military Operations", "q": "Which operation was launched by India in October 2023 to repatriate Indian citizens from Israel following the outbreak of the Israel-Gaza conflict?", "options": ["A) Operation Ajay", "B) Operation Kaveri", "C) Operation Ganga", "D) Operation Devi Shakti"], "ans": 0, "brief": "Operation Ajay (2023) repatriated Indian nationals from Israel during the Gaza conflict[cite: 5]."},
+        {"num": 216, "module": "Module 9: Military Operations", "q": "What was 'Operation Karuna', launched by India in May 2023?", "options": ["A) Humanitarian Assistance and Disaster Relief (HADR) provided to Myanmar after Cyclone Mocha", "B) Medical aid dispatched to Sri Lanka after tsunami", "C) Cyclone relief provided to Fiji", "D) Flood rescue mission in Bangladesh"], "ans": 0, "brief": "Operation Karuna (2023) provided HADR relief to Myanmar after Cyclone Mocha[cite: 5]."},
+        {"num": 217, "module": "Module 9: Military Operations", "q": "What was 'Operation DRISHTI', conducted from June 15 to 19, 2026?", "options": ["A) A major humanitarian medical initiative by the Indian Army and IAF providing surgical eye care at Military Hospital Namkum in Ranchi, Jharkhand", "B) An orbital surveillance satellite launch by ISRO", "C) A border surveillance operation along the Indo-Myanmar border", "D) A night-vision training drill for infantry units"], "ans": 0, "brief": "Operation DRISHTI was a mega surgical eye camp organized by the Army and IAF at MH Namkum, Ranchi[cite: 5]."},
+        {"num": 218, "module": "Module 9: Military Operations", "q": "What was 'Operation Amistad', launched by India in 2026?", "options": ["A) Humanitarian assistance and disaster relief (HADR) mission to aid Venezuela after an earthquake using C-17 aircraft", "B) Evacuation of Indians from Haiti", "C) Anti-narcotics patrol in the Caribbean Sea", "D) Peacekeeping deployment in Colombia"], "ans": 0, "brief": "Operation Amistad was a HADR mission to aid Venezuela after an earthquake using IAF C-17 aircraft[cite: 5]."},
+        {"num": 219, "module": "Module 9: Military Operations", "q": "Why did the Indian Navy launch 'Operation Urja Suraksha' in 2026?", "options": ["A) To protect India's energy supply routes in the strategically important Strait of Hormuz amid rising West Asia tensions", "B) To safeguard offshore oil rigs in Bombay High against cyclones", "C) To escort LNG tankers from Australia to Kochi", "D) To prevent fuel smuggling across maritime borders"], "ans": 0, "brief": "Operation Urja Suraksha protected energy supply routes in the Strait of Hormuz during West Asia tensions[cite: 5]."},
+        {"num": 220, "module": "Module 9: Military Operations", "q": "What was 'Operation Him Setu', launched by the Indian Army on April 9, 2026?", "options": ["A) Rescue operation by Trishakti Corps and BRO to evacuate stranded tourists in Sikkim after landslides and heavy snowfall", "B) Construction of permanent bridges across the Shyok River in Ladakh", "C) Winter patrol along the Siachen Glacier", "D) Snow clearance drive on the Zoji La pass"], "ans": 0, "brief": "Operation Him Setu was launched by Trishakti Corps and BRO to rescue tourists in Sikkim after landslides[cite: 5]."},
+        {"num": 221, "module": "Module 9: Military Operations", "q": "What is 'Operation 777', launched in connection with the Kaal Bhairava autonomous combat aircraft programme by Flying Wedge Defence & Aerospace (FWDA)?", "options": ["A) Creating manufacturing and integration partnerships across 7 continents and 77 countries", "B) Developing a 777-km range stealth drone in 7 years", "C) Recruiting 777 aerospace engineers from 7 technical institutes", "D) Testing 7 autonomous drones for 77 continuous hours"], "ans": 0, "brief": "Operation 777 aims to build partnerships across 7 continents and 77 countries for the Kaal Bhairava program[cite: 5]."},
+        {"num": 222, "module": "Module 9: Military Operations", "q": "What was 'Operation Antim Prahar', mentioned in the notes?", "options": ["A) An anti-Naxal tactical operation launched in Gadchiroli, Maharashtra", "B) A counter-terror sweep in the Anantnag forests of J&K", "C) A joint border patrol against smuggling in Punjab", "D) An anti-piracy boarding operation in the Gulf of Aden"], "ans": 0, "brief": "Operation Antim Prahar was an anti-Naxal tactical operation in Gadchiroli, Maharashtra[cite: 5]."},
+        {"num": 223, "module": "Module 9: Military Operations", "q": "What was 'Operation Vijay' (1961)?", "options": ["A) Military operation by the Indian Armed Forces to liberate Goa, Daman, and Diu from Portuguese colonial rule", "B) Capture of the Haji Pir pass in Kargil", "C) Integration of Sikkim as a state of India", "D) Liberation of Bangladesh in 1971"], "ans": 0, "brief": "Operation Vijay (1961) liberated Goa, Daman, and Diu from 451 years of Portuguese colonial rule[cite: 5]."},
+        {"num": 224, "module": "Module 9: Military Operations", "q": "What was 'Operation Trident' (1971)?", "options": ["A) Indian Navy's offensive missile attack on Karachi harbour on 4 December 1971", "B) Airborne paratrooper drop at Tangail in East Pakistan", "C) Tank battle at Basantar in the western sector", "D) Amphibious landing at Cox's Bazar"], "ans": 0, "brief": "Operation Trident was the Indian Navy's attack on Karachi harbour on 4 Dec 1971 (celebrated as Navy Day)[cite: 5]."},
+        {"num": 225, "module": "Module 9: Military Operations", "q": "What was 'Operation Black Forest', mentioned in the regional security notes?", "options": ["A) An anti-Naxal security operation", "B) A counter-insurgency operation in Assam", "C) A joint military drill with Germany", "D) An illegal logging crackdown in the Western Ghats"], "ans": 0, "brief": "Operation Black Forest was noted as an anti-Naxal security operation[cite: 5]."},
+
+        // MODULE 10: DEFENCE DIALOGUES, APPOINTMENTS, BUDGETS & TECHNOLOGY (226-250)
+        {"num": 226, "module": "Module 10: Dialogues & Budget", "q": "Who was appointed as India's Chief of Defence Staff (CDS), succeeding General Anil Chauhan after his retirement in May 2026?", "options": ["A) Lieutenant General N S Raja Subramani (Retd.)", "B) General Upendra Dwivedi", "C) Vice Admiral Krishna Swaminathan", "D) Air Marshal Tejinder Singh"], "ans": 0, "brief": "Lt Gen N S Raja Subramani (Retd.) was appointed as India's next Chief of Defence Staff (CDS)[cite: 5]."},
+        {"num": 227, "module": "Module 10: Dialogues & Budget", "q": "Who assumed charge as the 27th Chief of the Naval Staff of the Indian Navy on 31 May 2026, succeeding Admiral Dinesh Kumar Tripathi?", "options": ["A) Admiral Krishna Swaminathan", "B) Vice Admiral Ajay Kochhar", "C) Vice Admiral Sanjay Vatsayan", "D) Vice Admiral B Sivakumar"], "ans": 0, "brief": "Admiral Krishna Swaminathan assumed charge as the 27th Chief of the Naval Staff on 31 May 2026[cite: 5]."},
+        {"num": 228, "module": "Module 10: Dialogues & Budget", "q": "Who assumed charge as the 48th Vice Chief of the Naval Staff (VCNS) on 29 May 2026?", "options": ["A) Vice Admiral Ajay Kochhar", "B) Vice Admiral Krishna Swaminathan", "C) Vice Admiral Sanjay Vatsayan", "D) Vice Admiral Alok Ananda"], "ans": 0, "brief": "Vice Admiral Ajay Kochhar assumed charge as the 48th Vice Chief of the Naval Staff on 29 May 2026[cite: 5]."},
+        {"num": 229, "module": "Module 10: Dialogues & Budget", "q": "Who was appointed as the Vice Chief of the Army Staff (VCOAS) of the Indian Army in 2026?", "options": ["A) Lieutenant General Dhiraj Seth", "B) Lieutenant General Mohit Malhotra", "C) Lieutenant General NS Raja Subramani", "D) Lieutenant General Upendra Dwivedi"], "ans": 0, "brief": "Lieutenant General Dhiraj Seth was appointed as the Vice Chief of the Army Staff (VCOAS)[cite: 5]."},
+        {"num": 230, "module": "Module 10: Dialogues & Budget", "q": "Who became the Chief of Integrated Defence Staff to the Chairman Chiefs of Staff Committee (CISC) on July 1, 2026?", "options": ["A) Air Marshal Tejinder Singh", "B) Air Marshal Ashutosh Dixit", "C) Air Marshal Jasvir Singh Mann", "D) Air Marshal Tarun Chaudhry"], "ans": 0, "brief": "Air Marshal Tejinder Singh became the Chief of Integrated Defence Staff (CISC) on July 1, 2026[cite: 5]."},
+        {"num": 231, "module": "Module 10: Dialogues & Budget", "q": "Who became the General Officer Commanding-in-Chief (GOC-in-C) of the Jaipur-based South Western Command of the Indian Army?", "options": ["A) Lieutenant General Mohit Malhotra", "B) Lieutenant General Dhiraj Seth", "C) Lieutenant General Upendra Dwivedi", "D) Lieutenant General MV Suchindra Kumar"], "ans": 0, "brief": "Lt Gen Mohit Malhotra became the GOC-in-C of the South Western Command in Jaipur[cite: 5]."},
+        {"num": 232, "module": "Module 10: Dialogues & Budget", "q": "Who assumed charge as the Air Officer Commanding-in-Chief (AOC-in-C) of the Southern Air Command on 1st July 2026?", "options": ["A) Air Marshal Jasvir Singh Mann", "B) Air Marshal Tarun Chaudhry", "C) Air Marshal Yalla Umesh", "D) Air Marshal Ashutosh Dixit"], "ans": 0, "brief": "Air Marshal Jasvir Singh Mann assumed charge as AOC-in-C of the Southern Air Command on 1 July 2026[cite: 5]."},
+        {"num": 233, "module": "Module 10: Dialogues & Budget", "q": "Who assumed the appointment of Air Officer Commanding-in-Chief (AOC-in-C) of the Central Air Command on June 1, 2026?", "options": ["A) Air Marshal Tarun Chaudhry", "B) Air Marshal Jasvir Singh Mann", "C) Air Marshal Tejinder Singh", "D) Air Marshal Yalla Umesh"], "ans": 0, "brief": "Air Marshal Tarun Chaudhry assumed charge as AOC-in-C of the Central Air Command on June 1, 2026[cite: 5]."},
+        {"num": 234, "module": "Module 10: Dialogues & Budget", "q": "Who assumed the appointment of Additional Director General (ADG) of the Military Nursing Service (MNS) on June 1, 2026?", "options": ["A) Major General Rachel Thomas", "B) Major General Smita Devrani", "C) Major General Sonali Ghosal", "D) Major General Joyce Gladys Roach"], "ans": 0, "brief": "Maj Gen Rachel Thomas assumed the appointment of ADG of the Military Nursing Service on June 1, 2026[cite: 5]."},
+        {"num": 235, "module": "Module 10: Dialogues & Budget", "q": "Who assumed charge as the Director General of Naval Armament (DGONA) at Naval Headquarters in New Delhi on March 1, 2026?", "options": ["A) B. P. Singh", "B) K. S. Swaminathan", "C) A. K. Kochhar", "D) P. R. Ramesh"], "ans": 0, "brief": "B.P. Singh (1994-batch INAS officer) assumed charge as DGONA on March 1, 2026[cite: 5]."},
+        {"num": 236, "module": "Module 10: Dialogues & Budget", "q": "Which country appointed Lieutenant General Susan Coyle as its first female Chief of Army in 125 years in April 2026?", "options": ["A) Australia", "B) United Kingdom", "C) Canada", "D) New Zealand"], "ans": 0, "brief": "Australia appointed Lieutenant General Susan Coyle as its first female Chief of Army in 125 years[cite: 5]."},
+        {"num": 237, "module": "Module 10: Dialogues & Budget", "q": "Which retired Lieutenant General was appointed as the Strategic Defence Advisor by Synergy Quantum?", "options": ["A) Madhavan Nair", "B) Deependra Singh Hooda", "C) Satish Dua", "D) Subrata Saha"], "ans": 0, "brief": "Retired Lt Gen Madhavan Nair was appointed Strategic Defence Advisor by Synergy Quantum[cite: 5]."},
+        {"num": 238, "module": "Module 10: Dialogues & Budget", "q": "Where was the second edition of the Joint Commanders' Conference, themed 'Military Capability in New Domains', held on May 7-8, 2026?", "options": ["A) Jaipur, Rajasthan", "B) New Delhi", "C) Bhopal, Madhya Pradesh", "D) Kevadia, Gujarat"], "ans": 0, "brief": "The 2nd Joint Commanders' Conference was held in Jaipur, Rajasthan, on May 7-8, 2026[cite: 5]."},
+        {"num": 239, "module": "Module 10: Dialogues & Budget", "q": "Where did Raksha Mantri Rajnath Singh co-chair the 6th India-France Annual Defence Dialogue with French Armed Forces Minister Catherine Vautrin?", "options": ["A) Bengaluru, Karnataka", "B) New Delhi", "C) Paris, France", "D) Mumbai, Maharashtra"], "ans": 0, "brief": "Rajnath Singh co-chaired the 6th India-France Annual Defence Dialogue in Bengaluru, Karnataka[cite: 5]."},
+        {"num": 240, "module": "Module 10: Dialogues & Budget", "q": "Where was the 8th India-Japan Defence Policy Dialogue held on 13 July 2026, led by Defence Secretary Rajesh Kumar Singh?", "options": ["A) Tokyo, Japan", "B) New Delhi, India", "C) Kyoto, Japan", "D) Osaka, Japan"], "ans": 0, "brief": "The 8th India-Japan Defence Policy Dialogue was held in Tokyo, Japan, on 13 July 2026[cite: 5]."},
+        {"num": 241, "module": "Module 10: Dialogues & Budget", "q": "What unprecedented allocation did Defence Services receive in the Union Budget for FY 2026-27 post Operation Sindoor, representing 2% of estimated GDP?", "options": ["A) Rs 7.85 lakh crore (15.19% increase over BE 2025-26)", "B) Rs 6.21 lakh crore", "C) Rs 8.50 lakh crore", "D) Rs 5.94 lakh crore"], "ans": 0, "brief": "Defence allocation reached Rs 7.85 lakh crore in FY 2026-27, a 15.19% increase over FY 2025-26 BE[cite: 5]."},
+        {"num": 242, "module": "Module 10: Dialogues & Budget", "q": "To what all-time high did India's defence exports touch in Financial Year (FY) 2025-26, recording a 62.66% increase over the previous fiscal year?", "options": ["A) Rs 38,424 crore (DPSUs 54.84%, Private 45.16%)", "B) Rs 23,622 crore", "C) Rs 45,000 crore", "D) Rs 16,000 crore"], "ans": 0, "brief": "Defence exports reached an all-time high of Rs 38,424 crore in FY 2025-26[cite: 5]."},
+        {"num": 243, "module": "Module 10: Dialogues & Budget", "q": "What record figure did India's annual defence production reach in FY 2025-26, marking a 110% increase since FY 2020-21?", "options": ["A) Rs 1.78 lakh crore", "B) Rs 1.54 lakh crore", "C) Rs 2.10 lakh crore", "D) Rs 1.25 lakh crore"], "ans": 0, "brief": "Annual defence production surged to Rs 1.78 lakh crore in FY 2025-26[cite: 5]."},
+        {"num": 244, "module": "Module 10: Dialogues & Budget", "q": "What total estimated value of capital acquisition proposals (Acceptance of Necessity - AoN) was approved by the Defence Acquisition Council (DAC) on July 3, 2026?", "options": ["A) About Rs 52,000 crore", "B) About Rs 84,000 crore", "C) About Rs 28,000 crore", "D) About Rs 1,10,000 crore"], "ans": 0, "brief": "The DAC accorded AoN to various acquisition proposals worth approximately Rs 52,000 crore on July 3, 2026[cite: 5]."},
+        {"num": 245, "module": "Module 10: Dialogues & Budget", "q": "What was the total value of procurement contracts signed by the Ministry of Defence on March 3, 2026, for six ALH Mk-III helicopters for ICG and VL-Shtil SAMs for the Navy?", "options": ["A) Rs 5,083 crore", "B) Rs 3,200 crore", "C) Rs 7,500 crore", "D) Rs 2,312 crore"], "ans": 0, "brief": "MoD signed contracts worth Rs 5,083 crore for 6 ALH Mk-III helicopters and VL-Shtil missiles[cite: 5]."},
+        {"num": 246, "module": "Module 10: Dialogues & Budget", "q": "Which 13-day commemorative motorcycle expedition was flagged off by Rajnath Singh from National War Memorial Delhi to Kargil War Memorial Dras on July 14, 2026?", "options": ["A) Shaurya Vijay Yatra", "B) Kargil Vijay Yatra", "C) Bharat Shaurya Yatra", "D) Vijay Diwas Yatra"], "ans": 0, "brief": "Rajnath Singh flagged off the 13-day 'Shaurya Vijay Yatra' motorcycle expedition for Kargil Vijay Diwas 2026[cite: 5]."},
+        {"num": 247, "module": "Module 10: Dialogues & Budget", "q": "Which South American peak, the second-highest peak in the world outside Asia, was summited by a 6-member team from NIM Uttarkashi and JIM&WS Pahalgam?", "options": ["A) Mt. Aconcagua", "B) Mt. Ojos del Salado", "C) Mt. Chimborazo", "D) Mt. Huascarán"], "ans": 0, "brief": "The NIM and JIM&WS team successfully summited Mt. Aconcagua in South America[cite: 5]."},
+        {"num": 248, "module": "Module 10: Dialogues & Budget", "q": "At which DRDO facility in Chandigarh did India's human spaceflight program complete the successful qualification load test of the Drogue Parachute for Gaganyaan?", "options": ["A) RTRS facility (Terminal Ballistics Research Laboratory / Rail Track Rocket Sled)", "B) TBRL Range, Panchkula", "C) Snow and Avalanche Study Establishment (SASE)", "D) DRDO Avionics Centre"], "ans": 0, "brief": "The Gaganyaan Drogue Parachute load test was conducted at DRDO's RTRS facility in Chandigarh[cite: 5]."},
+        {"num": 249, "module": "Module 10: Dialogues & Budget", "q": "At which international defence exhibition in Riyadh, Saudi Arabia, did Raksha Rajya Mantri Sanjay Seth inaugurate the first-ever India Pavilion in 2026?", "options": ["A) World Defence Show (WDS) 2026", "B) IDEX Saudi Arabia", "C) Gulf Defence Expo", "D) Middle East Security Summit"], "ans": 0, "brief": "Sanjay Seth led the Indian delegation to WDS 2026 in Riyadh and inaugurated the first-ever India Pavilion[cite: 5]."},
+        {"num": 250, "module": "Module 10: Dialogues & Budget", "q": "What was the theme of the National Defence Industries Conclave (NDIC) 2026 organized by the Department of Defence Production at Manekshaw Centre, New Delhi?", "options": ["A) Advanced Manufacturing Technologies", "B) Aatmanirbhar Defence Ecosystem", "C) Exporting Indian Defence Worldwide", "D) AI and Quantum in Military Systems"], "ans": 0, "brief": "The NDIC 2026 was organized by DDP on the theme 'Advanced Manufacturing Technologies'[cite: 5]."}
+    ];
+
+    let activeQuestions = [];
+    let currentScore = 0;
+    let wrongCount = 0;
+    let answeredCount = 0;
+    let activeFilter = 'All';
+    let searchQuery = '';
+    let showAllActive = false;
+    let statusFilter = 'all';
+    let questionStatus = {};
+
+    function shuffleArray(array) {
+        const arr = [...array];
+        for (let i = arr.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [arr[i], arr[j]] = [arr[j], arr[i]];
+        }
+        return arr;
+    }
+
+    function initializeAndShuffleQuiz() {
+        const prepared = originalQuestionsData.map(q => {
+            const cleanOptions = q.options.map(opt => opt.replace(/^[A-D]\)\s*/, ''));
+            const correctAnswerText = cleanOptions[q.ans];
+            const shuffledCleanOptions = shuffleArray(cleanOptions);
+            const newCorrectIdx = shuffledCleanOptions.indexOf(correctAnswerText);
+            const relabeledOptions = shuffledCleanOptions.map((opt, i) => {
+                return String.fromCharCode(65 + i) + ') ' + opt;
+            });
+            return {
+                ...q,
+                options: relabeledOptions,
+                ans: newCorrectIdx
+            };
+        });
+        activeQuestions = shuffleArray(prepared);
+        questionStatus = {};
+        currentScore = 0;
+        wrongCount = 0;
+        answeredCount = 0;
+        statusFilter = 'all';
+        document.querySelectorAll('.stat-item').forEach(el => el.classList.remove('active-filter'));
+        updateStats();
+    }
+
+    function applyFilters() {
+        searchQuery = document.getElementById('search-input').value.toLowerCase().trim();
+        renderQuiz();
+    }
+
+    function filterByStatus(status) {
+        if (statusFilter === status) {
+            statusFilter = 'all';
+            document.querySelectorAll('.stat-item').forEach(el => el.classList.remove('active-filter'));
+        } else {
+            statusFilter = status;
+            document.querySelectorAll('.stat-item').forEach(el => el.classList.remove('active-filter'));
+            if (status === 'correct') {
+                document.getElementById('correctStat').classList.add('active-filter');
+            } else if (status === 'wrong') {
+                document.getElementById('wrongStat').classList.add('active-filter');
+            } else if (status === 'left') {
+                document.getElementById('leftStat').classList.add('active-filter');
+            }
+        }
+        renderQuiz();
+    }
+
+    function renderQuiz() {
+        const container = document.getElementById('quiz-container');
+        container.innerHTML = '';
+        let displayCount = 0;
+        let seqNum = 1;
+
+        const isQidSearch = searchQuery && /^\d+$/.test(searchQuery);
+        const qidNumber = isQidSearch ? parseInt(searchQuery) : null;
+
+        activeQuestions.forEach((q) => {
+            if (activeFilter !== 'All') {
+                const qModuleMatch = q.module.match(/Module (\d+)/);
+                const qModuleNum = qModuleMatch ? qModuleMatch[1] : null;
+                const filterMatch = activeFilter.match(/Module (\d+)/);
+                const filterModuleNum = filterMatch ? filterMatch[1] : null;
+                
+                if (qModuleNum && filterModuleNum) {
+                    if (qModuleNum !== filterModuleNum) return;
+                } else {
+                    if (!q.module.startsWith(activeFilter + ':')) return;
+                }
+            }
+            
+            if (statusFilter !== 'all') {
+                const status = questionStatus[q.num];
+                if (statusFilter === 'correct' && status !== 'correct') return;
+                if (statusFilter === 'wrong' && status !== 'wrong') return;
+                if (statusFilter === 'left' && status !== undefined) return;
+            }
+            
+            if (searchQuery) {
+                if (isQidSearch) {
+                    if (q.num !== qidNumber) return;
+                } else {
+                    const match = q.q.toLowerCase().includes(searchQuery) ||
+                                  q.module.toLowerCase().includes(searchQuery) ||
+                                  q.brief.toLowerCase().includes(searchQuery) ||
+                                  q.options.some(o => o.toLowerCase().includes(searchQuery));
+                    if (!match) return;
+                }
+            }
+            
+            displayCount++;
+            const card = document.createElement('div');
+            card.className = 'question-card';
+            card.id = `card-${q.num}`;
+            
+            const savedNote = localStorage.getItem(`defence_gk_2026_note_QID_${q.num}`) || '';
+            const savedNoteHtml = savedNote ? `
+                <div class="saved-note-banner" id="saved-display-${q.num}">
+                    <strong>📌 Saved Note:</strong> ${savedNote}
+                </div>` : `<div id="saved-display-${q.num}"></div>`;
+            
+            const status = questionStatus[q.num];
+            let statusBadge = '';
+            if (status === 'correct') {
+                statusBadge = `<span class="q-status-badge status-correct">✅ Correct</span>`;
+            } else if (status === 'wrong') {
+                statusBadge = `<span class="q-status-badge status-wrong">❌ Wrong</span>`;
+            } else {
+                statusBadge = `<span class="q-status-badge status-unanswered">⏳ Unanswered</span>`;
+            }
+            
+            card.innerHTML = `
+                <div class="q-header">
+                    <div class="q-badges-left">
+                        <span class="q-num-badge">Question #${seqNum++}</span>
+                        <span class="qid-badge">QID:- ${q.num}</span>
+                        ${statusBadge}
+                    </div>
+                    <span class="q-mod-badge">${q.module}</span>
+                </div>
+                <div class="q-text">${q.q}</div>
+                <div class="options-grid" id="opts-${q.num}">
+                    ${q.options.map((optText, optIdx) => `
+                        <button class="opt-btn" onclick="checkAnswer(${q.num}, ${optIdx}, ${q.ans})">
+                            <span>${optText}</span>
+                        </button>
+                    `).join('')}
+                </div>
+                <div class="feedback-box" id="feedback-${q.num}">
+                    ${showAllActive && !questionStatus[q.num] ? `
+                        <div class="feedback-title">✓ Correct Answer: ${q.options[q.ans]}</div>
+                        <div><strong>Why this is right:</strong> ${q.brief}</div>
+                        ${savedNoteHtml}
+                        <div class="notes-section">
+                            <button class="notes-btn" onclick="toggleNoteEditor(${q.num})">Add / Edit Notes & Points</button>
+                            <div class="note-editor" id="editor-${q.num}">
+                                <textarea class="notes-area" id="textarea-${q.num}" rows="3" placeholder="Add your notes/points here...">${savedNote}</textarea>
+                                <button class="save-note-btn" onclick="saveNote(${q.num})">Save Note Locally</button>
+                            </div>
+                        </div>
+                    ` : ''}
+                </div>
+            `;
+            container.appendChild(card);
+
+            if (questionStatus[q.num]) {
+                const optsContainer = document.getElementById(`opts-${q.num}`);
+                if (optsContainer) {
+                    const buttons = optsContainer.querySelectorAll('.opt-btn');
+                    buttons.forEach((btn, idx) => {
+                        btn.classList.add('disabled');
+                        if (idx === q.ans) {
+                            btn.classList.add('correct');
+                        }
+                        if (q._selectedIdx !== undefined && idx === q._selectedIdx && idx !== q.ans) {
+                            btn.classList.add('wrong');
+                        }
+                    });
+                }
+                const feedback = document.getElementById(`feedback-${q.num}`);
+                if (feedback) {
+                    const isCorrect = questionStatus[q.num] === 'correct';
+                    feedback.className = `feedback-box show-${isCorrect ? 'correct' : 'wrong'}`;
+                    const savedNoteDisplay = localStorage.getItem(`defence_gk_2026_note_QID_${q.num}`) || '';
+                    const savedNoteHtmlDisplay = savedNoteDisplay ? `
+                        <div class="saved-note-banner" id="saved-display-${q.num}">
+                            <strong>📌 Saved Note:</strong> ${savedNoteDisplay}
+                        </div>` : `<div id="saved-display-${q.num}"></div>`;
+                    
+                    if (isCorrect) {
+                        feedback.innerHTML = `
+                            <div class="feedback-title">✓ Correct Answer!</div>
+                            <div><strong>Why this is right:</strong> ${q.brief}</div>
+                            ${savedNoteHtmlDisplay}
+                            <div class="notes-section">
+                                <button class="notes-btn" onclick="toggleNoteEditor(${q.num})">Add / Edit Notes & Points</button>
+                                <div class="note-editor" id="editor-${q.num}">
+                                    <textarea class="notes-area" id="textarea-${q.num}" rows="3" placeholder="Add your notes/points here...">${savedNoteDisplay}</textarea>
+                                    <button class="save-note-btn" onclick="saveNote(${q.num})">Save Note Locally</button>
+                                </div>
+                            </div>
+                        `;
+                    } else {
+                        feedback.innerHTML = `
+                            <div class="feedback-title">✗ Wrong Answer — The Correct Answer is: ${q.options[q.ans]}</div>
+                            <div><strong>Why this is right:</strong> ${q.brief}</div>
+                            ${savedNoteHtmlDisplay}
+                            <div class="notes-section">
+                                <button class="notes-btn" onclick="toggleNoteEditor(${q.num})">Add / Edit Notes & Points</button>
+                                <div class="note-editor" id="editor-${q.num}">
+                                    <textarea class="notes-area" id="textarea-${q.num}" rows="3" placeholder="Add your notes/points here...">${savedNoteDisplay}</textarea>
+                                    <button class="save-note-btn" onclick="saveNote(${q.num})">Save Note Locally</button>
+                                </div>
+                            </div>
+                        `;
+                    }
+                }
+            }
+
+            if (showAllActive && !questionStatus[q.num]) {
+                const optsContainer = document.getElementById(`opts-${q.num}`);
+                if (optsContainer) {
+                    const buttons = optsContainer.querySelectorAll('.opt-btn');
+                    buttons.forEach((btn, idx) => {
+                        btn.classList.add('disabled');
+                        if (idx === q.ans) {
+                            btn.classList.add('correct');
+                        }
+                    });
+                }
+                const feedback = document.getElementById(`feedback-${q.num}`);
+                if (feedback) {
+                    feedback.className = 'feedback-box show-correct';
+                    const savedNoteDisplay = localStorage.getItem(`defence_gk_2026_note_QID_${q.num}`) || '';
+                    const savedNoteHtmlDisplay = savedNoteDisplay ? `
+                        <div class="saved-note-banner" id="saved-display-${q.num}">
+                            <strong>📌 Saved Note:</strong> ${savedNoteDisplay}
+                        </div>` : `<div id="saved-display-${q.num}"></div>`;
+                    
+                    if (!feedback.innerHTML) {
+                        feedback.innerHTML = `
+                            <div class="feedback-title">✓ Correct Answer: ${q.options[q.ans]}</div>
+                            <div><strong>Why this is right:</strong> ${q.brief}</div>
+                            ${savedNoteHtmlDisplay}
+                            <div class="notes-section">
+                                <button class="notes-btn" onclick="toggleNoteEditor(${q.num})">Add / Edit Notes & Points</button>
+                                <div class="note-editor" id="editor-${q.num}">
+                                    <textarea class="notes-area" id="textarea-${q.num}" rows="3" placeholder="Add your notes/points here...">${savedNoteDisplay}</textarea>
+                                    <button class="save-note-btn" onclick="saveNote(${q.num})">Save Note Locally</button>
+                                </div>
+                            </div>
+                        `;
+                    }
+                }
+            }
+        });
+
+        if (displayCount === 0) {
+            let message = 'No Defence GK MCQs matched your search.';
+            if (isQidSearch) {
+                message = `No question found with QID ${qidNumber}. Please check the QID and try again.`;
+            } else if (statusFilter === 'correct' && currentScore === 0) {
+                message = 'No correct answers yet. Keep practicing! 🎯';
+            } else if (statusFilter === 'wrong' && wrongCount === 0) {
+                message = 'No wrong answers yet! Great job! 🎉';
+            } else if (statusFilter === 'left') {
+                if (answeredCount === activeQuestions.length) {
+                    message = '🎉 All questions have been answered! No questions left to attempt.';
+                } else {
+                    message = `📝 You have ${activeQuestions.length - answeredCount} questions left to attempt. Start answering!`;
+                }
+            }
+            container.innerHTML = `<div class="no-results">${message}</div>`;
+        }
+
+        updateStats();
+    }
+
+    function checkAnswer(qNum, selectedIdx, correctIdx) {
+        if (showAllActive) return;
+        if (questionStatus[qNum]) return;
+        
+        const optsContainer = document.getElementById(`opts-${qNum}`);
+        const buttons = optsContainer.querySelectorAll('.opt-btn');
+        const feedback = document.getElementById(`feedback-${qNum}`);
+        
+        if (buttons[0].classList.contains('disabled')) {
+            return;
+        }
+        
+        const qObj = activeQuestions.find(item => item.num === qNum);
+        qObj._selectedIdx = selectedIdx;
+        
+        buttons.forEach((btn, idx) => {
+            btn.classList.add('disabled');
+            if (idx === correctIdx) {
+                btn.classList.add('correct');
+            }
+        });
+        
+        const savedNote = localStorage.getItem(`defence_gk_2026_note_QID_${qNum}`) || '';
+        const savedNoteHtml = savedNote ? `
+            <div class="saved-note-banner" id="saved-display-${qNum}">
+                <strong>📌 Saved Note:</strong> ${savedNote}
+            </div>` : `<div id="saved-display-${qNum}"></div>`;
+        
+        const isCorrect = selectedIdx === correctIdx;
+        if (isCorrect) {
+            currentScore++;
+            questionStatus[qNum] = 'correct';
+            buttons[selectedIdx].classList.add('correct');
+            feedback.className = 'feedback-box show-correct';
+            feedback.innerHTML = `
+                <div class="feedback-title">✓ Correct Answer!</div>
+                <div><strong>Why this is right:</strong> ${qObj.brief}</div>
+                ${savedNoteHtml}
+                <div class="notes-section">
+                    <button class="notes-btn" onclick="toggleNoteEditor(${qNum})">Add / Edit Notes & Points</button>
+                    <div class="note-editor" id="editor-${qNum}">
+                        <textarea class="notes-area" id="textarea-${qNum}" rows="3" placeholder="Add your notes/points here...">${savedNote}</textarea>
+                        <button class="save-note-btn" onclick="saveNote(${qNum})">Save Note Locally</button>
+                    </div>
+                </div>
+            `;
+        } else {
+            wrongCount++;
+            questionStatus[qNum] = 'wrong';
+            buttons[selectedIdx].classList.add('wrong');
+            const correctOptText = qObj.options[correctIdx];
+            feedback.className = 'feedback-box show-wrong';
+            feedback.innerHTML = `
+                <div class="feedback-title">✗ Wrong Answer — The Correct Answer is: ${correctOptText}</div>
+                <div><strong>Why this is right:</strong> ${qObj.brief}</div>
+                ${savedNoteHtml}
+                <div class="notes-section">
+                    <button class="notes-btn" onclick="toggleNoteEditor(${qNum})">Add / Edit Notes & Points</button>
+                    <div class="note-editor" id="editor-${qNum}">
+                        <textarea class="notes-area" id="textarea-${qNum}" rows="3" placeholder="Add your notes/points here...">${savedNote}</textarea>
+                        <button class="save-note-btn" onclick="saveNote(${qNum})">Save Note Locally</button>
+                    </div>
+                </div>
+            `;
+        }
+        answeredCount++;
+        
+        const badgeContainer = document.querySelector(`#card-${qNum} .q-badges-left`);
+        if (badgeContainer) {
+            const oldBadge = badgeContainer.querySelector('.q-status-badge');
+            let newBadgeHtml = '';
+            if (isCorrect) {
+                newBadgeHtml = `<span class="q-status-badge status-correct">✅ Correct</span>`;
+            } else {
+                newBadgeHtml = `<span class="q-status-badge status-wrong">❌ Wrong</span>`;
+            }
+            if (oldBadge) {
+                oldBadge.outerHTML = newBadgeHtml;
+            } else {
+                badgeContainer.innerHTML += newBadgeHtml;
+            }
+        }
+        
+        updateStats();
+        
+        if (statusFilter !== 'all') {
+            renderQuiz();
+        }
+    }
+
+    function toggleNoteEditor(qNum) {
+        const editor = document.getElementById(`editor-${qNum}`);
+        if (editor.style.display === 'block') {
+            editor.style.display = 'none';
+        } else {
+            editor.style.display = 'block';
+        }
+    }
+
+    function saveNote(qNum) {
+        const textarea = document.getElementById(`textarea-${qNum}`);
+        const noteText = textarea.value.trim();
+        const storageKey = `defence_gk_2026_note_QID_${qNum}`;
+        
+        if (noteText) {
+            localStorage.setItem(storageKey, noteText);
+        } else {
+            localStorage.removeItem(storageKey);
+        }
+
+        const displayContainer = document.getElementById(`saved-display-${qNum}`);
+        if (noteText) {
+            displayContainer.className = 'saved-note-banner';
+            displayContainer.innerHTML = `<strong>📌 Saved Note:</strong> ${noteText}`;
+        } else {
+            displayContainer.className = '';
+            displayContainer.innerHTML = '';
+        }
+        document.getElementById(`editor-${qNum}`).style.display = 'none';
+    }
+
+    function updateStats() {
+        const totalQuestions = activeQuestions.length;
+        const leftToAttempt = totalQuestions - answeredCount;
+        
+        document.getElementById('correct-count').textContent = currentScore;
+        document.getElementById('wrong-count').textContent = wrongCount;
+        document.getElementById('left-count').textContent = leftToAttempt;
+        
+        const pct = answeredCount > 0 ? Math.round((currentScore / answeredCount) * 100) : 0;
+        document.getElementById('pct-display').textContent = pct + '%';
+    }
+
+    function filterQuestions(modPrefix) {
+        activeFilter = modPrefix;
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.classList.remove('active');
+            if (btn.getAttribute('data-filter') === modPrefix) {
+                btn.classList.add('active');
+            }
+        });
+        renderQuiz();
+    }
+
+    function resetQuiz() {
+        if (showAllActive) {
+            showAllActive = false;
+            const btn = document.getElementById('showAllBtn');
+            btn.classList.remove('show-all-active');
+            btn.textContent = '👁️ Show All Answers (Study Mode)';
+        }
+        currentScore = 0;
+        wrongCount = 0;
+        answeredCount = 0;
+        questionStatus = {};
+        statusFilter = 'all';
+        document.querySelectorAll('.stat-item').forEach(el => el.classList.remove('active-filter'));
+        updateStats();
+        renderQuiz();
+    }
+
+    function toggleShowAll() {
+        const btn = document.getElementById('showAllBtn');
+        showAllActive = !showAllActive;
+        
+        if (showAllActive) {
+            btn.classList.add('show-all-active');
+            btn.textContent = '🔴 Hide All Answers';
+        } else {
+            btn.classList.remove('show-all-active');
+            btn.textContent = '👁️ Show All Answers (Study Mode)';
+        }
+        renderQuiz();
+    }
+
+    // Initialize
+    initializeAndShuffleQuiz();
+    renderQuiz();
+</script>
+</body>
+</html>
