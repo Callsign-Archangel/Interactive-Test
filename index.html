@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AFCAT 2026 — Command Center | All Practice Tests</title>
+<meta name="description" content="One place for every AFCAT 2026 practice test — Vocabulary, Reasoning, Current Affairs, Defence GK, Idioms, One-Word Substitution, Organisations, and Spotting Errors.">
+<style>
+    :root {
+        --bg-main: #f8fafc;
+        --card-bg: #ffffff;
+        --primary: #0f172a;
+        --primary-soft: #1e293b;
+        --accent-red: #dc2626;
+        --accent-green: #10b981;
+        --accent-blue: #2563eb;
+        --accent-amber: #eab308;
+        --accent-sky: #38bdf8;
+        --text-main: #1e293b;
+        --text-muted: #64748b;
+        --border: #e2e8f0;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+        font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        background-color: var(--bg-main);
+        color: var(--text-main);
+        line-height: 1.5;
+        padding-bottom: 60px;
+    }
+
+    /* ---------- Header ---------- */
+    header {
+        background-color: var(--primary);
+        color: #ffffff;
+        padding: 0;
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        background-image:
+            radial-gradient(circle at 15% 20%, rgba(56,189,248,0.10) 0%, transparent 45%),
+            radial-gradient(circle at 85% 80%, rgba(220,38,38,0.10) 0%, transparent 45%);
+        border-bottom: 3px solid var(--accent-sky);
+    }
+
+    .header-container {
+        max-width: 1180px;
+        margin: 0 auto;
+        padding: 26px 20px;
+    }
+
+    .eyebrow {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 0.7rem;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        color: var(--accent-sky);
+        font-weight: 700;
+        background: rgba(56,189,248,0.1);
+        border: 1px solid rgba(56,189,248,0.3);
+        padding: 4px 10px;
+        border-radius: 20px;
+        margin-bottom: 14px;
+    }
+
+    .eyebrow .dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: var(--accent-sky);
+        box-shadow: 0 0 8px var(--accent-sky);
+    }
+
+    header h1 {
+        font-size: clamp(1.6rem, 4vw, 2.4rem);
+        font-weight: 800;
+        letter-spacing: -0.5px;
+    }
+
+    header h1 span {
+        color: var(--accent-sky);
+    }
+
+    header p.subtitle {
+        margin-top: 8px;
+        color: #94a3b8;
+        font-size: 0.95rem;
+        max-width: 620px;
+    }
+
+    .header-stats {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin-top: 20px;
+    }
+
+    .hstat {
+        background-color: rgba(255,255,255,0.05);
+        border: 2px solid #334155;
+        border-radius: 8px;
+        padding: 8px 16px;
+        min-width: 92px;
+        text-align: center;
+    }
+
+    .hstat .hstat-num {
+        font-size: 1.25rem;
+        font-weight: 800;
+        display: block;
+        line-height: 1.2;
+        color: #f1f5f9;
+    }
+
+    .hstat .hstat-label {
+        font-size: 0.62rem;
+        text-transform: uppercase;
+        letter-spacing: 0.4px;
+        color: #94a3b8;
+    }
+
+    /* ---------- Main ---------- */
+    main {
+        max-width: 1180px;
+        margin: 0 auto;
+        padding: 30px 20px 0;
+    }
+
+    .toolbar {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 22px;
+    }
+
+    .search-wrap {
+        position: relative;
+        flex: 1 1 260px;
+        max-width: 380px;
+    }
+
+    #searchInput {
+        width: 100%;
+        padding: 11px 14px 11px 38px;
+        border: 2px solid var(--border);
+        border-radius: 8px;
+        font-size: 0.9rem;
+        background: var(--card-bg);
+        color: var(--text-main);
+        outline: none;
+        transition: border-color 0.2s;
+    }
+
+    #searchInput:focus {
+        border-color: var(--accent-blue);
+    }
+
+    .search-icon {
+        position: absolute;
+        left: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        color: var(--text-muted);
+        font-size: 0.95rem;
+        pointer-events: none;
+    }
+
+    .filter-chips {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+    }
+
+    .chip {
+        border: 2px solid var(--border);
+        background: var(--card-bg);
+        color: var(--text-muted);
+        font-size: 0.78rem;
+        font-weight: 600;
+        padding: 7px 14px;
+        border-radius: 20px;
+        cursor: pointer;
+        user-select: none;
+        transition: all 0.15s;
+        white-space: nowrap;
+    }
+
+    .chip:hover { transform: translateY(-1px); }
+
+    .chip.active {
+        background: var(--primary);
+        border-color: var(--primary);
+        color: #fff;
+    }
+
+    /* ---------- Grid ---------- */
+    .grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 18px;
+        margin-bottom: 10px;
+    }
+
+    .card {
+        background: var(--card-bg);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        overflow: hidden;
+        text-decoration: none;
+        color: inherit;
+        display: flex;
+        flex-direction: column;
+        transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+        position: relative;
+    }
+
+    .card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 12px 24px -8px rgba(15, 23, 42, 0.18);
+        border-color: var(--card-accent, var(--accent-blue));
+    }
+
+    .card-top {
+        background: var(--primary);
+        padding: 18px 18px 16px;
+        position: relative;
+        border-bottom: 4px solid var(--card-accent, var(--accent-blue));
+    }
+
+    .card-icon {
+        width: 44px;
+        height: 44px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.4rem;
+        background: rgba(255,255,255,0.08);
+        border: 1px solid rgba(255,255,255,0.12);
+        margin-bottom: 10px;
+    }
+
+    .card-top h2 {
+        color: #fff;
+        font-size: 1.05rem;
+        font-weight: 700;
+        letter-spacing: -0.2px;
+        line-height: 1.3;
+    }
+
+    .card-top .card-tag {
+        display: inline-block;
+        margin-top: 6px;
+        font-size: 0.65rem;
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+        font-weight: 700;
+        color: var(--card-accent, var(--accent-sky));
+    }
+
+    .card-body {
+        padding: 16px 18px 18px;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .card-body p {
+        font-size: 0.85rem;
+        color: var(--text-muted);
+        margin-bottom: 16px;
+        flex: 1;
+    }
+
+    .card-meta {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .card-meta .qcount {
+        font-size: 0.78rem;
+        font-weight: 700;
+        color: var(--text-main);
+        background: var(--bg-main);
+        border: 1px solid var(--border);
+        padding: 4px 10px;
+        border-radius: 6px;
+    }
+
+    .card-meta .go {
+        font-size: 0.82rem;
+        font-weight: 700;
+        color: var(--card-accent, var(--accent-blue));
+        display: flex;
+        align-items: center;
+        gap: 4px;
+    }
+
+    .card:hover .card-meta .go {
+        gap: 7px;
+        transition: gap 0.18s;
+    }
+
+    .no-results {
+        display: none;
+        text-align: center;
+        padding: 50px 20px;
+        color: var(--text-muted);
+    }
+
+    .no-results.show { display: block; }
+
+    /* ---------- Footer ---------- */
+    footer {
+        max-width: 1180px;
+        margin: 40px auto 0;
+        padding: 20px 20px 0;
+        border-top: 1px solid var(--border);
+        text-align: center;
+        color: var(--text-muted);
+        font-size: 0.8rem;
+    }
+
+    footer strong { color: var(--text-main); }
+
+    @media (max-width: 600px) {
+        .toolbar { flex-direction: column; align-items: stretch; }
+        .search-wrap { max-width: none; flex: 0 0 auto; }
+        main { padding-top: 20px; }
+    }
+</style>
+</head>
+<body>
+
+<header>
+    <div class="header-container">
+        <div class="eyebrow"><span class="dot"></span> AFCAT 2026 PREP</div>
+        <h1>Your Test <span>Command Center</span></h1>
+        <p class="subtitle">Every practice quiz you've built, in one place. Pick a subject below and jump straight in — each test opens in its own tab with your usual scoring and review tools.</p>
+
+        <div class="header-stats">
+            <div class="hstat"><span class="hstat-num">9</span><span class="hstat-label">Test Sets</span></div>
+            <div class="hstat"><span class="hstat-num">2250</span><span class="hstat-label">Total MCQs</span></div>
+            <div class="hstat"><span class="hstat-num">4</span><span class="hstat-label">Subjects</span></div>
+        </div>
+    </div>
+</header>
+
+<main>
+    <div class="toolbar">
+        <div class="search-wrap">
+            <span class="search-icon">&#128269;</span>
+            <input type="text" id="searchInput" placeholder="Search tests…" autocomplete="off">
+        </div>
+        <div class="filter-chips" id="filterChips">
+            <div class="chip active" data-filter="all">All</div>
+            <div class="chip" data-filter="english">English</div>
+            <div class="chip" data-filter="gk">GK &amp; Awareness</div>
+            <div class="chip" data-filter="reasoning">Reasoning</div>
+            <div class="chip" data-filter="numerical">Numerical</div>
+        </div>
+    </div>
+
+    <div class="grid" id="quizGrid"></div>
+
+    <div class="no-results" id="noResults">No tests match your search. Try a different keyword.</div>
+</main>
+
+<footer>
+    <p>Built for personal AFCAT 2026 practice · <strong>9 tests</strong> · Click any card to begin</p>
+</footer>
+
+<script>
+    const quizzes = [
+        {
+            title: "Vocabulary",
+            file: "AFCAT_Vocabulary_QUIZ.html",
+            desc: "Synonyms, antonyms and word usage drawn from previous AFCAT English papers — 250 questions to sharpen your word power.",
+            count: "250 MCQs",
+            icon: "&#128218;",
+            tag: "English",
+            category: "english",
+            accent: "#2563eb"
+        },
+        {
+            title: "Spotting Errors",
+            file: "Spotting_Errors_QUIZ.html",
+            desc: "Grammar and sentence-correction practice for AFCAT, CDS and NDA — train your eye to catch the error fast.",
+            count: "250 MCQs",
+            icon: "&#128269;",
+            tag: "English",
+            category: "english",
+            accent: "#dc2626"
+        },
+        {
+            title: "One-Word Substitution",
+            file: "One_Word_Susbstitution_QUIZ.html",
+            desc: "Replace long phrases with the single word that means the same — a classic AFCAT English staple.",
+            count: "250 MCQs",
+            icon: "&#9997;&#65039;",
+            tag: "English",
+            category: "english",
+            accent: "#10b981"
+        },
+        {
+            title: "Idioms &amp; Phrases",
+            file: "Idioms_Class_Quiz.html",
+            desc: "Common idioms and phrases with their meanings, tested the way AFCAT actually asks them.",
+            count: "250 MCQs",
+            icon: "&#128172;",
+            tag: "English",
+            category: "english",
+            accent: "#eab308"
+        },
+        {
+            title: "Current Affairs",
+            file: "AFCAT_Every_Current_Affairs.html",
+            desc: "Up-to-date current affairs and defence-related news for AFCAT 2 2026 — stay current, score high.",
+            count: "250 MCQs",
+            icon: "&#128240;",
+            tag: "GK",
+            category: "gk",
+            accent: "#38bdf8"
+        },
+        {
+            title: "Defence GK 2026",
+            file: "Defence_GK_2026_QUIZ.html",
+            desc: "Ranks, equipment, operations and general defence knowledge every AFCAT aspirant should know cold.",
+            count: "250 MCQs",
+            icon: "&#9992;&#65039;",
+            tag: "GK",
+            category: "gk",
+            accent: "#0f172a"
+        },
+        {
+            title: "Organisations",
+            file: "Organizations_Class_QUIZ.html",
+            desc: "International and national organisations — headquarters, heads and founding facts, quiz-tested.",
+            count: "250 MCQs",
+            icon: "&#127760;",
+            tag: "GK",
+            category: "gk",
+            accent: "#2563eb"
+        },
+        {
+            title: "Reasoning &amp; Aptitude",
+            file: "AFCAT_REASONING_QUIZ.html",
+            desc: "Verbal and non-verbal reasoning plus numerical aptitude, built to match the AFCAT exam pattern.",
+            count: "250 MCQs",
+            icon: "&#129504;",
+            tag: "Reasoning",
+            category: "reasoning",
+            accent: "#dc2626"
+        },
+        {
+            title: "Numerical Ability",
+            file: "AFCAT_Numerical_QUIZ.html",
+            desc: "Ratio & proportion, partnership, ages, mixtures, averages, time & work, speed & distance, boats & races, and percentages — 250 fully worked MCQs.",
+            count: "250 MCQs",
+            icon: "&#128202;",
+            tag: "Numerical",
+            category: "numerical",
+            accent: "#10b981"
+        }
+    ];
+
+    const grid = document.getElementById('quizGrid');
+    const noResults = document.getElementById('noResults');
+    const searchInput = document.getElementById('searchInput');
+    const chips = document.querySelectorAll('.chip');
+
+    let activeFilter = 'all';
+
+    function render() {
+        const q = searchInput.value.trim().toLowerCase();
+        grid.innerHTML = '';
+        let visibleCount = 0;
+
+        quizzes.forEach(item => {
+            const matchesFilter = activeFilter === 'all' || item.category === activeFilter;
+            const matchesSearch = !q ||
+                item.title.toLowerCase().includes(q) ||
+                item.desc.toLowerCase().includes(q) ||
+                item.tag.toLowerCase().includes(q);
+
+            if (matchesFilter && matchesSearch) {
+                visibleCount++;
+                const card = document.createElement('a');
+                card.className = 'card';
+                card.href = item.file;
+                card.style.setProperty('--card-accent', item.accent);
+                card.innerHTML = `
+                    <div class="card-top">
+                        <div class="card-icon">${item.icon}</div>
+                        <h2>${item.title}</h2>
+                        <span class="card-tag">${item.tag}</span>
+                    </div>
+                    <div class="card-body">
+                        <p>${item.desc}</p>
+                        <div class="card-meta">
+                            <span class="qcount">${item.count}</span>
+                            <span class="go">Start test &#8594;</span>
+                        </div>
+                    </div>
+                `;
+                grid.appendChild(card);
+            }
+        });
+
+        noResults.classList.toggle('show', visibleCount === 0);
+    }
+
+    chips.forEach(chip => {
+        chip.addEventListener('click', () => {
+            chips.forEach(c => c.classList.remove('active'));
+            chip.classList.add('active');
+            activeFilter = chip.dataset.filter;
+            render();
+        });
+    });
+
+    searchInput.addEventListener('input', render);
+
+    render();
+</script>
+
+</body>
+</html>
